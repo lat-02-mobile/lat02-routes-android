@@ -5,7 +5,7 @@ plugins {
     id 'org.jetbrains.kotlin.android' version '1.7.10' apply false
 }
 
-task installLocalGitHook(type: Copy){
+task installLocalGitHook(type: Copy) {
     from new File(rootProject.rootDir, 'hooks/pre-commit')
     into { new File(rootProject.rootDir, '.git/hooks')}
     fileMode 0775

@@ -1,12 +1,7 @@
 #!/bin/sh
-echo "*****Running unit tests******"
-
-
+echo "*****Running unit tests & lint******"
 ./gradlew test
-
+./gradlew lintKotlin
 status=$?
-
-
-echo "*****Done with unit tests******"
-
+echo "*****Done with unit tests & lint******"
 exit $status
