@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">RoutesApp</string>
     <string name="new_language_text">Nuevo texto de idioma</string>
+    <string name="reg_hint_name">Nombre</string>
+    <string name="reg_hint_email">Email</string>
+    <string name="reg_hint_password">Contraseña</string>
+    <string name="reg_registration">Registrarse</string>
+    <string name="reg_login">Iniciar Sesion</string>
+    <string name="reg_txt_others">O Registrate Con</string>
+    <string name="hello_blank_fragment">Hola Fragmento en Blanco</string>
 </resources>
