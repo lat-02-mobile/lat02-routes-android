@@ -1,20 +1,27 @@
 package com.jalasoft.routesapp.ui.auth.registerUser.viewModel
 
-import com.jalasoft.routesapp.data.model.remote.User
-import com.jalasoft.routesapp.data.remote.managers.FirebaseCollections
-import com.jalasoft.routesapp.data.remote.managers.FirebaseManager
-import com.jalasoft.routesapp.util.UserType
+import androidx.lifecycle.ViewModel
+import com.jalasoft.routesapp.data.remote.managers.UserManager
 
-object RegisterUserViewModel {
+class RegisterUserViewModel: ViewModel() {
 
-    fun registerUser(name: String, email: String, password: String) {
-        val userId = FirebaseManager.getDocId(FirebaseCollections.Users)
-        val user = User(userId, name, email, password, 0,  UserType.NORMAL.int)
-
-        FirebaseManager.addUserDocument(user, FirebaseCollections.Users, { documentId ->
-            println(documentId)
+    fun registerUserAuth(name: String, email: String, password: String, successListener: (String) -> Unit, errorListener: (String) -> Unit) {
+        UserManager.Singleton.createUserAuth(email, password, { _ ->
+            registerUser(name, email, { success ->
+                successListener(success)
+            }, { error ->
+                errorListener(error)
+            })
         }, { errorMessage ->
-            println(errorMessage)
+            errorListener(errorMessage)
+        })
+    }
+
+    fun registerUser(name: String, email: String, successListener: (String) -> Unit, errorListener: (String) -> Unit) {
+        UserManager.Singleton.createUser(name,email, { userId ->
+            successListener(userId)
+        }, { errorMessage ->
+            errorListener(errorMessage)
         })
     }
 }

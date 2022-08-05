@@ -59,9 +59,12 @@ dependencies {
 
     // Firebase
     implementation platform('com.google.firebase:firebase-bom:30.2.0')
-
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.firebase:firebase-firestore-ktx'
+
+    // ViewModel Lifecycle
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -74,6 +74,37 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawablePadding="12dp"
+                android:ems="10"
+                android:padding="8dp"
+                android:hint="@string/reg_hint_confirm_password"
+                app:startIconDrawable="@drawable/ic_lock_24"
+                app:endIconMode="password_toggle"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_reg_confirm_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/txt_reg_error"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/reg_txt_others"
+                android:textSize="16dp"
+                android:padding="8dp"
+                android:textStyle="normal"
+                android:textColor="@color/red_color"
+                android:visibility="gone"
+                android:gravity="left" />
+
             <Button
                 android:id="@+id/btn_reg_register"
                 android:layout_width="match_parent"
@@ -88,6 +119,46 @@
                 style="@style/btnPrimaryRounded"
                 android:backgroundTint="@color/color_primary" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="@string/reg_txt_others"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:gravity="center" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <ImageButton
+                    android:id="@+id/ib_reg_facebook"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
+                    android:src="@drawable/ic_facebook" />
+
+                <ImageButton
+                    android:id="@+id/ib_reg_google"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
+                    android:src="@drawable/ic_google" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="@string/reg_txt_login"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:gravity="center" />
+
             <Button
                 android:id="@+id/btn_reg_login"
                 android:layout_width="match_parent"
@@ -101,15 +172,6 @@
                 android:textColor="@color/white"
                 style="@style/btnPrimaryRounded"
                 android:backgroundTint="@color/color_primary" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:text="@string/reg_txt_others"
-                android:textSize="18dp"
-                android:textStyle="bold"
-                android:gravity="center" />
 
         </LinearLayout>
 
