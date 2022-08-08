@@ -14,5 +14,7 @@
     <string name="reg_login">Iniciar Sesion</string>
     <string name="reg_txt_others">O registrate usando</string>
     <string name="reg_txt_login">¿Ya tienes una cuenta?</string>
+    <string name="reg_vm_valid_email">El Email está siendo utilizado en otra cuenta</string>
+
     <string name="hello_blank_fragment">Hola Fragmento en Blanco</string>
 </resources>

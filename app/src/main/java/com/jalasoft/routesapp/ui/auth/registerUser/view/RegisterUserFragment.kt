@@ -49,6 +49,7 @@ class RegisterUserFragment : Fragment() {
 
     private fun addUser() {
         if (validateFields()) {
+            showProgress(true)
             val name = binding.etRegName.text.toString()
             val email = binding.etRegEmail.text.toString()
             val password = binding.etRegPassword.text.toString()
@@ -59,8 +60,11 @@ class RegisterUserFragment : Fragment() {
                 binding.etRegName.setText("")
                 binding.etRegEmail.setText("")
                 binding.etRegPassword.setText("")
+                binding.etRegConfirmPassword.setText("")
+                showProgress(false)
                 Toast.makeText(context,"Register Successfully",Toast.LENGTH_SHORT).show()
             }, { error ->
+                showProgress(false)
                 binding.txtRegError.isVisible = true
                 binding.txtRegError.setText(error)
             })
@@ -72,29 +76,47 @@ class RegisterUserFragment : Fragment() {
         val name = binding.etRegName.text.toString()
         val email = binding.etRegEmail.text.toString()
         val password = binding.etRegPassword.text.toString()
-        val confirmPassword = binding.etRegPassword.text.toString()
+        val confirmPassword = binding.etRegConfirmPassword.text.toString()
 
         if (name.isEmpty()) {
             isValid = false
-            binding.etRegName.setError(R.string.reg_val_name.toString())
+            binding.txtRegError.isVisible = true
+            binding.txtRegError.setText(context?.getString(R.string.reg_val_name))
+            return isValid
         }
         if (email.isEmpty()) {
             isValid = false
-            binding.etRegEmail.setError(R.string.reg_val_email.toString())
+            binding.txtRegError.isVisible = true
+            binding.txtRegError.setText(context?.getString(R.string.reg_val_email))
+            return isValid
         }
         if (password.isEmpty()) {
             isValid = false
-            binding.etRegPassword.setError(R.string.reg_val_password.toString())
+            binding.txtRegError.isVisible = true
+            binding.txtRegError.setText(context?.getString(R.string.reg_val_password))
+            return isValid
         }
         if (confirmPassword.isEmpty()) {
             isValid = false
-            binding.etRegConfirmPassword.setError(R.string.reg_val_confirm_password.toString())
+            binding.txtRegError.isVisible = true
+            binding.txtRegError.setText(context?.getString(R.string.reg_val_confirm_password))
+            return isValid
         }
         if (password != confirmPassword) {
             isValid = false
-            binding.etRegPassword.setError(R.string.reg_val_incorrect_passwords.toString())
-            binding.etRegConfirmPassword.setError(R.string.reg_val_incorrect_passwords.toString())
+            binding.txtRegError.isVisible = true
+            binding.txtRegError.setText(context?.getString(R.string.reg_val_incorrect_passwords))
+            return isValid
         }
         return isValid
+    }
+
+    fun showProgress(show:Boolean){
+        if (show){
+            binding.pbRegUser.visibility = View.VISIBLE
+        }else {
+            binding.pbRegUser.visibility = View.GONE
+        }
+
     }
 }

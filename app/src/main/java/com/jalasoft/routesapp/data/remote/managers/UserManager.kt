@@ -27,5 +27,13 @@ class UserManager {
                 errorListener(errorMessage)
             })
         }
+
+        fun validateEmailUser(email: String, successListener: (MutableList<User>) -> Unit, errorListener: (String) -> Unit) {
+            FirebaseManager.Singleton.getUsersByParameter(FirebaseCollections.Users, "email",email, { users ->
+                successListener(users)
+            }, { error ->
+                errorListener(error)
+            })
+        }
     }
 }
