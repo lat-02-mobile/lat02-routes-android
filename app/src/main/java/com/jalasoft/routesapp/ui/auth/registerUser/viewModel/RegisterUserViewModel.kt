@@ -1,41 +1,82 @@
 package com.jalasoft.routesapp.ui.auth.registerUser.viewModel
 
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.jalasoft.routesapp.R
-import com.jalasoft.routesapp.data.model.remote.User
 import com.jalasoft.routesapp.data.remote.managers.UserManager
 
-class RegisterUserViewModel: ViewModel() {
+class RegisterUserViewModel : ViewModel() {
+    var registerUser: Boolean = false
+    var errorMessage: String = ""
+    var context: Context? = null
 
-    fun registerUserAuth(name: String, email: String, password: String, successListener: (String) -> Unit, errorListener: (String) -> Unit) {
-        if (validateEmail(email)) {
-            UserManager.Singleton.createUserAuth(email, password, { _ ->
-                registerUser(name, email, { success ->
-                    successListener(success)
+    fun registerUserAuth(name: String, email: String, password: String, confirmPassword: String, callback: () -> Unit) {
+        if (validateFields(name, email, password, confirmPassword)) {
+            if (validateEmail(email)) {
+                UserManager.createUserAuth(email, password, { _ ->
+                    registerUser(name, email, { success ->
+                        registerUser = true
+                        callback()
+                    }, { error ->
+                        errorMessage = error
+                        callback()
+                    })
                 }, { error ->
-                    errorListener(error)
+                    errorMessage = error
+                    callback()
                 })
-            }, { errorMessage ->
-                errorListener(errorMessage)
-            })
+            } else {
+                errorMessage = context?.getString(R.string.reg_vm_valid_email).toString()
+                callback()
+            }
         } else {
-            errorListener(R.string.reg_vm_valid_email.toString())
+            callback()
         }
     }
 
     fun registerUser(name: String, email: String, successListener: (String) -> Unit, errorListener: (String) -> Unit) {
-        UserManager.Singleton.createUser(name,email, { userId ->
+        UserManager.createUser(name, email, { userId ->
             successListener(userId)
         }, { errorMessage ->
             errorListener(errorMessage)
         })
     }
 
-    fun validateEmail(email: String) : Boolean {
+    fun validateFields(name: String, email: String, password: String, confirmPassword: String): Boolean {
         var isValid = true
-        UserManager.Singleton.validateEmailUser(email, { users ->
+        if (name.isEmpty()) {
+            isValid = false
+            errorMessage = context?.getString(R.string.reg_val_name).toString()
+            return isValid
+        }
+        if (email.isEmpty()) {
+            isValid = false
+            errorMessage = context?.getString(R.string.reg_val_email).toString()
+            return isValid
+        }
+        if (password.isEmpty()) {
+            isValid = false
+            errorMessage = context?.getString(R.string.reg_val_password).toString()
+            return isValid
+        }
+        if (confirmPassword.isEmpty()) {
+            isValid = false
+            errorMessage = context?.getString(R.string.reg_val_confirm_password).toString()
+            return isValid
+        }
+        if (password != confirmPassword) {
+            isValid = false
+            errorMessage = context?.getString(R.string.reg_val_incorrect_passwords).toString()
+            return isValid
+        }
+        return isValid
+    }
+
+    fun validateEmail(email: String): Boolean {
+        var isValid = true
+        UserManager.validateEmailUser(email, { users ->
             if (users.isNotEmpty()) {
                 isValid = false
             }

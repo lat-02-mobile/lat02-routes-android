@@ -4,7 +4,7 @@ data class User(
     val Id: String? = null,
     val Name: String? = null,
     val Email: String? = null,
-    val phoneNumber: Int? = null,
+    val phoneNumber: String? = null,
     val Type: Int? = null,
     val TypeLogin: Int? = null,
     val createdAt: String? = null,
