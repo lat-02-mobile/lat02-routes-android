@@ -2,7 +2,17 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'org.jmailen.kotlinter' version '3.11.1'
+    id "org.sonarqube" version "3.4.0.2513"
 }
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "lat-02-mobile_lat02-routes-android"
+        property "sonar.organization", "lat-02-mobile"
+        property "sonar.host.url", "https://sonarcloud.io"
+    }
+}
+apply from: "$project.rootDir/jacoco.gradle"
 
 android {
     compileSdk 32
