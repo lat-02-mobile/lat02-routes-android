@@ -10,18 +10,14 @@ object DateHelper {
         return sdf.format(Date())
     }
 
-    fun convertLongToTime(time: Long): String {
-        val date = Date(time)
-        val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
+    fun convertDoubleToTime(time: Double): String {
+        val date = Date(time.toLong())
+        val format = SimpleDateFormat("yyyy-MM-dd HH:mm")
         return format.format(date)
     }
 
-    fun currentTimeToLong(): Long {
-        return System.currentTimeMillis()
-    }
-
-    fun convertDateToLong(date: String): Long {
-        val df = SimpleDateFormat("yyyy.MM.dd HH:mm")
-        return df.parse(date).time
+    fun convertDateToDouble(date: String): Double {
+        val df = SimpleDateFormat("yyyy-MM-dd HH:mm")
+        return df.parse(date).time.toDouble()
     }
 }

@@ -17,7 +17,8 @@ object UserManager {
 
     fun createUser(name: String, email: String, successListener: (String) -> Unit, errorListener: (String) -> Unit) {
         val userId = FirebaseManager.getDocId(FirebaseCollections.Users)
-        val date = DateHelper.getCurrentDate()
+        val dateStr = DateHelper.getCurrentDate()
+        val date = DateHelper.convertDateToDouble(dateStr)
         val user = User(userId, name, email, "", UserType.NORMAL.int, UserTypeLogin.NORMAL.int, date, date)
 
         FirebaseManager.addDocument(user, FirebaseCollections.Users, { documentId ->

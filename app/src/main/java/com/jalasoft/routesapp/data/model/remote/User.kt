@@ -7,6 +7,6 @@ data class User(
     val phoneNumber: String? = null,
     val Type: Int? = null,
     val TypeLogin: Int? = null,
-    val createdAt: String? = null,
-    val updatedAt: String? = null
+    val createdAt: Double? = null,
+    val updatedAt: Double? = null
 )

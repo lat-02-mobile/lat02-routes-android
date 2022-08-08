@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.google.firebase.FirebaseApp
 import com.jalasoft.routesapp.databinding.FragmentRegisterUserBinding
 import com.jalasoft.routesapp.ui.auth.registerUser.viewModel.RegisterUserViewModel
@@ -27,6 +28,7 @@ class RegisterUserFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        observers()
     }
 
     override fun onCreateView(
@@ -46,6 +48,25 @@ class RegisterUserFragment : Fragment() {
         }
     }
 
+    private fun observers() {
+        val errorObserver = Observer<String> { errorMessage ->
+            binding.txtRegError.isVisible = true
+            binding.txtRegError.text = errorMessage
+            showProgress(false)
+        }
+        val resultObserver = Observer<Boolean> { _ ->
+            showProgress(false)
+            binding.txtRegError.isVisible = false
+            binding.etRegName.setText("")
+            binding.etRegEmail.setText("")
+            binding.etRegPassword.setText("")
+            binding.etRegConfirmPassword.setText("")
+            Toast.makeText(context, "Register Successfully", Toast.LENGTH_SHORT).show()
+        }
+        viewModel.errorMessage.observe(this, errorObserver)
+        viewModel.registerUser.observe(this, resultObserver)
+    }
+
     private fun addUser() {
         showProgress(true)
         val name = binding.etRegName.text.toString()
@@ -53,25 +74,10 @@ class RegisterUserFragment : Fragment() {
         val password = binding.etRegPassword.text.toString()
         val confirmPassword = binding.etRegConfirmPassword.text.toString()
 
-        viewModel.registerUserAuth(name, email, password, confirmPassword) {
-            if (viewModel.registerUser) {
-                binding.txtRegError.isVisible = false
-                binding.txtRegError.setText("")
-                binding.etRegName.setText("")
-                binding.etRegEmail.setText("")
-                binding.etRegPassword.setText("")
-                binding.etRegConfirmPassword.setText("")
-                showProgress(false)
-                Toast.makeText(context, "Register Successfully", Toast.LENGTH_SHORT).show()
-            } else {
-                showProgress(false)
-                binding.txtRegError.isVisible = true
-                binding.txtRegError.setText(viewModel.errorMessage)
-            }
-        }
+        viewModel.registerUserAuth(name, email, password, confirmPassword)
     }
 
-    fun showProgress(show: Boolean) {
+    private fun showProgress(show: Boolean) {
         if (show) {
             binding.pbRegUser.visibility = View.VISIBLE
         } else {
