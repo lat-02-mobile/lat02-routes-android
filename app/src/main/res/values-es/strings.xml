@@ -1,4 +1,20 @@
 <resources>
     <string name="app_name">RoutesApp</string>
     <string name="new_language_text">Nuevo texto de idioma</string>
+    <string name="reg_hint_name">Nombre</string>
+    <string name="reg_hint_email">Email</string>
+    <string name="reg_hint_password">Contraseña</string>
+    <string name="reg_hint_confirm_password">Confirmar Contraseña</string>
+    <string name="reg_val_name">El Nombre es requerido</string>
+    <string name="reg_val_email">El Email es requerido</string>
+    <string name="reg_val_password">La Contraseña es requerida</string>
+    <string name="reg_val_confirm_password">Confirmar la Contraseña es requerida</string>
+    <string name="reg_val_incorrect_passwords">Las Contraseñas no coinciden</string>
+    <string name="reg_registration">Registrarse</string>
+    <string name="reg_login">Iniciar Sesion</string>
+    <string name="reg_txt_others">O registrate usando</string>
+    <string name="reg_txt_login">¿Ya tienes una cuenta?</string>
+    <string name="reg_vm_valid_email">El Email está siendo utilizado en otra cuenta</string>
+
+    <string name="hello_blank_fragment">Hola Fragmento en Blanco</string>
 </resources>
