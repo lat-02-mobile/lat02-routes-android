@@ -18,7 +18,8 @@ class RegisterUserViewModel : ViewModel() {
     var context: Context? = null
 
     fun registerUserAuth(name: String, email: String, password: String, confirmPassword: String) {
-        if (validateFields(name, email, password, confirmPassword)) {
+        val valid = validateFields(name, email, password, confirmPassword)
+        if (valid.isEmpty()) {
             if (validateEmail(email)) {
                 UserManager.createUserAuth(email, password, { _ ->
                     registerUser(name, email, { _ ->
@@ -32,6 +33,8 @@ class RegisterUserViewModel : ViewModel() {
             } else {
                 errorMessage.value = context?.getString(R.string.reg_vm_valid_email).toString()
             }
+        } else {
+            errorMessage.value = valid
         }
     }
 
@@ -43,37 +46,32 @@ class RegisterUserViewModel : ViewModel() {
         })
     }
 
-    private fun validateFields(name: String, email: String, password: String, confirmPassword: String): Boolean {
-        var isValid = true
+    fun validateFields(name: String, email: String, password: String, confirmPassword: String): String {
+        var isValid = ""
         if (name.isEmpty()) {
-            isValid = false
-            errorMessage.value = context?.getString(R.string.reg_val_name).toString()
+            isValid = context?.getString(R.string.reg_val_name).toString()
             return isValid
         }
         if (email.isEmpty()) {
-            isValid = false
-            errorMessage.value = context?.getString(R.string.reg_val_email).toString()
+            isValid = context?.getString(R.string.reg_val_email).toString()
             return isValid
         }
         if (password.isEmpty()) {
-            isValid = false
-            errorMessage.value = context?.getString(R.string.reg_val_password).toString()
+            isValid = context?.getString(R.string.reg_val_password).toString()
             return isValid
         }
         if (confirmPassword.isEmpty()) {
-            isValid = false
-            errorMessage.value = context?.getString(R.string.reg_val_confirm_password).toString()
+            isValid = context?.getString(R.string.reg_val_confirm_password).toString()
             return isValid
         }
         if (password != confirmPassword) {
-            isValid = false
-            errorMessage.value = context?.getString(R.string.reg_val_incorrect_passwords).toString()
+            isValid = context?.getString(R.string.reg_val_incorrect_passwords).toString()
             return isValid
         }
         return isValid
     }
 
-    private fun validateEmail(email: String): Boolean {
+    fun validateEmail(email: String): Boolean {
         var isValid = true
         UserManager.validateEmailUser(email, { users ->
             if (users.isNotEmpty()) {
