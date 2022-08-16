@@ -1,13 +1,10 @@
 package com.jalasoft.routesapp.data.remote.managers
 
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.firestore.FirebaseFirestore
 import com.jalasoft.routesapp.data.model.remote.User
 import com.jalasoft.routesapp.util.helpers.FirebaseCollections
 
-object FirebaseManager {
-    private val db = Firebase.firestore
-
+class FirebaseManager(private val db: FirebaseFirestore) {
     fun getDocId(collection: FirebaseCollections): String {
         return db.collection(collection.toString()).document().id
     }
@@ -21,11 +18,13 @@ object FirebaseManager {
     }
 
     fun getUsersByParameter(collection: FirebaseCollections, field: String, parameter: String, successListener: (MutableList<User>) -> Unit, errorListener: (String) -> Unit) {
-        db.collection(collection.toString()).whereEqualTo(field, parameter).get().addOnSuccessListener { documents ->
-            var users = documents.toObjects(User::class.java)
-            successListener(users)
-        }.addOnFailureListener { exception ->
-            errorListener(exception.message.toString())
+        db.collection(collection.toString()).whereEqualTo(field, parameter).get().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val list = task.result.toObjects(User::class.java)
+                successListener(list)
+            } else {
+                errorListener(task.exception?.message.toString())
+            }
         }
     }
 }

@@ -1,12 +1,9 @@
 package com.jalasoft.routesapp.data.remote.managers
 
 import com.google.firebase.auth.AuthCredential
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.auth.FirebaseAuth
 
-object AuthFirebaseManager {
-    private val auth = Firebase.auth
-
+class AuthFirebaseManager(private val auth: FirebaseAuth) {
     fun createUserAuth(email: String, password: String, successListener: (String) -> Unit, errorListener: (String) -> Unit) {
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {

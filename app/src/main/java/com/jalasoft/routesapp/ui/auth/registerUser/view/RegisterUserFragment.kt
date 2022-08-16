@@ -24,7 +24,9 @@ import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.databinding.FragmentRegisterUserBinding
 import com.jalasoft.routesapp.ui.auth.registerUser.viewModel.RegisterUserViewModel
 import com.jalasoft.routesapp.util.helpers.UserTypeLogin
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RegisterUserFragment : Fragment() {
 
     private var _binding: FragmentRegisterUserBinding? = null
@@ -35,7 +37,6 @@ class RegisterUserFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         FirebaseApp.initializeApp(context)
-        viewModel.context = context
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,6 +56,7 @@ class RegisterUserFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.context = context
         googleConfiguration()
         buttonActions()
     }
@@ -111,7 +113,7 @@ class RegisterUserFragment : Fragment() {
         val password = binding.etRegPassword.text.toString()
         val confirmPassword = binding.etRegConfirmPassword.text.toString()
 
-        viewModel.registerUserAuth(name, email, password, confirmPassword)
+        viewModel.verifyRegisterUserAuth(name, email, password, confirmPassword)
     }
 
     private fun signInGoogle() {
@@ -137,7 +139,7 @@ class RegisterUserFragment : Fragment() {
     private fun updateUI(account: GoogleSignInAccount) {
         showProgress(true)
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-        viewModel.registerUserGoogleAuth(account.displayName.toString(), account.email.toString(), UserTypeLogin.GOOGLE, credential)
+        viewModel.validateEmailGoogle(account.displayName.toString(), account.email.toString(), UserTypeLogin.GOOGLE, credential)
     }
 
     private fun showProgress(show: Boolean) {
