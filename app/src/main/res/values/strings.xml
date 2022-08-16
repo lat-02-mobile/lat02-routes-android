@@ -17,5 +17,13 @@
     <string name="reg_txt_login">Already have an account?</string>
     <string name="reg_vm_valid_email">The Email is being used in another account</string>
 
+    <string name="default_web_cliente_id">11042396908-c4tf4cmfen29e6oln7uum134r3vsvo08.apps.googleusercontent.com</string>
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="txt_login">You don\'t have an account yet?</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="name_app">RoutesApp</string>
+    <string name="tv_welcome">Welcome back!</string>
+    <string name="btn_sign_outd">Sign Out</string>
 </resources>
