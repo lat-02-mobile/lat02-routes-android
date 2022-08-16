@@ -14,6 +14,16 @@ class AuthFirebaseManager(private val auth: FirebaseAuth) {
         }
     }
 
+    fun loginUserAuth(email: String, password: String, successListener: (String) -> Unit, errorListener: (String) -> Unit) {
+        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                successListener(task.result.user?.email.toString())
+            } else {
+                errorListener(task.exception?.message.toString())
+            }
+        }
+    }
+
     fun signInUserAuth(credential: AuthCredential, successListener: (String) -> Unit, errorListener: (String) -> Unit) {
         auth.signInWithCredential(credential).addOnCompleteListener {
             if (it.isSuccessful) {

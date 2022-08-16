@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.home.HomeFragment"
+    android:id="@+id/homefragment">
+
+
+    <Button
+        android:id="@+id/btn_sign_out"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:padding="10dp"
+        android:text="@string/btn_sign_outd"
+        android:textAllCaps="false"
+        android:textStyle="normal"
+        android:textSize="18dp"
+        android:textColor="@color/white"
+        style="@style/btnPrimaryRounded"
+        android:backgroundTint="@color/color_primary" />
+
+</FrameLayout>

@@ -122,10 +122,6 @@ constructor(private val userManager: UserManager) : ViewModel(), IUserManager {
         userManager.validateEmailUserGoogle(name, email, typeLogin, credential, this)
     }
 
-    fun signOutUser() {
-        userManager.signOutUser()
-    }
-
     override fun validateEmailGoogleResponse(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential, users: MutableList<User>) {
         if (users.isNotEmpty()) {
             userGoogleAuth(name, email, typeLogin, credential, false)
