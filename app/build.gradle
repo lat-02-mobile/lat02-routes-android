@@ -81,6 +81,9 @@ dependencies {
     // ViewModel Lifecycle
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
+
+    // Facebook
+    implementation 'com.facebook.android:facebook-android-sdk:latest.release'
 }
 
 apply plugin: 'com.google.gms.google-services'
