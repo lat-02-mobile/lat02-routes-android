@@ -1,15 +1,17 @@
 package com.jalasoft.routesapp.data.remote.managers
 
+import android.util.Log
 import com.google.firebase.auth.AuthCredential
 import com.jalasoft.routesapp.data.model.remote.User
+import com.jalasoft.routesapp.data.remote.interfaces.IUserManager
 import com.jalasoft.routesapp.util.helpers.DateHelper
 import com.jalasoft.routesapp.util.helpers.FirebaseCollections
 import com.jalasoft.routesapp.util.helpers.UserType
 import com.jalasoft.routesapp.util.helpers.UserTypeLogin
 
-object UserManager {
+class UserManager(private val authManager: AuthFirebaseManager, private val firebaseManager: FirebaseManager) {
     fun createUserAuth(email: String, password: String, successListener: (String) -> Unit, errorListener: (String) -> Unit) {
-        AuthFirebaseManager.createUserAuth(email, password, { userUId ->
+        authManager.createUserAuth(email, password, { userUId ->
             successListener(userUId)
         }, { errorMessage ->
             errorListener(errorMessage)
@@ -17,12 +19,12 @@ object UserManager {
     }
 
     fun createUser(name: String, email: String, typeLogin: UserTypeLogin, successListener: (String) -> Unit, errorListener: (String) -> Unit) {
-        val userId = FirebaseManager.getDocId(FirebaseCollections.Users)
+        val userId = firebaseManager.getDocId(FirebaseCollections.Users)
         val dateStr = DateHelper.getCurrentDate()
         val date = DateHelper.convertDateToDouble(dateStr)
         val user = User(userId, name, email, "", UserType.NORMAL.int, typeLogin.int, date, date)
 
-        FirebaseManager.addDocument(user, FirebaseCollections.Users, { documentId ->
+        firebaseManager.addDocument(user, FirebaseCollections.Users, { documentId ->
             successListener(documentId)
         }, { errorMessage ->
             errorListener(errorMessage)
@@ -30,22 +32,30 @@ object UserManager {
     }
 
     fun signInWithCredential(credential: AuthCredential, successListener: (String) -> Unit, errorListener: (String) -> Unit) {
-        AuthFirebaseManager.signInUserAuth(credential, {
+        authManager.signInUserAuth(credential, {
             successListener(it)
         }, {
             errorListener(it)
         })
     }
 
-    fun validateEmailUser(email: String, successListener: (MutableList<User>) -> Unit, errorListener: (String) -> Unit) {
-        FirebaseManager.getUsersByParameter(FirebaseCollections.Users, "email", email, { users ->
-            successListener(users)
+    fun validateEmailUser(name: String, email: String, password: String, listener: IUserManager) {
+        firebaseManager.getUsersByParameter(FirebaseCollections.Users, "email", email, { users ->
+            listener.validateEmailNormalResponse(name, email, password, users)
         }, { error ->
-            errorListener(error)
+            Log.d("valEmail", error)
+        })
+    }
+
+    fun validateEmailUserGoogle(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential, listener: IUserManager) {
+        firebaseManager.getUsersByParameter(FirebaseCollections.Users, "email", email, { users ->
+            listener.validateEmailGoogleResponse(name, email, typeLogin, credential, users)
+        }, { error ->
+            Log.d("valEmail", error)
         })
     }
 
     fun signOutUser() {
-        AuthFirebaseManager.singOut()
+        authManager.singOut()
     }
 }

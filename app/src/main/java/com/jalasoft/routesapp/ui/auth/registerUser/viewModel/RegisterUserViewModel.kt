@@ -1,16 +1,21 @@
 package com.jalasoft.routesapp.ui.auth.registerUser.viewModel
 
-import android.content.ContentValues.TAG
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.AuthCredential
 import com.jalasoft.routesapp.R
+import com.jalasoft.routesapp.data.model.remote.User
+import com.jalasoft.routesapp.data.remote.interfaces.IUserManager
 import com.jalasoft.routesapp.data.remote.managers.UserManager
 import com.jalasoft.routesapp.util.helpers.UserTypeLogin
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class RegisterUserViewModel : ViewModel() {
+@HiltViewModel
+class RegisterUserViewModel
+@Inject
+constructor(private val userManager: UserManager) : ViewModel(), IUserManager {
     val registerUser: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
     }
@@ -22,37 +27,41 @@ class RegisterUserViewModel : ViewModel() {
     }
     var context: Context? = null
 
-    fun registerUserAuth(name: String, email: String, password: String, confirmPassword: String) {
+    fun verifyRegisterUserAuth(name: String, email: String, password: String, confirmPassword: String) {
         val valid = validateFields(name, email, password, confirmPassword)
         if (valid.isEmpty()) {
-            if (validateEmail(email)) {
-                UserManager.createUserAuth(email, password, { _ ->
-                    registerUser(name, email, UserTypeLogin.NORMAL, { _ ->
-                        registerUser.value = true
-                    }, { error ->
-                        errorMessage.value = error
-                    })
-                }, { error ->
-                    errorMessage.value = error
-                })
-            } else {
-                errorMessage.value = context?.getString(R.string.reg_vm_valid_email).toString()
-            }
+            validateEmailNormal(name, email, password)
         } else {
             errorMessage.value = valid
         }
     }
 
+    private fun registerUserAuth(name: String, email: String, password: String, validEmail: Boolean) {
+        if (validEmail) {
+            userManager.createUserAuth(email, password, { _ ->
+                registerUser(name, email, UserTypeLogin.NORMAL, { _ ->
+                    registerUser.value = true
+                }, { error ->
+                    errorMessage.value = error
+                })
+            }, { error ->
+                errorMessage.value = error
+            })
+        } else {
+            errorMessage.value = context?.getString(R.string.reg_vm_valid_email).toString()
+        }
+    }
+
     fun registerUser(name: String, email: String, typeLogin: UserTypeLogin, successListener: (String) -> Unit, errorListener: (String) -> Unit) {
-        UserManager.createUser(name, email, typeLogin, { userId ->
+        userManager.createUser(name, email, typeLogin, { userId ->
             successListener(userId)
         }, { errorMessage ->
             errorListener(errorMessage)
         })
     }
 
-    fun registerUserGoogleAuth(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential) {
-        if (validateEmail(email)) {
+    fun userGoogleAuth(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential, emailValid: Boolean) {
+        if (emailValid) {
             registerUserWithGoogle(name, email, typeLogin, { _ ->
                 singInWithGoogleCredentials(credential)
             }, { error ->
@@ -64,7 +73,7 @@ class RegisterUserViewModel : ViewModel() {
     }
 
     fun registerUserWithGoogle(name: String, email: String, typeLogin: UserTypeLogin, successListener: (String) -> Unit, errorListener: (String) -> Unit) {
-        UserManager.createUser(name, email, typeLogin, { userId ->
+        userManager.createUser(name, email, typeLogin, { userId ->
             successListener(userId)
         }, { errorMessage ->
             errorListener(errorMessage)
@@ -72,7 +81,7 @@ class RegisterUserViewModel : ViewModel() {
     }
 
     fun singInWithGoogleCredentials(credential: AuthCredential) {
-        UserManager.signInWithCredential(credential, {
+        userManager.signInWithCredential(credential, {
             signInGoogle.value = true
         }, {
             signInGoogle.value = false
@@ -105,20 +114,27 @@ class RegisterUserViewModel : ViewModel() {
         return isValid
     }
 
-    fun validateEmail(email: String): Boolean {
-        var isValid = true
-        UserManager.validateEmailUser(email, { users ->
-            if (users.isNotEmpty()) {
-                isValid = false
-            }
-        }, { error ->
-            Log.d(TAG, error)
-        })
-
-        return isValid
+    fun validateEmailNormal(name: String, email: String, password: String) {
+        userManager.validateEmailUser(name, email, password, this)
     }
 
-    fun signOutUser() {
-        UserManager.signOutUser()
+    fun validateEmailGoogle(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential) {
+        userManager.validateEmailUserGoogle(name, email, typeLogin, credential, this)
+    }
+
+    override fun validateEmailGoogleResponse(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential, users: MutableList<User>) {
+        if (users.isNotEmpty()) {
+            userGoogleAuth(name, email, typeLogin, credential, false)
+        } else {
+            userGoogleAuth(name, email, typeLogin, credential, true)
+        }
+    }
+
+    override fun validateEmailNormalResponse(name: String, email: String, password: String, users: MutableList<User>) {
+        if (users.isNotEmpty()) {
+            registerUserAuth(name, email, password, false)
+        } else {
+            registerUserAuth(name, email, password, true)
+        }
     }
 }

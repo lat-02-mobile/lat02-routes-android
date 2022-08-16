@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -24,7 +23,9 @@ import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.databinding.FragmentRegisterUserBinding
 import com.jalasoft.routesapp.ui.auth.registerUser.viewModel.RegisterUserViewModel
 import com.jalasoft.routesapp.util.helpers.UserTypeLogin
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RegisterUserFragment : Fragment() {
 
     private var _binding: FragmentRegisterUserBinding? = null
@@ -35,7 +36,6 @@ class RegisterUserFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         FirebaseApp.initializeApp(context)
-        viewModel.context = context
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,12 +49,12 @@ class RegisterUserFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentRegisterUserBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-        return root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.context = context
         googleConfiguration()
         buttonActions()
     }
@@ -77,19 +77,22 @@ class RegisterUserFragment : Fragment() {
             binding.txtRegError.text = errorMessage
             showProgress(false)
         }
-        val resultObserver = Observer<Boolean> { _ ->
-            showProgress(false)
-            binding.txtRegError.isVisible = false
-            binding.etRegName.setText("")
-            binding.etRegEmail.setText("")
-            binding.etRegPassword.setText("")
-            binding.etRegConfirmPassword.setText("")
-            Toast.makeText(context, "Register Successfully", Toast.LENGTH_SHORT).show()
+        val resultObserver = Observer<Boolean> { value ->
+            if (value) {
+                showProgress(false)
+                binding.txtRegError.isVisible = false
+                binding.etRegName.setText("")
+                binding.etRegEmail.setText("")
+                binding.etRegPassword.setText("")
+                binding.etRegConfirmPassword.setText("")
+                findNavController().navigate(R.id.homeFragment)
+            }
         }
-        val googleObserver = Observer<Boolean> { _ ->
-            Toast.makeText(context, "Login Successfully With google", Toast.LENGTH_SHORT).show()
-            viewModel.signOutUser()
-            showProgress(false)
+        val googleObserver = Observer<Boolean> { value ->
+            if (value) {
+                showProgress(false)
+                findNavController().navigate(R.id.homeFragment)
+            }
         }
         viewModel.errorMessage.observe(this, errorObserver)
         viewModel.registerUser.observe(this, resultObserver)
@@ -111,7 +114,7 @@ class RegisterUserFragment : Fragment() {
         val password = binding.etRegPassword.text.toString()
         val confirmPassword = binding.etRegConfirmPassword.text.toString()
 
-        viewModel.registerUserAuth(name, email, password, confirmPassword)
+        viewModel.verifyRegisterUserAuth(name, email, password, confirmPassword)
     }
 
     private fun signInGoogle() {
@@ -137,7 +140,7 @@ class RegisterUserFragment : Fragment() {
     private fun updateUI(account: GoogleSignInAccount) {
         showProgress(true)
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-        viewModel.registerUserGoogleAuth(account.displayName.toString(), account.email.toString(), UserTypeLogin.GOOGLE, credential)
+        viewModel.validateEmailGoogle(account.displayName.toString(), account.email.toString(), UserTypeLogin.GOOGLE, credential)
     }
 
     private fun showProgress(show: Boolean) {

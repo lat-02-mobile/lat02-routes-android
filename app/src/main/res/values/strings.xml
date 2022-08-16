@@ -25,4 +25,12 @@
     <string name="facebook_app_id" translatable="false">3146525082229053</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb3146525082229053</string>
     <string name="facebook_client_token" translatable="false">131412692dc6c5687212fa62aa82474a</string>
+
+    <string name="txt_login">You don\'t have an account yet?</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="log_txt_others">Or login using</string>
+    <string name="name_app">RoutesApp</string>
+    <string name="tv_welcome">Welcome back!</string>
+    <string name="btn_sign_outd">Sign Out</string>
 </resources>
