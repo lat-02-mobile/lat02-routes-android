@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/homeFragment"
+        android:icon="@drawable/ic_baseline_directions_bus_24"
+        android:title="Home" />
+    <item
+        android:id="@+id/locationsFragment"
+        android:icon="@drawable/ic_baseline_location_on_24"
+        android:title="Locations" />
+
+    <item
+        android:id="@+id/favoritesFragment"
+        android:icon="@drawable/ic_baseline_favorite_border_24"
+        android:title="Favorites"
+        />
+
+    <item
+        android:id="@+id/settingsFragment"
+        android:icon="@drawable/ic_baseline_settings_24"
+        android:title="Settings"
+        />
+</menu>

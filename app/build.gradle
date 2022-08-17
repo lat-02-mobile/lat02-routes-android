@@ -5,6 +5,7 @@ plugins {
     id "org.sonarqube" version "3.4.0.2513"
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
 sonarqube {
@@ -89,6 +90,10 @@ dependencies {
     // Hilt
     implementation "com.google.dagger:hilt-android:2.42"
     kapt "com.google.dagger:hilt-compiler:2.42"
+
+    // Dependency to include Maps SDK for Android
+    implementation 'com.google.android.gms:play-services-maps:18.1.0'
+    implementation 'com.google.android.gms:play-services-location:20.0.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
