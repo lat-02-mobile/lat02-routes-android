@@ -47,9 +47,9 @@ class UserManager(private val authManager: AuthFirebaseManager, private val fire
         })
     }
 
-    fun validateEmailUserGoogle(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential, listener: IUserManager) {
+    fun validateEmailUserGoogleOrFacebook(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential, listener: IUserManager) {
         firebaseManager.getUsersByParameter(FirebaseCollections.Users, "email", email, { users ->
-            listener.validateEmailGoogleResponse(name, email, typeLogin, credential, users)
+            listener.validateEmailGoogleOrFacebookResponse(name, email, typeLogin, credential, users)
         }, { error ->
             Log.d("valEmail", error)
         })

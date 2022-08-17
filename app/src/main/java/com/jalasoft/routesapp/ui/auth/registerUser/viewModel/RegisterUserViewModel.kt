@@ -22,7 +22,7 @@ constructor(private val userManager: UserManager) : ViewModel(), IUserManager {
     val errorMessage: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
-    val signInGoogle: MutableLiveData<Boolean> by lazy {
+    val signInGoogleOrFacebook: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
     }
     var context: Context? = null
@@ -82,9 +82,9 @@ constructor(private val userManager: UserManager) : ViewModel(), IUserManager {
 
     fun singInWithGoogleCredentials(credential: AuthCredential) {
         userManager.signInWithCredential(credential, {
-            signInGoogle.value = true
+            signInGoogleOrFacebook.value = true
         }, {
-            signInGoogle.value = false
+            signInGoogleOrFacebook.value = false
             errorMessage.value = it
         })
     }
@@ -118,11 +118,11 @@ constructor(private val userManager: UserManager) : ViewModel(), IUserManager {
         userManager.validateEmailUser(name, email, password, this)
     }
 
-    fun validateEmailGoogle(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential) {
-        userManager.validateEmailUserGoogle(name, email, typeLogin, credential, this)
+    fun validateEmailGoogleOrFacebook(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential) {
+        userManager.validateEmailUserGoogleOrFacebook(name, email, typeLogin, credential, this)
     }
 
-    override fun validateEmailGoogleResponse(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential, users: MutableList<User>) {
+    override fun validateEmailGoogleOrFacebookResponse(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential, users: MutableList<User>) {
         if (users.isNotEmpty()) {
             userGoogleAuth(name, email, typeLogin, credential, false)
         } else {

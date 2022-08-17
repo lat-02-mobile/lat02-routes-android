@@ -28,7 +28,7 @@ constructor(private val userManager: UserManager, private val auth: AuthFirebase
     val errorMessage: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
-    val signInGoogle: MutableLiveData<Boolean> by lazy {
+    val signInGoogleOrFacebook: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
     }
 
@@ -104,54 +104,35 @@ constructor(private val userManager: UserManager, private val auth: AuthFirebase
         return isValid
     }
 
-    /*private fun validateEmail(email: String): Boolean {
-        var isValid = true
-        userManager.validateEmailUser(email, { users ->
-            if (users.isNotEmpty()) {
-                isValid = false
-            }
-        }, { error ->
-            Log.d(ContentValues.TAG, error)
-        })
-        return isValid
-    }*/
-
-    /*
-    fun permissionGranted(email: String, provider: LoginViewModel.ProviderType){
-        fragmentTransaction.replace(com.jalasoft.routesapp.R.id.action_loginFragment_to_homeFragment, LoginFragment())
-        putExtra()
-        fragmentTransaction.commit()
-    }*/
-
-    fun validateEmailGoogle(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential) {
-        userManager.validateEmailUserGoogle(name, email, typeLogin, credential, this)
+    fun validateEmailGoogleOrFacebook(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential) {
+        userManager.validateEmailUserGoogleOrFacebook(name, email, typeLogin, credential, this)
     }
 
     override fun validateEmailNormalResponse(name: String, email: String, password: String, users: MutableList<User>) {
         // Nothing to implement
     }
 
-    override fun validateEmailGoogleResponse(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential, users: MutableList<User>) {
+    override fun validateEmailGoogleOrFacebookResponse(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential, users: MutableList<User>) {
         if (users.isNotEmpty()) {
-            userGoogleAuth(name, email, typeLogin, credential, false)
+            userAuthWithCredentials(name, email, typeLogin, credential, false)
         } else {
-            userGoogleAuth(name, email, typeLogin, credential, true)
+            userAuthWithCredentials(name, email, typeLogin, credential, true)
         }
     }
 
-    fun userGoogleAuth(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential, emailValid: Boolean) {
+    private fun userAuthWithCredentials(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential, emailValid: Boolean) {
         if (emailValid) {
-            registerUserWithGoogle(name, email, typeLogin, { _ ->
-                singInWithGoogleCredentials(credential)
+            registerUserToFirebaseFromGoogleOrFacebook(name, email, typeLogin, {
+                singInWithCredentials(credential)
             }, { error ->
                 errorMessage.value = error
             })
         } else {
-            singInWithGoogleCredentials(credential)
+            singInWithCredentials(credential)
         }
     }
 
-    fun registerUserWithGoogle(name: String, email: String, typeLogin: UserTypeLogin, successListener: (String) -> Unit, errorListener: (String) -> Unit) {
+    private fun registerUserToFirebaseFromGoogleOrFacebook(name: String, email: String, typeLogin: UserTypeLogin, successListener: (String) -> Unit, errorListener: (String) -> Unit) {
         userManager.createUser(name, email, typeLogin, { userId ->
             successListener(userId)
         }, { errorMessage ->
@@ -159,11 +140,11 @@ constructor(private val userManager: UserManager, private val auth: AuthFirebase
         })
     }
 
-    fun singInWithGoogleCredentials(credential: AuthCredential) {
+    private fun singInWithCredentials(credential: AuthCredential) {
         userManager.signInWithCredential(credential, {
-            signInGoogle.value = true
+            signInGoogleOrFacebook.value = true
         }, {
-            signInGoogle.value = false
+            signInGoogleOrFacebook.value = false
             errorMessage.value = it
         })
     }
