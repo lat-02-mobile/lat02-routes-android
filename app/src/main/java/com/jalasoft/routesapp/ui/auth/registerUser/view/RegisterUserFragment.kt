@@ -57,7 +57,6 @@ class RegisterUserFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.context = context
         googleConfiguration()
         facebookConfiguration()
         buttonActions()
