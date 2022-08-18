@@ -4,8 +4,8 @@
     package="com.jalasoft.routesapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:name=".RoutesAppApplication"
@@ -18,13 +18,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RoutesApp"
         tools:targetApi="31">
+        <activity
+            android:name=".AuthActivity"
+            android:exported="false" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="${GOOGLE_MAPS_API_KEY}"
-            />
-        <activity
-            android:name=".HomeActivity"
-            android:exported="false" />
+            android:value="${GOOGLE_MAPS_API_KEY}" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">

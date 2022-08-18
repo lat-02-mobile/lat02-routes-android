@@ -2,28 +2,11 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_navigation"
-    app:startDestination="@id/loginFragment">
+    android:id="@+id/home_main_navigation"
+    app:startDestination="@id/homeFragment2">
 
     <fragment
-        android:id="@+id/loginFragment"
-        android:name="com.jalasoft.routesapp.ui.auth.login.view.LoginFragment"
-        android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
-        <action
-            android:id="@+id/action_loginFragment_to_registerUserFragment"
-            app:destination="@id/registerUserFragment" />
-        <action
-            android:id="@+id/action_loginFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/registerUserFragment"
-        android:name="com.jalasoft.routesapp.ui.auth.registerUser.view.RegisterUserFragment"
-        android:label="fragment_register_user"
-        tools:layout="@layout/fragment_register_user" />
-    <fragment
-        android:id="@+id/homeFragment"
+        android:id="@+id/homeFragment2"
         android:name="com.jalasoft.routesapp.ui.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
