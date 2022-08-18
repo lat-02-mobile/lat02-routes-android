@@ -12,8 +12,6 @@ import dagger.hilt.android.testing.HiltTestApplication
 import junit.framework.TestCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
-import org.hamcrest.CoreMatchers
-import org.hamcrest.MatcherAssert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -61,7 +59,7 @@ class LoginViewModelTest : TestCase() {
             try {
                 viewModel.signInGoogle.observeForever(observer)
                 val value = viewModel.signInGoogle.getOrAwaitValue()
-                MatcherAssert.assertThat(value, CoreMatchers.`is`(true))
+                assertTrue(value)
             } finally {
                 viewModel.signInGoogle.removeObserver(observer)
             }
@@ -81,7 +79,7 @@ class LoginViewModelTest : TestCase() {
             try {
                 viewModel.signInGoogle.observeForever(observer)
                 val value = viewModel.signInGoogle.getOrAwaitValue()
-                MatcherAssert.assertThat(value, CoreMatchers.`is`(true))
+                assertTrue(value)
             } finally {
                 viewModel.signInGoogle.removeObserver(observer)
             }
@@ -99,7 +97,7 @@ class LoginViewModelTest : TestCase() {
             try {
                 viewModel.signInGoogle.observeForever(observer)
                 val value = viewModel.signInGoogle.getOrAwaitValue()
-                MatcherAssert.assertThat(value, CoreMatchers.`is`(true))
+                assertTrue(value)
             } finally {
                 viewModel.signInGoogle.removeObserver(observer)
             }
@@ -115,7 +113,7 @@ class LoginViewModelTest : TestCase() {
             try {
                 viewModel.signInGoogle.observeForever(observer)
                 val value = viewModel.signInGoogle.getOrAwaitValue()
-                MatcherAssert.assertThat(value, CoreMatchers.`is`(true))
+                assertTrue(value)
             } finally {
                 viewModel.signInGoogle.removeObserver(observer)
             }
@@ -133,7 +131,7 @@ class LoginViewModelTest : TestCase() {
             try {
                 viewModel.signInGoogle.observeForever(observer)
                 val value = viewModel.signInGoogle.getOrAwaitValue()
-                MatcherAssert.assertThat(value, CoreMatchers.`is`(true))
+                assertTrue(value)
             } finally {
                 viewModel.signInGoogle.removeObserver(observer)
             }
@@ -149,7 +147,7 @@ class LoginViewModelTest : TestCase() {
             try {
                 viewModel.signInGoogle.observeForever(observer)
                 val value = viewModel.signInGoogle.getOrAwaitValue()
-                MatcherAssert.assertThat(value, CoreMatchers.`is`(true))
+                assertTrue(value)
             } finally {
                 viewModel.signInGoogle.removeObserver(observer)
             }

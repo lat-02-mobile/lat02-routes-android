@@ -7,9 +7,7 @@ import com.jalasoft.routesapp.data.source.FakeDataUserManager
 import com.jalasoft.routesapp.data.source.getOrAwaitValue
 import junit.framework.TestCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.hamcrest.CoreMatchers.`is`
 import org.junit.Rule
-import org.hamcrest.MatcherAssert.assertThat
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import com.jalasoft.routesapp.util.helpers.UserTypeLogin
@@ -105,7 +103,7 @@ class RegisterUserViewModelTest : TestCase() {
             try {
                 viewModel.signInGoogle.observeForever(observer)
                 val value = viewModel.signInGoogle.getOrAwaitValue()
-                assertThat(value, `is`(true))
+                assertTrue(value)
             } finally {
                 viewModel.signInGoogle.removeObserver(observer)
             }
@@ -125,7 +123,7 @@ class RegisterUserViewModelTest : TestCase() {
             try {
                 viewModel.signInGoogle.observeForever(observer)
                 val value = viewModel.signInGoogle.getOrAwaitValue()
-                assertThat(value, `is`(true))
+                assertTrue(value)
             } finally {
                 viewModel.signInGoogle.removeObserver(observer)
             }
@@ -172,7 +170,7 @@ class RegisterUserViewModelTest : TestCase() {
                 assertEquals(result.data.toString(), names)
 
                 val value = viewModel.registerUser.getOrAwaitValue()
-                assertThat(value, `is`(true))
+                assertTrue(value)
             } finally {
                 viewModel.registerUser.removeObserver(observer)
             }
@@ -190,7 +188,7 @@ class RegisterUserViewModelTest : TestCase() {
             try {
                 viewModel.signInGoogle.observeForever(observer)
                 val value = viewModel.signInGoogle.getOrAwaitValue()
-                assertThat(value, `is`(true))
+                assertTrue(value)
             } finally {
                 viewModel.signInGoogle.removeObserver(observer)
             }
@@ -206,7 +204,7 @@ class RegisterUserViewModelTest : TestCase() {
             try {
                 viewModel.signInGoogle.observeForever(observer)
                 val value = viewModel.signInGoogle.getOrAwaitValue()
-                assertThat(value, `is`(true))
+                assertTrue(value)
             } finally {
                 viewModel.signInGoogle.removeObserver(observer)
             }
@@ -224,7 +222,7 @@ class RegisterUserViewModelTest : TestCase() {
             try {
                 viewModel.signInGoogle.observeForever(observer)
                 val value = viewModel.signInGoogle.getOrAwaitValue()
-                assertThat(value, `is`(true))
+                assertTrue(value)
             } finally {
                 viewModel.signInGoogle.removeObserver(observer)
             }
@@ -240,7 +238,7 @@ class RegisterUserViewModelTest : TestCase() {
             try {
                 viewModel.signInGoogle.observeForever(observer)
                 val value = viewModel.signInGoogle.getOrAwaitValue()
-                assertThat(value, `is`(true))
+                assertTrue(value)
             } finally {
                 viewModel.signInGoogle.removeObserver(observer)
             }
