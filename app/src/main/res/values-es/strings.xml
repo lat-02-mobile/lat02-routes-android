@@ -17,4 +17,11 @@
     <string name="reg_vm_valid_email">El Email está siendo utilizado en otra cuenta</string>
 
     <string name="hello_blank_fragment">Hola Fragmento en Blanco</string>
+    <string name="txt_login">¿No Tienes\ una cuenta todavia?</string>
+    <string name="login">Iniciar Sesion</string>
+    <string name="register">Registrate</string>
+    <string name="log_txt_others">O inicia sesion usando</string>
+    <string name="name_app">RoutesApp</string>
+    <string name="tv_welcome">Bienvenido de vuelta!</string>
+    <string name="btn_sign_outd">Cerrar Sesion</string>
 </resources>

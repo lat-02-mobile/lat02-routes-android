@@ -1,86 +1,133 @@
 package com.jalasoft.routesapp.ui.auth.registerUser.viewModel
 
-import android.content.ContentValues.TAG
-import android.content.Context
-import android.util.Log
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import com.google.firebase.auth.AuthCredential
 import com.jalasoft.routesapp.R
-import com.jalasoft.routesapp.data.remote.managers.UserManager
+import com.jalasoft.routesapp.RoutesAppApplication
+import com.jalasoft.routesapp.data.remote.managers.UserRepository
+import com.jalasoft.routesapp.util.helpers.UserTypeLogin
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class RegisterUserViewModel : ViewModel() {
+@HiltViewModel
+class RegisterUserViewModel
+@Inject
+constructor(private val repository: UserRepository) : ViewModel() {
     val registerUser: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
     }
     val errorMessage: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
-    var context: Context? = null
+    val signInGoogle: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>()
+    }
 
-    fun registerUserAuth(name: String, email: String, password: String, confirmPassword: String) {
+    fun verifyRegisterUserAuth(name: String, email: String, password: String, confirmPassword: String) {
         val valid = validateFields(name, email, password, confirmPassword)
         if (valid.isEmpty()) {
-            if (validateEmail(email)) {
-                UserManager.createUserAuth(email, password, { _ ->
-                    registerUser(name, email, { _ ->
-                        registerUser.value = true
-                    }, { error ->
-                        errorMessage.value = error
-                    })
-                }, { error ->
-                    errorMessage.value = error
-                })
-            } else {
-                errorMessage.value = context?.getString(R.string.reg_vm_valid_email).toString()
-            }
+            validateEmailNormal(name, email, password)
         } else {
             errorMessage.value = valid
         }
     }
 
-    fun registerUser(name: String, email: String, successListener: (String) -> Unit, errorListener: (String) -> Unit) {
-        UserManager.createUser(name, email, { userId ->
-            successListener(userId)
-        }, { errorMessage ->
-            errorListener(errorMessage)
-        })
+    fun registerUserAuth(name: String, email: String, password: String, validEmail: Boolean) = viewModelScope.launch {
+        if (validEmail) {
+            val result = repository.createUserAuth(email, password)
+            if (result.message?.isNotEmpty() == true) {
+                errorMessage.value = result.message
+            } else {
+                registerUser(name, email, UserTypeLogin.NORMAL)
+            }
+        } else {
+            errorMessage.value = RoutesAppApplication.resource?.getString(R.string.reg_vm_valid_email).toString()
+        }
+    }
+
+    fun registerUser(name: String, email: String, typeLogin: UserTypeLogin) = viewModelScope.launch {
+        val result = repository.createUser(name, email, typeLogin)
+        if (result.message?.isNotEmpty() == true) {
+            errorMessage.value = result.message
+        } else {
+            registerUser.value = true
+        }
+    }
+
+    fun userGoogleAuth(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential, emailValid: Boolean) {
+        if (emailValid) {
+            registerUserWithGoogle(name, email, typeLogin, credential)
+        } else {
+            singInWithGoogleCredentials(credential)
+        }
+    }
+
+    fun registerUserWithGoogle(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential) = viewModelScope.launch {
+        val result = repository.createUser(name, email, typeLogin)
+        if (result.data?.isNotEmpty() == true) {
+            singInWithGoogleCredentials(credential)
+        }
+    }
+
+    fun singInWithGoogleCredentials(credential: AuthCredential) = viewModelScope.launch {
+        val result = repository.signInWithCredential(credential)
+        if (result.data?.isNotEmpty() == true) {
+            signInGoogle.value = true
+        } else {
+            signInGoogle.value = false
+            errorMessage.value = result.message
+        }
     }
 
     fun validateFields(name: String, email: String, password: String, confirmPassword: String): String {
         var isValid = ""
         if (name.isEmpty()) {
-            isValid = context?.getString(R.string.reg_val_name).toString()
+            isValid = RoutesAppApplication.resource?.getString(R.string.reg_val_name).toString()
             return isValid
         }
         if (email.isEmpty()) {
-            isValid = context?.getString(R.string.reg_val_email).toString()
+            isValid = RoutesAppApplication.resource?.getString(R.string.reg_val_email).toString()
             return isValid
         }
         if (password.isEmpty()) {
-            isValid = context?.getString(R.string.reg_val_password).toString()
+            isValid = RoutesAppApplication.resource?.getString(R.string.reg_val_password).toString()
             return isValid
         }
         if (confirmPassword.isEmpty()) {
-            isValid = context?.getString(R.string.reg_val_confirm_password).toString()
+            isValid = RoutesAppApplication.resource?.getString(R.string.reg_val_confirm_password).toString()
             return isValid
         }
         if (password != confirmPassword) {
-            isValid = context?.getString(R.string.reg_val_incorrect_passwords).toString()
+            isValid = RoutesAppApplication.resource?.getString(R.string.reg_val_incorrect_passwords).toString()
             return isValid
         }
         return isValid
     }
 
-    fun validateEmail(email: String): Boolean {
-        var isValid = true
-        UserManager.validateEmailUser(email, { users ->
-            if (users.isNotEmpty()) {
-                isValid = false
-            }
-        }, { error ->
-            Log.d(TAG, error)
-        })
-
-        return isValid
+    fun validateEmailNormal(name: String, email: String, password: String) = viewModelScope.launch {
+        val users = repository.validateEmailUser(email)
+        if (users.data?.isNotEmpty() == true) {
+            registerUserAuth(name, email, password, false)
+        } else {
+            registerUserAuth(name, email, password, true)
+        }
     }
+
+    fun validateEmailGoogle(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential) = viewModelScope.launch {
+        val users = repository.validateEmailUser(email)
+        if (users.data?.isNotEmpty() == true) {
+            userGoogleAuth(name, email, typeLogin, credential, false)
+        } else {
+            userGoogleAuth(name, email, typeLogin, credential, true)
+        }
+    }
+}
+
+@Suppress("UNCHECKED_CAST")
+class RegisterUserModelFactory(
+    private val userRepository: UserRepository
+) : ViewModelProvider.NewInstanceFactory() {
+    override fun <T : ViewModel> create(modelClass: Class<T>) =
+        (RegisterUserViewModel(userRepository) as T)
 }

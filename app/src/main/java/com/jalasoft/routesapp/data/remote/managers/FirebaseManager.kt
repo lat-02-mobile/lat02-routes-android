@@ -1,31 +1,32 @@
 package com.jalasoft.routesapp.data.remote.managers
 
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.firestore.FirebaseFirestore
 import com.jalasoft.routesapp.data.model.remote.User
+import com.jalasoft.routesapp.data.remote.interfaces.FirebaseDataSource
+import com.jalasoft.routesapp.util.Response
 import com.jalasoft.routesapp.util.helpers.FirebaseCollections
+import kotlinx.coroutines.tasks.await
 
-object FirebaseManager {
-    private val db = Firebase.firestore
-
+class FirebaseManager(private val db: FirebaseFirestore) : FirebaseDataSource {
     fun getDocId(collection: FirebaseCollections): String {
         return db.collection(collection.toString()).document().id
     }
 
-    fun <T : Any> addDocument(document: T, collection: FirebaseCollections, successListener: (String) -> Unit, errorListener: (String) -> Unit) {
-        db.collection(collection.toString()).add(document).addOnSuccessListener { documentReference ->
-            successListener(documentReference.id)
-        }.addOnFailureListener { exception ->
-            errorListener(exception.message.toString())
+    override suspend fun <T : Any> addDocument(document: T, collection: FirebaseCollections): Response<String> {
+        return try {
+            val result = db.collection(collection.toString()).add(document).await()
+            return Response.Success(result.id)
+        } catch (e: Exception) {
+            Response.Error(e.message.toString(), null)
         }
     }
 
-    fun getUsersByParameter(collection: FirebaseCollections, field: String, parameter: String, successListener: (MutableList<User>) -> Unit, errorListener: (String) -> Unit) {
-        db.collection(collection.toString()).whereEqualTo(field, parameter).get().addOnSuccessListener { documents ->
-            var users = documents.toObjects(User::class.java)
-            successListener(users)
-        }.addOnFailureListener { exception ->
-            errorListener(exception.message.toString())
+    override suspend fun getUsersByParameter(collection: FirebaseCollections, field: String, parameter: String): Response<MutableList<User>> {
+        return try {
+            val list = db.collection(collection.toString()).whereEqualTo(field, parameter).get().await()
+            return Response.Success(list.toObjects(User::class.java))
+        } catch (e: Exception) {
+            Response.Error(e.message.toString(), null)
         }
     }
 }
