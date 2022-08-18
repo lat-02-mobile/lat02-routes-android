@@ -3,21 +3,21 @@
     <item
         android:id="@+id/homeFragment"
         android:icon="@drawable/ic_baseline_directions_bus_24"
-        android:title="Home" />
+        android:title="@string/home" />
     <item
         android:id="@+id/locationsFragment"
         android:icon="@drawable/ic_baseline_location_on_24"
-        android:title="Locations" />
+        android:title="@string/locations" />
 
     <item
         android:id="@+id/favoritesFragment"
         android:icon="@drawable/ic_baseline_favorite_border_24"
-        android:title="Favorites"
+        android:title="@string/favorites"
         />
 
     <item
         android:id="@+id/settingsFragment"
         android:icon="@drawable/ic_baseline_settings_24"
-        android:title="Settings"
+        android:title="@string/settings"
         />
 </menu>

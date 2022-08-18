@@ -5,13 +5,11 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.Address
-import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
+import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -21,7 +19,6 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.viewModels
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -31,42 +28,30 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.jalasoft.routesapp.R
-import com.jalasoft.routesapp.ui.auth.login.viewModel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(), OnMapReadyCallback {
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
-    private val permissionId = 5
-    private val viewModel: LoginViewModel by viewModels()
-
-    companion object {
-        const val TAG = "HomeFragment"
-    }
 
     private val requestFINELOCATIONPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
                 getLocation()
-                Log.d(TAG, "has permissions fine location")
             } else {
                 Toast.makeText(
                     requireContext(),
-                    "Please give precise location permissions",
+                    getString(R.string.give_the_app_precise_location_permissions),
                     Toast.LENGTH_LONG
                 ).show()
+                // Redirect the user to the app settings to give permissions manually
+                val intent = Intent()
+                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                val uri = Uri.fromParts("package", activity?.packageName ?: null, null)
+                intent.setData(uri)
+                requireContext().startActivity(intent)
             }
         }
-//    val requestCOARSELOCATIONPermissionLauncher =
-//        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-//            if (isGranted) {
-//                Log.d(TAG, "has permissions coarse")
-//            } else {
-//                Log.d(TAG, "do not has permissions")
-//
-//            }
-//        }
 
     private var mMap: GoogleMap? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -89,7 +74,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         mapFragment?.getMapAsync(this)
 
         view.findViewById<ImageButton>(R.id.btn_current_location).setOnClickListener {
-//            getLocation()
             when {
                 ContextCompat.checkSelfPermission(
                     requireContext(),
@@ -98,9 +82,9 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                     getLocation()
                 }
                 shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> {
-                    AlertDialog.Builder(requireContext()).setTitle("Access location Permission")
-                        .setMessage("Please allow the location permission")
-                        .setPositiveButton("Allow") { _, _ ->
+                    AlertDialog.Builder(requireContext()).setTitle(getString(R.string.access_location_permission))
+                        .setMessage(getString(R.string.allow_get_precise_location_permission))
+                        .setPositiveButton(getString(R.string.allow)) { _, _ ->
                             requestFINELOCATIONPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
                         }.show()
                 }
@@ -110,7 +94,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             }
         }
 
-        // Button for logout
+        // FIX: Button for logout (is no longer working due the change from fragment to activity)
 //        view.findViewById<Button>(R.id.btn_sign_out).setOnClickListener {
 //            viewModel.signOutUser()
 //            findNavController().navigate(R.id.loginFragment)
@@ -133,21 +117,16 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             mFusedLocationClient.lastLocation.addOnCompleteListener() { task ->
                 val location: Location? = task.result
                 if (location != null) {
-                    val geocoder = Geocoder(requireContext(), Locale.getDefault())
-                    val list: List<Address> =
-                        geocoder.getFromLocation(location.latitude, location.longitude, 1)
                     moveToLocation(location)
                     Toast.makeText(
                         requireContext(),
-                        "Latitude: ${list[0].latitude}, Longitude: ${list[0].longitude}",
+                        getString(R.string.setting_marker_to_current_location),
                         Toast.LENGTH_LONG
                     ).show()
-                } else {
-                    Log.d("location", "nulling")
                 }
             }
         } else {
-            Toast.makeText(requireContext(), "Please turn on location", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), getString(R.string.turn_on_location), Toast.LENGTH_LONG).show()
             val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
             startActivity(intent)
         }
@@ -161,7 +140,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     private fun moveToLocation(location: Location) {
         val latlng = LatLng(location.latitude, location.longitude)
-        val location = CameraUpdateFactory.newLatLngZoom(latlng, 13f)
-        mMap?.animateCamera(location)
+        val cameraTargetLocation = CameraUpdateFactory.newLatLngZoom(latlng, 13f)
+        mMap?.animateCamera(cameraTargetLocation)
     }
 }

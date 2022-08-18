@@ -26,4 +26,18 @@
     <string name="name_app">RoutesApp</string>
     <string name="tv_welcome">Bienvenido de vuelta!</string>
     <string name="btn_sign_outd">Cerrar Sesion</string>
+
+    <!-- Home Fragment -->
+    <string name="give_the_app_precise_location_permissions" translatable="false">Para usar esta funcionalidad por favor, otorgue a la aplicacion permisos the ubicacion precisos</string>
+    <string name="access_location_permission">Permiso para acceder a la ubicación</string>
+    <string name="allow_get_precise_location_permission">Por favor permita que la aplicacion obtenga permisos para la ubicación</string>
+    <string name="allow">Permitir</string>
+    <string name="turn_on_location">Por favor, encienda la ubicación</string>
+    <string name="setting_marker_to_current_location">Moviendo el marcador a su ubicación actual</string>
+
+    <!-- Main Menu -->
+    <string name="home">Inicio</string>
+    <string name="locations">Ubicaciones</string>
+    <string name="favorites">Favoritos</string>
+    <string name="settings">Configuracion</string>
 </resources>
