@@ -2,6 +2,7 @@ package com.jalasoft.routesapp.ui.auth.login.view
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +21,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.GoogleAuthProvider
+import com.jalasoft.routesapp.MainActivity
 import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.databinding.FragmentLoginBinding
 import com.jalasoft.routesapp.ui.auth.login.viewModel.LoginViewModel
@@ -96,12 +98,16 @@ class LoginFragment : Fragment() {
             showProgress(false)
             binding.loginEmail.setText("")
             binding.loginPassword.setText("")
-            findNavController().navigate(R.id.homeFragment)
+            val intent = Intent(activity, MainActivity::class.java)
+            activity?.startActivity(intent)
+            activity?.finish()
             Toast.makeText(context, "Login Successfully", Toast.LENGTH_SHORT).show()
         }
         val googleObserver = Observer<Boolean> { value ->
             if (value) {
-                findNavController().navigate(R.id.homeFragment)
+                val intent = Intent(activity, MainActivity::class.java)
+                activity?.startActivity(intent)
+                activity?.finish()
                 showProgress(false)
             }
         }
