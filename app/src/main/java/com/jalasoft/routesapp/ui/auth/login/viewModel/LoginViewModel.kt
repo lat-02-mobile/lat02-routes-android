@@ -9,8 +9,6 @@ import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.jalasoft.routesapp.R
-import com.jalasoft.routesapp.data.model.remote.User
-import com.jalasoft.routesapp.data.remote.interfaces.IUserManager
 import com.jalasoft.routesapp.data.remote.managers.AuthFirebaseManager
 import com.jalasoft.routesapp.data.remote.managers.UserManager
 import com.jalasoft.routesapp.util.helpers.UserTypeLogin
@@ -20,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel
 @Inject
-constructor(private val userManager: UserManager, private val auth: AuthFirebaseManager) : ViewModel(), IUserManager {
+constructor(private val userManager: UserManager, private val auth: AuthFirebaseManager) : ViewModel() {
 
     val loginIsSuccessful: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
@@ -124,19 +122,7 @@ constructor(private val userManager: UserManager, private val auth: AuthFirebase
     }*/
 
     fun validateEmailGoogle(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential) {
-        userManager.validateEmailUserGoogle(name, email, typeLogin, credential, this)
-    }
-
-    override fun validateEmailNormalResponse(name: String, email: String, password: String, users: MutableList<User>) {
-        // Nothing to implement
-    }
-
-    override fun validateEmailGoogleResponse(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential, users: MutableList<User>) {
-        if (users.isNotEmpty()) {
-            userGoogleAuth(name, email, typeLogin, credential, false)
-        } else {
-            userGoogleAuth(name, email, typeLogin, credential, true)
-        }
+        // userManager.validateEmailUserGoogle(name, email, typeLogin, credential, this)
     }
 
     fun userGoogleAuth(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential, emailValid: Boolean) {
@@ -152,20 +138,20 @@ constructor(private val userManager: UserManager, private val auth: AuthFirebase
     }
 
     fun registerUserWithGoogle(name: String, email: String, typeLogin: UserTypeLogin, successListener: (String) -> Unit, errorListener: (String) -> Unit) {
-        userManager.createUser(name, email, typeLogin, { userId ->
+        /*userManager.createUser(name, email, typeLogin, { userId ->
             successListener(userId)
         }, { errorMessage ->
             errorListener(errorMessage)
-        })
+        })*/
     }
 
     fun singInWithGoogleCredentials(credential: AuthCredential) {
-        userManager.signInWithCredential(credential, {
+        /*userManager.signInWithCredential(credential, {
             signInGoogle.value = true
         }, {
             signInGoogle.value = false
             errorMessage.value = it
-        })
+        })*/
     }
 
     fun signOutUser() {
