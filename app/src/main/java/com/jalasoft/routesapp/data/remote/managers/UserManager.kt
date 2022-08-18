@@ -30,7 +30,7 @@ class UserManager(private val authManager: AuthFirebaseManager, private val fire
         return authManager.signInUserAuth(credential)
     }
 
-    fun signOutUser() {
+    override fun signOut() {
         authManager.singOut()
     }
 }

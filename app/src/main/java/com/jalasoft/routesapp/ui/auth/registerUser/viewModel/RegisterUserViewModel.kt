@@ -1,10 +1,8 @@
 package com.jalasoft.routesapp.ui.auth.registerUser.viewModel
 
+import android.annotation.SuppressLint
 import android.content.Context
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.google.firebase.auth.AuthCredential
 import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.data.remote.managers.UserRepository
@@ -26,6 +24,8 @@ constructor(private val repository: UserRepository) : ViewModel() {
     val signInGoogle: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
     }
+
+    @SuppressLint("StaticFieldLeak")
     var context: Context? = null
 
     fun verifyRegisterUserAuth(name: String, email: String, password: String, confirmPassword: String) {
@@ -37,18 +37,13 @@ constructor(private val repository: UserRepository) : ViewModel() {
         }
     }
 
-    private fun registerUserAuth(name: String, email: String, password: String, validEmail: Boolean) = viewModelScope.launch {
+    fun registerUserAuth(name: String, email: String, password: String, validEmail: Boolean) = viewModelScope.launch {
         if (validEmail) {
             val result = repository.createUserAuth(email, password)
             if (result.message?.isNotEmpty() == true) {
                 errorMessage.value = result.message
             } else {
-                val result = repository.createUser(name, email, UserTypeLogin.NORMAL)
-                if (result.message?.isNotEmpty() == true) {
-                    errorMessage.value = result.message
-                } else {
-                    registerUser.value = true
-                }
+                registerUser(name, email, UserTypeLogin.NORMAL)
             }
         } else {
             errorMessage.value = context?.getString(R.string.reg_vm_valid_email).toString()
@@ -59,6 +54,8 @@ constructor(private val repository: UserRepository) : ViewModel() {
         val result = repository.createUser(name, email, typeLogin)
         if (result.message?.isNotEmpty() == true) {
             errorMessage.value = result.message
+        } else {
+            registerUser.value = true
         }
     }
 

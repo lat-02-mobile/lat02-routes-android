@@ -23,4 +23,8 @@ class FakeDataUserManager(var users: MutableList<User> = mutableListOf()) : User
     override suspend fun signInWithCredential(credential: AuthCredential): Response<String> {
         return Response.Success(credential.toString())
     }
+
+    override fun signOut() {
+        users.removeAll(users)
+    }
 }
