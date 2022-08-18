@@ -1,10 +1,9 @@
 package com.jalasoft.routesapp.ui.auth.registerUser.viewModel
 
-import android.annotation.SuppressLint
-import android.content.Context
 import androidx.lifecycle.*
 import com.google.firebase.auth.AuthCredential
 import com.jalasoft.routesapp.R
+import com.jalasoft.routesapp.RoutesAppApplication
 import com.jalasoft.routesapp.data.remote.managers.UserRepository
 import com.jalasoft.routesapp.util.helpers.UserTypeLogin
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,9 +24,6 @@ constructor(private val repository: UserRepository) : ViewModel() {
         MutableLiveData<Boolean>()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    var context: Context? = null
-
     fun verifyRegisterUserAuth(name: String, email: String, password: String, confirmPassword: String) {
         val valid = validateFields(name, email, password, confirmPassword)
         if (valid.isEmpty()) {
@@ -46,7 +42,7 @@ constructor(private val repository: UserRepository) : ViewModel() {
                 registerUser(name, email, UserTypeLogin.NORMAL)
             }
         } else {
-            errorMessage.value = context?.getString(R.string.reg_vm_valid_email).toString()
+            errorMessage.value = RoutesAppApplication.resource?.getString(R.string.reg_vm_valid_email).toString()
         }
     }
 
@@ -87,23 +83,23 @@ constructor(private val repository: UserRepository) : ViewModel() {
     fun validateFields(name: String, email: String, password: String, confirmPassword: String): String {
         var isValid = ""
         if (name.isEmpty()) {
-            isValid = context?.getString(R.string.reg_val_name).toString()
+            isValid = RoutesAppApplication.resource?.getString(R.string.reg_val_name).toString()
             return isValid
         }
         if (email.isEmpty()) {
-            isValid = context?.getString(R.string.reg_val_email).toString()
+            isValid = RoutesAppApplication.resource?.getString(R.string.reg_val_email).toString()
             return isValid
         }
         if (password.isEmpty()) {
-            isValid = context?.getString(R.string.reg_val_password).toString()
+            isValid = RoutesAppApplication.resource?.getString(R.string.reg_val_password).toString()
             return isValid
         }
         if (confirmPassword.isEmpty()) {
-            isValid = context?.getString(R.string.reg_val_confirm_password).toString()
+            isValid = RoutesAppApplication.resource?.getString(R.string.reg_val_confirm_password).toString()
             return isValid
         }
         if (password != confirmPassword) {
-            isValid = context?.getString(R.string.reg_val_incorrect_passwords).toString()
+            isValid = RoutesAppApplication.resource?.getString(R.string.reg_val_incorrect_passwords).toString()
             return isValid
         }
         return isValid
