@@ -2,6 +2,7 @@ package com.jalasoft.routesapp.ui.auth.registerUser.view
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -19,6 +20,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.GoogleAuthProvider
+import com.jalasoft.routesapp.MainActivity
 import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.databinding.FragmentRegisterUserBinding
 import com.jalasoft.routesapp.ui.auth.registerUser.viewModel.RegisterUserViewModel
@@ -54,7 +56,6 @@ class RegisterUserFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.context = context
         googleConfiguration()
         buttonActions()
     }
@@ -90,8 +91,9 @@ class RegisterUserFragment : Fragment() {
         }
         val googleObserver = Observer<Boolean> { value ->
             if (value) {
-                showProgress(false)
-                findNavController().navigate(R.id.homeFragment)
+                val intent = Intent(activity, MainActivity::class.java)
+                activity?.startActivity(intent)
+                activity?.finish()
             }
         }
         viewModel.errorMessage.observe(this, errorObserver)
@@ -101,7 +103,7 @@ class RegisterUserFragment : Fragment() {
 
     private fun googleConfiguration() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_cliente_id))
+            .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
         googleSingInClient = GoogleSignIn.getClient(binding.root.context, gso)

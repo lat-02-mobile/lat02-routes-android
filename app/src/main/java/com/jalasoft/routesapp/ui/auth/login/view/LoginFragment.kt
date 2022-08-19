@@ -74,7 +74,7 @@ class LoginFragment : Fragment() {
 
     private fun googleConfiguration() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_cliente_id))
+            .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
         googleSingInClient = GoogleSignIn.getClient(binding.root.context, gso)

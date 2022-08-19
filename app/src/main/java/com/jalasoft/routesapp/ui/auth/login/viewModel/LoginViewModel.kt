@@ -3,24 +3,22 @@ package com.jalasoft.routesapp.ui.auth.login.viewModel
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.AuthCredential
-import com.google.firebase.auth.FirebaseAuth
 import com.jalasoft.routesapp.R
-import com.jalasoft.routesapp.data.model.remote.User
-import com.jalasoft.routesapp.data.remote.interfaces.IUserManager
-import com.jalasoft.routesapp.data.remote.managers.AuthFirebaseManager
-import com.jalasoft.routesapp.data.remote.managers.UserManager
+import com.jalasoft.routesapp.data.remote.managers.UserRepository
 import com.jalasoft.routesapp.util.helpers.UserTypeLogin
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel
 @Inject
-constructor(private val userManager: UserManager, private val auth: AuthFirebaseManager) : ViewModel(), IUserManager {
+constructor(private val repository: UserRepository) : ViewModel() {
 
     val loginIsSuccessful: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
@@ -48,7 +46,7 @@ constructor(private val userManager: UserManager, private val auth: AuthFirebase
         }*/
 
     fun loginUserAuth(email: String, password: String) {
-        val valid = validateFields(email, password)
+        /*val valid = validateFields(email, password)
         var user = FirebaseAuth.getInstance().currentUser
         if (user == null) {
             if (valid.isEmpty()) {
@@ -67,7 +65,7 @@ constructor(private val userManager: UserManager, private val auth: AuthFirebase
                 //    print("fail")
                 // }
             }
-        }
+        }*/
     }
 
     private fun showErrorAlert() {
@@ -123,16 +121,9 @@ constructor(private val userManager: UserManager, private val auth: AuthFirebase
         fragmentTransaction.commit()
     }*/
 
-    fun validateEmailGoogle(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential) {
-        userManager.validateEmailUserGoogle(name, email, typeLogin, credential, this)
-    }
-
-    override fun validateEmailNormalResponse(name: String, email: String, password: String, users: MutableList<User>) {
-        // Nothing to implement
-    }
-
-    override fun validateEmailGoogleResponse(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential, users: MutableList<User>) {
-        if (users.isNotEmpty()) {
+    fun validateEmailGoogle(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential) = viewModelScope.launch {
+        val users = repository.validateEmailUser(email)
+        if (users.data?.isNotEmpty() == true) {
             userGoogleAuth(name, email, typeLogin, credential, false)
         } else {
             userGoogleAuth(name, email, typeLogin, credential, true)
@@ -141,34 +132,38 @@ constructor(private val userManager: UserManager, private val auth: AuthFirebase
 
     fun userGoogleAuth(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential, emailValid: Boolean) {
         if (emailValid) {
-            registerUserWithGoogle(name, email, typeLogin, { _ ->
-                singInWithGoogleCredentials(credential)
-            }, { error ->
-                errorMessage.value = error
-            })
+            registerUserWithGoogle(name, email, typeLogin, credential)
         } else {
             singInWithGoogleCredentials(credential)
         }
     }
 
-    fun registerUserWithGoogle(name: String, email: String, typeLogin: UserTypeLogin, successListener: (String) -> Unit, errorListener: (String) -> Unit) {
-        userManager.createUser(name, email, typeLogin, { userId ->
-            successListener(userId)
-        }, { errorMessage ->
-            errorListener(errorMessage)
-        })
+    fun registerUserWithGoogle(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential) = viewModelScope.launch {
+        val result = repository.createUser(name, email, typeLogin)
+        if (result.data?.isNotEmpty() == true) {
+            singInWithGoogleCredentials(credential)
+        }
     }
 
-    fun singInWithGoogleCredentials(credential: AuthCredential) {
-        userManager.signInWithCredential(credential, {
+    fun singInWithGoogleCredentials(credential: AuthCredential) = viewModelScope.launch {
+        val result = repository.signInWithCredential(credential)
+        if (result.data?.isNotEmpty() == true) {
             signInGoogle.value = true
-        }, {
+        } else {
             signInGoogle.value = false
-            errorMessage.value = it
-        })
+            errorMessage.value = result.message
+        }
     }
 
     fun signOutUser() {
-        userManager.signOutUser()
+        repository.signOut()
     }
+}
+
+@Suppress("UNCHECKED_CAST")
+class LoginModelFactory(
+    private val userRepository: UserRepository
+) : ViewModelProvider.NewInstanceFactory() {
+    override fun <T : ViewModel> create(modelClass: Class<T>) =
+        (LoginViewModel(userRepository) as T)
 }
