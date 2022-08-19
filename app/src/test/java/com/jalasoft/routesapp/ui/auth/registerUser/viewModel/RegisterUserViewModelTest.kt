@@ -232,7 +232,7 @@ class RegisterUserViewModelTest : TestCase() {
     @Test
     fun `Given Google - Facebook Email is not register and it register the user or Email is registered it SignIn`() {
         runBlocking {
-            viewModel.singInWithGoogleCredentials(credential)
+            viewModel.singInWithCredentials(credential)
 
             val observer = Observer<Boolean> {}
             try {
