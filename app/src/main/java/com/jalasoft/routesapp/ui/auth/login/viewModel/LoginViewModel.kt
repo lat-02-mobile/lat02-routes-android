@@ -103,12 +103,8 @@ constructor(private val repository: UserRepository) : ViewModel() {
     }
 
     fun validateEmailGoogleOrFacebook(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential) = viewModelScope.launch {
-        val users = repository.validateEmailUser(email)
-        if (users.data?.isNotEmpty() == true) {
-            userAuthWithCredentials(name, email, typeLogin, credential, false)
-        } else {
-            userAuthWithCredentials(name, email, typeLogin, credential, true)
-        }
+        val isEmailRegistered = repository.validateEmailUser(email).data?.isEmpty() == true
+        userAuthWithCredentials(name, email, typeLogin, credential, isEmailRegistered)
     }
 
     fun userAuthWithCredentials(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential, emailValid: Boolean) {
