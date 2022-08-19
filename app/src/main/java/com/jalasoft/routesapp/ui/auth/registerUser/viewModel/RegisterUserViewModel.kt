@@ -59,18 +59,18 @@ constructor(private val repository: UserRepository) : ViewModel() {
         if (emailValid) {
             registerUserWithGoogle(name, email, typeLogin, credential)
         } else {
-            singInWithGoogleCredentials(credential)
+            singInWithCredentials(credential)
         }
     }
 
     fun registerUserWithGoogle(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential) = viewModelScope.launch {
         val result = repository.createUser(name, email, typeLogin)
         if (result.data?.isNotEmpty() == true) {
-            singInWithGoogleCredentials(credential)
+            singInWithCredentials(credential)
         }
     }
 
-    fun singInWithGoogleCredentials(credential: AuthCredential) = viewModelScope.launch {
+    fun singInWithCredentials(credential: AuthCredential) = viewModelScope.launch {
         val result = repository.signInWithCredential(credential)
         if (result.data?.isNotEmpty() == true) {
             signInGoogleOrFacebook.value = true
