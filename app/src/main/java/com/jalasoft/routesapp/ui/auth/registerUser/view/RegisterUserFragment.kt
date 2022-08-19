@@ -1,27 +1,26 @@
 package com.jalasoft.routesapp.ui.auth.registerUser.view
 
 import android.app.Activity
-import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.facebook.CallbackManager
+import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.tasks.Task
-import com.google.firebase.FirebaseApp
-import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.AuthCredential
 import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.databinding.FragmentRegisterUserBinding
 import com.jalasoft.routesapp.ui.auth.registerUser.viewModel.RegisterUserViewModel
+import com.jalasoft.routesapp.util.FacebookGoogleAuthUtil
 import com.jalasoft.routesapp.util.helpers.UserTypeLogin
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -32,11 +31,8 @@ class RegisterUserFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: RegisterUserViewModel by viewModels()
     private lateinit var googleSingInClient: GoogleSignInClient
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        FirebaseApp.initializeApp(context)
-    }
+    private lateinit var callbackManager: CallbackManager
+    private lateinit var fbLoginManager: LoginManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,26 +43,47 @@ class RegisterUserFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentRegisterUserBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        googleConfiguration()
+
+        callbackManager = CallbackManager.Factory.create()
+        fbLoginManager = LoginManager.getInstance()
+
+        googleSingInClient = FacebookGoogleAuthUtil.googleConfiguration(binding.root.context)
+
+        FacebookGoogleAuthUtil.facebookConfiguration(callbackManager, fbLoginManager) { displayName, email, userTypeLogin, credential ->
+            updateUI(displayName, email, userTypeLogin, credential)
+        }
+
         buttonActions()
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        callbackManager.onActivityResult(requestCode, resultCode, data)
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     private fun buttonActions() {
         binding.btnRegRegister.setOnClickListener {
             addUser()
         }
+
         binding.ibRegGoogle.setOnClickListener {
             signInGoogle()
         }
+
         binding.btnRegLogin.setOnClickListener {
             findNavController().navigateUp()
+        }
+
+        binding.ibRegFacebook.setOnClickListener {
+            fbLoginManager.logIn(this, FacebookGoogleAuthUtil.FB_PERMISSIONS)
         }
     }
 
@@ -87,7 +104,7 @@ class RegisterUserFragment : Fragment() {
                 findNavController().navigate(R.id.homeFragment)
             }
         }
-        val googleObserver = Observer<Boolean> { value ->
+        val googleAndFacebookObserver = Observer<Boolean> { value ->
             if (value) {
                 showProgress(false)
                 findNavController().navigate(R.id.homeFragment)
@@ -95,15 +112,7 @@ class RegisterUserFragment : Fragment() {
         }
         viewModel.errorMessage.observe(this, errorObserver)
         viewModel.registerUser.observe(this, resultObserver)
-        viewModel.signInGoogle.observe(this, googleObserver)
-    }
-
-    private fun googleConfiguration() {
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
-        googleSingInClient = GoogleSignIn.getClient(binding.root.context, gso)
+        viewModel.signInGoogleOrFacebook.observe(this, googleAndFacebookObserver)
     }
 
     private fun addUser() {
@@ -125,21 +134,15 @@ class RegisterUserFragment : Fragment() {
             result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-            handleResults(task)
+            FacebookGoogleAuthUtil.handleGoogleResults(task) { displayName, email, userTypeLogin, credential ->
+                updateUI(displayName, email, userTypeLogin, credential)
+            }
         }
     }
 
-    private fun handleResults(task: Task<GoogleSignInAccount>) {
-        val account: GoogleSignInAccount? = task.result
-        if (account != null) {
-            updateUI(account)
-        }
-    }
-
-    private fun updateUI(account: GoogleSignInAccount) {
+    private fun updateUI(displayName: String, email: String, userTypeLogin: UserTypeLogin, credential: AuthCredential) {
         showProgress(true)
-        val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-        viewModel.validateEmailGoogle(account.displayName.toString(), account.email.toString(), UserTypeLogin.GOOGLE, credential)
+        viewModel.validateEmailGoogleOrFacebook(displayName, email, userTypeLogin, credential)
     }
 
     private fun showProgress(show: Boolean) {

@@ -1,7 +1,7 @@
 package com.jalasoft.routesapp.ui.auth.login.view
 
 import android.app.Activity
-import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,16 +13,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.facebook.CallbackManager
+import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.tasks.Task
-import com.google.firebase.FirebaseApp
-import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.AuthCredential
 import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.databinding.FragmentLoginBinding
 import com.jalasoft.routesapp.ui.auth.login.viewModel.LoginViewModel
+import com.jalasoft.routesapp.util.FacebookGoogleAuthUtil
 import com.jalasoft.routesapp.util.helpers.UserTypeLogin
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -33,15 +32,12 @@ class LoginFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: LoginViewModel by viewModels()
     private lateinit var googleSingInClient: GoogleSignInClient
+    private lateinit var callbackManager: CallbackManager
+    private lateinit var fbLoginManager: LoginManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         observers()
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        FirebaseApp.initializeApp(context)
     }
 
     override fun onCreateView(
@@ -55,8 +51,28 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        googleConfiguration()
+
+        callbackManager = CallbackManager.Factory.create()
+        fbLoginManager = LoginManager.getInstance()
+
+        googleSingInClient = FacebookGoogleAuthUtil.googleConfiguration(binding.root.context)
+
+        FacebookGoogleAuthUtil.facebookConfiguration(callbackManager, fbLoginManager) { displayName, email, userTypeLogin, credential ->
+            updateUI(displayName, email, userTypeLogin, credential)
+        }
+
+        buttonActions()
+
         viewModel.context = context
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        callbackManager.onActivityResult(requestCode, resultCode, data)
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    private fun buttonActions() {
         binding.btnLogRegister.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registerUserFragment)
         }
@@ -68,14 +84,10 @@ class LoginFragment : Fragment() {
         binding.ibLogGoogle.setOnClickListener {
             signInGoogle()
         }
-    }
 
-    private fun googleConfiguration() {
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
-        googleSingInClient = GoogleSignIn.getClient(binding.root.context, gso)
+        binding.ibLogFacebook.setOnClickListener {
+            fbLoginManager.logIn(this, FacebookGoogleAuthUtil.FB_PERMISSIONS)
+        }
     }
 
     private fun loginWithEmailAndPassword() {
@@ -99,7 +111,7 @@ class LoginFragment : Fragment() {
             findNavController().navigate(R.id.homeFragment)
             Toast.makeText(context, "Login Successfully", Toast.LENGTH_SHORT).show()
         }
-        val googleObserver = Observer<Boolean> { value ->
+        val googleAndFacebookObserver = Observer<Boolean> { value ->
             if (value) {
                 findNavController().navigate(R.id.homeFragment)
                 showProgress(false)
@@ -107,7 +119,7 @@ class LoginFragment : Fragment() {
         }
         viewModel.errorMessage.observe(this, errorObserver)
         viewModel.loginIsSuccessful.observe(this, resultObserver)
-        viewModel.signInGoogle.observe(this, googleObserver)
+        viewModel.signInGoogleOrFacebook.observe(this, googleAndFacebookObserver)
     }
 
     private fun showProgress(show: Boolean) {
@@ -118,26 +130,6 @@ class LoginFragment : Fragment() {
         }
     }
 
-    /*fun goToHomeFragment(){
-        if(loginIsSuccessful == true){
-            findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
-        }
-    }
-*/
-    /*companion object {
-        const val tv_email = "email"
-        const val providerType = "provider"
-
-        fun newInstance(email: String, provider: LoginViewModel.ProviderType): HomeFragment {
-            val fragment = HomeFragment()
-            val args = Bundle()
-            args.putString(tv_email, email)
-            args.putString(providerType, provider.name)
-            fragment.arguments = args
-            return fragment
-        }
-    }*/
-
     private fun signInGoogle() {
         val signInIntent = googleSingInClient.signInIntent
         launcher.launch(signInIntent)
@@ -147,20 +139,19 @@ class LoginFragment : Fragment() {
             result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-            handleResults(task)
+            FacebookGoogleAuthUtil.handleGoogleResults(task) { displayName, email, userTypeLogin, credential ->
+                updateUI(displayName, email, userTypeLogin, credential)
+            }
         }
     }
 
-    private fun handleResults(task: Task<GoogleSignInAccount>) {
-        val account: GoogleSignInAccount? = task.result
-        if (account != null) {
-            updateUI(account)
-        }
-    }
-
-    private fun updateUI(account: GoogleSignInAccount) {
+    private fun updateUI(displayName: String, email: String, userTypeLogin: UserTypeLogin, credential: AuthCredential) {
         showProgress(true)
-        val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-        viewModel.validateEmailGoogle(account.displayName.toString(), account.email.toString(), UserTypeLogin.GOOGLE, credential)
+        viewModel.validateEmailGoogleOrFacebook(displayName, email, userTypeLogin, credential)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

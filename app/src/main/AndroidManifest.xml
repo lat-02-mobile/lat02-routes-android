@@ -3,6 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.jalasoft.routesapp">
 
+    <queries>
+        <provider android:authorities="com.facebook.katana.provider.PlatformProvider"
+            android:exported="false" />
+    </queries>
+
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
@@ -16,6 +21,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RoutesApp"
         tools:targetApi="31">
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>
+
+        <activity android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
