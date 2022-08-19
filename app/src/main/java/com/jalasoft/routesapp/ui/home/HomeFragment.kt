@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -28,12 +27,14 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.jalasoft.routesapp.R
+import com.jalasoft.routesapp.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(), OnMapReadyCallback {
+    private var _binding: FragmentHomeBinding? = null
+    private val binding get() = _binding!!
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
-
     private val requestFINELOCATIONPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
@@ -46,14 +47,15 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 ).show()
                 // Redirect the user to the app settings to give permissions manually
                 val intent = Intent()
-                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
                 val uri = Uri.fromParts("package", activity?.packageName ?: null, null)
-                intent.setData(uri)
+                intent.data = uri
                 requireContext().startActivity(intent)
             }
         }
 
     private var mMap: GoogleMap? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -63,7 +65,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -73,7 +76,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             childFragmentManager.findFragmentById(R.id.map_fragment) as? SupportMapFragment
         mapFragment?.getMapAsync(this)
 
-        view.findViewById<ImageButton>(R.id.btn_current_location).setOnClickListener {
+        binding.btnCurrentLocation.setOnClickListener {
             when {
                 ContextCompat.checkSelfPermission(
                     requireContext(),
@@ -93,12 +96,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 }
             }
         }
-
-        // FIX: Button for logout (is no longer working due the change from fragment to activity)
-//        view.findViewById<Button>(R.id.btn_sign_out).setOnClickListener {
-//            viewModel.signOutUser()
-//            findNavController().navigate(R.id.loginFragment)
-//        }
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -118,11 +115,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 val location: Location? = task.result
                 if (location != null) {
                     moveToLocation(location)
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.setting_marker_to_current_location),
-                        Toast.LENGTH_LONG
-                    ).show()
                 }
             }
         } else {
