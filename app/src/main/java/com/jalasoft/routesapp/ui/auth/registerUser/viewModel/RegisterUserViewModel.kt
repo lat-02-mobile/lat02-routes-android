@@ -4,7 +4,6 @@ import androidx.lifecycle.*
 import com.google.firebase.auth.AuthCredential
 import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.RoutesAppApplication
-import com.jalasoft.routesapp.data.model.remote.User
 import com.jalasoft.routesapp.data.remote.managers.UserRepository
 import com.jalasoft.routesapp.util.helpers.UserTypeLogin
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -56,7 +55,7 @@ constructor(private val repository: UserRepository) : ViewModel() {
         }
     }
 
-    fun userGoogleAuth(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential, emailValid: Boolean) {
+    fun userAuthWithCredentials(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential, emailValid: Boolean) {
         if (emailValid) {
             registerUserWithGoogle(name, email, typeLogin, credential)
         } else {
@@ -106,7 +105,7 @@ constructor(private val repository: UserRepository) : ViewModel() {
         return isValid
     }
 
-    private fun validateEmailNormal(name: String, email: String, password: String) = viewModelScope.launch {
+    fun validateEmailNormal(name: String, email: String, password: String) = viewModelScope.launch {
         val users = repository.validateEmailUser(email)
         if (users.data?.isNotEmpty() == true) {
             registerUserAuth(name, email, password, false)
@@ -115,12 +114,12 @@ constructor(private val repository: UserRepository) : ViewModel() {
         }
     }
 
-    override fun validateEmailGoogleOrFacebookResponse(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential, users: MutableList<User>) {
+    fun validateEmailGoogleOrFacebook(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential) = viewModelScope.launch {
         val users = repository.validateEmailUser(email)
         if (users.data?.isNotEmpty() == true) {
-            userGoogleAuth(name, email, typeLogin, credential, false)
+            userAuthWithCredentials(name, email, typeLogin, credential, false)
         } else {
-            userGoogleAuth(name, email, typeLogin, credential, true)
+            userAuthWithCredentials(name, email, typeLogin, credential, true)
         }
     }
 }

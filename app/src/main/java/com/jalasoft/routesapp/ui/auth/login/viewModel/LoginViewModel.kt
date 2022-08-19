@@ -111,7 +111,7 @@ constructor(private val repository: UserRepository) : ViewModel() {
         }
     }
 
-    private fun userAuthWithCredentials(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential, emailValid: Boolean) {
+    fun userAuthWithCredentials(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential, emailValid: Boolean) {
         if (emailValid) {
             registerUserToFirebaseFromGoogleOrFacebook(name, email, typeLogin, credential)
         } else {
@@ -119,14 +119,14 @@ constructor(private val repository: UserRepository) : ViewModel() {
         }
     }
 
-    private fun registerUserToFirebaseFromGoogleOrFacebook(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential) = viewModelScope.launch {
+    fun registerUserToFirebaseFromGoogleOrFacebook(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential) = viewModelScope.launch {
         val result = repository.createUser(name, email, typeLogin)
         if (result.data?.isNotEmpty() == true) {
             singInWithCredentials(credential)
         }
     }
 
-    private fun singInWithCredentials(credential: AuthCredential) = viewModelScope.launch {
+    fun singInWithCredentials(credential: AuthCredential) = viewModelScope.launch {
         val result = repository.signInWithCredential(credential)
         if (result.data?.isNotEmpty() == true) {
             signInGoogleOrFacebook.value = true
