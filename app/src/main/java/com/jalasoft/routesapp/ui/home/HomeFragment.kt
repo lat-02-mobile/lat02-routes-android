@@ -37,21 +37,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private val requestFINELOCATIONPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-            if (isGranted) {
-                getLocation()
-            } else {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.give_the_app_precise_location_permissions),
-                    Toast.LENGTH_LONG
-                ).show()
-                // Redirect the user to the app settings to give permissions manually
-                val intent = Intent()
-                intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                val uri = Uri.fromParts("package", activity?.packageName ?: null, null)
-                intent.data = uri
-                requireContext().startActivity(intent)
-            }
+            checkPermissions(isGranted)
         }
 
     private var mMap: GoogleMap? = null
@@ -77,23 +63,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         mapFragment?.getMapAsync(this)
 
         binding.btnCurrentLocation.setOnClickListener {
-            when {
-                ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ) == PackageManager.PERMISSION_GRANTED -> {
-                    getLocation()
-                }
-                shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> {
-                    AlertDialog.Builder(requireContext()).setTitle(getString(R.string.access_location_permission))
-                        .setMessage(getString(R.string.allow_get_precise_location_permission))
-                        .setPositiveButton(getString(R.string.allow)) { _, _ ->
-                            requestFINELOCATIONPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-                        }.show()
-                }
-                else -> {
-                    requestFINELOCATIONPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-                }
+            if (isLocationPermissionGranted()) {
+                getLocation()
             }
         }
     }
@@ -108,7 +79,52 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         mMap = googleMap
     }
 
-    @SuppressLint("MissingPermission", "SetTextI18n")
+    @SuppressLint("MissingPermission")
+    private fun isLocationPermissionGranted(): Boolean {
+        when {
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                mMap?.isMyLocationEnabled = true
+                return true
+            }
+            shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> {
+                AlertDialog.Builder(requireContext()).setTitle(getString(R.string.access_location_permission))
+                    .setMessage(getString(R.string.allow_get_precise_location_permission))
+                    .setPositiveButton(getString(R.string.allow)) { _, _ ->
+                        requestFINELOCATIONPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+                    }.show()
+                return false
+            }
+            else -> {
+                requestFINELOCATIONPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+                return false
+            }
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun checkPermissions(isGranted: Boolean) {
+        if (isGranted) {
+            mMap?.isMyLocationEnabled = true
+            getLocation()
+        } else {
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.give_the_app_precise_location_permissions),
+                Toast.LENGTH_LONG
+            ).show()
+            // Redirect the user to the app settings to give permissions manually
+            val intent = Intent()
+            intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+            val uri = Uri.fromParts("package", activity?.packageName ?: null, null)
+            intent.data = uri
+            requireContext().startActivity(intent)
+        }
+    }
+
+    @SuppressLint("MissingPermission")
     private fun getLocation() {
         if (isLocationEnabled()) {
             mFusedLocationClient.lastLocation.addOnCompleteListener() { task ->

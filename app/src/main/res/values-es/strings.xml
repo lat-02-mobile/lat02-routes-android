@@ -24,6 +24,7 @@
     <string name="name_app">RoutesApp</string>
     <string name="tv_welcome">Bienvenido de vuelta!</string>
     <string name="btn_sign_outd">Cerrar Sesion</string>
+    <string name="login_success">Ingreso exitoso</string>
 
     <!-- Home Fragment -->
     <string name="give_the_app_precise_location_permissions" translatable="false">Esta funcionalidad requiere permisos de la ubicacion precisa</string>
