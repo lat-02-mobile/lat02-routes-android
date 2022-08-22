@@ -17,6 +17,7 @@ import com.facebook.CallbackManager
 import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.jalasoft.routesapp.MainActivity
 import com.google.firebase.auth.AuthCredential
 import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.databinding.FragmentLoginBinding
@@ -108,12 +109,16 @@ class LoginFragment : Fragment() {
             showProgress(false)
             binding.loginEmail.setText("")
             binding.loginPassword.setText("")
-            findNavController().navigate(R.id.homeFragment)
+            val intent = Intent(activity, MainActivity::class.java)
+            activity?.startActivity(intent)
+            activity?.finish()
             Toast.makeText(context, "Login Successfully", Toast.LENGTH_SHORT).show()
         }
         val googleAndFacebookObserver = Observer<Boolean> { value ->
             if (value) {
-                findNavController().navigate(R.id.homeFragment)
+                val intent = Intent(activity, MainActivity::class.java)
+                activity?.startActivity(intent)
+                activity?.finish()
                 showProgress(false)
             }
         }

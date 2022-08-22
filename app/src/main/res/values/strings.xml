@@ -18,8 +18,6 @@
     <string name="reg_vm_valid_email">The Email is being used in another account</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
-    <!-- Facebook ids-->
     <string name="facebook_app_id" translatable="false">${FACEBOOK_APP_ID}</string>
     <string name="fb_login_protocol_scheme" translatable="false">${FB_LOGIN_PROTOCOL_SCHEME}</string>
     <string name="facebook_client_token" translatable="false">${FACEBOOK_CLIENT_TOKEN}</string>
@@ -31,4 +29,19 @@
     <string name="name_app">RoutesApp</string>
     <string name="tv_welcome">Welcome back!</string>
     <string name="btn_sign_outd">Sign Out</string>
+    <string name="login_success">Login Successfully</string>
+
+    <!-- Home Fragment -->
+    <string name="give_the_app_precise_location_permissions">To use this functionality, please give the app precise location permissions</string>
+    <string name="access_location_permission">Access location permission</string>
+    <string name="allow_get_precise_location_permission">Please allow the app to get precise location permission</string>
+    <string name="allow">Allow</string>
+    <string name="turn_on_location">Please turn on location</string>
+    <string name="setting_marker_to_current_location">Setting the marker to your current location</string>
+
+    <!-- Main Menu -->
+    <string name="home">Home</string>
+    <string name="locations">Locations</string>
+    <string name="favorites">Favorites</string>
+    <string name="settings">Settings</string>
 </resources>
