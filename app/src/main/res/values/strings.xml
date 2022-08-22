@@ -31,4 +31,7 @@
     <string name="name_app">RoutesApp</string>
     <string name="tv_welcome">Welcome back!</string>
     <string name="btn_sign_outd">Sign Out</string>
+    <string name="login_email_empty">Email with invalid format</string>
+    <string name="login_password_empty">Empty password</string>
+    <string name="login_success">Login Successfully</string>
 </resources>

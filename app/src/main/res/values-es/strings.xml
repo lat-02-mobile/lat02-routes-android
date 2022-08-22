@@ -22,6 +22,9 @@
     <string name="register">Registrate</string>
     <string name="log_txt_others">O inicia sesion usando</string>
     <string name="name_app">RoutesApp</string>
-    <string name="tv_welcome">Bienvenido de vuelta!</string>
+    <string name="tv_welcome">¡Bienvenido de vuelta!</string>
     <string name="btn_sign_outd">Cerrar Sesion</string>
+    <string name="login_email_empty">Email no cumple con el formato</string>
+    <string name="login_password_empty">Contraseña vacía</string>
+    <string name="login_success">Bienvenido</string>
 </resources>

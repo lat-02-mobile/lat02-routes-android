@@ -18,7 +18,9 @@ import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.AuthCredential
+import com.google.firebase.auth.FirebaseAuth
 import com.jalasoft.routesapp.R
+import com.jalasoft.routesapp.RoutesAppApplication
 import com.jalasoft.routesapp.databinding.FragmentLoginBinding
 import com.jalasoft.routesapp.ui.auth.login.viewModel.LoginViewModel
 import com.jalasoft.routesapp.util.FacebookGoogleAuthUtil
@@ -38,6 +40,11 @@ class LoginFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         observers()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        userIsLogged()
     }
 
     override fun onCreateView(
@@ -62,8 +69,6 @@ class LoginFragment : Fragment() {
         }
 
         buttonActions()
-
-        viewModel.context = context
     }
 
     @Deprecated("Deprecated in Java")
@@ -95,7 +100,7 @@ class LoginFragment : Fragment() {
         val email = binding.loginEmail.text.toString()
         val password = binding.loginPassword.text.toString()
 
-        viewModel.loginUserAuth(email, password)
+        viewModel.validateFields(email, password)
     }
 
     private fun observers() {
@@ -104,12 +109,14 @@ class LoginFragment : Fragment() {
             binding.txtError.text = errorMessage
             showProgress(false)
         }
-        val resultObserver = Observer<Boolean> {
-            showProgress(false)
-            binding.loginEmail.setText("")
-            binding.loginPassword.setText("")
-            findNavController().navigate(R.id.homeFragment)
-            Toast.makeText(context, "Login Successfully", Toast.LENGTH_SHORT).show()
+        val resultObserver = Observer<Boolean> { value ->
+            if (value) {
+                showProgress(false)
+                binding.loginEmail.setText("")
+                binding.loginPassword.setText("")
+                findNavController().navigate(R.id.homeFragment)
+                Toast.makeText(context, RoutesAppApplication.resource?.getString(R.string.login_success).toString(), Toast.LENGTH_SHORT).show()
+            }
         }
         val googleAndFacebookObserver = Observer<Boolean> { value ->
             if (value) {
@@ -133,6 +140,21 @@ class LoginFragment : Fragment() {
     private fun signInGoogle() {
         val signInIntent = googleSingInClient.signInIntent
         launcher.launch(signInIntent)
+    }
+
+    private fun userIsLogged() {
+        val isLogged: Boolean
+        val user = FirebaseAuth.getInstance().currentUser
+        if(user !== null){
+            isLogged = true
+            goToHomeFragment(isLogged)
+        }
+    }
+
+    private fun goToHomeFragment(isLogged: Boolean){
+        if(isLogged){
+            findNavController().navigate(R.id.homeFragment)
+        }
     }
 
     private val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
