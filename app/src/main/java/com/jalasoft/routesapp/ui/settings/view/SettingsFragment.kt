@@ -6,9 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.databinding.FragmentSettingsBinding
 import com.jalasoft.routesapp.ui.settings.viewModel.SettingsViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SettingsFragment : Fragment() {
 
     private var _binding: FragmentSettingsBinding? = null
@@ -32,7 +36,9 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.btnSetCity.setOnClickListener {
-            viewModel.readData()
+            findNavController().navigate(R.id.action_settingsFragment_to_cityPickerFragment)
+//            viewModel.fetchCountries()
+//            viewModel.fetchCities()
         }
     }
 }

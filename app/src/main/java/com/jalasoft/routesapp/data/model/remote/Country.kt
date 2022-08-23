@@ -1,8 +1,10 @@
 package com.jalasoft.routesapp.data.model.remote
 
+import com.google.firebase.firestore.DocumentReference
+
 data class Country(
-    val Code: String,
-    val Name: String,
-    val Phone: String,
-    val Cities: List<String>
+    var code: String = "",
+    var name: String = "",
+    var phone: String = "",
+    var cities: List<DocumentReference> = listOf()
 )

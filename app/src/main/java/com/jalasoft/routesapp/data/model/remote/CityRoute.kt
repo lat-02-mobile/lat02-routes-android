@@ -1,6 +1,9 @@
 package com.jalasoft.routesapp.data.model.remote
 
 data class CityRoute(
-    val Bus: List<Line>,
-    val Subway: List<Line>
+    var Bus: List<Line> = listOf(),
+    var Subway: List<Line> = listOf(),
+    var CountryId: String = "",
+    var id: String = "",
+    var name: String = ""
 )

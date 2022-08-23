@@ -14,5 +14,14 @@
         android:id="@+id/settingsFragment"
         android:name="com.jalasoft.routesapp.ui.settings.view.SettingsFragment"
         android:label="fragment_settings"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settingsFragment_to_cityPickerFragment"
+            app:destination="@id/cityPickerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cityPickerFragment"
+        android:name="com.jalasoft.routesapp.ui.cityPicker.view.CityPickerFragment"
+        android:label="fragment_city_picker"
+        tools:layout="@layout/fragment_city_picker" />
 </navigation>
