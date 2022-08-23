@@ -1,8 +1,5 @@
 package com.jalasoft.routesapp.ui.auth.login.viewModel
 
-import android.annotation.SuppressLint
-import android.app.AlertDialog
-import android.content.Context
 import android.util.Patterns
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -36,8 +33,7 @@ constructor(private val repository: UserRepository) : ViewModel() {
     fun validateFields(email: String, password: String) {
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             errorMessage.value = RoutesAppApplication.resource?.getString(R.string.login_email_empty).toString()
-        }
-        else if (email.isNotEmpty() && password.isEmpty()) {
+        } else if (email.isNotEmpty() && password.isEmpty()) {
             errorMessage.value = RoutesAppApplication.resource?.getString(R.string.login_password_empty).toString()
         } else {
             firebaseLogin(email, password)

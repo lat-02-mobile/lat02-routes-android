@@ -76,7 +76,7 @@ class LoginViewModelTest : TestCase() {
             viewModel.validateFields(emailTwo, emailTwo)
             val result = fakeManager.signInWithEmailAndPassword(email, password)
             val resultTwo = fakeManager.signInWithEmailAndPassword(emailTwo, passwordTwo)
-            assertNotSame(result,resultTwo)
+            assertNotSame(result, resultTwo)
             assertNotNull(result)
             assertNotNull(resultTwo)
         }

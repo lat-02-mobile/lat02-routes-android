@@ -145,7 +145,7 @@ class LoginFragment : Fragment() {
     private fun userIsLogged() {
         val isLogged: Boolean
         val user = FirebaseAuth.getInstance().currentUser
-        if(user !== null){
+        if (user !== null) {
             isLogged = true
             goToHomeFragment(isLogged)
         }
