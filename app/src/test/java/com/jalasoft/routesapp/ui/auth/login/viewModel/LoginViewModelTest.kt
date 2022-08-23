@@ -50,52 +50,44 @@ class LoginViewModelTest : TestCase() {
     }
 
     @Test
-    fun `Given an empty or invalid format of email`() {
+    fun `Given an empty or invalid format of email it returns error message`() {
         val emailTwo = "example"
-        val passwordTwo = "test.test"
-        runBlocking {
-            viewModel.validateFields(email, password)
-            val result = fakeManager.signInWithEmailAndPassword(email, password)
-            val resultTwo = fakeManager.signInWithEmailAndPassword(emailTwo, passwordTwo)
-            assertNotSame(result,resultTwo)
-            val observer = Observer<Boolean> {}
-            try {
-                viewModel.loginIsSuccessful.observeForever(observer)
-                val value = viewModel.loginIsSuccessful.getOrAwaitValue()
-                assertTrue(value)
-            } finally {
-                viewModel.loginIsSuccessful.removeObserver(observer)
-            }
+        fakeManager = FakeDataUserManager(users)
+        val observer = Observer<String> {}
+        viewModel.validateFields(emailTwo, password)
+
+        try {
+            viewModel.errorMessage.observeForever(observer)
+            viewModel.validateFields(emailTwo, password)
+
+            val value = viewModel.errorMessage.getOrAwaitValue()
+            assertNotNull(value)
+        } finally {
+            viewModel.errorMessage.removeObserver(observer)
         }
     }
 
     @Test
-    fun `Given an empty password`() {
+    fun `Given an empty password or invalid fields it returns error message`() {
         val emailTwo = "test@gmail.com"
         val passwordTwo = ""
         runBlocking {
             viewModel.validateFields(email, password)
+            viewModel.validateFields(emailTwo, emailTwo)
             val result = fakeManager.signInWithEmailAndPassword(email, password)
             val resultTwo = fakeManager.signInWithEmailAndPassword(emailTwo, passwordTwo)
             assertNotSame(result,resultTwo)
-            val observer = Observer<Boolean> {}
-            try {
-                viewModel.loginIsSuccessful.observeForever(observer)
-                val value = viewModel.loginIsSuccessful.getOrAwaitValue()
-                assertTrue(value)
-            } finally {
-                viewModel.loginIsSuccessful.removeObserver(observer)
-            }
+            assertNotNull(result)
+            assertNotNull(resultTwo)
         }
     }
 
     @Test
-    fun `Given a correct email and password`() {
+    fun `Given a correct email and password validates and goes to homepage`() {
         val emailTwo = "test@gmail.com"
         val passwordTwo = "test.test"
         runBlocking {
             viewModel.validateFields(email, password)
-            viewModel.validateFields(emailTwo, passwordTwo)
             val result = fakeManager.signInWithEmailAndPassword(email, password)
             val resultTwo = fakeManager.signInWithEmailAndPassword(emailTwo, passwordTwo)
             assertEquals(result.data.toString(), resultTwo.data.toString())
@@ -109,7 +101,6 @@ class LoginViewModelTest : TestCase() {
             }
         }
     }
-
 
     @Test
     fun `Given a valid Google - Facebook Account in case the User is not registered it registers in the database and SignIn`() {

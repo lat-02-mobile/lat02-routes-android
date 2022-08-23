@@ -151,8 +151,8 @@ class LoginFragment : Fragment() {
         }
     }
 
-    private fun goToHomeFragment(isLogged: Boolean){
-        if(isLogged){
+    private fun goToHomeFragment(isLogged: Boolean) {
+        if (isLogged) {
             findNavController().navigate(R.id.homeFragment)
         }
     }

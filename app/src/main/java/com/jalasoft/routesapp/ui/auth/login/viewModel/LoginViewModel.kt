@@ -34,22 +34,22 @@ constructor(private val repository: UserRepository) : ViewModel() {
     }
 
     fun validateFields(email: String, password: String) {
-        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             errorMessage.value = RoutesAppApplication.resource?.getString(R.string.login_email_empty).toString()
         }
         else if (email.isNotEmpty() && password.isEmpty()) {
             errorMessage.value = RoutesAppApplication.resource?.getString(R.string.login_password_empty).toString()
-        } else{
+        } else {
             firebaseLogin(email, password)
         }
     }
 
-    private fun firebaseLogin(email: String, password: String) = viewModelScope.launch{
+    private fun firebaseLogin(email: String, password: String) = viewModelScope.launch {
         val users = repository.signInWithEmailAndPassword(email, password)
-        if(users.data?.isNotEmpty() == true){
+        if (users.data?.isNotEmpty() == true) {
             loginIsSuccessful.value = true
             FirebaseAuth.getInstance().currentUser
-        } else{
+        } else {
             loginIsSuccessful.value = false
         }
     }
