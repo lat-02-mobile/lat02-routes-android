@@ -5,5 +5,7 @@ data class CityRoute(
     var Subway: List<Line> = listOf(),
     var CountryId: String = "",
     var id: String = "",
+    var lat: String = "",
+    var lng: String = "",
     var name: String = ""
 )

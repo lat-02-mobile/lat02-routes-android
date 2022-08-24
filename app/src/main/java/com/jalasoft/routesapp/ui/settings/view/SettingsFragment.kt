@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.databinding.FragmentSettingsBinding
 import com.jalasoft.routesapp.ui.settings.viewModel.SettingsViewModel
+import com.jalasoft.routesapp.util.PreferenceManager
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -19,10 +20,6 @@ class SettingsFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: SettingsViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,10 +32,12 @@ class SettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val currentCity = PreferenceManager.getCurrentCity(requireContext())
+
+        binding.btnSetCity.text = if (currentCity != "none") currentCity else "Not set yet"
+
         binding.btnSetCity.setOnClickListener {
             findNavController().navigate(R.id.action_settingsFragment_to_cityPickerFragment)
-//            viewModel.fetchCountries()
-//            viewModel.fetchCities()
         }
     }
 }

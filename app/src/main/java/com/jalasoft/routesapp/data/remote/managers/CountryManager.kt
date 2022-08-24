@@ -9,15 +9,14 @@ import com.jalasoft.routesapp.data.model.remote.CityRoute
 import com.jalasoft.routesapp.data.model.remote.Country
 import kotlinx.coroutines.tasks.await
 
-class CountryManager: CountryRepository {
+class CountryManager : CountryRepository {
     val db = Firebase.firestore
 
-    override suspend fun getAllCountries() : List<Country> {
+    override suspend fun getAllCountries(): List<Country> {
         val result = db.collection("Countries").get().await()
         val countries = mutableListOf<Country>()
         for (document in result) {
             countries.add(document.toObject(Country::class.java))
-
         }
         return countries
     }
@@ -33,10 +32,10 @@ class CountryManager: CountryRepository {
 
     override suspend fun getAllCities(): List<City> {
         val cities = mutableListOf<City>()
-        val countries = getAllCountries().forEach { country ->
+        getAllCountries().forEach { country ->
             val cityRoutes = getCityRoutesByCountry(country.cities)
             for (city in cityRoutes) {
-                val newCity = City(city.name, country.name, country.code, country.phone)
+                val newCity = City(city.name, country.name, country.code, country.phone, city.lat, city.lng)
                 cities.add(newCity)
             }
         }

@@ -13,7 +13,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        tools:context=".ui.countries.CountriesFragment">
+        tools:context=".ui.countries.CountriesFragment"
+        android:layout_marginBottom="10dp"
+        android:paddingBottom="10dp"
+        android:background="@drawable/bg_city_item"
+        >
 
         <TextView
             android:id="@+id/tv_cityName"

@@ -14,10 +14,11 @@ import javax.inject.Inject
 @HiltViewModel
 class CityPickerViewModel
 @Inject
-constructor(private val repository: CountryRepository): ViewModel() {
+constructor(private val repository: CountryRepository) : ViewModel() {
 
     var _citiesList: MutableLiveData<List<City>> = MutableLiveData()
     val citiesList: LiveData<List<City>> = _citiesList
+    var originalList: List<City> = listOf()
 
     companion object {
         const val TAG = "Settings"
@@ -30,8 +31,13 @@ constructor(private val repository: CountryRepository): ViewModel() {
 
     fun fetchCities() = viewModelScope.launch {
         _citiesList.value = repository.getAllCities()
-//        repository.getAllCities().forEach { city ->
-//            Log.d(TAG, "${city.name} - ${city.country}")
-//        }
+        originalList = _citiesList.value!!
+    }
+
+    fun filterCities(criteria: String): Int {
+        _citiesList.value = originalList.filter { city ->
+            city.name.lowercase().contains(criteria.lowercase()) || city.country.lowercase().contains(criteria.lowercase())
+        }
+        return _citiesList.value!!.size
     }
 }

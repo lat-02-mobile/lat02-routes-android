@@ -3,18 +3,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp"
     tools:context=".ui.settings.view.SettingsFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/hello_blank_fragment" />
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Current City"
+            android:layout_weight="1"
+            />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnSetCity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:drawableEnd="@drawable/ic_baseline_arrow_forward_ios_24"
+            android:textAllCaps="false"
+            tools:text="Sucre" />
+    </LinearLayout>
+
 
     <Button
-        android:id="@+id/btnSetCity"
-        android:layout_width="wrap_content"
+        android:id="@+id/btn_logout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Pick City"
-        />
+        android:text="logout" />
 
 </LinearLayout>

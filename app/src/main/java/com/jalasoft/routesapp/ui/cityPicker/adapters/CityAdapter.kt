@@ -4,18 +4,15 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.jalasoft.routesapp.data.model.remote.City
-import com.jalasoft.routesapp.data.model.remote.Country
 import com.jalasoft.routesapp.databinding.CityItemBinding
 
 class CityAdapter(var citiesList: MutableList<City>, val listener: ICityListener) : RecyclerView.Adapter<CityAdapter.CityViewHolder>() {
 
     interface ICityListener {
-        fun onCountryTap(city: City)
+        fun onCityTap(city: City)
     }
 
-    class CityViewHolder(val binding: CityItemBinding) : RecyclerView.ViewHolder(binding.root) {
-
-    }
+    class CityViewHolder(val binding: CityItemBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CityViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -26,6 +23,9 @@ class CityAdapter(var citiesList: MutableList<City>, val listener: ICityListener
 
     override fun onBindViewHolder(holder: CityViewHolder, position: Int) {
         holder.binding.cityItem = citiesList[position]
+        holder.binding.cityContainer.setOnClickListener {
+            listener.onCityTap(citiesList[position])
+        }
     }
 
     override fun getItemCount(): Int {
@@ -33,7 +33,13 @@ class CityAdapter(var citiesList: MutableList<City>, val listener: ICityListener
     }
 
     fun updateList(citiesList: MutableList<City>) {
+        val oldSize = this.citiesList.size
         this.citiesList = citiesList
-        notifyItemRangeChanged(0, citiesList.size)
+        if (citiesList.size <= oldSize) {
+            notifyItemRangeRemoved(0, oldSize)
+            notifyItemRangeInserted(0, citiesList.size)
+        } else {
+            notifyItemRangeChanged(0, this.citiesList.size)
+        }
     }
 }
