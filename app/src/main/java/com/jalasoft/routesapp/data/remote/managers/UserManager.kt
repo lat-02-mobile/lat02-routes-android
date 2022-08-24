@@ -30,6 +30,10 @@ class UserManager(private val authManager: AuthFirebaseManager, private val fire
         return authManager.signInUserAuth(credential)
     }
 
+    override suspend fun signInWithEmailAndPassword(email: String, password: String): Response<String> {
+        return authManager.loginUserAuth(email, password)
+    }
+
     override fun signOut() {
         authManager.singOut()
     }

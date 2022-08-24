@@ -36,6 +36,7 @@ class LoginViewModelTest : TestCase() {
 
     private val names: String = "test"
     private val email: String = "test@gmail.com"
+    private var password: String = "test.test"
     private val typeLogin: UserTypeLogin = UserTypeLogin.GOOGLE
     private val users: MutableList<User> = mutableListOf()
     private val user = User("asd", names, email, "0", 0, typeLogin.int, 1.0, 1.0)
@@ -46,6 +47,59 @@ class LoginViewModelTest : TestCase() {
         hiltRule.inject()
         fakeManager = FakeDataUserManager(users)
         viewModel = LoginViewModel(fakeManager)
+    }
+
+    @Test
+    fun `Given an empty or invalid format of email it returns error message`() {
+        val emailTwo = "example"
+        fakeManager = FakeDataUserManager(users)
+        val observer = Observer<String> {}
+        viewModel.validateFields(emailTwo, password)
+
+        try {
+            viewModel.errorMessage.observeForever(observer)
+            viewModel.validateFields(emailTwo, password)
+
+            val value = viewModel.errorMessage.getOrAwaitValue()
+            assertNotNull(value)
+        } finally {
+            viewModel.errorMessage.removeObserver(observer)
+        }
+    }
+
+    @Test
+    fun `Given an empty password or invalid fields it returns error message`() {
+        val emailTwo = "test@gmail.com"
+        val passwordTwo = ""
+        runBlocking {
+            viewModel.validateFields(email, password)
+            viewModel.validateFields(emailTwo, emailTwo)
+            val result = fakeManager.signInWithEmailAndPassword(email, password)
+            val resultTwo = fakeManager.signInWithEmailAndPassword(emailTwo, passwordTwo)
+            assertNotSame(result, resultTwo)
+            assertNotNull(result)
+            assertNotNull(resultTwo)
+        }
+    }
+
+    @Test
+    fun `Given a correct email and password validates and goes to homepage`() {
+        val emailTwo = "test@gmail.com"
+        val passwordTwo = "test.test"
+        runBlocking {
+            viewModel.validateFields(email, password)
+            val result = fakeManager.signInWithEmailAndPassword(email, password)
+            val resultTwo = fakeManager.signInWithEmailAndPassword(emailTwo, passwordTwo)
+            assertEquals(result.data.toString(), resultTwo.data.toString())
+            val observer = Observer<Boolean> {}
+            try {
+                viewModel.loginIsSuccessful.observeForever(observer)
+                val value = viewModel.loginIsSuccessful.getOrAwaitValue()
+                assertTrue(value)
+            } finally {
+                viewModel.loginIsSuccessful.removeObserver(observer)
+            }
+        }
     }
 
     @Test

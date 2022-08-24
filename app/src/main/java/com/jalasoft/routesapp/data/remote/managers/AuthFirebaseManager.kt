@@ -7,13 +7,12 @@ import com.jalasoft.routesapp.util.Response
 import kotlinx.coroutines.tasks.await
 
 class AuthFirebaseManager(private val auth: FirebaseAuth) : AuthFirebaseDataSource {
-    fun loginUserAuth(email: String, password: String, successListener: (String) -> Unit, errorListener: (String) -> Unit) {
-        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                successListener(task.result.user?.email.toString())
-            } else {
-                errorListener(task.exception?.message.toString())
-            }
+    override suspend fun loginUserAuth(email: String, password: String): Response<String> {
+        return try {
+            val result = auth.signInWithEmailAndPassword(email, password).await()
+            return Response.Success(result.toString())
+        } catch (e: Exception) {
+            Response.Error(e.message.toString(), null)
         }
     }
 
