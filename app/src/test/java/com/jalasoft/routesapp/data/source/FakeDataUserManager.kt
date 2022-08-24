@@ -26,15 +26,6 @@ class FakeDataUserManager(var users: MutableList<User> = mutableListOf()) : User
     override suspend fun signInWithCredential(credential: AuthCredential): Response<String> {
         return Response.Success(credential.toString())
     }
-
-    override suspend fun sendPhoneNumberCode(phoneNumber: String, activity: Activity, mCallBack: PhoneAuthProvider.OnVerificationStateChangedCallbacks): Response<String> {
-        return Response.Success("")
-    }
-
-    override suspend fun verifyPhoneCode(credential: PhoneAuthCredential, activity: Activity): Response<String> {
-        return Response.Success("")
-    }
-
     override suspend fun signInWithEmailAndPassword(email: String, password: String): Response<String> {
         return Response.Success(email)
     }

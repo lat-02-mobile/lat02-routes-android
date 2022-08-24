@@ -20,13 +20,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <!-- Google Web client -->
     <string name="default_web_client_id" translatable="false">clientId</string>
-    <!-- Facebook ids-->
-    <string name="facebook_app_id" translatable="false">${FACEBOOK_APP_ID}</string>
-    <string name="fb_login_protocol_scheme" translatable="false">${FB_LOGIN_PROTOCOL_SCHEME}</string>
-    <string name="facebook_client_token" translatable="false">${FACEBOOK_CLIENT_TOKEN}</string>
 
-
-    <!-- Facebook ids-->
+     <!-- Facebook ids-->
     <string name="facebook_app_id" translatable="false">${FACEBOOK_APP_ID}</string>
     <string name="fb_login_protocol_scheme" translatable="false">${FB_LOGIN_PROTOCOL_SCHEME}</string>
     <string name="facebook_client_token" translatable="false">${FACEBOOK_CLIENT_TOKEN}</string>
@@ -41,8 +36,6 @@
     <string name="tv_welcome">Welcome back!</string>
     <string name="btn_sign_outd">Sign Out</string>
     <string name="login_email_empty">Email with invalid format</string>
-    <string name="login_password_empty">Empty password</string>
-    <string name="login_success">Login Successfully</string>
 
     <!-- Home Fragment -->
     <string name="give_the_app_precise_location_permissions">To use this functionality, please give the app precise location permissions</string>
@@ -51,6 +44,8 @@
     <string name="allow">Allow</string>
     <string name="turn_on_location">Please turn on location</string>
     <string name="setting_marker_to_current_location">Setting the marker to your current location</string>
+
+    <string name="login_password_empty">Empty password</string>
 
     <!-- Main Menu -->
     <string name="home">Home</string>
@@ -71,54 +66,7 @@
     <string name="reg_val_code">Code</string>
     <string name="reg_val_cancel">Cancel</string>
     <string name="reg_val_resend">Resend</string>
-
-    <string name="login_email_empty">Email with invalid format</string>
-    <string name="login_password_empty">Empty password</string>
     <string name="login_success">Login Successfully</string>
 
-    <!-- Home Fragment -->
-    <string name="give_the_app_precise_location_permissions">To use this functionality, please give the app precise location permissions</string>
-    <string name="access_location_permission">Access location permission</string>
-    <string name="allow_get_precise_location_permission">Please allow the app to get precise location permission</string>
-    <string name="allow">Allow</string>
-    <string name="turn_on_location">Please turn on location</string>
-    <string name="setting_marker_to_current_location">Setting the marker to your current location</string>
 
-    <!-- Main Menu -->
-    <string name="home">Home</string>
-    <string name="locations">Locations</string>
-    <string name="favorites">Favorites</string>
-    <string name="settings">Settings</string>
-    <string name="reg_val_phone">phone number</string>
-    <string name="reg_val_add_phone">Please add your phone number</string>
-    <string name="reg_val_add_code">Please add code</string>
-    <string name="reg_val_verify_code">The code must have 6 digits</string>
-    <string name="reg_val_verify_phone">The phone number must have at least 4 digits</string>
-    <string name="reg_verify">Verify</string>
-    <string name="reg_val_phone_code_verification">The code does not match</string>
-    <string name="reg_val_phone_code_verification_no_code_enter">No code was entered</string>
-    <string name="reg_val_phone_code_forwarded">The code was forwarded</string>
-    <string name="reg_val_verification_alert_title">Please enter code</string>
-    <string name="reg_val_verification_code_required">Code is required.</string>
-    <string name="reg_val_code">Code</string>
-    <string name="reg_val_cancel">Cancel</string>
-    <string name="reg_val_resend">Resend</string>
-
-    <string name="login_email_empty">Email with invalid format</string>
-    <string name="login_password_empty">Empty password</string>
-    <string name="login_success">Login Successfully</string>
-
-    <!-- Home Fragment -->
-    <string name="give_the_app_precise_location_permissions">To use this functionality, please give the app precise location permissions</string>
-    <string name="access_location_permission">Access location permission</string>
-    <string name="allow_get_precise_location_permission">Please allow the app to get precise location permission</string>
-    <string name="allow">Allow</string>
-    <string name="turn_on_location">Please turn on location</string>
-    <string name="setting_marker_to_current_location">Setting the marker to your current location</string>
-
-    <!-- Main Menu -->
-    <string name="home">Home</string>
-    <string name="locations">Locations</string>
-    <string name="favorites">Favorites</string>
-    <string name="settings">Settings</string>
 </resources>
