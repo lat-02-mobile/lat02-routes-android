@@ -96,6 +96,15 @@ dependencies {
     // Hilt
     implementation "com.google.dagger:hilt-android:2.42"
     kapt "com.google.dagger:hilt-compiler:2.42"
+
+    // Dependency to include Maps SDK for Android
+    implementation 'com.google.android.gms:play-services-maps:18.1.0'
+    implementation 'com.google.android.gms:play-services-location:20.0.0'
+
+    //country code picker
+    implementation 'com.hbb20:ccp:2.6.1'
+    implementation 'androidx.browser:browser:1.4.0'
+
 }
 
 apply plugin: 'com.google.gms.google-services'
