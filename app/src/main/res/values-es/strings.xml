@@ -26,5 +26,19 @@
     <string name="btn_sign_outd">Cerrar Sesion</string>
     <string name="login_email_empty">Email no cumple con el formato</string>
     <string name="login_password_empty">Contraseña vacía</string>
-    <string name="login_success">Login exitoso</string>
+    <string name="login_success">Ingreso exitoso</string>
+
+    <!-- Home Fragment -->
+    <string name="give_the_app_precise_location_permissions" translatable="false">Esta funcionalidad requiere permisos de la ubicacion precisa</string>
+    <string name="access_location_permission">Permiso para acceder a la ubicación</string>
+    <string name="allow_get_precise_location_permission">Por favor permita que la aplicacion obtenga permisos para la ubicación</string>
+    <string name="allow">Permitir</string>
+    <string name="turn_on_location">Por favor, encienda el gps</string>
+    <string name="setting_marker_to_current_location">Moviendo el marcador a su ubicación actual</string>
+
+    <!-- Main Menu -->
+    <string name="home">Inicio</string>
+    <string name="locations">Ubicaciones</string>
+    <string name="favorites">Favoritos</string>
+    <string name="settings">Configuracion</string>
 </resources>

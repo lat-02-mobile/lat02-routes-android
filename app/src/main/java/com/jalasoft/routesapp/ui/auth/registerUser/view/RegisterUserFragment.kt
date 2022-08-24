@@ -16,6 +16,7 @@ import com.facebook.CallbackManager
 import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.jalasoft.routesapp.MainActivity
 import com.google.firebase.auth.AuthCredential
 import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.databinding.FragmentRegisterUserBinding
@@ -106,8 +107,9 @@ class RegisterUserFragment : Fragment() {
         }
         val googleAndFacebookObserver = Observer<Boolean> { value ->
             if (value) {
-                showProgress(false)
-                findNavController().navigate(R.id.homeFragment)
+                val intent = Intent(activity, MainActivity::class.java)
+                activity?.startActivity(intent)
+                activity?.finish()
             }
         }
         viewModel.errorMessage.observe(this, errorObserver)
