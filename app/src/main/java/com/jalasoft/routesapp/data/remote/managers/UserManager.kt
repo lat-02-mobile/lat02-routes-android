@@ -11,8 +11,7 @@ import com.jalasoft.routesapp.util.helpers.FirebaseCollections
 import com.jalasoft.routesapp.util.helpers.UserType
 import com.jalasoft.routesapp.util.helpers.UserTypeLogin
 
-class UserManager(private val authManager: AuthFirebaseManager, private val firebaseManager: FirebaseManager) :
-    UserRepository {
+class UserManager(private val authManager: AuthFirebaseManager, private val firebaseManager: FirebaseManager) : UserRepository {
     override suspend fun validateEmailUser(email: String): Response<MutableList<User>> {
         return firebaseManager.getUsersByParameter(FirebaseCollections.Users, "email", email)
     }
