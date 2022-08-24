@@ -2,6 +2,7 @@ package com.jalasoft.routesapp.ui.auth.registerUser.viewModel
 
 import androidx.lifecycle.*
 import com.google.firebase.auth.AuthCredential
+import com.google.firebase.firestore.auth.User
 import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.RoutesAppApplication
 import com.jalasoft.routesapp.data.remote.managers.UserRepository
@@ -114,6 +115,8 @@ constructor(private val repository: UserRepository) : ViewModel() {
         val isEmailRegistered = repository.validateEmailUser(email).data?.isEmpty() == true
         userAuthWithCredentials(name, email, typeLogin, credential, isEmailRegistered)
     }
+
+
 }
 
 @Suppress("UNCHECKED_CAST")
