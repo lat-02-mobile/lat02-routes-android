@@ -18,6 +18,8 @@
     <string name="reg_vm_valid_email">The Email is being used in another account</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Facebook ids-->
     <string name="facebook_app_id" translatable="false">${FACEBOOK_APP_ID}</string>
     <string name="fb_login_protocol_scheme" translatable="false">${FB_LOGIN_PROTOCOL_SCHEME}</string>
     <string name="facebook_client_token" translatable="false">${FACEBOOK_CLIENT_TOKEN}</string>
@@ -29,6 +31,8 @@
     <string name="name_app">RoutesApp</string>
     <string name="tv_welcome">Welcome back!</string>
     <string name="btn_sign_outd">Sign Out</string>
+    <string name="login_email_empty">Email with invalid format</string>
+    <string name="login_password_empty">Empty password</string>
     <string name="login_success">Login Successfully</string>
 
     <!-- Home Fragment -->
