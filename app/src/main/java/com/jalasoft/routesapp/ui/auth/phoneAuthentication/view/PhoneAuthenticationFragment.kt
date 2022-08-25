@@ -3,7 +3,6 @@ package com.jalasoft.routesapp.ui.auth.phoneAuthentication.view
 import android.content.Context
 import android.os.Bundle
 import android.text.InputType
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +21,7 @@ import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.RoutesAppApplication
 import com.jalasoft.routesapp.databinding.FragmentPhoneAuthenticationBinding
 import com.jalasoft.routesapp.ui.auth.phoneAuthentication.viewModel.PhoneAuthenticationViewModel
+import com.jalasoft.routesapp.util.ConverterFromPixelToDpUtil.toDp
 import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class PhoneAuthenticationFragment : Fragment() {
@@ -164,10 +164,4 @@ class PhoneAuthenticationFragment : Fragment() {
         constraintLayout.addView(textInputLayout)
         return constraintLayout
     }
-
-    private fun Int.toDp(context: Context): Int = TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_DIP,
-        this.toFloat(),
-        context.resources.displayMetrics
-    ).toInt()
 }

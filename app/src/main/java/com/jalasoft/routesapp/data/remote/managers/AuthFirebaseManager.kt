@@ -6,6 +6,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.jalasoft.routesapp.data.remote.interfaces.AuthFirebaseDataSource
 import com.jalasoft.routesapp.util.Response
+import com.jalasoft.routesapp.util.helpers.Constants.CODE_VERIFICATION_TIME_OUT
 import kotlinx.coroutines.tasks.await
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -35,7 +36,7 @@ class AuthFirebaseManager(private val auth: FirebaseAuth) : AuthFirebaseDataSour
             val options = PhoneAuthOptions.newBuilder(Firebase.auth)
                 .setPhoneNumber(phoneNumber)
                 .setActivity(activity)
-                .setTimeout(60L, TimeUnit.SECONDS)
+                .setTimeout(CODE_VERIFICATION_TIME_OUT, TimeUnit.SECONDS)
                 .setCallbacks(mCallBack)
                 .build()
             val result = PhoneAuthProvider.verifyPhoneNumber(options)
