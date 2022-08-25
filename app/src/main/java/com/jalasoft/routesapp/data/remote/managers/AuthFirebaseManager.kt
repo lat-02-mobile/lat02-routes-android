@@ -7,6 +7,15 @@ import com.jalasoft.routesapp.util.Response
 import kotlinx.coroutines.tasks.await
 
 class AuthFirebaseManager(private val auth: FirebaseAuth) : AuthFirebaseDataSource {
+
+    // MARK: Temporary solution for signOut user
+    companion object {
+        fun signOutUser() {
+            val auth = FirebaseAuth.getInstance()
+            auth.signOut()
+        }
+    }
+
     override suspend fun loginUserAuth(email: String, password: String): Response<String> {
         return try {
             val result = auth.signInWithEmailAndPassword(email, password).await()
