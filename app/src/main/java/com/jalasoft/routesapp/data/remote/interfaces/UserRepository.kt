@@ -13,8 +13,8 @@ interface UserRepository {
     suspend fun createUser(name: String, email: String, typeLogin: UserTypeLogin): Response<String>
     suspend fun createUserAuth(email: String, password: String): Response<String>
     suspend fun signInWithCredential(credential: AuthCredential): Response<String>
-    suspend fun sendPhoneNumberCode (phoneNumber: String, activity: Activity, mCallBack: PhoneAuthProvider.OnVerificationStateChangedCallbacks) : Response<String>
-    suspend fun verifyPhoneCode (credential: PhoneAuthCredential, activity: Activity) : Response<String>
+    suspend fun sendPhoneNumberCode(phoneNumber: String, activity: Activity, mCallBack: PhoneAuthProvider.OnVerificationStateChangedCallbacks): Response<String>
+    suspend fun verifyPhoneCode(credential: PhoneAuthCredential, activity: Activity): Response<String>
     suspend fun signInWithEmailAndPassword(email: String, password: String): Response<String>
     fun signOut()
 }

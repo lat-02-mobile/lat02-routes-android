@@ -1,7 +1,6 @@
 package com.jalasoft.routesapp.data.remote.managers
 
 import android.app.Activity
-import android.util.Log
 import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -39,18 +38,18 @@ class AuthFirebaseManager(private val auth: FirebaseAuth) : AuthFirebaseDataSour
                 .setTimeout(60L, TimeUnit.SECONDS)
                 .setCallbacks(mCallBack)
                 .build()
-                val result = PhoneAuthProvider.verifyPhoneNumber(options)
-                return Response.Success(result.toString())
+            val result = PhoneAuthProvider.verifyPhoneNumber(options)
+            return Response.Success(result.toString())
         } catch (e: Exception) {
             Response.Error(e.message.toString(), null)
         }
     }
-    override suspend fun verifyPhoneCode( credential: PhoneAuthCredential, activity: Activity): Response<String> {
+    override suspend fun verifyPhoneCode(credential: PhoneAuthCredential, activity: Activity): Response<String> {
         return try {
             var result = ""
             var success = false
             val user = Firebase.auth.currentUser!!
-            user.linkWithCredential(credential).addOnCompleteListener(activity){ task ->
+            user.linkWithCredential(credential).addOnCompleteListener(activity) { task ->
                 if (task.isSuccessful) {
                     result = task.result.toString()
                     success = true
@@ -61,7 +60,7 @@ class AuthFirebaseManager(private val auth: FirebaseAuth) : AuthFirebaseDataSour
             }.await()
             if (success) {
                 return Response.Success(result)
-            }else{
+            } else {
                 return Response.Error(result, null)
             }
         } catch (e: Exception) {

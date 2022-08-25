@@ -103,7 +103,6 @@ class RegisterUserFragment : Fragment() {
                 binding.etRegPassword.setText("")
                 binding.etRegConfirmPassword.setText("")
                 findNavController().navigate(R.id.phoneAuthenticationFragment)
-
             }
         }
         val googleAndFacebookObserver = Observer<Boolean> { value ->

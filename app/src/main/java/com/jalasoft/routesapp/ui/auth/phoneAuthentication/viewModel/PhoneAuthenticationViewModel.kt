@@ -13,7 +13,6 @@ import com.jalasoft.routesapp.data.remote.managers.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
 @HiltViewModel
 class PhoneAuthenticationViewModel
 @Inject
@@ -38,10 +37,10 @@ constructor(private val repository: UserRepository) : ViewModel() {
     private var phoneVerificationId: String = ""
     private lateinit var phoneCredential: PhoneAuthCredential
 
-    fun sendVerificationCode(countryCode: String, phoneNumber: String, activity: Activity)  = viewModelScope.launch {
+    fun sendVerificationCode(countryCode: String, phoneNumber: String, activity: Activity) = viewModelScope.launch {
         val valid = validatePhoneNumber(phoneNumber)
-        if (valid.isEmpty()){
-            val mCallBack = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks(){
+        if (valid.isEmpty()) {
+            val mCallBack = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                 override fun onCodeSent(
                     verificationId: String,
                     forceResendingToken: PhoneAuthProvider.ForceResendingToken
@@ -50,24 +49,19 @@ constructor(private val repository: UserRepository) : ViewModel() {
                     codeSubmitted.value = true
                 }
                 override fun onVerificationCompleted(credential: PhoneAuthCredential) {
-                    onAutomaticVerification.value =  true
+                    onAutomaticVerification.value = true
                     phoneCredential = credential
                 }
                 override fun onVerificationFailed(e: FirebaseException) {
                     errorMessage.value = e.toString()
                 }
             }
-            val result = repository.sendPhoneNumberCode(countryCode+phoneNumber, activity, mCallBack)
-            if (result.message?.isNotEmpty() == true) {
-                    errorMessage.value = result.message
-             }
-        }else {
-            errorMessage.value = valid
-        }
-
+            val result = repository.sendPhoneNumberCode(countryCode + phoneNumber, activity, mCallBack)
+            if (result.message?.isNotEmpty() == true) errorMessage.value = result.message
+        } else errorMessage.value = valid
     }
 
-    fun verifyCode(code: String, activity: Activity) = viewModelScope.launch{
+    fun verifyCode(code: String, activity: Activity) = viewModelScope.launch {
         val valid = validateConfirmationCode(code)
         if (valid.isEmpty()) {
             val phoneAuthCredential =
@@ -81,32 +75,30 @@ constructor(private val repository: UserRepository) : ViewModel() {
             } else {
                 onVerificationCompleted.value = true
             }
-        }else{
+        } else {
             alertDialogErrorMessage.value = valid
         }
     }
-
-
     fun validatePhoneNumber(phoneNumber: String): String {
         var isValid = ""
         if (phoneNumber.isEmpty()) {
             isValid = RoutesAppApplication.resource?.getString(R.string.reg_val_add_phone).toString()
             return isValid
         }
-        if (phoneNumber.length < 4 ) {
+        if (phoneNumber.length < 4) {
             isValid = RoutesAppApplication.resource?.getString(R.string.reg_val_verify_phone).toString()
             return isValid
         }
         return isValid
     }
 
-    fun validateConfirmationCode(code: String): String{
+    fun validateConfirmationCode(code: String): String {
         var isValid = ""
         if (code.isEmpty()) {
             isValid = RoutesAppApplication.resource?.getString(R.string.reg_val_add_code).toString()
             return isValid
         }
-        if (code.length < 6 ) {
+        if (code.length < 6) {
             isValid = RoutesAppApplication.resource?.getString(R.string.reg_val_verify_code).toString()
             return isValid
         }

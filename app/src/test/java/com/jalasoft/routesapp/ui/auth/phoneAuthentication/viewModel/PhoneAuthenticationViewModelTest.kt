@@ -1,5 +1,5 @@
 package com.jalasoft.routesapp.ui.auth.phoneAuthentication.viewModel
-
+import android.app.Activity
 import androidx.lifecycle.Observer
 import com.jalasoft.routesapp.MainActivity
 import com.jalasoft.routesapp.data.model.remote.User
@@ -18,12 +18,11 @@ import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
-
 @ExperimentalCoroutinesApi
 @RunWith(RobolectricTestRunner::class)
 @Config(application = HiltTestApplication::class, manifest = Config.NONE)
 @HiltAndroidTest
-class PhoneAuthenticationViewModelTest : TestCase(){
+class PhoneAuthenticationViewModelTest : TestCase() {
     @get:Rule
     val hiltRule = HiltAndroidRule(this)
 
@@ -31,11 +30,11 @@ class PhoneAuthenticationViewModelTest : TestCase(){
     lateinit var viewModel: PhoneAuthenticationViewModel
     lateinit var fakeManager: FakeDataUserManager
     var users: MutableList<User> = mutableListOf()
-    private var phoneNumber : String = "2693827100"
+    private var phoneNumber: String = "2693827100"
     private var errorPhoneNumber: String = "212"
-    var activity = MainActivity()
-    var code = "062629"
-    var invalidCode= "2629"
+    var activity: Activity = MainActivity()
+    var code: String = "062629"
+    var invalidCode: String = "2629"
 
     @Before
     public override fun setUp() {
@@ -61,17 +60,16 @@ class PhoneAuthenticationViewModelTest : TestCase(){
     fun `Given a inValid code will send a error string`() {
         runBlocking {
             val observer = Observer<String> {}
-            try{
+            try {
                 viewModel.alertDialogErrorMessage.observeForever(observer)
                 viewModel.verifyCode(invalidCode, activity)
-                val value =viewModel.alertDialogErrorMessage.getOrAwaitValue()
+                val value = viewModel.alertDialogErrorMessage.getOrAwaitValue()
                 assertNotNull(value)
-            }finally {
+            } finally {
                 viewModel.alertDialogErrorMessage.removeObserver(observer)
             }
         }
     }
-
 
     @Test
     fun `Given a valid phone number it returns an empty String`() {
@@ -89,15 +87,14 @@ class PhoneAuthenticationViewModelTest : TestCase(){
     fun `Given a inValid phone number will send a error string`() {
         runBlocking {
             val observer = Observer<String> {}
-            try{
+            try {
                 viewModel.errorMessage.observeForever(observer)
-                viewModel.sendVerificationCode(code,errorPhoneNumber, activity)
-                val value =viewModel.errorMessage.getOrAwaitValue()
+                viewModel.sendVerificationCode(code, errorPhoneNumber, activity)
+                val value = viewModel.errorMessage.getOrAwaitValue()
                 assertNotNull(value)
-            }finally {
+            } finally {
                 viewModel.errorMessage.removeObserver(observer)
             }
         }
     }
-
 }
