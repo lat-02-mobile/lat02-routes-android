@@ -39,4 +39,14 @@
     <string name="locations">Ubicaciones</string>
     <string name="favorites">Favoritos</string>
     <string name="settings">Configuracion</string>
+
+    <!-- Pick City   -->
+    <string name="choose_your_city">Elige tu ciudad</string>
+    <string name="search_hint">Buscar por ciudades o paises</string>
+    <string name="welcome_to">Bienvenido a</string>
+
+    <!-- Settings -->
+    <string name="current_city">Ciudad Actual</string>
+    <string name="logout">Cerrar Sesion</string>
+    <string name="city_not_set_yet">No configurado</string>
 </resources>

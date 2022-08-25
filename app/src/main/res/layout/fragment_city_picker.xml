@@ -26,7 +26,7 @@
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Choose your city"
+        android:text="@string/choose_your_city"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -51,7 +51,7 @@
         app:layout_constraintTop_toBottomOf="@id/globe_icon"
         android:background="@drawable/bg_search_view"
         android:layout_marginTop="10dp"
-        app:queryHint="Search for cities or countries"
+        app:queryHint="@string/search_hint"
         app:queryBackground="@null"
         app:iconifiedByDefault="false"
         />

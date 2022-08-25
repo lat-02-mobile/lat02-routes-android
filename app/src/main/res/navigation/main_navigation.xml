@@ -34,7 +34,8 @@
             android:id="@+id/action_cityPickerFragment_to_splashScreenFragment"
             app:destination="@id/splashScreenFragment"
             app:enterAnim="@android:anim/fade_in"
-            app:exitAnim="@android:anim/fade_out" />
+            app:exitAnim="@android:anim/fade_out"
+            app:popUpTo="@id/homeFragment" />
     </fragment>
     <fragment
         android:id="@+id/splashScreenFragment"
@@ -46,7 +47,7 @@
             app:destination="@id/homeFragment"
             app:enterAnim="@android:anim/fade_in"
             app:exitAnim="@android:anim/fade_out"
-            app:popUpTo="@id/homeFragment"
+            app:popUpTo="@id/home_main_navigation"
             app:popUpToInclusive="true" />
         <argument
             android:name="city"

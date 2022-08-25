@@ -7,20 +7,36 @@
     android:background="@color/color_primary_gradient"
     tools:context=".ui.cityPicker.view.SplashScreenFragment">
 
-    <TextView
-        android:id="@+id/welcome_message"
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:lines="2"
-        android:textColor="@color/white"
-        android:textSize="24dp"
-        android:textStyle="bold"
+        android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@id/iv_smileFace"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Welcome to\nCochabamba" />
+        android:gravity="center"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:text="@string/welcome_to"
+            />
+
+        <TextView
+            android:id="@+id/welcome_message_city"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            tools:text="Sucre" />
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/iv_smileFace"

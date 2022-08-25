@@ -1,6 +1,5 @@
 package com.jalasoft.routesapp.ui.cityPicker.viewModel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,15 +18,6 @@ constructor(private val repository: CountryRepository) : ViewModel() {
     var _citiesList: MutableLiveData<List<City>> = MutableLiveData()
     val citiesList: LiveData<List<City>> = _citiesList
     var originalList: List<City> = listOf()
-
-    companion object {
-        const val TAG = "Settings"
-    }
-    fun fetchCountries() = viewModelScope.launch {
-        repository.getAllCountries().forEach { country ->
-            Log.d(TAG, country.name)
-        }
-    }
 
     fun fetchCities() = viewModelScope.launch {
         _citiesList.value = repository.getAllCities()

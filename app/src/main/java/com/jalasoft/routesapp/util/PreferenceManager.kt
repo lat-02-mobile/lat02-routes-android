@@ -7,6 +7,7 @@ object PreferenceManager {
     private const val CURRENT_CITY_LAT = "current_city_lat"
     private const val CURRENT_CITY_LNG = "current_city_lng"
     private const val CURRENT_CITY = "current_city"
+    const val NOT_FOUND = "null"
 
     fun saveCurrentLocation(context: Context, valueLat: String, valueLng: String, city: String) {
         val pref = context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE)
@@ -17,16 +18,16 @@ object PreferenceManager {
 
     fun getCurrentLocationLat(context: Context): String {
         val pref = context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE)
-        return pref.getString(CURRENT_CITY_LAT, "none") ?: "none"
+        return pref.getString(CURRENT_CITY_LAT, NOT_FOUND) ?: NOT_FOUND
     }
 
     fun getCurrentLocationLng(context: Context): String {
         val pref = context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE)
-        return pref.getString(CURRENT_CITY_LNG, "none") ?: "none"
+        return pref.getString(CURRENT_CITY_LNG, NOT_FOUND) ?: NOT_FOUND
     }
 
     fun getCurrentCity(context: Context): String {
         val pref = context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE)
-        return pref.getString(CURRENT_CITY, "none") ?: "none"
+        return pref.getString(CURRENT_CITY, NOT_FOUND) ?: NOT_FOUND
     }
 }

@@ -48,7 +48,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -154,7 +154,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private fun setMapOnCurrentCity() {
         val currentLat = PreferenceManager.getCurrentLocationLat(requireContext())
         val currentLng = PreferenceManager.getCurrentLocationLng(requireContext())
-        if (currentLat != "none" && currentLng != "none") {
+        if (currentLat != PreferenceManager.NOT_FOUND && currentLng != PreferenceManager.NOT_FOUND) {
             val location = LatLng(currentLat.toDouble(), currentLng.toDouble())
             moveToLocation(location, 11F)
         } else {

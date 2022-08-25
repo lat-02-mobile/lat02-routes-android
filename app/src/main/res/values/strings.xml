@@ -44,4 +44,14 @@
     <string name="locations">Locations</string>
     <string name="favorites">Favorites</string>
     <string name="settings">Settings</string>
+
+    <!-- Pick City   -->
+    <string name="choose_your_city">Choose your city</string>
+    <string name="search_hint">Search for cities or countries</string>
+    <string name="welcome_to">Welcome to</string>
+
+    <!-- Settings -->
+    <string name="current_city">Current City</string>
+    <string name="logout">Logout</string>
+    <string name="city_not_set_yet">Not set yet</string>
 </resources>

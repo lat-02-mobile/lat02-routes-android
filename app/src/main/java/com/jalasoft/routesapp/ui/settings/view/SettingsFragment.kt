@@ -34,7 +34,7 @@ class SettingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val currentCity = PreferenceManager.getCurrentCity(requireContext())
 
-        binding.btnSetCity.text = if (currentCity != "none") currentCity else "Not set yet"
+        binding.btnSetCity.text = if (currentCity != PreferenceManager.NOT_FOUND) currentCity else getString(R.string.city_not_set_yet)
 
         binding.btnSetCity.setOnClickListener {
             findNavController().navigate(R.id.action_settingsFragment_to_cityPickerFragment)

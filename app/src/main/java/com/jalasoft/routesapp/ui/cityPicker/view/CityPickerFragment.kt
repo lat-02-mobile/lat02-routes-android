@@ -53,6 +53,11 @@ class CityPickerFragment : Fragment(), CityAdapter.ICityListener {
             }
         })
 
+        val currentCity = PreferenceManager.getCurrentCity(requireContext())
+        if (currentCity == PreferenceManager.NOT_FOUND) {
+            binding.btnBack.visibility = View.GONE
+        }
+
         binding.btnBack.setOnClickListener {
             findNavController().popBackStack()
         }
