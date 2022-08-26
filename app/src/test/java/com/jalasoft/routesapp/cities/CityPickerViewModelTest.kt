@@ -35,27 +35,27 @@ class CityPickerViewModelTest : TestCase() {
     }
 
     @Test
-    fun `Fetch all the cities`() {
+    fun `When the user enters to the city picker then fetch all the cities available in the database`() {
         viewModel.fetchCities()
         assertEquals(viewModel._citiesList.value, CountriesFakedata.cities)
     }
 
     @Test
-    fun `Filter cities by name`() {
+    fun `Given a search criteria for city then filter cities by name`() {
         viewModel.fetchCities()
         viewModel.filterCities("sucre")
         assertEquals(viewModel._citiesList.value, CountriesFakedata.cities.filter { it.name == "Sucre" })
     }
 
     @Test
-    fun `Filter cities by country name`() {
+    fun `Given a search criteria for country then filter cities by country name`() {
         viewModel.fetchCities()
         viewModel.filterCities("bolivia")
         assertEquals(viewModel._citiesList.value, CountriesFakedata.cities.filter { it.country == "Bolivia" })
     }
 
     @Test
-    fun `Filter cities for no result`() {
+    fun `Given a search criteria with no matches then filter cities for no result`() {
         viewModel.fetchCities()
         viewModel.filterCities("gfdsfdsa")
         viewModel._citiesList.value?.let { assertEquals(it.isEmpty(), true) }
