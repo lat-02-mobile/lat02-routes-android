@@ -6,6 +6,29 @@
     app:startDestination="@id/homeFragment">
 
     <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.jalasoft.routesapp.ui.auth.login.view.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_registerUserFragment"
+            app:destination="@id/registerUserFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registerUserFragment"
+        android:name="com.jalasoft.routesapp.ui.auth.registerUser.view.RegisterUserFragment"
+        android:label="fragment_register_user"
+        tools:layout="@layout/fragment_register_user" >
+        <action
+            android:id="@+id/action_registerUserFragment_to_phoneAuthenticationFragment"
+            app:destination="@id/phoneAuthenticationFragment" />
+    </fragment>
+
+
+    <fragment
         android:id="@+id/homeFragment"
         android:name="com.jalasoft.routesapp.ui.home.HomeFragment"
         android:label="fragment_home"
@@ -15,4 +38,16 @@
         android:name="com.jalasoft.routesapp.ui.settings.view.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/phoneAuthenticationFragment"
+        android:name="com.jalasoft.routesapp.ui.auth.phoneAuthentication.view.PhoneAuthenticationFragment"
+        android:label="fragment_phone_authentication"
+        tools:layout="@layout/fragment_phone_authentication" >
+        <action
+            android:id="@+id/action_phoneAuthenticationFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+
+
+
 </navigation>
