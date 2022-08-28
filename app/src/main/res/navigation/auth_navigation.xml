@@ -13,18 +13,20 @@
         <action
             android:id="@+id/action_loginFragment_to_registerUserFragment"
             app:destination="@id/registerUserFragment" />
-        <action
-            android:id="@+id/action_loginFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/registerUserFragment"
         android:name="com.jalasoft.routesapp.ui.auth.registerUser.view.RegisterUserFragment"
         android:label="fragment_register_user"
-        tools:layout="@layout/fragment_register_user" />
+        tools:layout="@layout/fragment_register_user" >
+        <action
+            android:id="@+id/action_registerUserFragment_to_phoneAuthenticationFragment"
+            app:destination="@id/phoneAuthenticationFragment" />
+    </fragment>
     <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.jalasoft.routesapp.ui.home.view.HomeFragment"
-        android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/phoneAuthenticationFragment"
+        android:name="com.jalasoft.routesapp.ui.auth.phoneAuthentication.view.PhoneAuthenticationFragment"
+        android:label="fragment_phone_authentication"
+        tools:layout="@layout/fragment_phone_authentication" />
 </navigation>

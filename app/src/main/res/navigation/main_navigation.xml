@@ -5,6 +5,7 @@
     android:id="@+id/home_main_navigation"
     app:startDestination="@id/homeFragment">
 
+
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.jalasoft.routesapp.ui.home.view.HomeFragment"
@@ -54,4 +55,5 @@
             app:argType="string"
             android:defaultValue="none" />
     </fragment>
+
 </navigation>

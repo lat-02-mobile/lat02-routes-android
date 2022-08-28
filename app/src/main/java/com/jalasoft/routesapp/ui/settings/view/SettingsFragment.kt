@@ -45,6 +45,7 @@ class SettingsFragment : Fragment() {
 
         binding.btnLogout.setOnClickListener {
             AuthFirebaseManager.signOutUser()
+            PreferenceManager.deleteAllData(requireContext())
             val intent = Intent(activity, AuthActivity::class.java)
             activity?.startActivity(intent)
             activity?.finish()

@@ -30,4 +30,9 @@ object PreferenceManager {
         val pref = context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE)
         return pref.getString(CURRENT_CITY, NOT_FOUND) ?: NOT_FOUND
     }
+
+    fun deleteAllData(context: Context) {
+        val pref = context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE)
+        pref.edit().clear().apply()
+    }
 }
