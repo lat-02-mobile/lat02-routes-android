@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jalasoft.routesapp.data.model.remote.City
-import com.jalasoft.routesapp.data.remote.managers.CountryRepository
+import com.jalasoft.routesapp.data.remote.interfaces.CountryRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

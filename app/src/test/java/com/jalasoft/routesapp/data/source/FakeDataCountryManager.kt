@@ -4,7 +4,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.jalasoft.routesapp.data.model.remote.City
 import com.jalasoft.routesapp.data.model.remote.CityRoute
 import com.jalasoft.routesapp.data.model.remote.Country
-import com.jalasoft.routesapp.data.remote.managers.CountryRepository
+import com.jalasoft.routesapp.data.remote.interfaces.CountryRepository
 
 class FakeDataCountryManager : CountryRepository {
 

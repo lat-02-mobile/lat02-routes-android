@@ -3,7 +3,7 @@ package com.jalasoft.routesapp.ui.settings.viewModel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jalasoft.routesapp.data.remote.managers.CountryRepository
+import com.jalasoft.routesapp.data.remote.interfaces.CountryRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

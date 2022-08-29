@@ -1,5 +1,7 @@
 package com.jalasoft.routesapp.data.model.remote
 
+import java.io.Serializable
+
 data class CityRoute(
     var Bus: List<Line> = listOf(),
     var Subway: List<Line> = listOf(),
@@ -8,4 +10,4 @@ data class CityRoute(
     var lat: String = "",
     var lng: String = "",
     var name: String = ""
-)
+) : Serializable

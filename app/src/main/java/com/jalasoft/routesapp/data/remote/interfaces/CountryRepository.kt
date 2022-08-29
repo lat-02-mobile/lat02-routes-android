@@ -1,4 +1,4 @@
-package com.jalasoft.routesapp.data.remote.managers
+package com.jalasoft.routesapp.data.remote.interfaces
 
 import com.google.firebase.firestore.DocumentReference
 import com.jalasoft.routesapp.data.model.remote.City

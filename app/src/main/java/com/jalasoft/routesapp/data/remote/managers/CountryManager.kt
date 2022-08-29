@@ -1,33 +1,23 @@
 package com.jalasoft.routesapp.data.remote.managers
 
 import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
-import com.google.firebase.ktx.Firebase
 import com.jalasoft.routesapp.data.model.remote.City
 import com.jalasoft.routesapp.data.model.remote.CityRoute
 import com.jalasoft.routesapp.data.model.remote.Country
+import com.jalasoft.routesapp.data.remote.interfaces.CountryRepository
+import com.jalasoft.routesapp.util.helpers.FirebaseCollections
 import kotlinx.coroutines.tasks.await
 
-class CountryManager : CountryRepository {
-    val db = Firebase.firestore
+class CountryManager(private val firebaseManager: FirebaseManager) : CountryRepository {
 
     override suspend fun getAllCountries(): List<Country> {
-        val result = db.collection("Countries").get().await()
-        val countries = mutableListOf<Country>()
-        for (document in result) {
-            countries.add(document.toObject(Country::class.java))
-        }
-        return countries
+        return firebaseManager.getAllDocuments<Country>(FirebaseCollections.Countries).data
+            ?: listOf()
     }
 
     override suspend fun getAllCityRoutes(): List<CityRoute> {
-        val countries = getAllCountries()
-        val cities = mutableListOf<CityRoute>()
-        for (country in countries) {
-            cities.addAll(getCityRoutesByCountry(country.cities))
-        }
-        return cities
+        return firebaseManager.getAllDocuments<CityRoute>(FirebaseCollections.CityRoute).data
+            ?: listOf()
     }
 
     override suspend fun getAllCities(): List<City> {
