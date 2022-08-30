@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="cityItem"
+            type="com.jalasoft.routesapp.data.model.remote.City" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/cityContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context=".ui.countries.CountriesFragment"
+        android:layout_marginBottom="10dp"
+        android:paddingBottom="10dp"
+        android:background="@drawable/bg_city_item"
+        >
+
+        <TextView
+            android:id="@+id/tv_cityName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{cityItem.name}"
+            android:textSize="24sp"
+            tools:text="Cochabamba" />
+
+        <TextView
+            android:id="@+id/tv_countryName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{cityItem.country}"
+            tools:text="Bolivia" />
+
+    </LinearLayout>
+</layout>

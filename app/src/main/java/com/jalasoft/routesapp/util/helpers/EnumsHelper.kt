@@ -1,7 +1,9 @@
 package com.jalasoft.routesapp.util.helpers
 
 enum class FirebaseCollections {
-    Users
+    Users,
+    Countries,
+    CityRoute
 }
 enum class UserType(val int: Int) {
     NORMAL(0),

@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">RoutesApp</string>
     <string name="new_language_text">Nuevo texto de idioma</string>
+    <!-- Register user -->
     <string name="reg_hint_name">Nombre</string>
     <string name="reg_hint_email">Email</string>
     <string name="reg_hint_password">Contraseña</string>
@@ -17,6 +18,8 @@
     <string name="reg_vm_valid_email">El Email está siendo utilizado en otra cuenta</string>
 
     <string name="hello_blank_fragment">Hola Fragmento en Blanco</string>
+
+    <!--  Startup page  -->
     <string name="txt_login">¿No Tienes\ una cuenta todavia?</string>
     <string name="login">Iniciar Sesion</string>
     <string name="register">Registrate</string>
@@ -25,31 +28,6 @@
     <string name="tv_welcome">¡Bienvenido de vuelta!</string>
     <string name="btn_sign_outd">Cerrar Sesion</string>
 
-    <string name="reg_val_phone">Número de teléfono</string>
-    <string name="reg_val_add_phone">Por favor agregue su número de teléfono</string>
-    <string name="reg_val_add_code">Por favor agregue el código</string>
-    <string name="reg_val_verify_code">El código deberá tener como mínimo 6 digitos</string>
-    <string name="reg_val_verify_phone">El número de teléfono deberá tener como mínimo 4 digitos</string>
-    <string name="reg_verify">Verificar</string>
-    <string name="reg_val_phone_code_verification">The code does not match</string>
-    <string name="reg_val_phone_code_verification_no_code_enter">No code was entered</string>
-    <string name="reg_val_phone_code_forwarded">The code was forwarded</string>
-    <string name="reg_val_verification_alert_title">Por favor ingrese el código</string>
-    <string name="reg_val_verification_code_required">Se requiere el código</string>
-    <string name="reg_val_cancel">Cancelar</string>
-    <string name="reg_val_code">Código</string>
-    <string name="reg_val_resend">Reenviar</string>
-
-
-    <!-- Main Menu -->
-    <string name="home">Inicio</string>
-    <string name="locations">Ubicaciones</string>
-    <string name="favorites">Favoritos</string>
-    <string name="settings">Configuracion</string>
-    <string name="login_email_empty">Email no cumple con el formato</string>
-    <string name="login_password_empty">Contraseña vacía</string>
-    <string name="login_success">Ingreso exitoso</string>
-
     <!-- Home Fragment -->
     <string name="give_the_app_precise_location_permissions" translatable="false">Esta funcionalidad requiere permisos de la ubicacion precisa</string>
     <string name="access_location_permission">Permiso para acceder a la ubicación</string>
@@ -57,5 +35,42 @@
     <string name="allow">Permitir</string>
     <string name="turn_on_location">Por favor, encienda el gps</string>
     <string name="setting_marker_to_current_location">Moviendo el marcador a su ubicación actual</string>
+
+    <!--  Login messages  -->
+    <string name="login_email_empty">Email no cumple con el formato</string>
+    <string name="login_password_empty">Contraseña vacía</string>
+    <string name="login_success">Ingreso exitoso</string>
+
+    <!-- Main Menu -->
+    <string name="home">Inicio</string>
+    <string name="locations">Ubicaciones</string>
+    <string name="favorites">Favoritos</string>
+    <string name="settings">Configuracion</string>
+
+    <!-- Pick City   -->
+    <string name="choose_your_city">Elige tu ciudad</string>
+    <string name="search_hint">Buscar por ciudades o paises</string>
+    <string name="welcome_to">Bienvenido a</string>
+
+    <!-- Settings -->
+    <string name="current_city">Ciudad Actual</string>
+    <string name="logout">Cerrar Sesion</string>
+    <string name="city_not_set_yet">No configurado</string>
+
+    <!--  Phone Verification  -->
+    <string name="reg_val_phone">Número de teléfono</string>
+    <string name="reg_val_add_phone">Por favor agregue su número de teléfono</string>
+    <string name="reg_val_add_code">Por favor agregue el código</string>
+    <string name="reg_val_verify_code">El código deberá tener como mínimo 6 digitos</string>
+    <string name="reg_val_verify_phone">El número de teléfono deberá tener como mínimo 4 digitos</string>
+    <string name="reg_verify">Verificar</string>
+    <string name="reg_val_phone_code_verification">El código no coincide</string>
+    <string name="reg_val_phone_code_verification_no_code_enter">No se ingresó ningún código</string>
+    <string name="reg_val_phone_code_forwarded">El código fue reenviado</string>
+    <string name="reg_val_verification_alert_title">Por favor ingrese el código</string>
+    <string name="reg_val_verification_code_required">Se requiere el código</string>
+    <string name="reg_val_cancel">Cancelar</string>
+    <string name="reg_val_code">Código</string>
+    <string name="reg_val_resend">Reenviar</string>
 
 </resources>

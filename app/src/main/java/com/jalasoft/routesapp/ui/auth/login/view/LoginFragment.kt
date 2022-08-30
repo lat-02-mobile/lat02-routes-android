@@ -115,7 +115,9 @@ class LoginFragment : Fragment() {
                 showProgress(false)
                 binding.loginEmail.setText("")
                 binding.loginPassword.setText("")
-                findNavController().navigate(R.id.homeFragment)
+                val intent = Intent(activity, MainActivity::class.java)
+                activity?.startActivity(intent)
+                activity?.finish()
                 Toast.makeText(context, RoutesAppApplication.resource?.getString(R.string.login_success).toString(), Toast.LENGTH_SHORT).show()
             }
         }

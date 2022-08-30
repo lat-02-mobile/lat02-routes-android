@@ -1,4 +1,4 @@
-package com.jalasoft.routesapp.ui.home
+package com.jalasoft.routesapp.ui.home.view
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -10,6 +10,7 @@ import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +19,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -28,6 +30,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.databinding.FragmentHomeBinding
+import com.jalasoft.routesapp.util.PreferenceManager
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -42,15 +45,11 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     private var mMap: GoogleMap? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -77,6 +76,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             )
         )
         mMap = googleMap
+        setMapOnCurrentCity()
     }
 
     @SuppressLint("MissingPermission")
@@ -130,7 +130,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             mFusedLocationClient.lastLocation.addOnCompleteListener() { task ->
                 val location: Location? = task.result
                 if (location != null) {
-                    moveToLocation(location)
+                    val newLatLng = LatLng(location.latitude, location.longitude)
+                    moveToLocation(newLatLng, 13F)
                 }
             }
         } else {
@@ -146,9 +147,20 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
     }
 
-    private fun moveToLocation(location: Location) {
-        val latlng = LatLng(location.latitude, location.longitude)
-        val cameraTargetLocation = CameraUpdateFactory.newLatLngZoom(latlng, 13f)
+    private fun moveToLocation(location: LatLng, zoom: Float) {
+        val cameraTargetLocation = CameraUpdateFactory.newLatLngZoom(location, zoom)
         mMap?.animateCamera(cameraTargetLocation)
+    }
+
+    private fun setMapOnCurrentCity() {
+        Log.d("home", PreferenceManager.getCurrentCity(requireContext()))
+        val currentLat = PreferenceManager.getCurrentLocationLat(requireContext())
+        val currentLng = PreferenceManager.getCurrentLocationLng(requireContext())
+        if (currentLat != PreferenceManager.NOT_FOUND && currentLng != PreferenceManager.NOT_FOUND) {
+            val location = LatLng(currentLat.toDouble(), currentLng.toDouble())
+            moveToLocation(location, 11F)
+        } else {
+            findNavController().navigate(R.id.action_homeFragment_to_cityPickerFragment)
+        }
     }
 }
