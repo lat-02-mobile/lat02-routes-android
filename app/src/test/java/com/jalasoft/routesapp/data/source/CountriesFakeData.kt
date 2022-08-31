@@ -4,17 +4,17 @@ import com.jalasoft.routesapp.data.model.remote.City
 import com.jalasoft.routesapp.data.model.remote.CityRoute
 import com.jalasoft.routesapp.data.model.remote.Country
 
-object CountriesFakedata {
+object CountriesFakeData {
     val countries = listOf<Country>(
         Country("BO", "Bolivia", "+591"),
         Country("PE", "Peru", "+51"),
         Country("MX", "Mexico", "+52")
 
     )
-    val cities = listOf<City>(
-        City("Potosi", "Bolivia", "BO", "+591", "6.5", "-6.5"),
-        City("Sucre", "Bolivia", "BO", "+591", "6.4", "-6.4"),
-        City("CDMX", "Mexico", "MX", "+52", "-6.3", "6.3")
+    val cities = listOf(
+        City("Bolivia", "city1", "country1", "6.5", "-6.5", "Sucre"),
+        City("Bolivia", "city2", "country1", "6.4", "-6.4", "Potosi"),
+        City("Mexico", "city3", "country2", "-6.3", "6.3", "CDMX")
     )
     val cityRoutes = listOf<CityRoute>(
         CityRoute(name = "Potosi", lat = "6.5", lng = "-6.5"),

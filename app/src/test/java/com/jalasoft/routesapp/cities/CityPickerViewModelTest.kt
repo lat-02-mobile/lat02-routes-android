@@ -1,6 +1,6 @@
 package com.jalasoft.routesapp.cities
 
-import com.jalasoft.routesapp.data.source.CountriesFakedata
+import com.jalasoft.routesapp.data.source.CountriesFakeData
 import com.jalasoft.routesapp.data.source.FakeDataCountryManager
 import com.jalasoft.routesapp.ui.cityPicker.viewModel.CityPickerViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -37,21 +37,21 @@ class CityPickerViewModelTest : TestCase() {
     @Test
     fun `When the user enters to the city picker then fetch all the cities available in the database`() {
         viewModel.fetchCities()
-        assertEquals(viewModel._citiesList.value, CountriesFakedata.cities)
+        assertEquals(viewModel._citiesList.value, CountriesFakeData.cities)
     }
 
     @Test
     fun `Given a search criteria for city then filter cities by name`() {
         viewModel.fetchCities()
         viewModel.filterCities("sucre")
-        assertEquals(viewModel._citiesList.value, CountriesFakedata.cities.filter { it.name == "Sucre" })
+        assertEquals(viewModel._citiesList.value, CountriesFakeData.cities.filter { it.name == "Sucre" })
     }
 
     @Test
     fun `Given a search criteria for country then filter cities by country name`() {
         viewModel.fetchCities()
         viewModel.filterCities("bolivia")
-        assertEquals(viewModel._citiesList.value, CountriesFakedata.cities.filter { it.country == "Bolivia" })
+        assertEquals(viewModel._citiesList.value, CountriesFakeData.cities.filter { it.country == "Bolivia" })
     }
 
     @Test
