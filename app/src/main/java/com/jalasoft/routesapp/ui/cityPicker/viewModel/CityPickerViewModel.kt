@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jalasoft.routesapp.data.model.remote.City
-import com.jalasoft.routesapp.data.remote.managers.CountryRepository
+import com.jalasoft.routesapp.data.remote.interfaces.CityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -13,7 +13,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CityPickerViewModel
 @Inject
-constructor(private val repository: CountryRepository) : ViewModel() {
+constructor(private val repository: CityRepository) : ViewModel() {
 
     var _citiesList: MutableLiveData<List<City>> = MutableLiveData()
     val citiesList: LiveData<List<City>> = _citiesList

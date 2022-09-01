@@ -2,6 +2,7 @@ package com.jalasoft.routesapp.di
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.jalasoft.routesapp.data.remote.interfaces.CityRepository
 import com.jalasoft.routesapp.data.remote.managers.*
 import dagger.Module
 import dagger.Provides
@@ -27,7 +28,7 @@ object ManagersModule {
 
     @Singleton
     @Provides
-    fun provideCountryRepository(): CountryRepository {
-        return CountryManager()
+    fun provideCountryRepository(): CityRepository {
+        return CityManager(FirebaseManager(FirebaseFirestore.getInstance()))
     }
 }
