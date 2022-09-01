@@ -2,7 +2,6 @@ package com.jalasoft.routesapp.data.model.remote
 
 import android.location.Location
 import android.location.LocationManager
-import android.util.Log
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.GeoPoint
@@ -29,9 +28,9 @@ data class Line(
             category = docRef.get().await()
             category?.let {
                 val currLang = Locale.getDefault().isO3Language
-                Log.d("LinePath", currLang)
-                if (currLang == "eng") categoryName = it.toObject(LineCategories::class.java)?.nameEng ?: ""
-                if (currLang == "spa") categoryName = it.toObject(LineCategories::class.java)?.nameEsp ?: ""
+                categoryName =
+                    if (currLang == "spa") it.toObject(LineCategories::class.java)?.nameEsp ?: ""
+                    else it.toObject(LineCategories::class.java)?.nameEng ?: ""
             }
         }
         return LinePath(name, categoryName, routePoints, start, stops)
