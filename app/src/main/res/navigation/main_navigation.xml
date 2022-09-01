@@ -55,5 +55,10 @@
             app:argType="string"
             android:defaultValue="none" />
     </fragment>
+    <fragment
+        android:id="@+id/routeFragment"
+        android:name="com.jalasoft.routesapp.ui.routes.route.view.RouteFragment"
+        android:label="fragment_route"
+        tools:layout="@layout/fragment_route" />
 
 </navigation>

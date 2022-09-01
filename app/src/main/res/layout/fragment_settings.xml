@@ -36,4 +36,10 @@
         android:layout_height="wrap_content"
         android:text="@string/logout" />
 
+    <Button
+        android:id="@+id/btn_route_map"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Route Map" />
+
 </LinearLayout>

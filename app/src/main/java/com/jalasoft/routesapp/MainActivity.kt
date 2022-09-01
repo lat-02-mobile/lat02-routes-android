@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigation.setupWithNavController(navController)
 
         navController.addOnDestinationChangedListener { _, nd: NavDestination, _ ->
-            if (nd.id == R.id.cityPickerFragment || nd.id == R.id.splashScreenFragment) {
+            if (nd.id == R.id.cityPickerFragment || nd.id == R.id.splashScreenFragment || nd.id == R.id.routeFragment) {
                 binding.bottomNavigation.visibility = View.GONE
             } else {
                 binding.bottomNavigation.visibility = View.VISIBLE

@@ -10,4 +10,5 @@
     <color name="color_primary">#004696</color>
     <color name="color_primary_gradient">#BF004696</color>
     <color name="red_color">#FF0000</color>
+    <color name="transparent_background">#00000000</color>
 </resources>
