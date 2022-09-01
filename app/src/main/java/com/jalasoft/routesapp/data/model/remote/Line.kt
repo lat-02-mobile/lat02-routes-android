@@ -2,9 +2,13 @@ package com.jalasoft.routesapp.data.model.remote
 
 import android.location.Location
 import android.location.LocationManager
+import android.util.Log
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.GeoPoint
+import kotlinx.coroutines.tasks.await
 import java.io.Serializable
+import java.util.*
 
 data class Line(
     val categoryRef: DocumentReference? = null,
@@ -15,15 +19,28 @@ data class Line(
     val stops: List<GeoPoint> = listOf()
 ) : Serializable {
 
-    fun lineToLinePath(line: Line): LinePath {
+    suspend fun lineToLinePath(): LinePath {
         val routePoints = LinePath.geoPointListToLocationList(routePoints)
         val start = start?.let { LinePath.geoPointToLocation(it) }
         val stops = LinePath.geoPointListToLocationList(stops)
-        return LinePath(routePoints, start, stops)
+        var category: DocumentSnapshot?
+        var categoryName = ""
+        categoryRef?.let { docRef ->
+            category = docRef.get().await()
+            category?.let {
+                val currLang = Locale.getDefault().isO3Language
+                Log.d("LinePath", currLang)
+                if (currLang == "eng") categoryName = it.toObject(LineCategories::class.java)?.nameEng ?: ""
+                if (currLang == "spa") categoryName = it.toObject(LineCategories::class.java)?.nameEsp ?: ""
+            }
+        }
+        return LinePath(name, categoryName, routePoints, start, stops)
     }
 }
 
 data class LinePath(
+    val name: String = "",
+    val category: String = "",
     val routePoints: List<Location> = listOf(),
     val start: Location? = null,
     val stops: List<Location> = listOf()

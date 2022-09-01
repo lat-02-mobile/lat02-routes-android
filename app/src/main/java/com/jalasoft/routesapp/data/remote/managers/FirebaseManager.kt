@@ -1,6 +1,5 @@
 package com.jalasoft.routesapp.data.remote.managers
 
-import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.jalasoft.routesapp.data.model.remote.User
 import com.jalasoft.routesapp.data.remote.interfaces.FirebaseDataSource
@@ -34,10 +33,8 @@ class FirebaseManager(val db: FirebaseFirestore) : FirebaseDataSource {
     suspend inline fun <reified T : Any> getAllDocuments(collection: FirebaseCollections): Response<List<T>> {
         return try {
             val result = db.collection(collection.toString()).get().await()
-            Log.d("getAllDocs", result.toString())
             Response.Success(result.toObjects(T::class.java))
         } catch (e: Exception) {
-            Log.d("getAllDocs", e.message.toString())
             Response.Error(e.message.toString(), null)
         }
     }

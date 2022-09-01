@@ -11,9 +11,12 @@ class CityManager(private val firebaseManager: FirebaseManager) : CityRepository
     override suspend fun getAllCities(): List<City> {
         val result = firebaseManager.getAllDocuments<City>(FirebaseCollections.Cities).data
 
+        // Test purposes only - DELETE this
         val resultLines = firebaseManager.getAllDocuments<Line>(FirebaseCollections.Lines).data
         Log.d("getAllDocs", resultLines.toString())
-
+        val linePath = resultLines?.get(0)?.lineToLinePath()
+        Log.d("LinePath", linePath.toString())
+        //
         return result ?: listOf()
     }
 }
