@@ -1,11 +1,10 @@
-package com.jalasoft.routesapp.ui.routes.route.view
+package com.jalasoft.routesapp.ui.routes.view
 
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
@@ -28,14 +27,17 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.jalasoft.routesapp.R
-import com.jalasoft.routesapp.databinding.FragmentRouteBinding
+import com.jalasoft.routesapp.data.model.remote.LinePath
+import com.jalasoft.routesapp.databinding.FragmentRouteSelectedBinding
 import com.jalasoft.routesapp.util.helpers.GoogleMapsHelper
 
-class RouteFragment : Fragment(), OnMapReadyCallback {
-    private var _binding: FragmentRouteBinding? = null
+class RouteSelectedFragment : Fragment(), OnMapReadyCallback {
+    private var _binding: FragmentRouteSelectedBinding? = null
     private val binding get() = _binding!!
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private var mMap: GoogleMap? = null
+    private var route: LinePath? = null
+    private var positionSelected = 0
     private val requestFINELOCATIONPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             checkPermissions(isGranted)
@@ -50,12 +52,15 @@ class RouteFragment : Fragment(), OnMapReadyCallback {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentRouteBinding.inflate(inflater, container, false)
+        _binding = FragmentRouteSelectedBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        route = arguments?.getSerializable("routeSelected") as LinePath
+        positionSelected = arguments?.getInt("routeSelectedPosition") ?: 0
+
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         val mapFragment = childFragmentManager.findFragmentById(R.id.map_route_fragment) as? SupportMapFragment
         mapFragment?.getMapAsync(this)
@@ -74,70 +79,47 @@ class RouteFragment : Fragment(), OnMapReadyCallback {
             getLocation()
         }
 
-        // Add markers
-        val firstPoint = LatLng(37.420614, -122.078212)
-        val secondPoint = LatLng(37.420463, -122.078052)
-        val thirdPoint = LatLng(37.417258, -122.078144)
-        val fourthPoint = LatLng(37.415592, -122.078204)
-        val fifthPoint = LatLng(37.415464, -122.079019)
-        val list = arrayListOf<LatLng>()
-        list.add(firstPoint)
-        list.add(secondPoint)
-        list.add(thirdPoint)
-        list.add(fourthPoint)
-        list.add(fifthPoint)
+        // Add Start and End Route Markers
+        val start = GoogleMapsHelper.locationToLatLng(route?.start!!)
+        val end = GoogleMapsHelper.locationToLatLng(route?.end!!)
+        mMap!!.addMarker(MarkerOptions().position(start).title(R.string.start_of_route.toString()).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.start_flag)))
+        // mMap!!.addMarker(MarkerOptions().position(end).title(R.string.end_of_route.toString()).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.end_flag)))
 
-        val oriDest = arrayListOf<LatLng>()
-        oriDest.add(firstPoint)
-        oriDest.add(fifthPoint)
-
-        val stops = arrayListOf<LatLng>()
-        stops.add(thirdPoint)
-
-        addMarkers(oriDest)
-        addStopMarkers(stops)
-        addPolyline(list)
+        addStopMarkers(route!!.stops)
+        drawPolyline(route!!.routePoints)
     }
 
     private fun btnActions() {
         binding.btnBackList.setOnClickListener {
             findNavController().popBackStack()
         }
-        binding.btnSettings.setOnClickListener {
-            // TODO
-        }
     }
 
-    fun addMarkers(list: ArrayList<LatLng>) {
-        for (i in list) {
-            mMap!!.addMarker(MarkerOptions().position(i).title("Point"))
-        }
-    }
-
-    fun addStopMarkers(list: ArrayList<LatLng>) {
+    private fun addStopMarkers(list: List<Location>) {
         for (i in list) {
             mMap!!.addMarker(
-                MarkerOptions().position(i).title("Stop").icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.ic_bus_stop))
+                MarkerOptions().position(GoogleMapsHelper.locationToLatLng(i)).title(R.string.bus_stop.toString()).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.ic_bus_stop))
             )
         }
     }
-    fun addPolyline(list: ArrayList<LatLng>) {
+
+    private fun drawPolyline(list: List<Location>) {
         for (i in list.indices) {
             val item = list[i]
             if (item == list.last()) {
                 mMap!!.addPolyline(
                     PolylineOptions()
-                        .add(list[i - 1], item)
-                        .width(5f)
-                        .color(Color.RED)
+                        .add(GoogleMapsHelper.locationToLatLng(list[i - 1]), GoogleMapsHelper.locationToLatLng(item))
+                        .width(10f)
+                        .color(resources.getColor(R.color.color_primary, null))
                         .geodesic(true)
                 )
             } else {
                 mMap!!.addPolyline(
                     PolylineOptions()
-                        .add(item, list[i + 1])
-                        .width(5f)
-                        .color(Color.RED)
+                        .add(GoogleMapsHelper.locationToLatLng(item), GoogleMapsHelper.locationToLatLng(list[i + 1]))
+                        .width(10f)
+                        .color(resources.getColor(R.color.color_primary, null))
                         .geodesic(true)
                 )
             }

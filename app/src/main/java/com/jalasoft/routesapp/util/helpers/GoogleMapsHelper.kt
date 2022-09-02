@@ -3,9 +3,11 @@ package com.jalasoft.routesapp.util.helpers
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.location.Location
 import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.LatLng
 
 object GoogleMapsHelper {
     fun bitmapFromVector(context: Context, vectorResId: Int): BitmapDescriptor? {
@@ -37,5 +39,9 @@ object GoogleMapsHelper {
 
         // after generating our bitmap we are returning our bitmap.
         return BitmapDescriptorFactory.fromBitmap(bitmap)
+    }
+
+    fun locationToLatLng(location: Location): LatLng {
+        return LatLng(location.latitude, location.longitude)
     }
 }

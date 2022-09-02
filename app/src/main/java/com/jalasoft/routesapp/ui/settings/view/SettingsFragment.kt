@@ -50,9 +50,5 @@ class SettingsFragment : Fragment() {
             activity?.startActivity(intent)
             activity?.finish()
         }
-
-        binding.btnRouteMap.setOnClickListener {
-            findNavController().navigate(R.id.routeFragment)
-        }
     }
 }
