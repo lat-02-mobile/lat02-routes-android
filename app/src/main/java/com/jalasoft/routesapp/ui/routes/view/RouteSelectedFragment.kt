@@ -29,6 +29,7 @@ import com.google.android.gms.maps.model.*
 import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.data.model.remote.LinePath
 import com.jalasoft.routesapp.databinding.FragmentRouteSelectedBinding
+import com.jalasoft.routesapp.util.helpers.Constants
 import com.jalasoft.routesapp.util.helpers.GoogleMapsHelper
 
 class RouteSelectedFragment : Fragment(), OnMapReadyCallback {
@@ -58,8 +59,8 @@ class RouteSelectedFragment : Fragment(), OnMapReadyCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        route = arguments?.getSerializable("routeSelected") as LinePath
-        positionSelected = arguments?.getInt("routeSelectedPosition") ?: 0
+        route = arguments?.getSerializable(Constants.BUNDLE_KEY_ROUTE_SELECTED_DATA) as LinePath
+        positionSelected = arguments?.getInt(Constants.BUNDLE_KEY_ROUTE_SELECTED_POSITION) ?: 0
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         val mapFragment = childFragmentManager.findFragmentById(R.id.map_route_fragment) as? SupportMapFragment
@@ -79,11 +80,10 @@ class RouteSelectedFragment : Fragment(), OnMapReadyCallback {
             getLocation()
         }
 
-        // Add Start and End Route Markers
         val start = GoogleMapsHelper.locationToLatLng(route?.start!!)
         val end = GoogleMapsHelper.locationToLatLng(route?.end!!)
         mMap!!.addMarker(MarkerOptions().position(start).title(R.string.start_of_route.toString()).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.start_flag)))
-        // mMap!!.addMarker(MarkerOptions().position(end).title(R.string.end_of_route.toString()).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.end_flag)))
+        mMap!!.addMarker(MarkerOptions().position(end).title(R.string.end_of_route.toString()).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.end_flag)))
 
         addStopMarkers(route!!.stops)
         drawPolyline(route!!.routePoints)

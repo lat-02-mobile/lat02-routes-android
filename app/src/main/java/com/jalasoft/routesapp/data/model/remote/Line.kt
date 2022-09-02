@@ -46,7 +46,7 @@ data class LinePath(
     val start: Location? = null,
     val end: Location? = null,
     val stops: List<Location> = listOf()
-) {
+) : Serializable {
     companion object {
         fun geoPointToLocation(data: GeoPoint): Location {
             val newLocation = Location(LocationManager.NETWORK_PROVIDER)

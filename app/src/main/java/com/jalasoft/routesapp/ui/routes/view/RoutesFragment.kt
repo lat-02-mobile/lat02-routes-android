@@ -14,6 +14,7 @@ import com.jalasoft.routesapp.data.model.remote.LinePath
 import com.jalasoft.routesapp.databinding.FragmentRoutesBinding
 import com.jalasoft.routesapp.ui.routes.adapter.RoutesAdapter
 import com.jalasoft.routesapp.ui.routes.viewModel.RoutesViewModel
+import com.jalasoft.routesapp.util.helpers.Constants
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -64,8 +65,8 @@ class RoutesFragment : Fragment(), RoutesAdapter.IRoutesListener {
 
     override fun gotoRoute(route: LinePath, position: Int) {
         val bundle = Bundle()
-        bundle.putSerializable("routeSelected", route)
-        bundle.putSerializable("routeSelectedPosition", position)
+        bundle.putSerializable(Constants.BUNDLE_KEY_ROUTE_SELECTED_DATA, route)
+        bundle.putSerializable(Constants.BUNDLE_KEY_ROUTE_SELECTED_POSITION, position)
         findNavController().navigate(R.id.routeSelected, bundle)
     }
 }
