@@ -16,17 +16,16 @@ object RouteCalculator {
             val nearestStopToDestination = line.stops.minWith(Comparator.comparingDouble { it.distanceTo(destination).toDouble() })
 
             if (nearestStopToDestination.distanceTo(destination).toDouble() <= minDistance && nearestStopToOrigin.distanceTo(origin).toDouble() <= minDistance) {
-                val oneRouteLine = LinePath.getOneRouteLine(line, nearestStopToDestination, nearestStopToOrigin)
-                if (oneRouteLine != null) availableTransport.add(oneRouteLine)
+                LinePath.getOneRouteLine(line, nearestStopToDestination, nearestStopToOrigin)?.let {
+                    availableTransport.add(it)
+                }
             } else {
-                if (nearestStopToDestination.distanceTo(destination).toDouble() <= minDistance) {
-                    val destinationCandidate = LinePath.getSubLine(line, nearestStopToDestination, true)
-                    candidates.destinationList.add(destinationCandidate)
+                getCandidateLine(nearestStopToDestination, destination, minDistance, line, true)?.let {
+                    candidates.destinationList.add(it)
                 }
 
-                if (nearestStopToOrigin.distanceTo(origin).toDouble() <= minDistance) {
-                    val originCandidate = LinePath.getSubLine(line, nearestStopToOrigin, false)
-                    candidates.originList.add(originCandidate)
+                getCandidateLine(nearestStopToOrigin, origin, minDistance, line, false)?.let {
+                    candidates.originList.add(it)
                 }
             }
         }
@@ -34,18 +33,32 @@ object RouteCalculator {
         for (routeFromOrigin in candidates.originList) {
             for (routeFromDestiny in candidates.destinationList) {
                 for (stop in routeFromDestiny.stops) {
-                    val nearestStop = routeFromOrigin.stops.minWith(Comparator.comparingDouble { it.distanceTo(stop).toDouble() })
-                    if (nearestStop.distanceTo(stop).toDouble() <= minDistanceBtwStops) {
-                        val indexOfNearestStop = LinePath.getIndexOfFromLocationList(nearestStop, routeFromOrigin.stops)
-                        // Line A
-                        val lineA = LinePath.getSubLine(routeFromOrigin, nearestStop, false)
-                        // Line B
-                        val lineB = LinePath.getSubLine(routeFromDestiny, stop, true)
-                        availableTransport.add(AvailableTransport(indexOfNearestStop, mutableListOf(lineA, lineB)))
+                    joinTwoLinesWithNearStopPoints(routeFromOrigin, routeFromDestiny, stop, minDistanceBtwStops)?.let {
+                        availableTransport.add(it)
                     }
                 }
             }
         }
         return availableTransport
+    }
+
+    private fun joinTwoLinesWithNearStopPoints(routeFromOrigin: LinePath, routeFromDestiny: LinePath, stop: Location, minDistanceBtwStops: Double): AvailableTransport? {
+        val nearestStop = routeFromOrigin.stops.minWith(Comparator.comparingDouble { it.distanceTo(stop).toDouble() })
+        if (nearestStop.distanceTo(stop).toDouble() <= minDistanceBtwStops) {
+            val indexOfNearestStop = LinePath.getIndexOfFromLocationList(nearestStop, routeFromOrigin.stops)
+            // Line A
+            val lineA = LinePath.getSubLine(routeFromOrigin, nearestStop, false)
+            // Line B
+            val lineB = LinePath.getSubLine(routeFromDestiny, stop, true)
+            return AvailableTransport(indexOfNearestStop, mutableListOf(lineA, lineB))
+        }
+        return null
+    }
+
+    private fun getCandidateLine(nearestStop: Location, pointToCheck: Location, minDistance: Double, line: LinePath, isForDestination: Boolean): LinePath? {
+        if (nearestStop.distanceTo(pointToCheck).toDouble() <= minDistance) {
+            return LinePath.getSubLine(line, nearestStop, isForDestination)
+        }
+        return null
     }
 }
