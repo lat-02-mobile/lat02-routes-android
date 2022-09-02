@@ -1,7 +1,7 @@
 package com.jalasoft.routesapp.cities
 
-import com.jalasoft.routesapp.data.source.CountriesFakedata
-import com.jalasoft.routesapp.data.source.FakeDataCountryManager
+import com.jalasoft.routesapp.data.source.CityManagerFakeData
+import com.jalasoft.routesapp.data.source.FakeCityManager
 import com.jalasoft.routesapp.ui.cityPicker.viewModel.CityPickerViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -24,34 +24,34 @@ class CityPickerViewModelTest : TestCase() {
     val hiltRule = HiltAndroidRule(this)
 
     private lateinit var viewModel: CityPickerViewModel
-    private lateinit var fakeManager: FakeDataCountryManager
+    private lateinit var fakeManager: FakeCityManager
 
     @Before
     public override fun setUp() {
         super.setUp()
         hiltRule.inject()
-        fakeManager = FakeDataCountryManager()
+        fakeManager = FakeCityManager()
         viewModel = CityPickerViewModel(fakeManager)
     }
 
     @Test
     fun `When the user enters to the city picker then fetch all the cities available in the database`() {
         viewModel.fetchCities()
-        assertEquals(viewModel._citiesList.value, CountriesFakedata.cities)
+        assertEquals(viewModel._citiesList.value, CityManagerFakeData.cities)
     }
 
     @Test
     fun `Given a search criteria for city then filter cities by name`() {
         viewModel.fetchCities()
         viewModel.filterCities("sucre")
-        assertEquals(viewModel._citiesList.value, CountriesFakedata.cities.filter { it.name == "Sucre" })
+        assertEquals(viewModel._citiesList.value, CityManagerFakeData.cities.filter { it.name == "Sucre" })
     }
 
     @Test
     fun `Given a search criteria for country then filter cities by country name`() {
         viewModel.fetchCities()
         viewModel.filterCities("bolivia")
-        assertEquals(viewModel._citiesList.value, CountriesFakedata.cities.filter { it.country == "Bolivia" })
+        assertEquals(viewModel._citiesList.value, CityManagerFakeData.cities.filter { it.country == "Bolivia" })
     }
 
     @Test
