@@ -15,12 +15,14 @@ data class Line(
     val name: String = "",
     val routePoints: List<GeoPoint> = listOf(),
     val start: GeoPoint? = null,
+    val end: GeoPoint? = null,
     val stops: List<GeoPoint> = listOf()
 ) : Serializable {
 
     suspend fun lineToLinePath(): LinePath {
         val routePoints = LinePath.geoPointListToLocationList(routePoints)
         val start = start?.let { LinePath.geoPointToLocation(it) }
+        val end = end?.let { LinePath.geoPointToLocation(it) }
         val stops = LinePath.geoPointListToLocationList(stops)
         var category: DocumentSnapshot?
         var categoryName = ""
@@ -33,7 +35,7 @@ data class Line(
                     else it.toObject(LineCategories::class.java)?.nameEng ?: ""
             }
         }
-        return LinePath(name, categoryName, routePoints, start, stops)
+        return LinePath(name, categoryName, routePoints, start, end, stops)
     }
 }
 
@@ -42,6 +44,7 @@ data class LinePath(
     val category: String = "",
     val routePoints: List<Location> = listOf(),
     val start: Location? = null,
+    val end: Location? = null,
     val stops: List<Location> = listOf()
 ) {
     companion object {
