@@ -3,10 +3,10 @@ package com.jalasoft.routesapp.ui.routes.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.jalasoft.routesapp.data.model.remote.Line
+import com.jalasoft.routesapp.data.model.remote.LinePath
 import com.jalasoft.routesapp.databinding.RouteItemBinding
 
-class RoutesAdapter(var routeList: MutableList<Line>) : RecyclerView.Adapter<RoutesAdapter.RouteViewHolder>() {
+class RoutesAdapter(var routeList: MutableList<LinePath>) : RecyclerView.Adapter<RoutesAdapter.RouteViewHolder>() {
 
     class RouteViewHolder(val binding: RouteItemBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -24,7 +24,7 @@ class RoutesAdapter(var routeList: MutableList<Line>) : RecyclerView.Adapter<Rou
         return routeList.size
     }
 
-    fun updateList(routesList: MutableList<Line>) {
+    fun updateList(routesList: MutableList<LinePath>) {
         val oldSize = this.routeList.size
         this.routeList = routesList
         if (routesList.size <= oldSize) {

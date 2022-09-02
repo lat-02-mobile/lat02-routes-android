@@ -6,7 +6,7 @@
     <data>
         <variable
             name="routeItem"
-            type="com.jalasoft.routesapp.data.model.remote.Line" />
+            type="com.jalasoft.routesapp.data.model.remote.LinePath" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,6 +21,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:textSize="20sp"
+            android:text="@{routeItem.name}"
             tools:text="Line A" />
 
         <TextView
@@ -33,6 +34,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:text="@{routeItem.category}"
             tools:text="Bus" />
 
         <TextView
@@ -41,7 +43,8 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/line_name"
-            tools:text="Street A, Lon - Lat" />
+            tools:text="Street A, Lon - Lat"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
