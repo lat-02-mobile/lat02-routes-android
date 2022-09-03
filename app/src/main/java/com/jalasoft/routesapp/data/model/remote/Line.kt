@@ -15,6 +15,7 @@ data class Line(
     val name: String = "",
     val routePoints: List<GeoPoint> = listOf(),
     val start: GeoPoint? = null,
+    val end: GeoPoint? = null,
     val stops: List<GeoPoint> = listOf()
 ) : Serializable {
 
@@ -34,6 +35,7 @@ data class Line(
     suspend fun lineToLinePath(): LinePath {
         val routePoints = geoPointListToLocationList(routePoints)
         val start = start?.let { geoPointToLocation(it) }
+        val end = end?.let { geoPointToLocation(it) }
         val stops = geoPointListToLocationList(stops)
         var category: DocumentSnapshot?
         var categoryName = ""
@@ -46,7 +48,7 @@ data class Line(
                     else it.toObject(LineCategories::class.java)?.nameEng ?: ""
             }
         }
-        return LinePath(name, categoryName, routePoints, start, stops)
+        return LinePath(name, categoryName, routePoints, start, end, stops)
     }
 }
 
@@ -55,6 +57,7 @@ data class LinePath(
     val category: String = "",
     val routePoints: List<Location> = listOf(),
     val start: Location? = null,
+    val end: Location? = null,
     val stops: List<Location> = listOf()
 ) {
     companion object {
@@ -69,24 +72,27 @@ data class LinePath(
                 val indexDestinationPoint = getIndexOfFromLocationList(nearestStopToDestination, line.routePoints)
 
                 val newRoutePoints = line.routePoints.slice(indexOriginPoint..indexDestinationPoint)
-                val newLine = LinePath(line.name, line.category, newRoutePoints, line.start, newStops)
+                val newLine = LinePath(line.name, line.category, newRoutePoints, line.start, line.end, newStops)
                 return AvailableTransport(null, mutableListOf(newLine))
             }
             return null
         }
 
+        // This functions separates a line's routePoints and stops
         fun getSubLine(line: LinePath, nearestStop: Location, isForDestination: Boolean): LinePath {
             val intersectionStopIndex = getIndexOfFromLocationList(nearestStop, line.stops)
             val intersectionRoutePointIndex = getIndexOfFromLocationList(nearestStop, line.routePoints)
 
+            // if the line is for destination then returns a new line from the beginning to the stop point
+            // else the new line is from the stop point until the last point (routePoint and stops)
             return if (isForDestination) {
                 val newStops = line.stops.slice(0..intersectionStopIndex)
                 val newRoutePoints = line.routePoints.slice(0..intersectionRoutePointIndex)
-                LinePath(line.name, line.category, newRoutePoints, line.start, newStops)
+                LinePath(line.name, line.category, newRoutePoints, line.start, line.end, newStops)
             } else {
                 val newStops = line.stops.slice(intersectionStopIndex until line.stops.size)
                 val newRoutePoints = line.routePoints.slice(intersectionRoutePointIndex until line.routePoints.size)
-                LinePath(line.name, line.category, newRoutePoints, line.start, newStops)
+                LinePath(line.name, line.category, newRoutePoints, line.start, line.end, newStops)
             }
         }
 
