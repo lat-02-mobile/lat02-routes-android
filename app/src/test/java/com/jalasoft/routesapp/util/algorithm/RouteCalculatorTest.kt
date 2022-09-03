@@ -76,7 +76,7 @@ class RouteCalculatorTest : TestCase() {
 
     @Test
     fun `Given a list of lines and an origin an destination point when the points are far away from any line`() {
-        val originPoint = RouteAlgorithmFakeData.coordinatesToLocation(-16.52242, -68.12587)
+        val originPoint = RouteAlgorithmFakeData.coordinatesToLocation(-16.52221, -68.12749)
         val destinationPoint = RouteAlgorithmFakeData.coordinatesToLocation(-16.52442, -68.12036)
         val minDistance = 200.0
         val minDistanceBtwStops = 200.0
