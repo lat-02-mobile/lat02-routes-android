@@ -82,8 +82,8 @@ class RouteSelectedFragment : Fragment(), OnMapReadyCallback {
 
         val start = GoogleMapsHelper.locationToLatLng(route?.start!!)
         val end = GoogleMapsHelper.locationToLatLng(route?.end!!)
-        mMap!!.addMarker(MarkerOptions().position(start).title(R.string.start_of_route.toString()).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.start_flag)))
-        mMap!!.addMarker(MarkerOptions().position(end).title(R.string.end_of_route.toString()).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.end_flag)))
+        mMap!!.addMarker(MarkerOptions().position(start).title(R.string.start_of_route.toString()).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.ic_start_route)))
+        mMap!!.addMarker(MarkerOptions().position(end).title(R.string.end_of_route.toString()).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.ic_end_route)))
 
         addStopMarkers(route!!.stops)
         drawPolyline(route!!.routePoints)
