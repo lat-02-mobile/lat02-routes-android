@@ -16,7 +16,7 @@ class RoutesViewModel
 @Inject
 constructor(private val repository: RouteRepository) : ViewModel() {
 
-    private var _routesList: MutableLiveData<List<LinePath>> = MutableLiveData()
+    var _routesList: MutableLiveData<List<LinePath>> = MutableLiveData()
     val routesList: LiveData<List<LinePath>> = _routesList
     var originalList: List<LinePath> = listOf()
 
