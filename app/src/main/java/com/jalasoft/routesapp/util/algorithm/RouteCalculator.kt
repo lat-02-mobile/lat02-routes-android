@@ -47,17 +47,17 @@ object RouteCalculator {
         if (nearestStop.distanceTo(stop).toDouble() <= minDistanceBtwStops) {
             val indexOfNearestStop = LinePath.getIndexOfFromLocationList(nearestStop, routeFromOrigin.stops)
             // Line A
-            val lineA = LinePath.getSubLine(routeFromOrigin, nearestStop, false)
+            val lineA = LinePath.getSubLine(routeFromOrigin, nearestStop, true)
             // Line B
-            val lineB = LinePath.getSubLine(routeFromDestiny, stop, true)
+            val lineB = LinePath.getSubLine(routeFromDestiny, stop, false)
             return AvailableTransport(indexOfNearestStop, mutableListOf(lineA, lineB))
         }
         return null
     }
 
-    private fun getCandidateLine(nearestStop: Location, pointToCheck: Location, minDistance: Double, line: LinePath, isForDestination: Boolean): LinePath? {
+    private fun getCandidateLine(nearestStop: Location, pointToCheck: Location, minDistance: Double, line: LinePath, sliceFromStart: Boolean): LinePath? {
         if (nearestStop.distanceTo(pointToCheck).toDouble() <= minDistance) {
-            return LinePath.getSubLine(line, nearestStop, isForDestination)
+            return LinePath.getSubLine(line, nearestStop, sliceFromStart)
         }
         return null
     }

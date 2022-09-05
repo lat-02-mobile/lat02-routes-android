@@ -79,13 +79,13 @@ data class LinePath(
         }
 
         // This functions separates a line's routePoints and stops
-        fun getSubLine(line: LinePath, nearestStop: Location, isForDestination: Boolean): LinePath {
+        fun getSubLine(line: LinePath, nearestStop: Location, sliceFromStart: Boolean): LinePath {
             val intersectionStopIndex = getIndexOfFromLocationList(nearestStop, line.stops)
             val intersectionRoutePointIndex = getIndexOfFromLocationList(nearestStop, line.routePoints)
 
-            // if the line is for destination then returns a new line from the beginning to the stop point
+            // if the line is needed to be sliced from start then returns a new line from the beginning to the stop point
             // else the new line is from the stop point until the last point (routePoint and stops)
-            return if (isForDestination) {
+            return if (sliceFromStart) {
                 val newStops = line.stops.slice(0..intersectionStopIndex)
                 val newRoutePoints = line.routePoints.slice(0..intersectionRoutePointIndex)
                 LinePath(line.name, line.category, newRoutePoints, line.start, line.end, newStops)

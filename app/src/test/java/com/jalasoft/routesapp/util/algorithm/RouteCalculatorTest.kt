@@ -39,7 +39,7 @@ class RouteCalculatorTest : TestCase() {
         val stops2 = RouteAlgorithmFakeData.arrayToMutableListOfLocation(RouteAlgorithmFakeData.stops2Array)
         val line2 = LinePath("246", "Mini", points2, start2, end2, stops2)
 
-        val start3 = RouteAlgorithmFakeData.coordinatesToLocation(-16.52447, -68.12538)
+        val start3 = RouteAlgorithmFakeData.coordinatesToLocation(-16.5206262, -68.1227148)
         val end3 = RouteAlgorithmFakeData.coordinatesToLocation(-16.5244779, -68.1253892)
         val points3 = RouteAlgorithmFakeData.arrayToMutableListOfLocation(RouteAlgorithmFakeData.points3Array)
         val stops3 = RouteAlgorithmFakeData.arrayToMutableListOfLocation(RouteAlgorithmFakeData.stops3Array)
@@ -49,18 +49,19 @@ class RouteCalculatorTest : TestCase() {
     }
 
     @Test
-    fun `Given a list of lines and an origin an destination point when the line stops are near the given points then it returns a list of single lines`() {
-        val originPoint = RouteAlgorithmFakeData.coordinatesToLocation(-16.52094, -68.12419)
-        val destinationPoint = RouteAlgorithmFakeData.coordinatesToLocation(-16.52355, -68.12269)
+    fun `Given a list of lines and an origin and destination point when the line stops are near the given points then it returns a list of single lines`() {
+        val originPoint = RouteAlgorithmFakeData.coordinatesToLocation(-16.52078, -68.12344)
+        val destinationPoint = RouteAlgorithmFakeData.coordinatesToLocation(-16.52455, -68.12269)
         val minDistance = 200.0
         val minDistanceBtwStops = 200.0
 
         val result = RouteCalculator.calculate(lines, destinationPoint, originPoint, minDistance, minDistanceBtwStops)
         assertTrue(result.isNotEmpty())
+        assertTrue(RouteAlgorithmFakeData.compareResults(result, RouteAlgorithmFakeData.result1_4))
     }
 
     @Test
-    fun `Given a list of lines and an origin an destination point when the line stops are near two lines then it returns a list of lines with two transport`() {
+    fun `Given a list of lines and an origin and destination point when the line stops are near two lines then it returns a list of lines with two transport`() {
         val originPoint = RouteAlgorithmFakeData.coordinatesToLocation(-16.52094, -68.12419)
         val destinationPoint = RouteAlgorithmFakeData.coordinatesToLocation(-16.52442, -68.12036)
         val minDistance = 200.0
@@ -68,14 +69,18 @@ class RouteCalculatorTest : TestCase() {
 
         val result = RouteCalculator.calculate(lines, destinationPoint, originPoint, minDistance, minDistanceBtwStops)
         if (result.isNotEmpty()) {
-            assertNotNull(result.first().connectionPoint)
+            val hasConnectionPoint = result.filter {
+                it.connectionPoint != null
+            }
+            assertTrue(hasConnectionPoint.isNotEmpty())
+            assertTrue(RouteAlgorithmFakeData.compareResults(result, RouteAlgorithmFakeData.result2))
         } else {
             fail()
         }
     }
 
     @Test
-    fun `Given a list of lines and an origin an destination point when the points are far away from any line`() {
+    fun `Given a list of lines and an origin and destination point when the points are far away from any line`() {
         val originPoint = RouteAlgorithmFakeData.coordinatesToLocation(-16.52221, -68.12749)
         val destinationPoint = RouteAlgorithmFakeData.coordinatesToLocation(-16.52442, -68.12036)
         val minDistance = 200.0
@@ -86,7 +91,7 @@ class RouteCalculatorTest : TestCase() {
     }
 
     @Test
-    fun `Given a list of lines and an origin an destination point when there are one and two transportation lines then it returns a list with single and double lines`() {
+    fun `Given a list of lines and an origin and destination point when there are one and two transportation lines then it returns a list with single and double lines`() {
         val originPoint = RouteAlgorithmFakeData.coordinatesToLocation(-16.52078, -68.12344)
         val destinationPoint = RouteAlgorithmFakeData.coordinatesToLocation(-16.52455, -68.12269)
         val minDistance = 200.0
@@ -101,5 +106,6 @@ class RouteCalculatorTest : TestCase() {
             it.connectionPoint != null
         }
         assertTrue(singleLineExist.isNotEmpty() && doubleLineExists.isNotEmpty())
+        assertTrue(RouteAlgorithmFakeData.compareResults(result, RouteAlgorithmFakeData.result1_4))
     }
 }
