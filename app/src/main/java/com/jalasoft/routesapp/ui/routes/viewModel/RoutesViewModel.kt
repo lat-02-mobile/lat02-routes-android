@@ -1,5 +1,6 @@
 package com.jalasoft.routesapp.ui.routes.viewModel
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,8 +20,8 @@ constructor(private val repository: RouteRepository) : ViewModel() {
     val routesList: LiveData<List<LinePath>> = _routesList
     var originalList: List<LinePath> = listOf()
 
-    fun fetchRoutes() = viewModelScope.launch {
-        _routesList.value = repository.getAllRouteLines()
+    fun fetchRoutes(context: Context) = viewModelScope.launch {
+        _routesList.value = repository.getAllRouteLines(context)
         originalList = _routesList.value!!
     }
 
