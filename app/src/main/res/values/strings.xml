@@ -87,5 +87,7 @@
     <!-- Routes page -->
     <string name="search_route_hint">Search</string>
 
+    <!-- Search origin and destination-->
+    <string name="search_origin_destination_hint">Search places</string>
 
 </resources>

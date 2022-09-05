@@ -10,16 +10,18 @@ import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -28,22 +30,31 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.jalasoft.routesapp.R
+import com.jalasoft.routesapp.data.api.models.gmaps.Place
 import com.jalasoft.routesapp.databinding.FragmentHomeBinding
+import com.jalasoft.routesapp.ui.home.adapters.PlaceAdapter
+import com.jalasoft.routesapp.ui.home.viewModel.HomeViewModel
 import com.jalasoft.routesapp.util.PreferenceManager
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HomeFragment : Fragment(), OnMapReadyCallback {
+class HomeFragment : Fragment(), OnMapReadyCallback, PlaceAdapter.IPlaceListener {
+
+    private lateinit var mBottomSheetDialog: LinearLayout
+    private lateinit var sheetBehavior: BottomSheetBehavior<LinearLayout>
+    private lateinit var mFusedLocationClient: FusedLocationProviderClient
+
+    private var mMap: GoogleMap? = null
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private lateinit var mFusedLocationClient: FusedLocationProviderClient
+    private val viewModel: HomeViewModel by viewModels()
+
     private val requestFINELOCATIONPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             checkPermissions(isGranted)
         }
-
-    private var mMap: GoogleMap? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,6 +67,9 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setRecycler()
+
+        // Map initialization
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         val mapFragment =
             childFragmentManager.findFragmentById(R.id.map_fragment) as? SupportMapFragment
@@ -66,6 +80,58 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 getLocation()
             }
         }
+
+        binding.btnCheckNextLocation.visibility = View.GONE
+        // SearchView popup config
+        binding.bottomLayout1.placesSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let {
+                    viewModel.searchPlaces(query)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return true
+            }
+        })
+
+        viewModel.fetchedPlaces.observe(viewLifecycleOwner) {
+            (binding.bottomLayout1.placesRecycler.adapter as PlaceAdapter).updateList(it.toMutableList())
+        }
+
+        mBottomSheetDialog = view.findViewById(R.id.bottom_layout_1)
+        sheetBehavior = BottomSheetBehavior.from(mBottomSheetDialog)
+
+        // Bottom sheet dialog config
+        binding.btnMenu.setOnClickListener {
+            if (sheetBehavior.state != BottomSheetBehavior.STATE_EXPANDED) {
+                sheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            } else {
+                sheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            }
+        }
+
+        sheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                if (newState == BottomSheetBehavior.STATE_EXPANDED) {
+                    binding.btnCheckNextLocation.visibility = View.VISIBLE
+                    binding.bottomLayout1.btnArrowPopupState.rotation = 0F
+                } else if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
+                    binding.btnCheckNextLocation.visibility = View.GONE
+                    binding.bottomLayout1.btnArrowPopupState.rotation = 180F
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+            }
+        })
+    }
+
+    @SuppressLint("CutPasteId")
+    private fun setRecycler() {
+        binding.bottomLayout1.placesRecycler.layoutManager = LinearLayoutManager(requireContext())
+        binding.bottomLayout1.placesRecycler.adapter = PlaceAdapter(mutableListOf(), this)
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -153,7 +219,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun setMapOnCurrentCity() {
-        Log.d("home", PreferenceManager.getCurrentCity(requireContext()))
         val currentLat = PreferenceManager.getCurrentLocationLat(requireContext())
         val currentLng = PreferenceManager.getCurrentLocationLng(requireContext())
         if (currentLat != PreferenceManager.NOT_FOUND && currentLng != PreferenceManager.NOT_FOUND) {
@@ -162,5 +227,10 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         } else {
             findNavController().navigate(R.id.action_homeFragment_to_cityPickerFragment)
         }
+    }
+
+    override fun onPlaceTap(place: Place) {
+        val statusTextView = binding.bottomLayout1.tvSelectLocationStatus
+        if (statusTextView.text == "Origin") statusTextView.text = "Destination"
     }
 }

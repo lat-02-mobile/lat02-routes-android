@@ -77,4 +77,9 @@
     <string name="reg_val_resend">Reenviar</string>
     <string name="routes">Rutas</string>
     <string name="search_route_hint">Buscar</string>
+
+
+    <!-- Search origin and destination-->
+    <string name="search_origin_destination_hint">Buscar lugares</string>
+
 </resources>
