@@ -37,6 +37,7 @@ data class Line(
         val start = start?.let { geoPointToLocation(it) }
         val end = end?.let { geoPointToLocation(it) }
         val stops = geoPointListToLocationList(stops)
+
         var category: DocumentSnapshot?
         var categoryName = ""
         categoryRef?.let { docRef ->
