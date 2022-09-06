@@ -88,6 +88,7 @@ class RouteSelectedFragment : Fragment(), OnMapReadyCallback {
         mMap?.addMarker(MarkerOptions().position(start).title(R.string.start_of_route.toString()).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.ic_start_route)))
         mMap?.addMarker(MarkerOptions().position(end).title(R.string.end_of_route.toString()).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.ic_end_route)))
 
+        moveToLocation(start, 15F)
         addStopMarkers(nRoute.stops)
         drawPolyline(nRoute.routePoints)
     }
@@ -185,8 +186,6 @@ class RouteSelectedFragment : Fragment(), OnMapReadyCallback {
                 if (location != null) {
                     mMap?.isMyLocationEnabled = true
                     mMap?.uiSettings?.isMyLocationButtonEnabled = false
-                    val newLatLng = LatLng(location.latitude, location.longitude)
-                    moveToLocation(newLatLng, 13F)
                 }
             }
         } else {

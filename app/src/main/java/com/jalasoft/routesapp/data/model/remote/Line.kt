@@ -19,11 +19,25 @@ data class Line(
     val stops: List<GeoPoint> = listOf()
 ) : Serializable {
 
+    companion object {
+        fun geoPointToLocation(data: GeoPoint): Location {
+            val newLocation = Location(LocationManager.NETWORK_PROVIDER)
+            newLocation.latitude = data.latitude
+            newLocation.longitude = data.longitude
+            return newLocation
+        }
+
+        fun geoPointListToLocationList(dataList: List<GeoPoint>): List<Location> {
+            return dataList.map { geoPointToLocation(it) }
+        }
+    }
+
     suspend fun lineToLinePath(): LinePath {
-        val routePoints = LinePath.geoPointListToLocationList(routePoints)
-        val start = start?.let { LinePath.geoPointToLocation(it) }
-        val end = end?.let { LinePath.geoPointToLocation(it) }
-        val stops = LinePath.geoPointListToLocationList(stops)
+        val routePoints = geoPointListToLocationList(routePoints)
+        val start = start?.let { geoPointToLocation(it) }
+        val end = end?.let { geoPointToLocation(it) }
+        val stops = geoPointListToLocationList(stops)
+
         var category: DocumentSnapshot?
         var categoryName = ""
         categoryRef?.let { docRef ->
@@ -48,17 +62,6 @@ data class LinePath(
     val stops: List<Location> = listOf()
 ) : Serializable {
     companion object {
-        fun geoPointToLocation(data: GeoPoint): Location {
-            val newLocation = Location(LocationManager.NETWORK_PROVIDER)
-            newLocation.latitude = data.latitude
-            newLocation.longitude = data.longitude
-            return newLocation
-        }
-
-        fun geoPointListToLocationList(dataList: List<GeoPoint>): List<Location> {
-            return dataList.map { geoPointToLocation(it) }
-        }
-
         fun getOneRouteLine(line: LinePath, nearestStopToDestination: Location, nearestStopToOrigin: Location): AvailableTransport? {
             val indexOrigin = line.stops.indexOf(nearestStopToOrigin)
             val indexDestination = line.stops.indexOf(nearestStopToDestination)

@@ -55,7 +55,7 @@ class RoutesFragment : Fragment(), RoutesAdapter.IRoutesListener {
             (binding.recyclerRoutes.adapter as RoutesAdapter).updateList(it.toMutableList())
         }
 
-        viewModel.fetchRoutes()
+        viewModel.fetchRoutes(requireContext())
     }
 
     private fun setRecycler() {

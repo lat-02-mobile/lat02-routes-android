@@ -75,7 +75,7 @@ class CityPickerFragment : Fragment(), CityAdapter.ICityListener {
     }
 
     override fun onCityTap(city: City) {
-        PreferenceManager.saveCurrentLocation(requireContext(), city.lat, city.lng, city.name)
+        PreferenceManager.saveCurrentLocation(requireContext(), city.lat, city.lng, city.name, city.id)
         val direction = CityPickerFragmentDirections.actionCityPickerFragmentToSplashScreenFragment(city = city.name)
         findNavController().navigate(direction)
     }
