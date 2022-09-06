@@ -9,6 +9,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.jalasoft.routesapp.databinding.ActivityMainBinding
+import com.jalasoft.routesapp.ui.routes.PossibleRoutesBottomSheet
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -38,6 +39,9 @@ class MainActivity : AppCompatActivity() {
             } else {
                 binding.bottomNavigation.visibility = View.VISIBLE
             }
+        }
+        PossibleRoutesBottomSheet(list = listOf()).apply {
+            show(supportFragmentManager, PossibleRoutesBottomSheet.TAG)
         }
     }
 }

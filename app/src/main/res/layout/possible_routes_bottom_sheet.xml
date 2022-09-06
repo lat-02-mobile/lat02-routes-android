@@ -24,6 +24,7 @@
             tools:text="Routes"/>
     </RelativeLayout>
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerPossibleRoutes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:listitem="@layout/possible_route_item"/>

@@ -20,7 +20,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
-     <!-- Facebook ids-->
+    <!-- Facebook ids-->
     <string name="facebook_app_id" translatable="false">3146525082229053</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb3146525082229053</string>
     <string name="facebook_client_token" translatable="false">131412692dc6c5687212fa62aa82474a</string>
