@@ -79,14 +79,17 @@ class RouteSelectedFragment : Fragment(), OnMapReadyCallback {
         if (isLocationPermissionGranted()) {
             getLocation()
         }
+        if (mMap == null) { return }
+        val nRoute = route ?: return
+        val rStart = nRoute.start ?: return
+        val rEnd = nRoute.end ?: return
+        val start = GoogleMapsHelper.locationToLatLng(rStart)
+        val end = GoogleMapsHelper.locationToLatLng(rEnd)
+        mMap?.addMarker(MarkerOptions().position(start).title(R.string.start_of_route.toString()).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.ic_start_route)))
+        mMap?.addMarker(MarkerOptions().position(end).title(R.string.end_of_route.toString()).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.ic_end_route)))
 
-        val start = GoogleMapsHelper.locationToLatLng(route?.start!!)
-        val end = GoogleMapsHelper.locationToLatLng(route?.end!!)
-        mMap!!.addMarker(MarkerOptions().position(start).title(R.string.start_of_route.toString()).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.ic_start_route)))
-        mMap!!.addMarker(MarkerOptions().position(end).title(R.string.end_of_route.toString()).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.ic_end_route)))
-
-        addStopMarkers(route!!.stops)
-        drawPolyline(route!!.routePoints)
+        addStopMarkers(nRoute.stops)
+        drawPolyline(nRoute.routePoints)
     }
 
     private fun btnActions() {
@@ -96,18 +99,20 @@ class RouteSelectedFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun addStopMarkers(list: List<Location>) {
+        if (mMap == null) { return }
         for (i in list) {
-            mMap!!.addMarker(
+            mMap?.addMarker(
                 MarkerOptions().position(GoogleMapsHelper.locationToLatLng(i)).title(R.string.bus_stop.toString()).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.ic_bus_stop))
             )
         }
     }
 
     private fun drawPolyline(list: List<Location>) {
+        if (mMap == null) { return }
         for (i in list.indices) {
             val item = list[i]
             if (item == list.last()) {
-                mMap!!.addPolyline(
+                mMap?.addPolyline(
                     PolylineOptions()
                         .add(GoogleMapsHelper.locationToLatLng(list[i - 1]), GoogleMapsHelper.locationToLatLng(item))
                         .width(10f)
@@ -115,7 +120,7 @@ class RouteSelectedFragment : Fragment(), OnMapReadyCallback {
                         .geodesic(true)
                 )
             } else {
-                mMap!!.addPolyline(
+                mMap?.addPolyline(
                     PolylineOptions()
                         .add(GoogleMapsHelper.locationToLatLng(item), GoogleMapsHelper.locationToLatLng(list[i + 1]))
                         .width(10f)

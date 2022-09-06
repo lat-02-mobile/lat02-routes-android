@@ -11,10 +11,7 @@ import com.google.android.gms.maps.model.LatLng
 
 object GoogleMapsHelper {
     fun bitmapFromVector(context: Context, vectorResId: Int): BitmapDescriptor? {
-        // below line is use to generate a drawable.
         val vectorDrawable = ContextCompat.getDrawable(context, vectorResId)
-
-        // below line is use to set bounds to our vector drawable.
         vectorDrawable!!.setBounds(
             0,
             0,
@@ -22,7 +19,6 @@ object GoogleMapsHelper {
             vectorDrawable.intrinsicHeight
         )
 
-        // below line is use to create a bitmap for our
         // drawable which we have added.
         val bitmap = Bitmap.createBitmap(
             vectorDrawable.intrinsicWidth,
@@ -30,10 +26,8 @@ object GoogleMapsHelper {
             Bitmap.Config.ARGB_8888
         )
 
-        // below line is use to add bitmap in our canvas.
         val canvas = Canvas(bitmap)
 
-        // below line is use to draw our
         // vector drawable in canvas.
         vectorDrawable.draw(canvas)
 
