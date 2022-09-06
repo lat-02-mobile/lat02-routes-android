@@ -4,6 +4,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.jalasoft.routesapp.data.remote.interfaces.CityRepository
 import com.jalasoft.routesapp.data.remote.interfaces.RouteRepository
+import com.jalasoft.routesapp.data.remote.interfaces.TourPointRepository
 import com.jalasoft.routesapp.data.remote.managers.*
 import dagger.Module
 import dagger.Provides
@@ -37,5 +38,11 @@ object ManagersModule {
     @Provides
     fun provideRouteRepository(): RouteRepository {
         return RouteManager(FirebaseManager(FirebaseFirestore.getInstance()))
+    }
+
+    @Singleton
+    @Provides
+    fun provideTourPointRepository(): TourPointRepository {
+        return TourPointManager(FirebaseManager(FirebaseFirestore.getInstance()))
     }
 }
