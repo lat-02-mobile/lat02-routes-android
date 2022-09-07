@@ -91,6 +91,7 @@
     <string name="select_an_origin">Select an Origin</string>
     <string name="select_a_destination">Select a Destination</string>
     <string name="search_places">Search places</string>
-    <string name="great">Great</string>
+    <string name="done">Done</string>
+    <string name="go_next_step">Done, now you can go to the next step</string>
 
 </resources>

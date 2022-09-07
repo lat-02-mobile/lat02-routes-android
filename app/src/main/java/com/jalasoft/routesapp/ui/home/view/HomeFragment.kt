@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
 import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
@@ -112,7 +113,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
                 viewModel.setOrigin(newLocation)
             } else {
                 viewModel.setDestination(newLocation)
-                binding.btnCheckNextLocation.visibility = View.GONE
             }
         }
 
@@ -122,7 +122,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
             if (viewModel.selectedDestination.value != null) {
                 viewModel.setDestination(null)
                 markerDestination?.remove()
-                binding.btnCheckNextLocation.visibility = View.VISIBLE
             } else {
                 viewModel.setOrigin(null)
                 markerOrigin?.remove()
@@ -143,23 +142,25 @@ class HomeFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
             (binding.bottomLayout1.placesRecycler.adapter as PlaceAdapter).updateList(it.toMutableList())
         }
 
+        viewModel.selectedDestination.observe(viewLifecycleOwner) {
+            if (it != null) {
+                binding.btnCheckNextLocation.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.color_secondary))
+                statusTextView.text = getString(R.string.done)
+                Toast.makeText(requireContext(), getString(R.string.go_next_step), Toast.LENGTH_LONG).show()
+            } else {
+                statusTextView.text = getString(R.string.select_a_destination)
+                binding.btnCheckNextLocation.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.color_primary))
+            }
+        }
+
         viewModel.selectedOrigin.observe(viewLifecycleOwner) {
             if (it != null) {
                 binding.btnGoBack.visibility = View.VISIBLE
                 statusTextView.text = getString(R.string.select_a_destination)
             } else {
-                binding.btnCheckNextLocation.visibility = View.VISIBLE
+                binding.btnCheckNextLocation.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.color_primary))
                 binding.btnGoBack.visibility = View.GONE
                 statusTextView.text = getString(R.string.select_an_origin)
-            }
-        }
-
-        viewModel.selectedDestination.observe(viewLifecycleOwner) {
-            if (it != null) {
-                binding.btnCheckNextLocation.visibility = View.GONE
-                statusTextView.text = getString(R.string.great)
-            } else {
-                statusTextView.text = getString(R.string.select_a_destination)
             }
         }
     }
@@ -248,7 +249,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
             // Redirect the user to the app settings to give permissions manually
             val intent = Intent()
             intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-            val uri = Uri.fromParts("package", activity?.packageName ?: null, null)
+            val uri = Uri.fromParts("package", activity?.packageName, null)
             intent.data = uri
             requireContext().startActivity(intent)
         }
@@ -257,7 +258,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
     @SuppressLint("MissingPermission")
     private fun getLocation() {
         if (isLocationEnabled()) {
-            mFusedLocationClient.lastLocation.addOnCompleteListener() { task ->
+            mFusedLocationClient.lastLocation.addOnCompleteListener { task ->
                 val location: Location? = task.result
                 if (location != null) {
                     val newLatLng = LatLng(location.latitude, location.longitude)
@@ -305,7 +306,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
                 markerDestination = mMap?.addMarker(markerCamera)
             }
         }
-        Toast.makeText(requireContext(), cameraLocation.toString(), Toast.LENGTH_LONG).show()
         return if (cameraLocation != null) {
             LatLng(cameraLocation.latitude, cameraLocation.longitude)
         } else {

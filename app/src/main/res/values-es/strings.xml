@@ -84,6 +84,7 @@
     <string name="select_an_origin">Selecciona un Origen</string>
     <string name="select_a_destination">Selecciona un Destino</string>
     <string name="search_places">Buscar lugares</string>
-    <string name="great">Genial</string>
+    <string name="done">Hecho</string>
+    <string name="go_next_step">Done, now you can go to the next step</string>
 
 </resources>
