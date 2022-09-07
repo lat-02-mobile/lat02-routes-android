@@ -78,7 +78,6 @@
     <string name="routes">Rutas</string>
     <string name="search_route_hint">Buscar</string>
 
-
     <!-- Search origin and destination-->
     <string name="search_origin_destination_hint">Buscar lugares</string>
     <string name="select_an_origin">Selecciona un Origen</string>
@@ -87,4 +86,8 @@
     <string name="done">Hecho</string>
     <string name="go_next_step">Done, now you can go to the next step</string>
 
+    <!-- Route Selected -->
+    <string name="start_of_route">Inicio de la Ruta</string>
+    <string name="end_of_route">Fin de la Ruta</string>
+    <string name="bus_stop">Parada de Bus</string>
 </resources>

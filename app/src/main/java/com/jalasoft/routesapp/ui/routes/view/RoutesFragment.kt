@@ -7,14 +7,18 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.jalasoft.routesapp.R
+import com.jalasoft.routesapp.data.model.remote.LinePath
 import com.jalasoft.routesapp.databinding.FragmentRoutesBinding
 import com.jalasoft.routesapp.ui.routes.adapter.RoutesAdapter
 import com.jalasoft.routesapp.ui.routes.viewModel.RoutesViewModel
+import com.jalasoft.routesapp.util.helpers.Constants
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class RoutesFragment : Fragment() {
+class RoutesFragment : Fragment(), RoutesAdapter.IRoutesListener {
     private var _binding: FragmentRoutesBinding? = null
     private val binding get() = _binding!!
 
@@ -51,11 +55,18 @@ class RoutesFragment : Fragment() {
             (binding.recyclerRoutes.adapter as RoutesAdapter).updateList(it.toMutableList())
         }
 
-        viewModel.fetchRoutes()
+        viewModel.fetchRoutes(requireContext())
     }
 
     private fun setRecycler() {
         binding.recyclerRoutes.layoutManager = LinearLayoutManager(requireContext())
-        binding.recyclerRoutes.adapter = RoutesAdapter(mutableListOf())
+        binding.recyclerRoutes.adapter = RoutesAdapter(mutableListOf(), this)
+    }
+
+    override fun gotoRoute(route: LinePath, position: Int) {
+        val bundle = Bundle()
+        bundle.putSerializable(Constants.BUNDLE_KEY_ROUTE_SELECTED_DATA, route)
+        bundle.putSerializable(Constants.BUNDLE_KEY_ROUTE_SELECTED_POSITION, position)
+        findNavController().navigate(R.id.routeSelected, bundle)
     }
 }
