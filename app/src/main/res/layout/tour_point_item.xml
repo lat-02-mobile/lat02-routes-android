@@ -16,16 +16,14 @@
         android:paddingBottom="5dp">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tour_point_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:lines="1"
                 android:textSize="20sp"
                 android:text="@{tourPointItem.name}"
                 tools:text="Colon Station" />
@@ -36,30 +34,6 @@
                 android:layout_height="wrap_content"
                 android:text="@{tourPointItem.address}"
                 tools:text="Street A, Lon - Lat" />
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tour_point_category"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                android:layout_gravity="end"
-                android:textColor="@color/color_primary"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:text="@{tourPointItem.category}"
-                tools:text="Station" />
 
         </LinearLayout>
 
