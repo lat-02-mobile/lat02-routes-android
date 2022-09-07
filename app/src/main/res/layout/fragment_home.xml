@@ -39,19 +39,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!--    <ImageButton-->
-    <!--        android:id="@+id/btn_current_location"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        app:layout_constraintBottom_toTopOf="@id/bottom_popup"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        android:src="@drawable/ic_baseline_my_location_24"-->
-    <!--        android:background="@drawable/round_corner"-->
-    <!--        android:layout_marginBottom="32dp"-->
-    <!--        android:layout_marginEnd="16dp"-->
-    <!--        android:padding="10dp"-->
-    <!--        />-->
-
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/bottom_popup"
         android:layout_width="match_parent"

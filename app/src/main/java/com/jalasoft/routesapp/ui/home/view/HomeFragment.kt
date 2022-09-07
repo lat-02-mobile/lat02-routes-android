@@ -84,7 +84,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
             )
         )
         mMap = googleMap
-        mMap!!.setOnMarkerClickListener(this)
+        mMap?.setOnMarkerClickListener(this)
         setMapOnCurrentCity()
     }
 
