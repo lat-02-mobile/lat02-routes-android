@@ -5,10 +5,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
+    android:background="@android:color/transparent"
     android:orientation="vertical"
+    android:paddingTop="10dp"
     app:behavior_hideable="false"
-    app:behavior_peekHeight="30dp"
+    app:behavior_peekHeight="60dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <LinearLayout
@@ -19,7 +20,7 @@
         >
         <ImageButton
             android:id="@+id/btn_arrow_popup_state"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
             android:rotation="180"
@@ -40,7 +41,7 @@
             android:id="@+id/tv_select_location_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Origin"
+            android:text="@string/select_an_origin"
             android:textColor="@color/white"
             android:textStyle="bold"
             android:layout_marginStart="10dp"
@@ -53,7 +54,7 @@
             app:layout_constraintTop_toBottomOf="@id/globe_icon"
             android:background="@drawable/bg_search_view"
             android:layout_marginTop="10dp"
-            app:queryHint="Search places"
+            app:queryHint="@string/search_places"
             app:queryBackground="@null"
             app:iconifiedByDefault="false"
             android:layout_marginStart="10dp"

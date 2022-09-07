@@ -4,6 +4,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.jalasoft.routesapp.data.api.retrofit.IGmapsService
 import com.jalasoft.routesapp.data.remote.interfaces.CityRepository
+import com.jalasoft.routesapp.data.remote.interfaces.PlaceRepository
 import com.jalasoft.routesapp.data.remote.interfaces.RouteRepository
 import com.jalasoft.routesapp.data.remote.managers.*
 import dagger.Module
@@ -42,7 +43,7 @@ object ManagersModule {
 
     @Singleton
     @Provides
-    fun providePlaceManager(retrofitService: IGmapsService): PlaceManager {
+    fun providePlaceManager(retrofitService: IGmapsService): PlaceRepository {
         return PlaceManager(retrofitService)
     }
 }

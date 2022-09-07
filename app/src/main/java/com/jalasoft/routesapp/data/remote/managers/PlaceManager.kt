@@ -9,9 +9,9 @@ import com.jalasoft.routesapp.util.Response
 import java.lang.Exception
 
 class PlaceManager(val service: IGmapsService) : PlaceRepository {
-    override suspend fun getAllPlaces(criteria: String): Response<List<Place>> {
+    override suspend fun getAllPlaces(criteria: String, location: String): Response<List<Place>> {
         try {
-            val response = service.getPlaces(criteria, BuildConfig.GOOGLE_MAPS_API_KEY)
+            val response = service.getPlaces(criteria, BuildConfig.GOOGLE_MAPS_API_KEY, location)
             if (response.isSuccessful) {
                 return Response.Success(response.body()?.results ?: listOf())
             }

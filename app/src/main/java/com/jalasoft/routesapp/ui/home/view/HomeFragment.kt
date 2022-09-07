@@ -28,8 +28,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.data.api.models.gmaps.Place
@@ -40,12 +39,14 @@ import com.jalasoft.routesapp.util.PreferenceManager
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HomeFragment : Fragment(), OnMapReadyCallback, PlaceAdapter.IPlaceListener {
+class HomeFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener, PlaceAdapter.IPlaceListener {
 
     private lateinit var mBottomSheetDialog: LinearLayout
     private lateinit var sheetBehavior: BottomSheetBehavior<LinearLayout>
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
 
+    private var markerOrigin: Marker? = null
+    private var markerDestination: Marker? = null
     private var mMap: GoogleMap? = null
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -67,71 +68,11 @@ class HomeFragment : Fragment(), OnMapReadyCallback, PlaceAdapter.IPlaceListener
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setButtons()
         setRecycler()
-
-        // Map initialization
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-        val mapFragment =
-            childFragmentManager.findFragmentById(R.id.map_fragment) as? SupportMapFragment
-        mapFragment?.getMapAsync(this)
-
-        binding.btnCurrentLocation.setOnClickListener {
-            if (isLocationPermissionGranted()) {
-                getLocation()
-            }
-        }
-
-        binding.btnCheckNextLocation.visibility = View.GONE
-        // SearchView popup config
-        binding.bottomLayout1.placesSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                query?.let {
-                    viewModel.searchPlaces(query)
-                }
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return true
-            }
-        })
-
-        viewModel.fetchedPlaces.observe(viewLifecycleOwner) {
-            (binding.bottomLayout1.placesRecycler.adapter as PlaceAdapter).updateList(it.toMutableList())
-        }
-
-        mBottomSheetDialog = view.findViewById(R.id.bottom_layout_1)
-        sheetBehavior = BottomSheetBehavior.from(mBottomSheetDialog)
-
-        // Bottom sheet dialog config
-        binding.btnMenu.setOnClickListener {
-            if (sheetBehavior.state != BottomSheetBehavior.STATE_EXPANDED) {
-                sheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-            } else {
-                sheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-            }
-        }
-
-        sheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
-            override fun onStateChanged(bottomSheet: View, newState: Int) {
-                if (newState == BottomSheetBehavior.STATE_EXPANDED) {
-                    binding.btnCheckNextLocation.visibility = View.VISIBLE
-                    binding.bottomLayout1.btnArrowPopupState.rotation = 0F
-                } else if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
-                    binding.btnCheckNextLocation.visibility = View.GONE
-                    binding.bottomLayout1.btnArrowPopupState.rotation = 180F
-                }
-            }
-
-            override fun onSlide(bottomSheet: View, slideOffset: Float) {
-            }
-        })
-    }
-
-    @SuppressLint("CutPasteId")
-    private fun setRecycler() {
-        binding.bottomLayout1.placesRecycler.layoutManager = LinearLayoutManager(requireContext())
-        binding.bottomLayout1.placesRecycler.adapter = PlaceAdapter(mutableListOf(), this)
+        setMap()
+        setBottomPopup()
+        setObservers()
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -142,9 +83,132 @@ class HomeFragment : Fragment(), OnMapReadyCallback, PlaceAdapter.IPlaceListener
             )
         )
         mMap = googleMap
+        mMap!!.setOnMarkerClickListener(this)
         setMapOnCurrentCity()
     }
 
+    override fun onPlaceTap(place: Place) {
+        val locationLatLng = LatLng(place.geometry.location.lat, place.geometry.location.lng)
+        moveToLocation(locationLatLng, 17F)
+        sheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+    }
+
+    override fun onMarkerClick(marker: Marker): Boolean {
+        if (marker == markerOrigin) {
+            viewModel.selectedOrigin.value = null
+        } else if (marker == markerDestination) {
+            viewModel.selectedDestination.value = null
+        }
+        marker.remove()
+        return true
+    }
+
+    // Methods for setups
+    private fun setButtons() {
+        // Next button
+        binding.btnCheckNextLocation.setOnClickListener {
+            val newLocation = getSelectedLocation()
+            if (viewModel.selectedOrigin.value == null) {
+                viewModel.setOrigin(newLocation)
+            } else {
+                viewModel.setDestination(newLocation)
+                binding.btnCheckNextLocation.visibility = View.GONE
+            }
+        }
+
+        // Go back button
+        binding.btnGoBack.visibility = View.GONE
+        binding.btnGoBack.setOnClickListener {
+            if (viewModel.selectedDestination.value != null) {
+                viewModel.setDestination(null)
+                markerDestination?.remove()
+                binding.btnCheckNextLocation.visibility = View.VISIBLE
+            } else {
+                viewModel.setOrigin(null)
+                markerOrigin?.remove()
+            }
+        }
+
+        // Get current location button
+        binding.btnCurrentLocation.setOnClickListener {
+            if (isLocationPermissionGranted()) {
+                getLocation()
+            }
+        }
+    }
+
+    private fun setObservers() {
+        val statusTextView = binding.bottomLayout1.tvSelectLocationStatus
+        viewModel.fetchedPlaces.observe(viewLifecycleOwner) {
+            (binding.bottomLayout1.placesRecycler.adapter as PlaceAdapter).updateList(it.toMutableList())
+        }
+
+        viewModel.selectedOrigin.observe(viewLifecycleOwner) {
+            if (it != null) {
+                binding.btnGoBack.visibility = View.VISIBLE
+                statusTextView.text = getString(R.string.select_a_destination)
+            } else {
+                binding.btnCheckNextLocation.visibility = View.VISIBLE
+                binding.btnGoBack.visibility = View.GONE
+                statusTextView.text = getString(R.string.select_an_origin)
+            }
+        }
+
+        viewModel.selectedDestination.observe(viewLifecycleOwner) {
+            if (it != null) {
+                binding.btnCheckNextLocation.visibility = View.GONE
+                statusTextView.text = getString(R.string.great)
+            } else {
+                statusTextView.text = getString(R.string.select_a_destination)
+            }
+        }
+    }
+
+    private fun setMap() {
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        val mapFragment =
+            childFragmentManager.findFragmentById(R.id.map_fragment) as? SupportMapFragment
+        mapFragment?.getMapAsync(this)
+    }
+
+    private fun setRecycler() {
+        binding.bottomLayout1.placesRecycler.layoutManager = LinearLayoutManager(requireContext())
+        binding.bottomLayout1.placesRecycler.adapter = PlaceAdapter(mutableListOf(), this)
+    }
+
+    private fun setBottomPopup() {
+        binding.bottomLayout1.placesSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let {
+                    val currentLat = PreferenceManager.getCurrentLocationLat(requireContext())
+                    val currentLng = PreferenceManager.getCurrentLocationLng(requireContext())
+                    viewModel.searchPlaces(query, "$currentLat $currentLng")
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return true
+            }
+        })
+
+        mBottomSheetDialog = requireView().findViewById(R.id.bottom_layout_1)
+        sheetBehavior = BottomSheetBehavior.from(mBottomSheetDialog)
+
+        sheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                if (newState == BottomSheetBehavior.STATE_EXPANDED) {
+                    binding.bottomLayout1.btnArrowPopupState.rotation = 0F
+                } else if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
+                    binding.bottomLayout1.btnArrowPopupState.rotation = 180F
+                }
+            }
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+            }
+        })
+    }
+
+    // Methods for map, location and permissions
     @SuppressLint("MissingPermission")
     private fun isLocationPermissionGranted(): Boolean {
         when {
@@ -229,8 +293,23 @@ class HomeFragment : Fragment(), OnMapReadyCallback, PlaceAdapter.IPlaceListener
         }
     }
 
-    override fun onPlaceTap(place: Place) {
-        val statusTextView = binding.bottomLayout1.tvSelectLocationStatus
-        if (statusTextView.text == "Origin") statusTextView.text = "Destination"
+    private fun getSelectedLocation(): LatLng? {
+        val cameraLocation = mMap?.cameraPosition?.target
+        val markerCamera = cameraLocation?.let { MarkerOptions().position(it) }
+        if (markerCamera != null) {
+            if (viewModel.selectedOrigin.value == null) {
+                markerCamera.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_origin))
+                markerOrigin = mMap?.addMarker(markerCamera)
+            } else {
+                markerCamera.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_destination))
+                markerDestination = mMap?.addMarker(markerCamera)
+            }
+        }
+        Toast.makeText(requireContext(), cameraLocation.toString(), Toast.LENGTH_LONG).show()
+        return if (cameraLocation != null) {
+            LatLng(cameraLocation.latitude, cameraLocation.longitude)
+        } else {
+            null
+        }
     }
 }

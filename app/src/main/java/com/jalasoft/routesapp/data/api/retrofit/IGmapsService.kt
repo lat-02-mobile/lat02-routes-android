@@ -9,6 +9,7 @@ interface IGmapsService {
     @GET("maps/api/place/textsearch/json")
     suspend fun getPlaces(
         @Query("query") placeCriteria: String,
-        @Query("key") keyMap: String
+        @Query("key") keyMap: String,
+        @Query("location") locationLatLng: String
     ): Response<GMapsResponse>
 }
