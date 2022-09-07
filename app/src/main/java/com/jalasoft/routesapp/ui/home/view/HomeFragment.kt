@@ -108,10 +108,11 @@ class HomeFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
     private fun setButtons() {
         // Next button
         binding.btnCheckNextLocation.setOnClickListener {
-            val newLocation = getSelectedLocation()
             if (viewModel.selectedOrigin.value == null) {
+                val newLocation = getSelectedLocation()
                 viewModel.setOrigin(newLocation)
-            } else {
+            } else if (viewModel.selectedDestination.value == null) {
+                val newLocation = getSelectedLocation()
                 viewModel.setDestination(newLocation)
             }
         }
