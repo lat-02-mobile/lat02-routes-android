@@ -7,6 +7,7 @@
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
     app:behavior_hideable="true"
     app:behavior_peekHeight="60dp"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -21,7 +22,7 @@
             android:textSize="23sp"
             android:textStyle="bold"
             android:textColor="@color/white"
-            tools:text="Routes"/>
+            android:text="@string/routes"/>
     </RelativeLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerPossibleRoutes"

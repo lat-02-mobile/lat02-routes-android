@@ -7,12 +7,13 @@ import coil.ImageLoader
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
 import com.jalasoft.routesapp.data.model.remote.Line
+import com.jalasoft.routesapp.data.model.remote.LinePath
 import com.jalasoft.routesapp.databinding.PossibleRouteItemBinding
 
-class PossibleRouteAdapter (var linesList: MutableList<Line>, val listener: IPossibleRouteListener) : RecyclerView.Adapter<PossibleRouteAdapter.PossibleRouteViewHolder>() {
+class PossibleRouteAdapter (var linesList: MutableList<LinePath>, val listener: IPossibleRouteListener) : RecyclerView.Adapter<PossibleRouteAdapter.PossibleRouteViewHolder>() {
 
     interface IPossibleRouteListener {
-        fun onCityTap(line: Line)
+        fun onCityTap(line: LinePath)
     }
 
     class PossibleRouteViewHolder(val binding: PossibleRouteItemBinding) : RecyclerView.ViewHolder(binding.root)
@@ -49,7 +50,7 @@ class PossibleRouteAdapter (var linesList: MutableList<Line>, val listener: IPos
         return linesList.size
     }
 
-    fun updateList(linesList: MutableList<Line>) {
+    fun updateList(linesList: MutableList<LinePath>) {
         val oldSize = this.linesList.size
         this.linesList = linesList
         if (linesList.size <= oldSize) {

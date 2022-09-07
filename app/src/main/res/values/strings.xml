@@ -80,5 +80,8 @@
     <string name="reg_val_cancel">Cancel</string>
     <string name="reg_val_resend">Resend</string>
 
+    <!--  Possible routes  -->
+    <string name="routes">Routes</string>
+
 
 </resources>

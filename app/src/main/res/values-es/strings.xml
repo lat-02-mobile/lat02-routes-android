@@ -73,4 +73,7 @@
     <string name="reg_val_code">Código</string>
     <string name="reg_val_resend">Reenviar</string>
 
+    <!--  Possible routes  -->
+    <string name="routes">Rutas</string>
+
 </resources>
