@@ -6,7 +6,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jalasoft.routesapp.data.model.remote.LinePath
 import com.jalasoft.routesapp.databinding.RouteItemBinding
 
-class RoutesAdapter(var routeList: MutableList<LinePath>) : RecyclerView.Adapter<RoutesAdapter.RouteViewHolder>() {
+class RoutesAdapter(var routeList: MutableList<LinePath>, val listener: IRoutesListener) : RecyclerView.Adapter<RoutesAdapter.RouteViewHolder>() {
+
+    interface IRoutesListener {
+        fun gotoRoute(route: LinePath, position: Int)
+    }
 
     class RouteViewHolder(val binding: RouteItemBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -17,7 +21,11 @@ class RoutesAdapter(var routeList: MutableList<LinePath>) : RecyclerView.Adapter
     }
 
     override fun onBindViewHolder(holder: RouteViewHolder, position: Int) {
-        holder.binding.routeItem = routeList[position]
+        val route = routeList[position]
+        holder.binding.routeItem = route
+        holder.binding.container.setOnClickListener {
+            listener.gotoRoute(route, position)
+        }
     }
 
     override fun getItemCount(): Int {
