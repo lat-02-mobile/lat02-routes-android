@@ -1,10 +1,10 @@
 package com.jalasoft.routesapp.data.model.remote
 
 import android.location.Location
-import android.location.LocationManager
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.GeoPoint
+import com.jalasoft.routesapp.util.helpers.GoogleMapsHelper
 import kotlinx.coroutines.tasks.await
 import java.io.Serializable
 import java.util.*
@@ -19,24 +19,11 @@ data class Line(
     val stops: List<GeoPoint> = listOf()
 ) : Serializable {
 
-    companion object {
-        fun geoPointToLocation(data: GeoPoint): Location {
-            val newLocation = Location(LocationManager.NETWORK_PROVIDER)
-            newLocation.latitude = data.latitude
-            newLocation.longitude = data.longitude
-            return newLocation
-        }
-
-        fun geoPointListToLocationList(dataList: List<GeoPoint>): List<Location> {
-            return dataList.map { geoPointToLocation(it) }
-        }
-    }
-
     suspend fun lineToLinePath(): LinePath {
-        val routePoints = geoPointListToLocationList(routePoints)
-        val start = start?.let { geoPointToLocation(it) }
-        val end = end?.let { geoPointToLocation(it) }
-        val stops = geoPointListToLocationList(stops)
+        val routePoints = GoogleMapsHelper.geoPointListToLocationList(routePoints)
+        val start = start?.let { GoogleMapsHelper.geoPointToLocation(it) }
+        val end = end?.let { GoogleMapsHelper.geoPointToLocation(it) }
+        val stops = GoogleMapsHelper.geoPointListToLocationList(stops)
 
         var category: DocumentSnapshot?
         var categoryName = ""

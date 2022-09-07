@@ -1,10 +1,10 @@
 package com.jalasoft.routesapp.data.model.remote
 
 import android.location.Location
-import android.location.LocationManager
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.GeoPoint
+import com.jalasoft.routesapp.util.helpers.GoogleMapsHelper
 import kotlinx.coroutines.tasks.await
 import java.io.Serializable
 import java.util.*
@@ -17,17 +17,9 @@ data class TourPoint(
     val urlImage: String? = "",
     val tourPointsCategoryRef: DocumentReference? = null
 ) : Serializable {
-    companion object {
-        fun geoPointToLocation(data: GeoPoint): Location {
-            val newLocation = Location(LocationManager.NETWORK_PROVIDER)
-            newLocation.latitude = data.latitude
-            newLocation.longitude = data.longitude
-            return newLocation
-        }
-    }
 
     suspend fun tourPointToTourPointPath(): TourPointPath {
-        val destination = destination?.let { TourPoint.geoPointToLocation(it) }
+        val destination = destination?.let { GoogleMapsHelper.geoPointToLocation(it) }
         var city: DocumentSnapshot?
         var cityId = ""
         idCity?.let { docRef ->
