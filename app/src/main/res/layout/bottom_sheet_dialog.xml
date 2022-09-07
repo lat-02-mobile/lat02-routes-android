@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottom_sheet_layout"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
+    android:orientation="vertical"
+    android:paddingTop="10dp"
+    app:behavior_hideable="false"
+    app:behavior_peekHeight="60dp"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_primary"
+        android:gravity="center"
+        >
+        <ImageButton
+            android:id="@+id/btn_arrow_popup_state"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
+            android:rotation="180"
+            android:background="@null"
+            android:backgroundTint="@null"
+            android:layout_weight="1"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_primary"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:id="@+id/tv_select_location_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/select_an_origin"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:layout_marginStart="10dp"
+            />
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/places_search_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/globe_icon"
+            android:background="@drawable/bg_search_view"
+            android:layout_marginTop="10dp"
+            app:queryHint="@string/search_places"
+            app:queryBackground="@null"
+            app:iconifiedByDefault="false"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/places_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:background="@color/background_color_1"
+            app:layout_constraintTop_toBottomOf="@id/sv_citySearcher"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:listitem="@layout/place_item"
+            android:layout_marginTop="10dp"
+            />
+
+    </LinearLayout>
+
+
+    <!--button for dismissing our dialog-->
+<!--    <Button-->
+<!--        android:id="@+id/idBtnDismiss"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_margin="10dp"-->
+<!--        android:text="Dismiss dialog"-->
+<!--        android:textAllCaps="false" />-->
+
+</LinearLayout>
