@@ -5,7 +5,9 @@ enum class FirebaseCollections {
     Countries,
     Cities,
     Lines,
-    LineCategories
+    LineCategories,
+    Tourpoints,
+    TourpointsCategory
 }
 enum class UserType(val int: Int) {
     NORMAL(0),

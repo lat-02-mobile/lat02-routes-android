@@ -5,9 +5,9 @@
         android:icon="@drawable/ic_baseline_directions_bus_24"
         android:title="@string/routes" />
     <item
-        android:id="@+id/locationsFragment"
+        android:id="@+id/tourPointsFragment"
         android:icon="@drawable/ic_baseline_location_on_24"
-        android:title="@string/locations" />
+        android:title="@string/tour_points" />
     <item
         android:id="@+id/homeFragment"
         android:icon="@drawable/ic_baseline_map_24"

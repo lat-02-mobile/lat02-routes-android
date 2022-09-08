@@ -53,6 +53,7 @@
     <string name="favorites">Favorites</string>
     <string name="settings">Settings</string>
     <string name="routes">Routes</string>
+    <string name="tour_points">Tour Points</string>
 
     <!-- Pick City   -->
     <string name="choose_your_city">Choose your city</string>
