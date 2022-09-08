@@ -10,7 +10,7 @@ import com.jalasoft.routesapp.util.helpers.FirebaseCollections
 class TourPointManager(private val firebaseManager: FirebaseManager) : TourPointRepository {
     override suspend fun getAllTourPoints(context: Context): List<TourPointPath> {
         val currentCityId = PreferenceManager.getCurrentCityID(context)
-        val cityRef = firebaseManager.db.document("Cities/$currentCityId")
+        val cityRef = firebaseManager.db.document("${FirebaseCollections.Cities}/$currentCityId")
 
         val result = firebaseManager.getDocumentsByReferenceWithCondition<TourPoint>(FirebaseCollections.Tourpoints, "idCity", cityRef).data
         if (result != null) {

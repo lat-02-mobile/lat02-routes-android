@@ -4,6 +4,7 @@ import android.location.Location
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.GeoPoint
+import com.jalasoft.routesapp.util.helpers.Constants
 import com.jalasoft.routesapp.util.helpers.GoogleMapsHelper
 import kotlinx.coroutines.tasks.await
 import java.io.Serializable
@@ -35,7 +36,7 @@ data class TourPoint(
             category?.let {
                 val currLang = Locale.getDefault().isO3Language
                 categoryName =
-                    if (currLang == "spa") it.toObject(TourPointsCategory::class.java)?.descriptionEsp ?: ""
+                    if (currLang == Constants.CURRENT_SPANISH_LANGUAGE) it.toObject(TourPointsCategory::class.java)?.descriptionEsp ?: ""
                     else it.toObject(TourPointsCategory::class.java)?.descriptionEng ?: ""
             }
         }

@@ -46,7 +46,7 @@
     <string name="locations">Ubicaciones</string>
     <string name="favorites">Favoritos</string>
     <string name="settings">Configuracion</string>
-    <string name="tour_points">Puntos Turisticos</string>
+    <string name="tour_points">Sitios</string>
 
     <!-- Pick City   -->
     <string name="choose_your_city">Elige tu ciudad</string>
