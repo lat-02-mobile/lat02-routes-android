@@ -61,4 +61,18 @@
         android:label="fragment_possible_routes"
         tools:layout="@layout/fragment_possible_routes" />
 
+    <fragment
+        android:id="@+id/routesFragment"
+        android:name="com.jalasoft.routesapp.ui.routes.view.RoutesFragment"
+        android:label="fragment_routes"
+        tools:layout="@layout/fragment_routes" />
+
+    <fragment
+        android:id="@+id/routeSelected"
+        android:name="com.jalasoft.routesapp.ui.routes.view.RouteSelectedFragment"
+        android:label="fragment_route"
+        tools:layout="@layout/fragment_route_selected" />
+
+
+
 </navigation>

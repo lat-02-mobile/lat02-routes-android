@@ -29,7 +29,7 @@
     <string name="btn_sign_outd">Cerrar Sesion</string>
 
     <!-- Home Fragment -->
-    <string name="give_the_app_precise_location_permissions" translatable="false">Esta funcionalidad requiere permisos de la ubicacion precisa</string>
+    <string name="give_the_app_precise_location_permissions">Esta funcionalidad requiere permisos de la ubicación precisa</string>
     <string name="access_location_permission">Permiso para acceder a la ubicación</string>
     <string name="allow_get_precise_location_permission">Por favor permita que la aplicacion obtenga permisos para la ubicación</string>
     <string name="allow">Permitir</string>
@@ -57,6 +57,9 @@
     <string name="logout">Cerrar Sesion</string>
     <string name="city_not_set_yet">No configurado</string>
 
+    <!-- App Bar -->
+    <string name="filter">Filtro</string>
+
     <!--  Phone Verification  -->
     <string name="reg_val_phone">Número de teléfono</string>
     <string name="reg_val_add_phone">Por favor agregue su número de teléfono</string>
@@ -72,8 +75,25 @@
     <string name="reg_val_cancel">Cancelar</string>
     <string name="reg_val_code">Código</string>
     <string name="reg_val_resend">Reenviar</string>
+    <string name="routes">Rutas</string>
+    <string name="search_route_hint">Buscar</string>
 
+    <!-- Search origin and destination-->
+    <string name="search_origin_destination_hint">Buscar lugares</string>
+    <string name="select_an_origin">Selecciona un Origen</string>
+    <string name="select_a_destination">Selecciona un Destino</string>
+    <string name="search_places">Buscar lugares</string>
+    <string name="done">Hecho</string>
+    <string name="go_next_step">Done, now you can go to the next step</string>
+
+<<<<<<< HEAD
     <!--  Possible routes  -->
     <string name="routes">Rutas</string>
 
+=======
+    <!-- Route Selected -->
+    <string name="start_of_route">Inicio de la Ruta</string>
+    <string name="end_of_route">Fin de la Ruta</string>
+    <string name="bus_stop">Parada de Bus</string>
+>>>>>>> develop
 </resources>

@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/homeFragment"
+        android:id="@+id/routesFragment"
         android:icon="@drawable/ic_baseline_directions_bus_24"
-        android:title="@string/home" />
+        android:title="@string/routes" />
     <item
         android:id="@+id/locationsFragment"
         android:icon="@drawable/ic_baseline_location_on_24"
         android:title="@string/locations" />
-
+    <item
+        android:id="@+id/homeFragment"
+        android:icon="@drawable/ic_baseline_map_24"
+        android:title="@string/home" />
     <item
         android:id="@+id/favoritesFragment"
-        android:icon="@drawable/ic_baseline_favorite_border_24"
+        android:icon="@drawable/ic_baseline_favorite_24"
         android:title="@string/favorites"
         />
-
     <item
         android:id="@+id/settingsFragment"
         android:icon="@drawable/ic_baseline_settings_24"

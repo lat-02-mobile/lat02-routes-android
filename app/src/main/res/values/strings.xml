@@ -19,7 +19,10 @@
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> develop
     <!-- Facebook ids-->
     <string name="facebook_app_id" translatable="false">3146525082229053</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb3146525082229053</string>
@@ -53,6 +56,7 @@
     <string name="locations">Locations</string>
     <string name="favorites">Favorites</string>
     <string name="settings">Settings</string>
+    <string name="routes">Routes</string>
 
     <!-- Pick City   -->
     <string name="choose_your_city">Choose your city</string>
@@ -63,6 +67,9 @@
     <string name="current_city">Current City</string>
     <string name="logout">Logout</string>
     <string name="city_not_set_yet">Not set yet</string>
+
+    <!-- App Bar -->
+    <string name="filter">Filter</string>
 
     <!--  Phone Verification  -->
     <string name="reg_val_phone">phone number</string>
@@ -80,8 +87,26 @@
     <string name="reg_val_cancel">Cancel</string>
     <string name="reg_val_resend">Resend</string>
 
+<<<<<<< HEAD
     <!--  Possible routes  -->
     <string name="routes">Routes</string>
 
+=======
+    <!-- Routes page -->
+    <string name="search_route_hint">Search</string>
+
+    <!-- Search origin and destination-->
+    <string name="search_origin_destination_hint">Search places</string>
+    <string name="select_an_origin">Select an Origin</string>
+    <string name="select_a_destination">Select a Destination</string>
+    <string name="search_places">Search places</string>
+    <string name="done">Done</string>
+    <string name="go_next_step">Done, now you can go to the next step</string>
+
+    <!-- Route Selected -->
+    <string name="start_of_route">Start of route</string>
+    <string name="end_of_route">end of route</string>
+    <string name="bus_stop">Bus Stop</string>
+>>>>>>> develop
 
 </resources>

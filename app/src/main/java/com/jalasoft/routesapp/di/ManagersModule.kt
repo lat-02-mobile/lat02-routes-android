@@ -2,7 +2,10 @@ package com.jalasoft.routesapp.di
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.jalasoft.routesapp.data.api.retrofit.IGmapsService
 import com.jalasoft.routesapp.data.remote.interfaces.CityRepository
+import com.jalasoft.routesapp.data.remote.interfaces.PlaceRepository
+import com.jalasoft.routesapp.data.remote.interfaces.RouteRepository
 import com.jalasoft.routesapp.data.remote.managers.*
 import dagger.Module
 import dagger.Provides
@@ -30,5 +33,17 @@ object ManagersModule {
     @Provides
     fun provideCountryRepository(): CityRepository {
         return CityManager(FirebaseManager(FirebaseFirestore.getInstance()))
+    }
+
+    @Singleton
+    @Provides
+    fun provideRouteRepository(): RouteRepository {
+        return RouteManager(FirebaseManager(FirebaseFirestore.getInstance()))
+    }
+
+    @Singleton
+    @Provides
+    fun providePlaceManager(retrofitService: IGmapsService): PlaceRepository {
+        return PlaceManager(retrofitService)
     }
 }

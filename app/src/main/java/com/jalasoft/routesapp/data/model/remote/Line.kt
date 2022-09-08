@@ -37,6 +37,7 @@ data class Line(
         val start = start?.let { geoPointToLocation(it) }
         val end = end?.let { geoPointToLocation(it) }
         val stops = geoPointListToLocationList(stops)
+
         var category: DocumentSnapshot?
         var categoryName = ""
         categoryRef?.let { docRef ->
@@ -59,7 +60,7 @@ data class LinePath(
     val start: Location? = null,
     val end: Location? = null,
     val stops: List<Location> = listOf()
-) {
+) : Serializable {
     companion object {
         fun getOneRouteLine(line: LinePath, nearestStopToDestination: Location, nearestStopToOrigin: Location): AvailableTransport? {
             val indexOrigin = line.stops.indexOf(nearestStopToOrigin)

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="placeItem"
+            type="com.jalasoft.routesapp.data.api.models.gmaps.Place" />
+    </data>
+
+    <RelativeLayout
+        android:id="@+id/placeContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:background="?android:selectableItemBackground"
+        >
+
+        <ImageView
+            android:id="@+id/iv_addressIcon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp" />
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/iv_addressIcon"
+            android:text="@{placeItem.name}"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:text="name" />
+
+        <TextView
+            android:id="@+id/tv_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_name"
+            android:layout_toEndOf="@id/iv_addressIcon"
+            android:text="@{placeItem.formatted_address}"
+            android:textStyle="italic"
+            tools:text="address" />
+
+
+    </RelativeLayout>
+</layout>

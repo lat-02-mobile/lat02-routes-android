@@ -1,4 +1,4 @@
-package com.jalasoft.routesapp.data.source
+package com.jalasoft.routesapp.ui.cityPicker
 
 import com.jalasoft.routesapp.data.model.remote.City
 import com.jalasoft.routesapp.data.model.remote.Country
