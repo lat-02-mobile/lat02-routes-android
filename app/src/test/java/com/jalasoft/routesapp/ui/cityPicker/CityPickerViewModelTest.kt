@@ -1,6 +1,5 @@
-package com.jalasoft.routesapp.cities
+package com.jalasoft.routesapp.ui.cityPicker
 
-import com.jalasoft.routesapp.data.source.CityManagerFakeData
 import com.jalasoft.routesapp.data.source.FakeCityManager
 import com.jalasoft.routesapp.ui.cityPicker.viewModel.CityPickerViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
