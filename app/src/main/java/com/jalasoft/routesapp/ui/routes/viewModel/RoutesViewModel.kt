@@ -11,6 +11,7 @@ import com.jalasoft.routesapp.data.model.remote.AvailableTransport
 import com.jalasoft.routesapp.data.model.remote.Line
 import com.jalasoft.routesapp.data.model.remote.LinePath
 import com.jalasoft.routesapp.data.remote.interfaces.RouteRepository
+import com.jalasoft.routesapp.util.algorithm.RouteCalculator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,12 +21,12 @@ class RoutesViewModel
 @Inject
 constructor(private val repository: RouteRepository) : ViewModel() {
 
-    var _routesList: MutableLiveData<List<LinePath>> = MutableLiveData()
+    private var _routesList: MutableLiveData<List<LinePath>> = MutableLiveData()
     val routesList: LiveData<List<LinePath>> = _routesList
     var originalList: List<LinePath> = listOf()
-    private var _possibleRoutesList: MutableLiveData<List<LinePath>> = MutableLiveData()
-    val possibleRoutesList: LiveData<List<LinePath>> = _possibleRoutesList
-    var possibleRoutesOriginalList: List<LinePath> = listOf()
+    private var _possibleRoutesList: MutableLiveData<List<AvailableTransport>> = MutableLiveData()
+    val possibleRoutesList: LiveData<List<AvailableTransport>> = _possibleRoutesList
+    var possibleRoutesOriginalList: List<AvailableTransport> = listOf()
 
     fun fetchRoutes(context: Context) = viewModelScope.launch {
         _routesList.value = repository.getAllRouteLines(context)
@@ -58,8 +59,15 @@ constructor(private val repository: RouteRepository) : ViewModel() {
         val stops3 = RouteAlgorithmFakeData.arrayToMutableListOfLocation(RouteAlgorithmFakeData.stops3Array)
         val line3 = LinePath("LA", "Metro", points3, start3, end3, stops3)
         val lines = listOf(line1, line2, line3)
-        _possibleRoutesList.value = lines
-        originalList = _possibleRoutesList.value!!
+
+        val originPoint = RouteAlgorithmFakeData.coordinatesToLocation(-16.52078, -68.12344)
+        val destinationPoint = RouteAlgorithmFakeData.coordinatesToLocation(-16.52455, -68.12269)
+        val minDistance = 200.0
+        val minDistanceBtwStops = 200.0
+
+        val result = RouteCalculator.calculate(lines, destinationPoint, originPoint, minDistance, minDistanceBtwStops)
+        _possibleRoutesList.value = result
+        possibleRoutesOriginalList = _possibleRoutesList.value!!
     }
 }
 
