@@ -99,6 +99,7 @@ class PossibleRoutesFragment : Fragment(), OnMapReadyCallback, PossibleRouteAdap
 
     override fun onCityTap(line: LinePath) {
         mMap?.let {
+            mMap!!.clear()
             GoogleMapsHelper.drawPolyline(mMap!!, line.routePoints )
         }
     }

@@ -1,16 +1,16 @@
 package com.jalasoft.routesapp.util.helpers
 
-import android.graphics.Color
-import android.location.Location
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.model.PolylineOptions
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Color
+import android.location.Location
 import androidx.core.content.ContextCompat
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.PolylineOptions
 import com.jalasoft.routesapp.util.Extensions.toLatLong
 
 object GoogleMapsHelper {
@@ -23,6 +23,20 @@ object GoogleMapsHelper {
                 .color(Color.parseColor(hexColor))
                 .geodesic(true)
         )
+    }
+    
+    // Distance in meters
+    fun getLocationListDistance(locations: List<Location>): Double {
+        var sum = 0.0
+        for (i in locations.indices) {
+            if ( i + 1 < locations.size) sum += locations[i].distanceTo(locations[i + 1])
+        }
+        return sum
+    }
+
+    // Estimated time in minutes
+    fun getEstimatedTimeToArrive(averageVelocityMetersSec: Double, totalDistanceMeters: Double): Double {
+        return (totalDistanceMeters * (1/averageVelocityMetersSec)) / 60
     }
 
     fun bitmapFromVector(context: Context, vectorResId: Int): BitmapDescriptor? {
