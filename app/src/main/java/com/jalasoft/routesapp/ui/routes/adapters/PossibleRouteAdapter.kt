@@ -1,16 +1,22 @@
 package com.jalasoft.routesapp.ui.routes.adapters
 
+import android.annotation.SuppressLint
+import android.graphics.Color.*
+import android.opengl.Visibility
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import coil.ImageLoader
-import coil.decode.SvgDecoder
 import coil.request.ImageRequest
+import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.data.model.remote.Line
 import com.jalasoft.routesapp.data.model.remote.LinePath
 import com.jalasoft.routesapp.databinding.PossibleRouteItemBinding
 
 class PossibleRouteAdapter (var linesList: MutableList<LinePath>, val listener: IPossibleRouteListener) : RecyclerView.Adapter<PossibleRouteAdapter.PossibleRouteViewHolder>() {
+
+    private var lastSelectedPosition = -1
 
     interface IPossibleRouteListener {
         fun onCityTap(line: LinePath)
@@ -24,10 +30,25 @@ class PossibleRouteAdapter (var linesList: MutableList<LinePath>, val listener: 
         return PossibleRouteViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: PossibleRouteViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: PossibleRouteViewHolder, @SuppressLint("RecyclerView") position: Int) {
         val line = linesList[position]
-        if (position == 0) holder.binding.lineNameText.text = line.name + "(recommended)"
-        else holder.binding.lineNameText.text = line.name
+        if (position == 0) holder.binding.recommendedText.visibility = View.VISIBLE
+        else holder.binding.recommendedText.visibility = View.GONE
+        holder.binding.lineNameText.text = line.name
+        val primaryColor = ContextCompat.getColor(holder.binding.root.context, R.color.color_primary_gradient)
+        if (lastSelectedPosition == position) {
+            holder.binding.lineNameText.setTextColor(WHITE)
+            holder.binding.recommendedText.setTextColor(WHITE)
+            holder.binding.transportImage.setColorFilter(WHITE)
+            holder.binding.transportImage.setBackgroundColor(TRANSPARENT)
+            holder.binding.mainContainer.setBackgroundColor(primaryColor)
+        } else {
+            holder.binding.lineNameText.setTextColor(BLACK)
+            holder.binding.recommendedText.setTextColor(BLACK)
+            holder.binding.transportImage.setBackgroundColor(WHITE)
+            holder.binding.transportImage.setColorFilter(BLACK)
+            holder.binding.mainContainer.setBackgroundColor(WHITE)
+        }
 //        val imageLoader = ImageLoader.Builder(holder.binding.root.context)
 //            .components {
 //                add(SvgDecoder.Factory())
@@ -37,11 +58,13 @@ class PossibleRouteAdapter (var linesList: MutableList<LinePath>, val listener: 
 //            .crossfade(true)
 //            .crossfade(500)
 //            .data(line.categoryRef)
-//            .target(holder.binding.transportImage)
+//            .target(holder.binding.transportmage)
 //            .build()
 //
 //        imageLoader.enqueue(request)
         holder.binding.possibleRouteContainer.setOnClickListener {
+            lastSelectedPosition = position
+            notifyDataSetChanged()
             listener.onCityTap(line)
         }
     }

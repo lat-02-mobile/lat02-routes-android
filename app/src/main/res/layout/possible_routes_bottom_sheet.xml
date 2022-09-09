@@ -12,7 +12,6 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:background="@color/color_primary_gradient"
         android:layout_height="60dp">
         <TextView
             android:layout_width="match_parent"
@@ -21,13 +20,14 @@
             android:layout_centerVertical="true"
             android:textSize="23sp"
             android:textStyle="bold"
-            android:textColor="@color/white"
+            android:textColor="@color/color_primary_gradient"
             android:text="@string/routes"/>
     </RelativeLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerPossibleRoutes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:listitem="@layout/possible_route_item"/>
+        tools:listitem="@layout/possible_route_item"
+        android:state_pressed="true"/>
 
 </LinearLayout>

@@ -22,7 +22,9 @@ import com.jalasoft.routesapp.ui.routes.adapters.PossibleRouteAdapter
 import com.jalasoft.routesapp.ui.routes.viewModel.RoutesViewModel
 import com.jalasoft.routesapp.util.PreferenceManager
 import com.jalasoft.routesapp.util.helpers.GoogleMapsHelper
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class PossibleRoutesFragment : Fragment(), OnMapReadyCallback, PossibleRouteAdapter.IPossibleRouteListener {
     private var _binding: FragmentPossibleRoutesBinding? = null
     private val binding get() = _binding!!

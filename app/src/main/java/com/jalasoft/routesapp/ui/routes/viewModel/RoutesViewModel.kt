@@ -1,23 +1,16 @@
 package com.jalasoft.routesapp.ui.routes.viewModel
 
-<<<<<<< HEAD
 import android.location.Location
 import android.location.LocationManager
-=======
 import android.content.Context
->>>>>>> develop
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-<<<<<<< HEAD
 import com.jalasoft.routesapp.data.model.remote.AvailableTransport
 import com.jalasoft.routesapp.data.model.remote.Line
 import com.jalasoft.routesapp.data.model.remote.LinePath
-=======
-import com.jalasoft.routesapp.data.model.remote.LinePath
 import com.jalasoft.routesapp.data.remote.interfaces.RouteRepository
->>>>>>> develop
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,12 +18,26 @@ import javax.inject.Inject
 @HiltViewModel
 class RoutesViewModel
 @Inject
-<<<<<<< HEAD
-constructor() : ViewModel() {
+constructor(private val repository: RouteRepository) : ViewModel() {
 
+    var _routesList: MutableLiveData<List<LinePath>> = MutableLiveData()
+    val routesList: LiveData<List<LinePath>> = _routesList
+    var originalList: List<LinePath> = listOf()
     private var _possibleRoutesList: MutableLiveData<List<LinePath>> = MutableLiveData()
     val possibleRoutesList: LiveData<List<LinePath>> = _possibleRoutesList
-    var originalList: List<LinePath> = listOf()
+    var possibleRoutesOriginalList: List<LinePath> = listOf()
+
+    fun fetchRoutes(context: Context) = viewModelScope.launch {
+        _routesList.value = repository.getAllRouteLines(context)
+        originalList = _routesList.value!!
+    }
+
+    fun filterRoutes(criteria: String): Int {
+        _routesList.value = originalList.filter { line ->
+            line.name.lowercase().contains(criteria.lowercase())
+        }
+        return _routesList.value!!.size
+    }
 
     fun getPossibleRoutes() = viewModelScope.launch {
         val start1 = RouteAlgorithmFakeData.coordinatesToLocation(-16.52035351419114, -68.12580890707301)
@@ -354,23 +361,5 @@ object RouteAlgorithmFakeData {
 
     private fun compareLocations(location1: Location?, location2: Location?): Boolean {
         return location1?.latitude == location2?.latitude && location1?.longitude == location2?.longitude
-=======
-constructor(private val repository: RouteRepository) : ViewModel() {
-
-    var _routesList: MutableLiveData<List<LinePath>> = MutableLiveData()
-    val routesList: LiveData<List<LinePath>> = _routesList
-    var originalList: List<LinePath> = listOf()
-
-    fun fetchRoutes(context: Context) = viewModelScope.launch {
-        _routesList.value = repository.getAllRouteLines(context)
-        originalList = _routesList.value!!
-    }
-
-    fun filterRoutes(criteria: String): Int {
-        _routesList.value = originalList.filter { line ->
-            line.name.lowercase().contains(criteria.lowercase())
-        }
-        return _routesList.value!!.size
->>>>>>> develop
     }
 }

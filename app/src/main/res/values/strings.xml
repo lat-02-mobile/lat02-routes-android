@@ -18,12 +18,6 @@
     <string name="reg_vm_valid_email">The Email is being used in another account</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
-<<<<<<< HEAD
-
-=======
->>>>>>> develop
-    <!-- Facebook ids-->
     <string name="facebook_app_id" translatable="false">3146525082229053</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb3146525082229053</string>
     <string name="facebook_client_token" translatable="false">131412692dc6c5687212fa62aa82474a</string>
@@ -87,11 +81,6 @@
     <string name="reg_val_cancel">Cancel</string>
     <string name="reg_val_resend">Resend</string>
 
-<<<<<<< HEAD
-    <!--  Possible routes  -->
-    <string name="routes">Routes</string>
-
-=======
     <!-- Routes page -->
     <string name="search_route_hint">Search</string>
 
@@ -107,6 +96,6 @@
     <string name="start_of_route">Start of route</string>
     <string name="end_of_route">end of route</string>
     <string name="bus_stop">Bus Stop</string>
->>>>>>> develop
 
+    <string name="recommended"> (recommended)</string>
 </resources>

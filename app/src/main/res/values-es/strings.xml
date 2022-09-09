@@ -86,14 +86,10 @@
     <string name="done">Hecho</string>
     <string name="go_next_step">Done, now you can go to the next step</string>
 
-<<<<<<< HEAD
-    <!--  Possible routes  -->
-    <string name="routes">Rutas</string>
-
-=======
     <!-- Route Selected -->
     <string name="start_of_route">Inicio de la Ruta</string>
     <string name="end_of_route">Fin de la Ruta</string>
     <string name="bus_stop">Parada de Bus</string>
->>>>>>> develop
+
+    <string name="recommended"> (recomendada)</string>
 </resources>

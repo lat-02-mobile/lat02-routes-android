@@ -1,11 +1,16 @@
 package com.jalasoft.routesapp.util.helpers
 
-<<<<<<< HEAD
 import android.graphics.Color
 import android.location.Location
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.PolylineOptions
-import com.jalasoft.routesapp.R
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import androidx.core.content.ContextCompat
+import com.google.android.gms.maps.model.BitmapDescriptor
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.LatLng
 import com.jalasoft.routesapp.util.Extensions.toLatLong
 
 object GoogleMapsHelper {
@@ -19,18 +24,7 @@ object GoogleMapsHelper {
                 .geodesic(true)
         )
     }
-}
-=======
-import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.location.Location
-import androidx.core.content.ContextCompat
-import com.google.android.gms.maps.model.BitmapDescriptor
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
 
-object GoogleMapsHelper {
     fun bitmapFromVector(context: Context, vectorResId: Int): BitmapDescriptor? {
         val vectorDrawable = ContextCompat.getDrawable(context, vectorResId)
         vectorDrawable!!.setBounds(
@@ -60,4 +54,4 @@ object GoogleMapsHelper {
         return LatLng(location.latitude, location.longitude)
     }
 }
->>>>>>> develop
+
