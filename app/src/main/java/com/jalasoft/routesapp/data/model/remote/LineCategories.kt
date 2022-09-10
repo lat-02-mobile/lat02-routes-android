@@ -6,7 +6,9 @@ data class LineCategories(
     val id: String = "",
     val nameEng: String = "",
     val nameEsp: String = "",
-    val icons: LineCategoryIcons = LineCategoryIcons()
+    val icons: LineCategoryIcons = LineCategoryIcons(),
+    val color: String = "#004696",
+    val averageVelocity: Double = 1.0
 ) : Serializable
 
 data class LineCategoryIcons(

@@ -13,6 +13,7 @@ import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.data.model.remote.AvailableTransport
 import com.jalasoft.routesapp.data.model.remote.LinePath
 import com.jalasoft.routesapp.databinding.PossibleRouteItemBinding
+import com.jalasoft.routesapp.util.helpers.GoogleMapsHelper
 
 class PossibleRouteAdapter (var possibleRoutesList: MutableList<AvailableTransport>, val listener: IPossibleRouteListener) : RecyclerView.Adapter<PossibleRouteAdapter.PossibleRouteViewHolder>() {
 
@@ -35,10 +36,13 @@ class PossibleRouteAdapter (var possibleRoutesList: MutableList<AvailableTranspo
         if (position == 0) holder.binding.recommendedText.visibility = View.VISIBLE
         else holder.binding.recommendedText.visibility = View.GONE
         holder.binding.itemIndex.text = " " + (position + 1).toString() + " "
+        holder.binding.estimatedTimeText.text = possibleRoute.calculateTotalDistance().toString() + " "
         val primaryColor = ContextCompat.getColor(holder.binding.root.context, R.color.color_primary_gradient)
         if (lastSelectedPosition == position) {
             holder.binding.itemIndex.setTextColor(WHITE)
             holder.binding.routeName.setTextColor(WHITE)
+            holder.binding.estimatedTimeText.setTextColor(WHITE)
+            holder.binding.minText.setTextColor(WHITE)
             holder.binding.recommendedText.setTextColor(WHITE)
             holder.binding.transportImage.setColorFilter(WHITE)
             holder.binding.transportImage.setBackgroundColor(TRANSPARENT)
@@ -52,6 +56,8 @@ class PossibleRouteAdapter (var possibleRoutesList: MutableList<AvailableTranspo
             holder.binding.itemIndex.setTextColor(BLACK)
             holder.binding.recommendedText.setTextColor(BLACK)
             holder.binding.routeName.setTextColor(BLACK)
+            holder.binding.estimatedTimeText.setTextColor(BLACK)
+            holder.binding.minText.setTextColor(BLACK)
             holder.binding.transportImage.setBackgroundColor(WHITE)
             holder.binding.transportImage.setColorFilter(BLACK)
             holder.binding.transportImage.load(possibleRoute.transports.first().icons.whiteUrl) {
@@ -61,19 +67,6 @@ class PossibleRouteAdapter (var possibleRoutesList: MutableList<AvailableTranspo
             }
             holder.binding.mainContainer.setBackgroundColor(WHITE)
         }
-//        val imageLoader = ImageLoader.Builder(holder.binding.root.context)
-//            .components {
-//                add(SvgDecoder.Factory())
-//            }
-//            .build()
-//        val request = ImageRequest.Builder(holder.binding.root.context)
-//            .crossfade(true)
-//            .crossfade(500)
-//            .data(line.categoryRef)
-//            .target(holder.binding.transportmage)
-//            .build()
-//
-//        imageLoader.enqueue(request)
         holder.binding.possibleRouteContainer.setOnClickListener {
             lastSelectedPosition = position
             notifyDataSetChanged()

@@ -60,7 +60,9 @@ data class LinePath(
     val start: Location? = null,
     val end: Location? = null,
     val stops: List<Location> = listOf(),
-    val icons: LineCategoryIcons = LineCategoryIcons()
+    val icons: LineCategoryIcons = LineCategoryIcons(),
+    val color: String = "#004696",
+    val averageVelocity: Double = 1.0
 ) : Serializable {
     companion object {
         fun getOneRouteLine(line: LinePath, nearestStopToDestination: Location, nearestStopToOrigin: Location): AvailableTransport? {
@@ -74,7 +76,7 @@ data class LinePath(
                 val indexDestinationPoint = getIndexOfFromLocationList(nearestStopToDestination, line.routePoints)
 
                 val newRoutePoints = line.routePoints.slice(indexOriginPoint..indexDestinationPoint)
-                val newLine = LinePath(line.name, line.category, newRoutePoints, line.start, line.end, newStops)
+                val newLine = LinePath(line.name, line.category, newRoutePoints, line.start, line.end, newStops, line.icons, line.color)
                 return AvailableTransport(null, mutableListOf(newLine))
             }
             return null
@@ -89,11 +91,11 @@ data class LinePath(
             return if (sliceFromStart) {
                 val newStops = line.stops.slice(0..intersectionStopIndex)
                 val newRoutePoints = line.routePoints.slice(0..intersectionRoutePointIndex)
-                LinePath(line.name, line.category, newRoutePoints, line.start, line.end, newStops, line.icons)
+                LinePath(line.name, line.category, newRoutePoints, line.start, line.end, newStops, line.icons, line.color)
             } else {
                 val newStops = line.stops.slice(intersectionStopIndex until line.stops.size)
                 val newRoutePoints = line.routePoints.slice(intersectionRoutePointIndex until line.routePoints.size)
-                LinePath(line.name, line.category, newRoutePoints, line.start, line.end, newStops, line.icons)
+                LinePath(line.name, line.category, newRoutePoints, line.start, line.end, newStops, line.icons, line.color)
             }
         }
 

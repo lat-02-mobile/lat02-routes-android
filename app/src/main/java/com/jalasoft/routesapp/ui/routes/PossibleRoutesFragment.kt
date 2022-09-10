@@ -109,7 +109,7 @@ class PossibleRoutesFragment : Fragment(), OnMapReadyCallback, PossibleRouteAdap
             it.addMarker(MarkerOptions().position(start).title(R.string.start_of_route.toString()).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.ic_start_route)))
             it.addMarker(MarkerOptions().position(end).title(R.string.end_of_route.toString()).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.ic_end_route)))
             for (line in possibleRoute.transports) {
-                GoogleMapsHelper.drawPolyline(it, line.routePoints )
+                GoogleMapsHelper.drawPolyline(it, line.routePoints, line.color)
                 line.routePoints.map {location ->
                     builder.include(location.toLatLong())
                 }
@@ -120,7 +120,7 @@ class PossibleRoutesFragment : Fragment(), OnMapReadyCallback, PossibleRouteAdap
                     val second = possibleRoute.transports.last().routePoints.first().toLatLong()
                     it.addMarker(MarkerOptions().position(first).title(R.string.start_of_route.toString()).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.ic_bus_stop)))
                     it.addMarker(MarkerOptions().position(second).title(R.string.end_of_route.toString()).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.ic_bus_stop)))
-                    GoogleMapsHelper.connectSopts(it, ctx, first, second)
+                    GoogleMapsHelper.connectStops(it, ctx, first, second)
                 }
             }
             val bounds = builder.build()

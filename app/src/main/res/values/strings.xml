@@ -99,4 +99,5 @@
 
     <string name="recommended"> (recommended)</string>
     <string name="route">Route</string>
+    <string name="minute">min</string>
 </resources>

@@ -33,7 +33,7 @@ object GoogleMapsHelper {
         )
     }
 
-    fun connectSopts(mMap: GoogleMap, context: Context, firstLatLng: LatLng, secondLatLng: LatLng) {
+    fun connectStops(mMap: GoogleMap, context: Context, firstLatLng: LatLng, secondLatLng: LatLng) {
         val path: MutableList<List<LatLng>> = ArrayList()
         val urlDirections = "https://maps.googleapis.com/maps/api/directions/json?origin=" +
                 "${firstLatLng.latitude},${firstLatLng.longitude}&destination=${secondLatLng.latitude}," +
