@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import coil.transform.CircleCropTransformation
 import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.data.model.remote.AvailableTransport
 import com.jalasoft.routesapp.data.model.remote.LinePath
@@ -33,21 +34,31 @@ class PossibleRouteAdapter (var possibleRoutesList: MutableList<AvailableTranspo
         val possibleRoute = possibleRoutesList[position]
         if (position == 0) holder.binding.recommendedText.visibility = View.VISIBLE
         else holder.binding.recommendedText.visibility = View.GONE
-        holder.binding.lineNameText.text = possibleRoute.transports[0].name
+        holder.binding.itemIndex.text = " " + (position + 1).toString() + " "
         val primaryColor = ContextCompat.getColor(holder.binding.root.context, R.color.color_primary_gradient)
         if (lastSelectedPosition == position) {
-            holder.binding.lineNameText.setTextColor(WHITE)
+            holder.binding.itemIndex.setTextColor(WHITE)
+            holder.binding.routeName.setTextColor(WHITE)
             holder.binding.recommendedText.setTextColor(WHITE)
             holder.binding.transportImage.setColorFilter(WHITE)
             holder.binding.transportImage.setBackgroundColor(TRANSPARENT)
-            holder.binding.transportImage.load(possibleRoute.transports[0].icons.blackUrl)
+            holder.binding.transportImage.load(possibleRoute.transports.first().icons.blackUrl) {
+                crossfade(true)
+                placeholder(R.drawable.ic_bus_stop)
+                transformations(CircleCropTransformation())
+            }
             holder.binding.mainContainer.setBackgroundColor(primaryColor)
         } else {
-            holder.binding.lineNameText.setTextColor(BLACK)
+            holder.binding.itemIndex.setTextColor(BLACK)
             holder.binding.recommendedText.setTextColor(BLACK)
+            holder.binding.routeName.setTextColor(BLACK)
             holder.binding.transportImage.setBackgroundColor(WHITE)
             holder.binding.transportImage.setColorFilter(BLACK)
-            holder.binding.transportImage.load(possibleRoute.transports.last().icons.whiteUrl)
+            holder.binding.transportImage.load(possibleRoute.transports.first().icons.whiteUrl) {
+                crossfade(true)
+                placeholder(R.drawable.ic_bus_stop)
+                transformations(CircleCropTransformation())
+            }
             holder.binding.mainContainer.setBackgroundColor(WHITE)
         }
 //        val imageLoader = ImageLoader.Builder(holder.binding.root.context)

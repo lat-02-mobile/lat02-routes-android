@@ -92,4 +92,5 @@
     <string name="bus_stop">Parada de Bus</string>
 
     <string name="recommended"> (recomendada)</string>
+    <string name="route">Ruta</string>
 </resources>

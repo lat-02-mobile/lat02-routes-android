@@ -34,6 +34,7 @@ class PossibleRoutesFragment : Fragment(), OnMapReadyCallback, PossibleRouteAdap
     private var _binding: FragmentPossibleRoutesBinding? = null
     private val binding get() = _binding!!
     private var mMap: GoogleMap? = null
+    private var index: Int = 0
 
     private val viewModel: RoutesViewModel by viewModels()
 

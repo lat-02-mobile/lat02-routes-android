@@ -53,7 +53,7 @@ constructor(private val repository: RouteRepository) : ViewModel() {
         val end2 = RouteAlgorithmFakeData.coordinatesToLocation(-16.5241937, -68.1204527)
         val points2 = RouteAlgorithmFakeData.arrayToMutableListOfLocation(RouteAlgorithmFakeData.points2Array)
         val stops2 = RouteAlgorithmFakeData.arrayToMutableListOfLocation(RouteAlgorithmFakeData.stops2Array)
-        val line2 = LinePath("246", "Mini", points2, start2, end2, stops2, LineCategoryIcons("https://firebasestorage.googleapis.com/v0/b/routes-app-8c8e4.appspot.com/o/lineCategories%2Fmini_bus_white.png?alt=media&token=e67646cd-457d-4563-a12f-55a17c478150",
+            val line2 = LinePath("246", "Mini", points2, start2, end2, stops2, LineCategoryIcons("https://firebasestorage.googleapis.com/v0/b/routes-app-8c8e4.appspot.com/o/lineCategories%2Fmini_bus_white.png?alt=media&token=e67646cd-457d-4563-a12f-55a17c478150",
             "https://firebasestorage.googleapis.com/v0/b/routes-app-8c8e4.appspot.com/o/lineCategories%2Fmini_bus_black.png?alt=media&token=cdda76ab-ec71-42b7-a10a-a665d6b03155"))
 
         val start3 = RouteAlgorithmFakeData.coordinatesToLocation(-16.5206262, -68.1227148)
