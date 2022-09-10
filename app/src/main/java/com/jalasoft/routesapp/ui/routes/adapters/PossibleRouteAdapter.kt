@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.data.model.remote.AvailableTransport
 import com.jalasoft.routesapp.data.model.remote.LinePath
@@ -39,12 +40,14 @@ class PossibleRouteAdapter (var possibleRoutesList: MutableList<AvailableTranspo
             holder.binding.recommendedText.setTextColor(WHITE)
             holder.binding.transportImage.setColorFilter(WHITE)
             holder.binding.transportImage.setBackgroundColor(TRANSPARENT)
+            holder.binding.transportImage.load(possibleRoute.transports[0].icons.blackUrl)
             holder.binding.mainContainer.setBackgroundColor(primaryColor)
         } else {
             holder.binding.lineNameText.setTextColor(BLACK)
             holder.binding.recommendedText.setTextColor(BLACK)
             holder.binding.transportImage.setBackgroundColor(WHITE)
             holder.binding.transportImage.setColorFilter(BLACK)
+            holder.binding.transportImage.load(possibleRoute.transports.last().icons.whiteUrl)
             holder.binding.mainContainer.setBackgroundColor(WHITE)
         }
 //        val imageLoader = ImageLoader.Builder(holder.binding.root.context)

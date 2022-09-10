@@ -100,24 +100,35 @@ class PossibleRoutesFragment : Fragment(), OnMapReadyCallback, PossibleRouteAdap
     }
 
     override fun onCityTap(possibleRoute: AvailableTransport) {
-        mMap?.clear()
-        val builder = LatLngBounds.Builder()
-        val start = possibleRoute.transports.first().routePoints.first().toLatLong()
-        val end = possibleRoute.transports.last().routePoints.last().toLatLong()
-        mMap?.addMarker(MarkerOptions().position(start).title(R.string.start_of_route.toString()).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.ic_start_route)))
-        mMap?.addMarker(MarkerOptions().position(end).title(R.string.end_of_route.toString()).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.ic_end_route)))
-        for (line in possibleRoute.transports) {
-            GoogleMapsHelper.drawPolyline(mMap!!, line.routePoints )
-            line.routePoints.map {
-                builder.include(it.toLatLong())
+        mMap?.let {
+            it.clear()
+            val builder = LatLngBounds.Builder()
+            val start = possibleRoute.transports.first().routePoints.first().toLatLong()
+            val end = possibleRoute.transports.last().routePoints.last().toLatLong()
+            it.addMarker(MarkerOptions().position(start).title(R.string.start_of_route.toString()).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.ic_start_route)))
+            it.addMarker(MarkerOptions().position(end).title(R.string.end_of_route.toString()).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.ic_end_route)))
+            for (line in possibleRoute.transports) {
+                GoogleMapsHelper.drawPolyline(it, line.routePoints )
+                line.routePoints.map {location ->
+                    builder.include(location.toLatLong())
+                }
             }
+            if (possibleRoute.transports.size > 1) {
+                context?.let { ctx ->
+                    val first = possibleRoute.transports.first().routePoints.last().toLatLong()
+                    val second = possibleRoute.transports.last().routePoints.first().toLatLong()
+                    it.addMarker(MarkerOptions().position(first).title(R.string.start_of_route.toString()).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.ic_bus_stop)))
+                    it.addMarker(MarkerOptions().position(second).title(R.string.end_of_route.toString()).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.ic_bus_stop)))
+                    GoogleMapsHelper.connectSopts(it, ctx, first, second)
+                }
+            }
+            val bounds = builder.build()
+            val padding = 250
+            val cu = CameraUpdateFactory.newLatLngBounds(bounds, padding)
+            mMap?.animateCamera(cu)
         }
-        val bounds = builder.build()
-        val padding = 250
-        val cu = CameraUpdateFactory.newLatLngBounds(bounds, padding)
-        mMap?.animateCamera(cu)
     }
-// AIzaSyBHB3Ncg6LhVPhUaKEFmKB3Nv0TgV6T5q0
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null

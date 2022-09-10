@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jalasoft.routesapp.data.model.remote.AvailableTransport
 import com.jalasoft.routesapp.data.model.remote.Line
+import com.jalasoft.routesapp.data.model.remote.LineCategoryIcons
 import com.jalasoft.routesapp.data.model.remote.LinePath
 import com.jalasoft.routesapp.data.remote.interfaces.RouteRepository
 import com.jalasoft.routesapp.util.algorithm.RouteCalculator
@@ -45,19 +46,22 @@ constructor(private val repository: RouteRepository) : ViewModel() {
         val end1 = RouteAlgorithmFakeData.coordinatesToLocation(-16.524285569842718, -68.12298370418992)
         val points1 = RouteAlgorithmFakeData.arrayToMutableListOfLocation(RouteAlgorithmFakeData.points1Array)
         val stops1 = RouteAlgorithmFakeData.arrayToMutableListOfLocation(RouteAlgorithmFakeData.stops1Array)
-        val line1 = LinePath("Line 1", "Bus", points1, start1, end1, stops1)
+        val line1 = LinePath("Line 1", "Bus", points1, start1, end1, stops1, LineCategoryIcons("https://firebasestorage.googleapis.com/v0/b/routes-app-8c8e4.appspot.com/o/lineCategories%2Fbus_white.png?alt=media&token=980b407c-2fc7-4fd2-b8da-a5504a7c7f1c",
+            "https://firebasestorage.googleapis.com/v0/b/routes-app-8c8e4.appspot.com/o/lineCategories%2Fbus_black.png?alt=media&token=21c3ba52-27ed-499a-933a-a31c8f2062ba"))
 
         val start2 = RouteAlgorithmFakeData.coordinatesToLocation(-16.5255314, -68.1254204)
         val end2 = RouteAlgorithmFakeData.coordinatesToLocation(-16.5241937, -68.1204527)
         val points2 = RouteAlgorithmFakeData.arrayToMutableListOfLocation(RouteAlgorithmFakeData.points2Array)
         val stops2 = RouteAlgorithmFakeData.arrayToMutableListOfLocation(RouteAlgorithmFakeData.stops2Array)
-        val line2 = LinePath("246", "Mini", points2, start2, end2, stops2)
+        val line2 = LinePath("246", "Mini", points2, start2, end2, stops2, LineCategoryIcons("https://firebasestorage.googleapis.com/v0/b/routes-app-8c8e4.appspot.com/o/lineCategories%2Fmini_bus_white.png?alt=media&token=e67646cd-457d-4563-a12f-55a17c478150",
+            "https://firebasestorage.googleapis.com/v0/b/routes-app-8c8e4.appspot.com/o/lineCategories%2Fmini_bus_black.png?alt=media&token=cdda76ab-ec71-42b7-a10a-a665d6b03155"))
 
         val start3 = RouteAlgorithmFakeData.coordinatesToLocation(-16.5206262, -68.1227148)
         val end3 = RouteAlgorithmFakeData.coordinatesToLocation(-16.5244779, -68.1253892)
         val points3 = RouteAlgorithmFakeData.arrayToMutableListOfLocation(RouteAlgorithmFakeData.points3Array)
         val stops3 = RouteAlgorithmFakeData.arrayToMutableListOfLocation(RouteAlgorithmFakeData.stops3Array)
-        val line3 = LinePath("LA", "Metro", points3, start3, end3, stops3)
+        val line3 = LinePath("LA", "Metro", points3, start3, end3, stops3, LineCategoryIcons("https://firebasestorage.googleapis.com/v0/b/routes-app-8c8e4.appspot.com/o/lineCategories%2Fsubway_white.png?alt=media&token=c3fe8f8e-7696-4879-b042-52e710f94842",
+            "https://firebasestorage.googleapis.com/v0/b/routes-app-8c8e4.appspot.com/o/lineCategories%2Fsubway_black.png?alt=media&token=7f8c755c-da68-4b85-8bc1-1df26ecb92d8"))
         val lines = listOf(line1, line2, line3)
 
         val originPoint = RouteAlgorithmFakeData.coordinatesToLocation(-16.52078, -68.12344)

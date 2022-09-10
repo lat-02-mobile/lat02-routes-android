@@ -13,6 +13,14 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PolylineOptions
 import com.jalasoft.routesapp.util.Extensions.toLatLong
 
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
+import com.google.maps.android.PolyUtil
+import com.jalasoft.routesapp.BuildConfig
+import org.json.JSONObject
+
 object GoogleMapsHelper {
     fun drawPolyline(mMap: GoogleMap, list: List<Location>, hexColor: String = "#004696") {
         val latLongList = list.map { it.toLatLong() }
@@ -24,7 +32,33 @@ object GoogleMapsHelper {
                 .geodesic(true)
         )
     }
-    
+
+    fun connectSopts(mMap: GoogleMap, context: Context, firstLatLng: LatLng, secondLatLng: LatLng) {
+        val path: MutableList<List<LatLng>> = ArrayList()
+        val urlDirections = "https://maps.googleapis.com/maps/api/directions/json?origin=" +
+                "${firstLatLng.latitude},${firstLatLng.longitude}&destination=${secondLatLng.latitude}," +
+                "${secondLatLng.longitude}&key=${BuildConfig.GOOGLE_DIRECTIONS_API_KEY}"
+        val directionsRequest = object : StringRequest(Request.Method.GET, urlDirections, Response.Listener<String> {
+                response ->
+            val jsonResponse = JSONObject(response)
+            // Get routes
+            val routes = jsonResponse.getJSONArray("routes")
+            val legs = routes.getJSONObject(0).getJSONArray("legs")
+            val steps = legs.getJSONObject(0).getJSONArray("steps")
+            for (i in 0 until steps.length()) {
+                val points = steps.getJSONObject(i).getJSONObject("polyline").getString("points")
+                path.add(PolyUtil.decode(points))
+            }
+            for (i in 0 until path.size) {
+                mMap.addPolyline(PolylineOptions().addAll(path[i]).color(Color.GRAY))
+            }
+        }, Response.ErrorListener {
+                _ ->
+        }){}
+        val requestQueue = Volley.newRequestQueue(context)
+        requestQueue.add(directionsRequest)
+    }
+
     // Distance in meters
     fun getLocationListDistance(locations: List<Location>): Double {
         var sum = 0.0

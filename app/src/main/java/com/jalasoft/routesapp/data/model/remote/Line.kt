@@ -59,7 +59,8 @@ data class LinePath(
     val routePoints: List<Location> = listOf(),
     val start: Location? = null,
     val end: Location? = null,
-    val stops: List<Location> = listOf()
+    val stops: List<Location> = listOf(),
+    val icons: LineCategoryIcons = LineCategoryIcons()
 ) : Serializable {
     companion object {
         fun getOneRouteLine(line: LinePath, nearestStopToDestination: Location, nearestStopToOrigin: Location): AvailableTransport? {
