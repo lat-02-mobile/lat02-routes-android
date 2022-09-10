@@ -7,18 +7,16 @@ import android.graphics.Color
 import android.location.Location
 import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.model.BitmapDescriptor
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.PolylineOptions
 import com.jalasoft.routesapp.util.Extensions.toLatLong
 
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.google.android.gms.maps.model.*
 import com.google.maps.android.PolyUtil
 import com.jalasoft.routesapp.BuildConfig
+import com.jalasoft.routesapp.R
 import org.json.JSONObject
 
 object GoogleMapsHelper {
@@ -27,7 +25,7 @@ object GoogleMapsHelper {
         mMap.addPolyline(
             PolylineOptions()
                 .addAll(latLongList)
-                .width(10f)
+                .width(18f)
                 .color(Color.parseColor(hexColor))
                 .geodesic(true)
         )
@@ -50,7 +48,12 @@ object GoogleMapsHelper {
                 path.add(PolyUtil.decode(points))
             }
             for (i in 0 until path.size) {
-                mMap.addPolyline(PolylineOptions().addAll(path[i]).color(Color.GRAY))
+                val dot: PatternItem = Dot()
+                val gap: PatternItem = Gap(8.toFloat())
+
+                val pattern = listOf(gap, dot)
+
+                mMap.addPolyline(PolylineOptions().addAll(path[i]).color(R.color.color_primary).pattern(pattern))
             }
         }, Response.ErrorListener {
                 _ ->
