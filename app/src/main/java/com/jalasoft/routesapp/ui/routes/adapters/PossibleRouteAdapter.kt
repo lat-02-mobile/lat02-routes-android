@@ -36,7 +36,7 @@ class PossibleRouteAdapter (var possibleRoutesList: MutableList<AvailableTranspo
         if (position == 0) holder.binding.recommendedText.visibility = View.VISIBLE
         else holder.binding.recommendedText.visibility = View.GONE
         holder.binding.itemIndex.text = " " + (position + 1).toString() + " "
-        holder.binding.estimatedTimeText.text = possibleRoute.calculateTotalDistance().toString() + " "
+        holder.binding.estimatedTimeText.text = possibleRoute.calculateEstimatedTimeToArrive().toString() + " "
         val primaryColor = ContextCompat.getColor(holder.binding.root.context, R.color.color_primary_gradient)
         if (lastSelectedPosition == position) {
             holder.binding.itemIndex.setTextColor(WHITE)

@@ -18,4 +18,12 @@ data class AvailableTransport(
         }
         return totalDistance
     }
+
+    fun calculateEstimatedTimeToArrive(): Int {
+        var totalMins = 0
+        for ( line in transports) {
+            totalMins += GoogleMapsHelper.getEstimatedTimeToArrive(line.averageVelocity, calculateTotalDistance().toDouble() ).toInt()
+        }
+        return totalMins
+    }
 }

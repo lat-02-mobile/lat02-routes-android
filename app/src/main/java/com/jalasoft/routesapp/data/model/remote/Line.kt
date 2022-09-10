@@ -76,7 +76,7 @@ data class LinePath(
                 val indexDestinationPoint = getIndexOfFromLocationList(nearestStopToDestination, line.routePoints)
 
                 val newRoutePoints = line.routePoints.slice(indexOriginPoint..indexDestinationPoint)
-                val newLine = LinePath(line.name, line.category, newRoutePoints, line.start, line.end, newStops, line.icons, line.color)
+                val newLine = LinePath(line.name, line.category, newRoutePoints, line.start, line.end, newStops, line.icons, line.color, line.averageVelocity)
                 return AvailableTransport(null, mutableListOf(newLine))
             }
             return null
@@ -91,11 +91,11 @@ data class LinePath(
             return if (sliceFromStart) {
                 val newStops = line.stops.slice(0..intersectionStopIndex)
                 val newRoutePoints = line.routePoints.slice(0..intersectionRoutePointIndex)
-                LinePath(line.name, line.category, newRoutePoints, line.start, line.end, newStops, line.icons, line.color)
+                LinePath(line.name, line.category, newRoutePoints, line.start, line.end, newStops, line.icons, line.color, line.averageVelocity)
             } else {
                 val newStops = line.stops.slice(intersectionStopIndex until line.stops.size)
                 val newRoutePoints = line.routePoints.slice(intersectionRoutePointIndex until line.routePoints.size)
-                LinePath(line.name, line.category, newRoutePoints, line.start, line.end, newStops, line.icons, line.color)
+                LinePath(line.name, line.category, newRoutePoints, line.start, line.end, newStops, line.icons, line.color, line.averageVelocity)
             }
         }
 
