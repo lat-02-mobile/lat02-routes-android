@@ -7,10 +7,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jalasoft.routesapp.data.api.models.gmaps.EndLocation
+import com.jalasoft.routesapp.data.api.models.gmaps.Route
+import com.jalasoft.routesapp.data.api.models.gmaps.StartLocation
 import com.jalasoft.routesapp.data.model.remote.AvailableTransport
 import com.jalasoft.routesapp.data.model.remote.Line
 import com.jalasoft.routesapp.data.model.remote.LineCategoryIcons
 import com.jalasoft.routesapp.data.model.remote.LinePath
+import com.jalasoft.routesapp.data.remote.interfaces.DirectionsRepository
 import com.jalasoft.routesapp.data.remote.interfaces.RouteRepository
 import com.jalasoft.routesapp.util.algorithm.RouteCalculator
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +24,7 @@ import javax.inject.Inject
 @HiltViewModel
 class RoutesViewModel
 @Inject
-constructor(private val repository: RouteRepository) : ViewModel() {
+constructor(private val repository: RouteRepository, private val gDirectionsRepository: DirectionsRepository) : ViewModel() {
 
     private var _routesList: MutableLiveData<List<LinePath>> = MutableLiveData()
     val routesList: LiveData<List<LinePath>> = _routesList
@@ -28,6 +32,8 @@ constructor(private val repository: RouteRepository) : ViewModel() {
     private var _possibleRoutesList: MutableLiveData<List<AvailableTransport>> = MutableLiveData()
     val possibleRoutesList: LiveData<List<AvailableTransport>> = _possibleRoutesList
     var possibleRoutesOriginalList: List<AvailableTransport> = listOf()
+    private var _directionsList: MutableLiveData<List<Route>> =  MutableLiveData()
+    var directionsList: LiveData<List<Route>> = _directionsList
 
     fun fetchRoutes(context: Context) = viewModelScope.launch {
         _routesList.value = repository.getAllRouteLines(context)
@@ -39,6 +45,14 @@ constructor(private val repository: RouteRepository) : ViewModel() {
             line.name.lowercase().contains(criteria.lowercase())
         }
         return _routesList.value!!.size
+    }
+
+    fun fetchDirections(startLocation: StartLocation, endLocation: EndLocation) = viewModelScope.launch {
+        val fetchedPlacesResponse = gDirectionsRepository.getDirections(startLocation, endLocation)
+        fetchedPlacesResponse.data?.let {
+            _directionsList.value = it
+            directionsList = _directionsList
+        }
     }
 
     fun getPossibleRoutes() = viewModelScope.launch {

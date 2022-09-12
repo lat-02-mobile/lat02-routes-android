@@ -7,59 +7,32 @@ import android.graphics.Color
 import android.location.Location
 import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.GoogleMap
-import com.jalasoft.routesapp.util.Extensions.toLatLong
-
-import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
 import com.google.android.gms.maps.model.*
-import com.google.maps.android.PolyUtil
-import com.jalasoft.routesapp.BuildConfig
-import com.jalasoft.routesapp.R
-import org.json.JSONObject
 
 object GoogleMapsHelper {
-    fun drawPolyline(mMap: GoogleMap, list: List<Location>, hexColor: String = "#004696") {
-        val latLongList = list.map { it.toLatLong() }
+    fun drawPolyline(mMap: GoogleMap, list: List<LatLng>, hexColor: String = "#004696") {
         mMap.addPolyline(
             PolylineOptions()
-                .addAll(latLongList)
+                .addAll(list)
                 .width(18f)
                 .color(Color.parseColor(hexColor))
                 .geodesic(true)
         )
     }
 
-    fun connectStops(mMap: GoogleMap, context: Context, firstLatLng: LatLng, secondLatLng: LatLng) {
-        val path: MutableList<List<LatLng>> = ArrayList()
-        val urlDirections = "https://maps.googleapis.com/maps/api/directions/json?origin=" +
-                "${firstLatLng.latitude},${firstLatLng.longitude}&destination=${secondLatLng.latitude}," +
-                "${secondLatLng.longitude}&key=${BuildConfig.GOOGLE_DIRECTIONS_API_KEY}"
-        val directionsRequest = object : StringRequest(Request.Method.GET, urlDirections, Response.Listener<String> {
-                response ->
-            val jsonResponse = JSONObject(response)
-            // Get routes
-            val routes = jsonResponse.getJSONArray("routes")
-            val legs = routes.getJSONObject(0).getJSONArray("legs")
-            val steps = legs.getJSONObject(0).getJSONArray("steps")
-            for (i in 0 until steps.length()) {
-                val points = steps.getJSONObject(i).getJSONObject("polyline").getString("points")
-                path.add(PolyUtil.decode(points))
-            }
-            for (i in 0 until path.size) {
-                val dot: PatternItem = Dot()
-                val gap: PatternItem = Gap(8.toFloat())
+    fun drawDotPolyline(mMap: GoogleMap, list: List<LatLng>, hexColor: String = "#004696") {
+        val dot: PatternItem = Dot()
+        val gap: PatternItem = Gap(8.toFloat())
+        val pattern = listOf(gap, dot)
 
-                val pattern = listOf(gap, dot)
-
-                mMap.addPolyline(PolylineOptions().addAll(path[i]).color(R.color.color_primary).pattern(pattern))
-            }
-        }, Response.ErrorListener {
-                _ ->
-        }){}
-        val requestQueue = Volley.newRequestQueue(context)
-        requestQueue.add(directionsRequest)
+        mMap.addPolyline(
+            PolylineOptions()
+                .addAll(list)
+                .width(18f)
+                .color(Color.parseColor(hexColor))
+                .geodesic(true)
+                .pattern(pattern)
+        )
     }
 
     // Distance in meters

@@ -18,7 +18,10 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.maps.android.PolyUtil
 import com.jalasoft.routesapp.R
+import com.jalasoft.routesapp.data.api.models.gmaps.EndLocation
+import com.jalasoft.routesapp.data.api.models.gmaps.StartLocation
 import com.jalasoft.routesapp.data.model.remote.AvailableTransport
 import com.jalasoft.routesapp.databinding.FragmentPossibleRoutesBinding
 import com.jalasoft.routesapp.ui.routes.adapters.PossibleRouteAdapter
@@ -106,21 +109,25 @@ class PossibleRoutesFragment : Fragment(), OnMapReadyCallback, PossibleRouteAdap
             val builder = LatLngBounds.Builder()
             val start = possibleRoute.transports.first().routePoints.first().toLatLong()
             val end = possibleRoute.transports.last().routePoints.last().toLatLong()
-            it.addMarker(MarkerOptions().position(start).title(R.string.start_of_route.toString()).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.ic_start_route)))
-            it.addMarker(MarkerOptions().position(end).title(R.string.end_of_route.toString()).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.ic_end_route)))
+            it.addMarker(MarkerOptions().position(start).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.ic_start_route)).anchor(0.5F, 0.5F))
+            it.addMarker(MarkerOptions().position(end).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.ic_end_route)).anchor(0.5F, 0.5F))
             for (line in possibleRoute.transports) {
-                GoogleMapsHelper.drawPolyline(it, line.routePoints, line.color)
+                GoogleMapsHelper.drawPolyline(it, line.routePoints.map { point -> point.toLatLong() }, line.color)
                 line.routePoints.map {location ->
                     builder.include(location.toLatLong())
                 }
             }
             if (possibleRoute.transports.size > 1) {
-                context?.let { ctx ->
-                    val first = possibleRoute.transports.first().routePoints.last().toLatLong()
-                    val second = possibleRoute.transports.last().routePoints.first().toLatLong()
-                    it.addMarker(MarkerOptions().position(first).title(R.string.start_of_route.toString()).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.ic_bus_stop)))
-                    it.addMarker(MarkerOptions().position(second).title(R.string.end_of_route.toString()).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.ic_bus_stop)))
-                    GoogleMapsHelper.connectStops(it, ctx, first, second)
+                val first = possibleRoute.transports.first().routePoints.last().toLatLong()
+                val second = possibleRoute.transports.last().routePoints.first().toLatLong()
+                it.addMarker(MarkerOptions().position(first).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.ic_bus_stop)).anchor(0.5F, 0.5F))
+                it.addMarker(MarkerOptions().position(second).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.ic_bus_stop)).anchor(0.5F, 0.5F))
+                viewModel.fetchDirections(StartLocation(first.latitude, first.longitude), EndLocation(second.latitude, second.longitude))
+                viewModel.directionsList.observe(viewLifecycleOwner) { route ->
+                    val shape = route.first().overviewPolyline?.points
+                    shape?.let { points ->
+                        GoogleMapsHelper.drawDotPolyline(mMap!!, PolyUtil.decode(points))
+                    }
                 }
             }
             val bounds = builder.build()

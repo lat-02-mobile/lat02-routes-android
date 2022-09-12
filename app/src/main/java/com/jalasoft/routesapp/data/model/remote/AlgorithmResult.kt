@@ -11,7 +11,7 @@ data class AvailableTransport(
     val connectionPoint: Int? = null,
     val transports: MutableList<LinePath> = mutableListOf()
 ) {
-    fun calculateTotalDistance(): Int {
+    private fun calculateTotalDistance(): Int {
         var totalDistance = 0
         for ( line in transports) {
             totalDistance += GoogleMapsHelper.getLocationListDistance(line.routePoints).toInt()

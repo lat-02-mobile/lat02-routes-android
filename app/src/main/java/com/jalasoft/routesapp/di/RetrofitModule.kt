@@ -2,6 +2,7 @@ package com.jalasoft.routesapp.di
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.jalasoft.routesapp.data.api.retrofit.IGmapsDirections
 import com.jalasoft.routesapp.data.api.retrofit.IGmapsService
 import dagger.Module
 import dagger.Provides
@@ -33,5 +34,11 @@ object RetrofitModule {
     @Provides
     fun provideGMapsService(builder: Retrofit.Builder): IGmapsService {
         return builder.build().create(IGmapsService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideGMapsDirections(builder: Retrofit.Builder): IGmapsDirections {
+        return builder.build().create(IGmapsDirections::class.java)
     }
 }
