@@ -5,6 +5,7 @@ import android.graphics.Color.*
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
@@ -35,41 +36,14 @@ class PossibleRouteAdapter (var possibleRoutesList: MutableList<AvailableTranspo
         val possibleRoute = possibleRoutesList[position]
         if (position == 0) holder.binding.recommendedText.visibility = View.VISIBLE
         else holder.binding.recommendedText.visibility = View.GONE
-        holder.binding.itemIndex.text = " " + (position + 1).toString() + " "
-        holder.binding.estimatedTimeText.text = possibleRoute.calculateEstimatedTimeToArrive().toString() + " "
+        val currentRouteIndex = " ${position + 1} "
+        val estimatedTimeText = possibleRoute.calculateEstimatedTimeToArrive().toString() + " "
         val primaryColor = ContextCompat.getColor(holder.binding.root.context, R.color.color_primary_gradient)
-        if (lastSelectedPosition == position) {
-            holder.binding.itemIndex.setTextColor(WHITE)
-            holder.binding.routeName.setTextColor(WHITE)
-            holder.binding.estimatedTimeText.setTextColor(WHITE)
-            holder.binding.minText.setTextColor(WHITE)
-            holder.binding.recommendedText.setTextColor(WHITE)
-            holder.binding.transportImage.setColorFilter(WHITE)
-            holder.binding.transportImage.setBackgroundColor(TRANSPARENT)
-            holder.binding.transportImage.load(possibleRoute.transports.first().icons.blackUrl) {
-                crossfade(true)
-                placeholder(R.drawable.ic_bus_stop)
-                transformations(CircleCropTransformation())
-            }
-            holder.binding.mainContainer.setBackgroundColor(primaryColor)
-        } else {
-            holder.binding.itemIndex.setTextColor(BLACK)
-            holder.binding.recommendedText.setTextColor(BLACK)
-            holder.binding.routeName.setTextColor(BLACK)
-            holder.binding.estimatedTimeText.setTextColor(BLACK)
-            holder.binding.minText.setTextColor(BLACK)
-            holder.binding.transportImage.setBackgroundColor(WHITE)
-            holder.binding.transportImage.setColorFilter(BLACK)
-            holder.binding.transportImage.load(possibleRoute.transports.first().icons.whiteUrl) {
-                crossfade(true)
-                placeholder(R.drawable.ic_bus_stop)
-                transformations(CircleCropTransformation())
-            }
-            holder.binding.mainContainer.setBackgroundColor(WHITE)
-        }
+        changeToUnselectedItemStyle(holder, possibleRoute, currentRouteIndex, estimatedTimeText)
         holder.binding.possibleRouteContainer.setOnClickListener {
+            changeToSelectedItemStyle(holder, possibleRoute, primaryColor)
+            if(lastSelectedPosition != -1) notifyItemChanged(lastSelectedPosition)
             lastSelectedPosition = position
-            notifyDataSetChanged()
             listener.onCityTap(possibleRoute)
         }
     }
@@ -89,4 +63,37 @@ class PossibleRouteAdapter (var possibleRoutesList: MutableList<AvailableTranspo
         }
     }
 
+    private fun changeToUnselectedItemStyle(holder: PossibleRouteViewHolder, possibleRoute: AvailableTransport, currentRouteIndex: String, estimatedTime: String) {
+        holder.binding.itemIndex.text = currentRouteIndex
+        holder.binding.estimatedTimeText.text = estimatedTime
+        holder.binding.itemIndex.setTextColor(BLACK)
+        holder.binding.recommendedText.setTextColor(BLACK)
+        holder.binding.routeName.setTextColor(BLACK)
+        holder.binding.estimatedTimeText.setTextColor(BLACK)
+        holder.binding.minText.setTextColor(BLACK)
+        holder.binding.transportImage.setBackgroundColor(WHITE)
+        holder.binding.transportImage.setColorFilter(BLACK)
+        holder.binding.transportImage.load(possibleRoute.transports.first().icons.whiteUrl) {
+            crossfade(true)
+            placeholder(R.drawable.ic_bus_stop)
+            transformations(CircleCropTransformation())
+        }
+        holder.binding.mainContainer.setBackgroundColor(WHITE)
+    }
+
+    private fun changeToSelectedItemStyle(holder: PossibleRouteViewHolder, possibleRoute: AvailableTransport, backgroundColor: Int) {
+        holder.binding.itemIndex.setTextColor(WHITE)
+        holder.binding.routeName.setTextColor(WHITE)
+        holder.binding.estimatedTimeText.setTextColor(WHITE)
+        holder.binding.minText.setTextColor(WHITE)
+        holder.binding.recommendedText.setTextColor(WHITE)
+        holder.binding.transportImage.setColorFilter(WHITE)
+        holder.binding.transportImage.setBackgroundColor(TRANSPARENT)
+        holder.binding.transportImage.load(possibleRoute.transports.first().icons.blackUrl) {
+            crossfade(true)
+            placeholder(R.drawable.ic_bus_stop)
+            transformations(CircleCropTransformation())
+        }
+        holder.binding.mainContainer.setBackgroundColor(backgroundColor)
+    }
 }
