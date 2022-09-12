@@ -27,6 +27,7 @@ import com.jalasoft.routesapp.ui.routes.adapters.PossibleRouteAdapter
 import com.jalasoft.routesapp.ui.routes.viewModel.RoutesViewModel
 import com.jalasoft.routesapp.util.Extensions.toLatLong
 import com.jalasoft.routesapp.util.PreferenceManager
+import com.jalasoft.routesapp.util.helpers.Constants
 import com.jalasoft.routesapp.util.helpers.GoogleMapsHelper
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -131,8 +132,7 @@ class PossibleRoutesFragment : Fragment(), OnMapReadyCallback, PossibleRouteAdap
                 }
             }
             val bounds = builder.build()
-            val padding = 250
-            val cu = CameraUpdateFactory.newLatLngBounds(bounds, padding)
+            val cu = CameraUpdateFactory.newLatLngBounds(bounds, Constants.POLYLINE_PADDING)
             mMap?.animateCamera(cu)
         }
     }

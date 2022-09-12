@@ -36,14 +36,14 @@ constructor(private val repository: RouteRepository, private val gDirectionsRepo
 
     fun fetchRoutes(context: Context) = viewModelScope.launch {
         _routesList.value = repository.getAllRouteLines(context)
-        originalList = _routesList.value!!
+        originalList = _routesList.value ?: listOf()
     }
 
     fun filterRoutes(criteria: String): Int {
         _routesList.value = originalList.filter { line ->
             line.name.lowercase().contains(criteria.lowercase())
         }
-        return _routesList.value!!.size
+        return _routesList.value?.size ?: 0
     }
 
     fun fetchDirections(startLocation: StartLocation, endLocation: EndLocation) = viewModelScope.launch {
@@ -54,6 +54,7 @@ constructor(private val repository: RouteRepository, private val gDirectionsRepo
         }
     }
 
+    // TODO("Change this method when joining locations with the routes")
     fun getPossibleRoutes() = viewModelScope.launch {
         val start1 = RouteAlgorithmFakeData.coordinatesToLocation(-16.52035351419114, -68.12580890707301)
         val end1 = RouteAlgorithmFakeData.coordinatesToLocation(-16.524285569842718, -68.12298370418992)
@@ -105,6 +106,7 @@ constructor(private val repository: RouteRepository, private val gDirectionsRepo
     }
 }
 
+// TODO("Replace this fake data by fetching the lines from firebase")
 object RouteAlgorithmFakeData {
 
     val points1Array = listOf(
