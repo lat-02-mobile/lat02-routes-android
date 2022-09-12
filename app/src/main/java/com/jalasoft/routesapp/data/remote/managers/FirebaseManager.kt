@@ -1,5 +1,6 @@
 package com.jalasoft.routesapp.data.remote.managers
 
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.jalasoft.routesapp.data.model.remote.User
 import com.jalasoft.routesapp.data.remote.interfaces.FirebaseDataSource
@@ -40,6 +41,15 @@ class FirebaseManager(val db: FirebaseFirestore) : FirebaseDataSource {
     }
 
     suspend inline fun <reified T : Any> getDocumentsWithCondition(collection: FirebaseCollections, field: String, parameter: String): Response<List<T>> {
+        return try {
+            val result = db.collection(collection.toString()).whereEqualTo(field, parameter).get().await()
+            Response.Success(result.toObjects(T::class.java))
+        } catch (e: Exception) {
+            Response.Error(e.message.toString(), null)
+        }
+    }
+
+    suspend inline fun <reified T : Any> getDocumentsByReferenceWithCondition(collection: FirebaseCollections, field: String, parameter: DocumentReference): Response<List<T>> {
         return try {
             val result = db.collection(collection.toString()).whereEqualTo(field, parameter).get().await()
             Response.Success(result.toObjects(T::class.java))

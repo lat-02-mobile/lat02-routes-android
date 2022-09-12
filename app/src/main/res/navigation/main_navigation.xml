@@ -66,6 +66,11 @@
         android:name="com.jalasoft.routesapp.ui.routes.view.RoutesFragment"
         android:label="fragment_routes"
         tools:layout="@layout/fragment_routes" />
+    <fragment
+        android:id="@+id/tourPointsFragment"
+        android:name="com.jalasoft.routesapp.ui.tourPoints.view.TourPointsFragment"
+        android:label="fragment_tour_points"
+        tools:layout="@layout/fragment_tour_points" />
 
     <fragment
         android:id="@+id/routeSelected"

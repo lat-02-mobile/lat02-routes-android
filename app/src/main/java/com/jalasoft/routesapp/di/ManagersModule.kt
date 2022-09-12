@@ -8,6 +8,7 @@ import com.jalasoft.routesapp.data.remote.interfaces.CityRepository
 import com.jalasoft.routesapp.data.remote.interfaces.DirectionsRepository
 import com.jalasoft.routesapp.data.remote.interfaces.PlaceRepository
 import com.jalasoft.routesapp.data.remote.interfaces.RouteRepository
+import com.jalasoft.routesapp.data.remote.interfaces.TourPointRepository
 import com.jalasoft.routesapp.data.remote.managers.*
 import dagger.Module
 import dagger.Provides
@@ -53,5 +54,11 @@ object ManagersModule {
     @Provides
     fun provideDirectionsManager(retrofitService: IGmapsDirections): DirectionsRepository {
         return DirectionsManager(retrofitService)
+    }
+
+    @Singleton
+    @Provides
+    fun provideTourPointRepository(): TourPointRepository {
+        return TourPointManager(FirebaseManager(FirebaseFirestore.getInstance()))
     }
 }

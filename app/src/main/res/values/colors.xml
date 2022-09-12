@@ -13,4 +13,5 @@
     <color name="red_color">#FF0000</color>
     <color name="background_color_1">#ddd</color>
     <color name="transparent_background">#00000000</color>
+    <color name="gray_color">#A9A9B0</color>
 </resources>
