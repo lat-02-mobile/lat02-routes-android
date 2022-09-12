@@ -2,6 +2,7 @@ package com.jalasoft.routesapp.data.source
 
 import android.location.Location
 import android.location.LocationManager
+import com.google.android.gms.maps.model.LatLng
 import com.jalasoft.routesapp.data.model.remote.LinePath
 
 object FakeRoutesData {
@@ -87,6 +88,16 @@ object FakeRoutesData {
     private val line3 = LinePath("LA", "Metro", points3, start3, end3, stops3)
 
     val lines = listOf(line1, line2, line3)
+
+    val directionsPointLst = listOf(
+        LatLng(-16.52469, -68.12539000000001),
+        LatLng(-16.524700000000003, -68.12529),
+        LatLng(-16.52478, -68.12515),
+        LatLng(-16.524820000000002, -68.12522),
+        LatLng(-16.52493, -68.12523),
+        LatLng(-16.52523, -68.12530000000001),
+        LatLng(-16.525540000000003, -68.1254)
+    )
 
     private fun coordinatesToLocation(lat: Double, lon: Double): Location {
         val location = Location(LocationManager.NETWORK_PROVIDER)

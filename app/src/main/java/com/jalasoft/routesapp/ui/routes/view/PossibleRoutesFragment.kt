@@ -1,6 +1,5 @@
-package com.jalasoft.routesapp.ui.routes
+package com.jalasoft.routesapp.ui.routes.view
 
-import android.R.attr.padding
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -31,7 +30,6 @@ import com.jalasoft.routesapp.util.PreferenceManager
 import com.jalasoft.routesapp.util.helpers.GoogleMapsHelper
 import dagger.hilt.android.AndroidEntryPoint
 
-
 @AndroidEntryPoint
 class PossibleRoutesFragment : Fragment(), OnMapReadyCallback, PossibleRouteAdapter.IPossibleRouteListener {
     private var _binding: FragmentPossibleRoutesBinding? = null
@@ -47,7 +45,8 @@ class PossibleRoutesFragment : Fragment(), OnMapReadyCallback, PossibleRouteAdap
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentPossibleRoutesBinding.inflate(inflater, container, false)
@@ -113,7 +112,7 @@ class PossibleRoutesFragment : Fragment(), OnMapReadyCallback, PossibleRouteAdap
             it.addMarker(MarkerOptions().position(end).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.ic_end_route)).anchor(0.5F, 0.5F))
             for (line in possibleRoute.transports) {
                 GoogleMapsHelper.drawPolyline(it, line.routePoints.map { point -> point.toLatLong() }, line.color)
-                line.routePoints.map {location ->
+                line.routePoints.map { location ->
                     builder.include(location.toLatLong())
                 }
             }
@@ -126,7 +125,8 @@ class PossibleRoutesFragment : Fragment(), OnMapReadyCallback, PossibleRouteAdap
                 viewModel.directionsList.observe(viewLifecycleOwner) { route ->
                     val shape = route.first().overviewPolyline?.points
                     shape?.let { points ->
-                        GoogleMapsHelper.drawDotPolyline(mMap!!, PolyUtil.decode(points))
+                        val latLngList = PolyUtil.decode(points)
+                        GoogleMapsHelper.drawDotPolyline(it, latLngList)
                     }
                 }
             }

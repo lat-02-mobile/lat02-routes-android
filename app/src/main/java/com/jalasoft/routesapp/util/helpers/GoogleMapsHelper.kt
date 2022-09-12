@@ -39,14 +39,14 @@ object GoogleMapsHelper {
     fun getLocationListDistance(locations: List<Location>): Double {
         var sum = 0.0
         for (i in locations.indices) {
-            if ( i + 1 < locations.size) sum += locations[i].distanceTo(locations[i + 1])
+            if (i + 1 < locations.size) sum += locations[i].distanceTo(locations[i + 1])
         }
         return sum
     }
 
     // Estimated time in minutes
     fun getEstimatedTimeToArrive(averageVelocityMetersSec: Double, totalDistanceMeters: Double): Double {
-        return (totalDistanceMeters * (1/averageVelocityMetersSec)) / 60
+        return (totalDistanceMeters * (1 / averageVelocityMetersSec)) / 60
     }
 
     fun bitmapFromVector(context: Context, vectorResId: Int): BitmapDescriptor? {
@@ -78,4 +78,3 @@ object GoogleMapsHelper {
         return LatLng(location.latitude, location.longitude)
     }
 }
-

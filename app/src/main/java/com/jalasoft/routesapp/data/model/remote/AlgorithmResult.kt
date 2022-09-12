@@ -13,7 +13,7 @@ data class AvailableTransport(
 ) {
     private fun calculateTotalDistance(): Int {
         var totalDistance = 0
-        for ( line in transports) {
+        for (line in transports) {
             totalDistance += GoogleMapsHelper.getLocationListDistance(line.routePoints).toInt()
         }
         return totalDistance
@@ -21,8 +21,8 @@ data class AvailableTransport(
 
     fun calculateEstimatedTimeToArrive(): Int {
         var totalMins = 0
-        for ( line in transports) {
-            totalMins += GoogleMapsHelper.getEstimatedTimeToArrive(line.averageVelocity, calculateTotalDistance().toDouble() ).toInt()
+        for (line in transports) {
+            totalMins += GoogleMapsHelper.getEstimatedTimeToArrive(line.averageVelocity, calculateTotalDistance().toDouble()).toInt()
         }
         return totalMins
     }

@@ -5,18 +5,15 @@ import android.graphics.Color.*
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.CircleCropTransformation
 import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.data.model.remote.AvailableTransport
-import com.jalasoft.routesapp.data.model.remote.LinePath
 import com.jalasoft.routesapp.databinding.PossibleRouteItemBinding
-import com.jalasoft.routesapp.util.helpers.GoogleMapsHelper
 
-class PossibleRouteAdapter (var possibleRoutesList: MutableList<AvailableTransport>, val listener: IPossibleRouteListener) : RecyclerView.Adapter<PossibleRouteAdapter.PossibleRouteViewHolder>() {
+class PossibleRouteAdapter(var possibleRoutesList: MutableList<AvailableTransport>, val listener: IPossibleRouteListener) : RecyclerView.Adapter<PossibleRouteAdapter.PossibleRouteViewHolder>() {
 
     private var lastSelectedPosition = -1
 
@@ -42,7 +39,7 @@ class PossibleRouteAdapter (var possibleRoutesList: MutableList<AvailableTranspo
         changeToUnselectedItemStyle(holder, possibleRoute, currentRouteIndex, estimatedTimeText)
         holder.binding.possibleRouteContainer.setOnClickListener {
             changeToSelectedItemStyle(holder, possibleRoute, primaryColor)
-            if(lastSelectedPosition != -1) notifyItemChanged(lastSelectedPosition)
+            if (lastSelectedPosition != -1) notifyItemChanged(lastSelectedPosition)
             lastSelectedPosition = position
             listener.onCityTap(possibleRoute)
         }

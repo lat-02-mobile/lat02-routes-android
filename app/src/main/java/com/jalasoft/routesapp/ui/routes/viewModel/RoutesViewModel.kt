@@ -11,7 +11,6 @@ import com.jalasoft.routesapp.data.api.models.gmaps.EndLocation
 import com.jalasoft.routesapp.data.api.models.gmaps.Route
 import com.jalasoft.routesapp.data.api.models.gmaps.StartLocation
 import com.jalasoft.routesapp.data.model.remote.AvailableTransport
-import com.jalasoft.routesapp.data.model.remote.Line
 import com.jalasoft.routesapp.data.model.remote.LineCategoryIcons
 import com.jalasoft.routesapp.data.model.remote.LinePath
 import com.jalasoft.routesapp.data.remote.interfaces.DirectionsRepository
@@ -32,7 +31,7 @@ constructor(private val repository: RouteRepository, private val gDirectionsRepo
     private var _possibleRoutesList: MutableLiveData<List<AvailableTransport>> = MutableLiveData()
     val possibleRoutesList: LiveData<List<AvailableTransport>> = _possibleRoutesList
     var possibleRoutesOriginalList: List<AvailableTransport> = listOf()
-    private var _directionsList: MutableLiveData<List<Route>> =  MutableLiveData()
+    private var _directionsList: MutableLiveData<List<Route>> = MutableLiveData()
     var directionsList: LiveData<List<Route>> = _directionsList
 
     fun fetchRoutes(context: Context) = viewModelScope.launch {
@@ -60,25 +59,39 @@ constructor(private val repository: RouteRepository, private val gDirectionsRepo
         val end1 = RouteAlgorithmFakeData.coordinatesToLocation(-16.524285569842718, -68.12298370418992)
         val points1 = RouteAlgorithmFakeData.arrayToMutableListOfLocation(RouteAlgorithmFakeData.points1Array)
         val stops1 = RouteAlgorithmFakeData.arrayToMutableListOfLocation(RouteAlgorithmFakeData.stops1Array)
-        val line1 = LinePath("Line 1", "Bus", points1, start1, end1, stops1, LineCategoryIcons("https://firebasestorage.googleapis.com/v0/b/routes-app-8c8e4.appspot.com/o/lineCategories%2Fbus_white.png?alt=media&token=980b407c-2fc7-4fd2-b8da-a5504a7c7f1c",
-            "https://firebasestorage.googleapis.com/v0/b/routes-app-8c8e4.appspot.com/o/lineCategories%2Fbus_black.png?alt=media&token=21c3ba52-27ed-499a-933a-a31c8f2062ba"),
-        "#67F5ED", 3.0)
+
+        val lineCategoryIcons1 = LineCategoryIcons(
+            "https://firebasestorage.googleapis.com/v0/b/routes-app-8c8e4.appspot.com/o/lineCategories%2Fbus_white.png?alt=media&token=980b407c-2fc7-4fd2-b8da-a5504a7c7f1c",
+            "https://firebasestorage.googleapis.com/v0/b/routes-app-8c8e4.appspot.com/o/lineCategories%2Fbus_black.png?alt=media&token=21c3ba52-27ed-499a-933a-a31c8f2062ba"
+        )
+        val line1 = LinePath("Line 1", "Bus", points1, start1, end1, stops1, lineCategoryIcons1, "#67F5ED", 3.0)
 
         val start2 = RouteAlgorithmFakeData.coordinatesToLocation(-16.5255314, -68.1254204)
         val end2 = RouteAlgorithmFakeData.coordinatesToLocation(-16.5241937, -68.1204527)
         val points2 = RouteAlgorithmFakeData.arrayToMutableListOfLocation(RouteAlgorithmFakeData.points2Array)
+
         val stops2 = RouteAlgorithmFakeData.arrayToMutableListOfLocation(RouteAlgorithmFakeData.stops2Array)
-            val line2 = LinePath("246", "Mini", points2, start2, end2, stops2, LineCategoryIcons("https://firebasestorage.googleapis.com/v0/b/routes-app-8c8e4.appspot.com/o/lineCategories%2Fmini_bus_white.png?alt=media&token=e67646cd-457d-4563-a12f-55a17c478150",
-            "https://firebasestorage.googleapis.com/v0/b/routes-app-8c8e4.appspot.com/o/lineCategories%2Fmini_bus_black.png?alt=media&token=cdda76ab-ec71-42b7-a10a-a665d6b03155"),
-            "#6495ED", 3.2)
+        val lineCategoryIcons2 = LineCategoryIcons(
+            "https://firebasestorage.googleapis.com/v0/b/routes-app-8c8e4.appspot.com/o/lineCategories%2Fmini_bus_white.png?alt=media&token=e67646cd-457d-4563-a12f-55a17c478150",
+            "https://firebasestorage.googleapis.com/v0/b/routes-app-8c8e4.appspot.com/o/lineCategories%2Fmini_bus_black.png?alt=media&token=cdda76ab-ec71-42b7-a10a-a665d6b03155"
+        )
+
+        val line2 = LinePath("246", "Mini", points2, start2, end2, stops2, lineCategoryIcons2, "#6495ED", 3.2)
 
         val start3 = RouteAlgorithmFakeData.coordinatesToLocation(-16.5206262, -68.1227148)
         val end3 = RouteAlgorithmFakeData.coordinatesToLocation(-16.5244779, -68.1253892)
-        val points3 = RouteAlgorithmFakeData.arrayToMutableListOfLocation(RouteAlgorithmFakeData.points3Array)
+        val points3 = RouteAlgorithmFakeData.arrayToMutableListOfLocation(
+            RouteAlgorithmFakeData.points3Array
+        )
+
         val stops3 = RouteAlgorithmFakeData.arrayToMutableListOfLocation(RouteAlgorithmFakeData.stops3Array)
-        val line3 = LinePath("LA", "Metro", points3, start3, end3, stops3, LineCategoryIcons("https://firebasestorage.googleapis.com/v0/b/routes-app-8c8e4.appspot.com/o/lineCategories%2Fsubway_white.png?alt=media&token=c3fe8f8e-7696-4879-b042-52e710f94842",
-            "https://firebasestorage.googleapis.com/v0/b/routes-app-8c8e4.appspot.com/o/lineCategories%2Fsubway_black.png?alt=media&token=7f8c755c-da68-4b85-8bc1-1df26ecb92d8"),
-        "#533483", 3.4)
+        val lineCategoryIcons3 = LineCategoryIcons(
+            "https://firebasestorage.googleapis.com/v0/b/routes-app-8c8e4.appspot.com/o/lineCategories%2Fsubway_white.png?alt=media&token=c3fe8f8e-7696-4879-b042-52e710f94842",
+            "https://firebasestorage.googleapis.com/v0/b/routes-app-8c8e4.appspot.com/o/lineCategories%2Fsubway_black.png?alt=media&token=7f8c755c-da68-4b85-8bc1-1df26ecb92d8"
+        )
+
+        val line3 = LinePath("LA", "Metro", points3, start3, end3, stops3, lineCategoryIcons3, "#533483", 3.4)
+
         val lines = listOf(line1, line2, line3)
 
         val originPoint = RouteAlgorithmFakeData.coordinatesToLocation(-16.52078, -68.12344)
@@ -157,196 +170,6 @@ object RouteAlgorithmFakeData {
         listOf(-16.5244779, -68.1253892)
     )
 
-    // points for test 1 and for
-    private val points4_1 = listOf(
-        listOf(-16.52130602845841, -68.12417648825397),
-        listOf(-16.521670987319112, -68.12320625310048),
-        listOf(-16.52197231180913, -68.12260107624422),
-        listOf(-16.522451435494332, -68.12218135682076),
-        listOf(-16.523261825566387, -68.12214426533951),
-        listOf(-16.523703514803486, -68.1221403609752),
-        listOf(-16.523780248849537, -68.12235510114752),
-        listOf(-16.524002964559173, -68.12266159393164),
-        listOf(-16.524285569842718, -68.12298370418992)
-    )
-
-    private val stops4_1 = listOf(
-        listOf(-16.52130602845841, -68.12417648825397),
-        listOf(-16.521670987319112, -68.12320625310048),
-        listOf(-16.522451435494332, -68.12218135682076),
-        listOf(-16.523780248849537, -68.12235510114752),
-        listOf(-16.524285569842718, -68.12298370418992)
-    )
-
-    private val points4_2_1 = listOf(
-        listOf(-16.5206262, -68.1227148),
-        listOf(-16.5209862, -68.1229079),
-        listOf(-16.5212999, -68.1231064),
-        listOf(-16.5216239, -68.1231976),
-        listOf(-16.5220662, -68.1233478),
-        listOf(-16.5226807, -68.1237467),
-        listOf(-16.5230562, -68.1242724),
-        listOf(-16.5232053, -68.1245996),
-        listOf(-16.5235817, -68.1248782),
-        listOf(-16.5237617, -68.124964),
-        listOf(-16.5241114, -68.1251303),
-        listOf(-16.5244779, -68.1253892)
-    )
-
-    private val stops4_2_1 = listOf(
-        listOf(-16.5206262, -68.1227148),
-        listOf(-16.5216239, -68.1231976),
-        listOf(-16.5232053, -68.1245996),
-        listOf(-16.5244779, -68.1253892)
-    )
-
-    private val points4_2_2 = listOf(
-        listOf(-16.5255314,	-68.1254204),
-        listOf(-16.5247497,	-68.1251629),
-        listOf(-16.5247755,	-68.1246533),
-        listOf(-16.5251612,	-68.1243314),
-        listOf(-16.5251046,	-68.1238218),
-        listOf(-16.5246006,	-68.1232156)
-    )
-
-    private val stops4_2_2 = listOf(
-        listOf(-16.5255314, -68.1254204),
-        listOf(-16.5246006,	-68.1232156)
-    )
-
-    val result1_4 = mutableListOf(
-        AvailableTransport(
-            null,
-            mutableListOf(
-                LinePath(
-                    "Line 1",
-                    "Bus",
-                    arrayToMutableListOfLocation(points4_1).toList(),
-                    coordinatesToLocation(-16.52035351419114, -68.12580890707301),
-                    coordinatesToLocation(-16.524285569842718, -68.12298370418992),
-                    arrayToMutableListOfLocation(stops4_1).toList()
-                )
-            )
-        ),
-        AvailableTransport(
-            3,
-            mutableListOf(
-                LinePath(
-                    "LA",
-                    "Metro",
-                    arrayToMutableListOfLocation(points4_2_1).toList(),
-                    coordinatesToLocation(-16.5206262, -68.1227148),
-                    coordinatesToLocation(-16.5244779, -68.1253892),
-                    arrayToMutableListOfLocation(stops4_2_1).toList()
-                ),
-                LinePath(
-                    "246",
-                    "Mini",
-                    arrayToMutableListOfLocation(points4_2_2).toList(),
-                    coordinatesToLocation(-16.5255314, -68.1254204),
-                    coordinatesToLocation(-16.5241937, -68.1204527),
-                    arrayToMutableListOfLocation(stops4_2_2).toList()
-                )
-            )
-        )
-    )
-
-    // points for test 2
-    private val points2_1_1 = listOf(
-        listOf(-16.52130602845841, -68.12417648825397),
-        listOf(-16.521670987319112, -68.12320625310048),
-        listOf(-16.52197231180913, -68.12260107624422),
-        listOf(-16.522451435494332, -68.12218135682076),
-        listOf(-16.523261825566387, -68.12214426533951),
-        listOf(-16.523703514803486, -68.1221403609752),
-        listOf(-16.523780248849537, -68.12235510114752),
-        listOf(-16.524002964559173, -68.12266159393164),
-        listOf(-16.524285569842718, -68.12298370418992)
-    )
-
-    private val stops2_1_1 = listOf(
-        listOf(-16.52130602845841, -68.12417648825397),
-        listOf(-16.521670987319112, -68.12320625310048),
-        listOf(-16.522451435494332, -68.12218135682076),
-        listOf(-16.523780248849537, -68.12235510114752),
-        listOf(-16.524285569842718, -68.12298370418992)
-    )
-
-    private val points2_1_2 = listOf(
-        listOf(-16.5246006,	-68.1232156),
-        listOf(-16.5245543,	-68.1218155),
-        listOf(-16.5247286,	-68.1216115),
-        listOf(-16.5241937,	-68.1204527)
-    )
-
-    private val stops2_1_2 = listOf(
-        listOf(-16.5246006,	-68.1232156),
-        listOf(-16.5241937,	-68.1204527)
-    )
-
-    private val points2_2_1 = listOf(
-        listOf(-16.5216239, -68.1231976),
-        listOf(-16.5220662, -68.1233478),
-        listOf(-16.5226807, -68.1237467),
-        listOf(-16.5230562, -68.1242724),
-        listOf(-16.5232053, -68.1245996),
-        listOf(-16.5235817, -68.1248782),
-        listOf(-16.5237617, -68.124964),
-        listOf(-16.5241114, -68.1251303),
-        listOf(-16.5244779, -68.1253892)
-    )
-
-    private val stops2_2_1 = listOf(
-        listOf(-16.5216239, -68.1231976),
-        listOf(-16.5232053, -68.1245996),
-        listOf(-16.5244779, -68.1253892)
-    )
-
-    val result2 = mutableListOf(
-        AvailableTransport(
-            4,
-            mutableListOf(
-                LinePath(
-                    "Line 1",
-                    "Bus",
-                    arrayToMutableListOfLocation(points2_1_1).toList(),
-                    coordinatesToLocation(-16.52035351419114, -68.12580890707301),
-                    coordinatesToLocation(-16.524285569842718, -68.12298370418992),
-                    arrayToMutableListOfLocation(stops2_1_1).toList()
-                ),
-                LinePath(
-                    "246",
-                    "Mini",
-                    arrayToMutableListOfLocation(points2_1_2).toList(),
-                    coordinatesToLocation(-16.5255314,	-68.1254204),
-                    coordinatesToLocation(-16.5241937,	-68.1204527),
-                    arrayToMutableListOfLocation(stops2_1_2).toList()
-                )
-            )
-        ),
-        AvailableTransport(
-            2,
-            mutableListOf(
-                LinePath(
-                    "LA",
-                    "Metro",
-                    arrayToMutableListOfLocation(points2_2_1).toList(),
-                    coordinatesToLocation(-16.5206262, -68.1227148),
-                    coordinatesToLocation(-16.5244779, -68.1253892),
-                    arrayToMutableListOfLocation(stops2_2_1).toList()
-                ),
-                LinePath(
-                    "246",
-                    "Mini",
-                    arrayToMutableListOfLocation(points2Array).toList(),
-                    coordinatesToLocation(-16.5255314,	-68.1254204),
-                    coordinatesToLocation(-16.5241937,	-68.1204527),
-                    arrayToMutableListOfLocation(stops2Array).toList()
-                )
-            )
-        )
-    )
-
     fun coordinatesToLocation(lat: Double, lon: Double): Location {
         val location = Location(LocationManager.NETWORK_PROVIDER)
         location.longitude = lon
@@ -361,34 +184,5 @@ object RouteAlgorithmFakeData {
             points.add(location)
         }
         return points
-    }
-
-    fun compareResults(result: MutableList<AvailableTransport>, resultToCompare: MutableList<AvailableTransport>): Boolean {
-        if (result.size != resultToCompare.size) return false
-        result.forEachIndexed { i, availableTransport ->
-            if (availableTransport.connectionPoint != resultToCompare[i].connectionPoint ||
-                availableTransport.transports.size != resultToCompare[i].transports.size
-            ) return false
-            availableTransport.transports.forEachIndexed { j, linePath ->
-                if (!compareLocations(linePath.end, resultToCompare[i].transports[j].end) ||
-                    !compareLocations(linePath.start, resultToCompare[i].transports[j].start) ||
-                    linePath.category != resultToCompare[i].transports[j].category ||
-                    linePath.name != resultToCompare[i].transports[j].name ||
-                    linePath.routePoints.size != resultToCompare[i].transports[j].routePoints.size ||
-                    linePath.stops.size != resultToCompare[i].transports[j].stops.size
-                ) return false
-                linePath.routePoints.forEachIndexed { k, location ->
-                    if (!compareLocations(location, resultToCompare[i].transports[j].routePoints[k])) return false
-                }
-                linePath.stops.forEachIndexed { k, location ->
-                    if (!compareLocations(location, resultToCompare[i].transports[j].stops[k])) return false
-                }
-            }
-        }
-        return true
-    }
-
-    private fun compareLocations(location1: Location?, location2: Location?): Boolean {
-        return location1?.latitude == location2?.latitude && location1?.longitude == location2?.longitude
     }
 }

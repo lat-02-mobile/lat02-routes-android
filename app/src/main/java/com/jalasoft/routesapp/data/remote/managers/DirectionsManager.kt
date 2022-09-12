@@ -1,16 +1,13 @@
 package com.jalasoft.routesapp.data.remote.managers
 
-import android.util.Log
 import com.jalasoft.routesapp.BuildConfig
 import com.jalasoft.routesapp.data.api.models.gmaps.EndLocation
-import com.jalasoft.routesapp.data.api.models.gmaps.Place
 import com.jalasoft.routesapp.data.api.models.gmaps.Route
 import com.jalasoft.routesapp.data.api.models.gmaps.StartLocation
 import com.jalasoft.routesapp.data.api.retrofit.IGmapsDirections
 import com.jalasoft.routesapp.data.remote.interfaces.DirectionsRepository
 import com.jalasoft.routesapp.util.Response
 import java.lang.Exception
-import javax.inject.Inject
 
 class DirectionsManager(val service: IGmapsDirections) : DirectionsRepository {
     override suspend fun getDirections(
