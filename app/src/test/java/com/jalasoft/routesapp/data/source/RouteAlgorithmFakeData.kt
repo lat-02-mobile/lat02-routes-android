@@ -3,7 +3,7 @@ package com.jalasoft.routesapp.data.source
 import android.location.Location
 import android.location.LocationManager
 import com.jalasoft.routesapp.data.model.remote.AvailableTransport
-import com.jalasoft.routesapp.data.model.remote.LinePath
+import com.jalasoft.routesapp.data.model.remote.LineRoutePath
 
 object RouteAlgorithmFakeData {
 
@@ -126,14 +126,19 @@ object RouteAlgorithmFakeData {
         listOf(-16.5255314, -68.1254204),
         listOf(-16.5246006,	-68.1232156)
     )
+    private const val idLine1 = "aqafwegtfe12"
+    private const val idLine2 = "gtgglvmsbvk1"
+    private const val idLine3 = "vmbrormfkjg9"
 
     val result1_4 = mutableListOf(
         AvailableTransport(
             null,
             mutableListOf(
-                LinePath(
+                LineRoutePath(
                     "Line 1",
+                    null,
                     "Bus",
+                    idLine1,
                     arrayToMutableListOfLocation(points4_1).toList(),
                     coordinatesToLocation(-16.52035351419114, -68.12580890707301),
                     coordinatesToLocation(-16.524285569842718, -68.12298370418992),
@@ -144,17 +149,21 @@ object RouteAlgorithmFakeData {
         AvailableTransport(
             3,
             mutableListOf(
-                LinePath(
+                LineRoutePath(
                     "LA",
+                    null,
                     "Metro",
+                    idLine2,
                     arrayToMutableListOfLocation(points4_2_1).toList(),
                     coordinatesToLocation(-16.5206262, -68.1227148),
                     coordinatesToLocation(-16.5244779, -68.1253892),
                     arrayToMutableListOfLocation(stops4_2_1).toList()
                 ),
-                LinePath(
+                LineRoutePath(
                     "246",
+                    null,
                     "Mini",
+                    idLine3,
                     arrayToMutableListOfLocation(points4_2_2).toList(),
                     coordinatesToLocation(-16.5255314, -68.1254204),
                     coordinatesToLocation(-16.5241937, -68.1204527),
@@ -219,17 +228,21 @@ object RouteAlgorithmFakeData {
         AvailableTransport(
             4,
             mutableListOf(
-                LinePath(
+                LineRoutePath(
                     "Line 1",
+                    null,
                     "Bus",
+                    idLine1,
                     arrayToMutableListOfLocation(points2_1_1).toList(),
                     coordinatesToLocation(-16.52035351419114, -68.12580890707301),
                     coordinatesToLocation(-16.524285569842718, -68.12298370418992),
                     arrayToMutableListOfLocation(stops2_1_1).toList()
                 ),
-                LinePath(
+                LineRoutePath(
                     "246",
+                    null,
                     "Mini",
+                    idLine1,
                     arrayToMutableListOfLocation(points2_1_2).toList(),
                     coordinatesToLocation(-16.5255314,	-68.1254204),
                     coordinatesToLocation(-16.5241937,	-68.1204527),
@@ -240,17 +253,21 @@ object RouteAlgorithmFakeData {
         AvailableTransport(
             2,
             mutableListOf(
-                LinePath(
+                LineRoutePath(
                     "LA",
+                    null,
                     "Metro",
+                    idLine1,
                     arrayToMutableListOfLocation(points2_2_1).toList(),
                     coordinatesToLocation(-16.5206262, -68.1227148),
                     coordinatesToLocation(-16.5244779, -68.1253892),
                     arrayToMutableListOfLocation(stops2_2_1).toList()
                 ),
-                LinePath(
+                LineRoutePath(
                     "246",
+                    null,
                     "Mini",
+                    idLine1,
                     arrayToMutableListOfLocation(points2Array).toList(),
                     coordinatesToLocation(-16.5255314,	-68.1254204),
                     coordinatesToLocation(-16.5241937,	-68.1204527),

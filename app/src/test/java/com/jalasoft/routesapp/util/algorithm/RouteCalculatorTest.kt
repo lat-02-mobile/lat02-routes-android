@@ -1,6 +1,6 @@
 package com.jalasoft.routesapp.util.algorithm
 
-import com.jalasoft.routesapp.data.model.remote.LinePath
+import com.jalasoft.routesapp.data.model.remote.LineRoutePath
 import com.jalasoft.routesapp.data.source.RouteAlgorithmFakeData
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -22,7 +22,7 @@ class RouteCalculatorTest : TestCase() {
     @get:Rule
     val hiltRule = HiltAndroidRule(this)
 
-    private lateinit var lines: List<LinePath>
+    private lateinit var lines: List<LineRoutePath>
 
     @Before
     public override fun setUp() {
@@ -31,19 +31,19 @@ class RouteCalculatorTest : TestCase() {
         val end1 = RouteAlgorithmFakeData.coordinatesToLocation(-16.524285569842718, -68.12298370418992)
         val points1 = RouteAlgorithmFakeData.arrayToMutableListOfLocation(RouteAlgorithmFakeData.points1Array)
         val stops1 = RouteAlgorithmFakeData.arrayToMutableListOfLocation(RouteAlgorithmFakeData.stops1Array)
-        val line1 = LinePath("Line 1", "Bus", points1, start1, end1, stops1)
+        val line1 = LineRoutePath("Line 1", null, "Bus", "wswswef12421", points1, start1, end1, stops1)
 
         val start2 = RouteAlgorithmFakeData.coordinatesToLocation(-16.5255314, -68.1254204)
         val end2 = RouteAlgorithmFakeData.coordinatesToLocation(-16.5241937, -68.1204527)
         val points2 = RouteAlgorithmFakeData.arrayToMutableListOfLocation(RouteAlgorithmFakeData.points2Array)
         val stops2 = RouteAlgorithmFakeData.arrayToMutableListOfLocation(RouteAlgorithmFakeData.stops2Array)
-        val line2 = LinePath("246", "Mini", points2, start2, end2, stops2)
+        val line2 = LineRoutePath("246", null, "Mini", "wswswef12421", points2, start2, end2, stops2)
 
         val start3 = RouteAlgorithmFakeData.coordinatesToLocation(-16.5206262, -68.1227148)
         val end3 = RouteAlgorithmFakeData.coordinatesToLocation(-16.5244779, -68.1253892)
         val points3 = RouteAlgorithmFakeData.arrayToMutableListOfLocation(RouteAlgorithmFakeData.points3Array)
         val stops3 = RouteAlgorithmFakeData.arrayToMutableListOfLocation(RouteAlgorithmFakeData.stops3Array)
-        val line3 = LinePath("LA", "Metro", points3, start3, end3, stops3)
+        val line3 = LineRoutePath("LA", null, "Metro", "wswswef12421", points3, start3, end3, stops3)
         hiltRule.inject()
         lines = listOf(line1, line2, line3)
     }

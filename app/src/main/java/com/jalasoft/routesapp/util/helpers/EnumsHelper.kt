@@ -5,6 +5,7 @@ enum class FirebaseCollections {
     Countries,
     Cities,
     Lines,
+    LineRoute,
     LineCategories,
     Tourpoints,
     TourpointsCategory

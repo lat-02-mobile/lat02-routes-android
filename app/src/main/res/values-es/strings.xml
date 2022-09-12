@@ -91,4 +91,9 @@
     <string name="start_of_route">Inicio de la Ruta</string>
     <string name="end_of_route">Fin de la Ruta</string>
     <string name="bus_stop">Parada de Bus</string>
+
+    <!-- Select route dialog -->
+    <string name="select_route">Seleccione una ruta</string>
+    <string name="no_route">No se encontro ninguna ruta</string>
+
 </resources>
