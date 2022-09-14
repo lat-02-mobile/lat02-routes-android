@@ -2,11 +2,11 @@ package com.jalasoft.routesapp.di
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.jalasoft.routesapp.RoutesAppApplication
 import com.jalasoft.routesapp.data.api.retrofit.IGmapsService
-import com.jalasoft.routesapp.data.remote.interfaces.CityRepository
-import com.jalasoft.routesapp.data.remote.interfaces.PlaceRepository
-import com.jalasoft.routesapp.data.remote.interfaces.RouteRepository
-import com.jalasoft.routesapp.data.remote.interfaces.TourPointRepository
+import com.jalasoft.routesapp.data.local.room.dao.TourPointDao
+import com.jalasoft.routesapp.data.local.room.managers.LocalDataBaseManager
+import com.jalasoft.routesapp.data.remote.interfaces.*
 import com.jalasoft.routesapp.data.remote.managers.*
 import dagger.Module
 import dagger.Provides
@@ -52,5 +52,17 @@ object ManagersModule {
     @Provides
     fun provideTourPointRepository(): TourPointRepository {
         return TourPointManager(FirebaseManager(FirebaseFirestore.getInstance()))
+    }
+
+    @Singleton
+    @Provides
+    fun provideLocalDataBaseManager(tourPointDao: TourPointDao): LocalDataBaseManager {
+        return LocalDataBaseManager(tourPointDao)
+    }
+
+    @Singleton
+    @Provides
+    fun provideTourPointDao(): TourPointDao {
+        return RoutesAppApplication.routesDB?.tourPointDao() as TourPointDao
     }
 }

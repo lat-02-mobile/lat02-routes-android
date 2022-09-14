@@ -30,11 +30,14 @@
 
     <style name="CityPickerTheme">
         <item name="android:textViewStyle">@style/WhiteTextTheme</item>
-
     </style>
 
     <style name="WhiteTextTheme" parent="Widget.AppCompat.TextView">
         <item name="android:textColor">@color/white</item>
         <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+
+    <style name="CustomDialogTheme">
+        <item name="android:windowBackground">@color/transparent_background</item>
     </style>
 </resources>

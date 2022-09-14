@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">RoutesApp</string>
     <string name="new_language_text">New language text</string>
+    <string name="loading_data">Loading Data</string>
     <!-- Register user -->
     <string name="reg_hint_name">Name</string>
     <string name="reg_hint_email">Email</string>

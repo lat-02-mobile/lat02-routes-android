@@ -1,5 +1,6 @@
 package com.jalasoft.routesapp.ui.cityPicker
 
+import com.jalasoft.routesapp.data.local.room.dao.TourPointDao
 import com.jalasoft.routesapp.data.source.FakeCityManager
 import com.jalasoft.routesapp.ui.cityPicker.viewModel.CityPickerViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -24,13 +25,14 @@ class CityPickerViewModelTest : TestCase() {
 
     private lateinit var viewModel: CityPickerViewModel
     private lateinit var fakeManager: FakeCityManager
+    private lateinit var tourPointDao: TourPointDao
 
     @Before
     public override fun setUp() {
         super.setUp()
         hiltRule.inject()
         fakeManager = FakeCityManager()
-        viewModel = CityPickerViewModel(fakeManager)
+        viewModel = CityPickerViewModel(fakeManager, tourPointDao)
     }
 
     @Test
