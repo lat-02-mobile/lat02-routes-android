@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class Line(
+data class LineEntity(
     @PrimaryKey
     val idLine: String,
     val name: String,

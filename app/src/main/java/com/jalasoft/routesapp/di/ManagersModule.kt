@@ -4,7 +4,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.jalasoft.routesapp.RoutesAppApplication
 import com.jalasoft.routesapp.data.api.retrofit.IGmapsService
-import com.jalasoft.routesapp.data.local.room.dao.TourPointDao
+import com.jalasoft.routesapp.data.local.room.db.RoutesDB
 import com.jalasoft.routesapp.data.local.room.managers.LocalDataBaseManager
 import com.jalasoft.routesapp.data.remote.interfaces.*
 import com.jalasoft.routesapp.data.remote.managers.*
@@ -56,13 +56,13 @@ object ManagersModule {
 
     @Singleton
     @Provides
-    fun provideLocalDataBaseManager(tourPointDao: TourPointDao): LocalDataBaseManager {
-        return LocalDataBaseManager(tourPointDao)
+    fun provideLocalDataBaseManager(localRoutesDB: RoutesDB): LocalDataBaseManager {
+        return LocalDataBaseManager(localRoutesDB)
     }
 
     @Singleton
     @Provides
-    fun provideTourPointDao(): TourPointDao {
-        return RoutesAppApplication.routesDB?.tourPointDao() as TourPointDao
+    fun provideRoutesDB(): RoutesDB {
+        return RoutesAppApplication.routesDB as RoutesDB
     }
 }

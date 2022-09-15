@@ -4,6 +4,7 @@ import android.location.Location
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.GeoPoint
+import com.jalasoft.routesapp.data.model.local.LineEntity
 import com.jalasoft.routesapp.util.helpers.Constants
 import com.jalasoft.routesapp.util.helpers.GoogleMapsHelper
 import kotlinx.coroutines.tasks.await
@@ -11,9 +12,11 @@ import java.io.Serializable
 import java.util.*
 
 data class Line(
+    val idLine: String? = null,
     val categoryRef: DocumentReference? = null,
     val idCity: String = "",
     val name: String = "",
+    val enable: Boolean? = true,
     val routePoints: List<GeoPoint> = listOf(),
     val start: GeoPoint? = null,
     val end: GeoPoint? = null,
@@ -38,6 +41,25 @@ data class Line(
             }
         }
         return LinePath(name, categoryName, routePoints, start, end, stops)
+    }
+
+    suspend fun lineToLineLocal(): LineEntity {
+        val lineId = idLine ?: ""
+        var cate = ""
+        val ena = enable ?: true
+        var category: DocumentSnapshot?
+        var categoryName = ""
+        categoryRef?.let { docRef ->
+            category = docRef.get().await()
+            category?.let {
+                val currLang = Locale.getDefault().isO3Language
+                categoryName =
+                    if (currLang == Constants.CURRENT_SPANISH_LANGUAGE) it.toObject(LineCategories::class.java)?.nameEsp ?: ""
+                    else it.toObject(LineCategories::class.java)?.nameEng ?: ""
+            }
+            cate = categoryName
+        }
+        return LineEntity(lineId, name, idCity, cate, ena)
     }
 }
 

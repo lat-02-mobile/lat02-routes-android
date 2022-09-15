@@ -9,13 +9,10 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.jalasoft.routesapp.R
-import com.jalasoft.routesapp.RoutesAppApplication
 import com.jalasoft.routesapp.data.model.remote.City
 import com.jalasoft.routesapp.databinding.FragmentCityPickerBinding
 import com.jalasoft.routesapp.ui.cityPicker.adapters.CityAdapter
 import com.jalasoft.routesapp.ui.cityPicker.viewModel.CityPickerViewModel
-import com.jalasoft.routesapp.util.CustomProgressDialog
 import com.jalasoft.routesapp.util.PreferenceManager
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -26,7 +23,6 @@ class CityPickerFragment : Fragment(), CityAdapter.ICityListener {
     private val binding get() = _binding!!
 
     private val viewModel: CityPickerViewModel by viewModels()
-    private val progressDialog by lazy { CustomProgressDialog(requireActivity()) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,16 +75,8 @@ class CityPickerFragment : Fragment(), CityAdapter.ICityListener {
     }
 
     override fun onCityTap(city: City) {
-        val text = RoutesAppApplication.resource?.getString(R.string.loading_data)
-        progressDialog.start(text!!)
         PreferenceManager.saveCurrentLocation(requireContext(), city.lat, city.lng, city.name, city.id)
-        viewModel.getTourPointsLocal(requireContext())
-        viewModel.dataSaved.observe(viewLifecycleOwner) {
-            if (it) {
-                progressDialog.stop()
-                val direction = CityPickerFragmentDirections.actionCityPickerFragmentToSplashScreenFragment(city = city.name)
-                findNavController().navigate(direction)
-            }
-        }
+        val direction = CityPickerFragmentDirections.actionCityPickerFragmentToSplashScreenFragment(city = city.name)
+        findNavController().navigate(direction)
     }
 }
