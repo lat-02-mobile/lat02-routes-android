@@ -1,4 +1,4 @@
-package com.jalasoft.routesapp.data.remote.managers
+package com.jalasoft.routesapp.data.remote.interfaces
 
 import android.app.Activity
 import com.google.firebase.auth.AuthCredential

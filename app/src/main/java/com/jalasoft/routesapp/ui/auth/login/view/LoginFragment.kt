@@ -111,8 +111,8 @@ class LoginFragment : Fragment() {
             showProgress(false)
         }
         val resultObserver = Observer<Boolean> { value ->
+            showProgress(false)
             if (value) {
-                showProgress(false)
                 binding.loginEmail.setText("")
                 binding.loginPassword.setText("")
                 val intent = Intent(activity, MainActivity::class.java)
@@ -122,11 +122,11 @@ class LoginFragment : Fragment() {
             }
         }
         val googleAndFacebookObserver = Observer<Boolean> { value ->
+            showProgress(false)
             if (value) {
                 val intent = Intent(activity, MainActivity::class.java)
                 activity?.startActivity(intent)
                 activity?.finish()
-                showProgress(false)
             }
         }
         viewModel.errorMessage.observe(this, errorObserver)

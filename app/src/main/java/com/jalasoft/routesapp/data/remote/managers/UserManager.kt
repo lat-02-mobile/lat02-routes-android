@@ -5,6 +5,7 @@ import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
 import com.jalasoft.routesapp.data.model.remote.User
+import com.jalasoft.routesapp.data.remote.interfaces.UserRepository
 import com.jalasoft.routesapp.util.Response
 import com.jalasoft.routesapp.util.helpers.DateHelper
 import com.jalasoft.routesapp.util.helpers.FirebaseCollections
@@ -20,7 +21,7 @@ class UserManager(private val authManager: AuthFirebaseManager, private val fire
         val userId = firebaseManager.getDocId(FirebaseCollections.Users)
         val dateStr = DateHelper.getCurrentDate()
         val date = DateHelper.convertDateToDouble(dateStr)
-        val user = User(userId, name, email, "", UserType.NORMAL.int, typeLogin.int, date, date)
+        val user = User(userId, name, email, "", UserType.NORMAL.int, listOf(typeLogin.int), date, date)
         return firebaseManager.addDocument(user, FirebaseCollections.Users)
     }
 

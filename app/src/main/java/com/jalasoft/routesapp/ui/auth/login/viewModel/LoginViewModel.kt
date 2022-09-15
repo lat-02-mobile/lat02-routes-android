@@ -9,7 +9,7 @@ import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.RoutesAppApplication
-import com.jalasoft.routesapp.data.remote.managers.UserRepository
+import com.jalasoft.routesapp.data.remote.interfaces.UserRepository
 import com.jalasoft.routesapp.util.helpers.UserTypeLogin
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

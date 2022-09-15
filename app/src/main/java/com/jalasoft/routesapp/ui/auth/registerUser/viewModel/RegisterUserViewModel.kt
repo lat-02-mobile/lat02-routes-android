@@ -4,7 +4,8 @@ import androidx.lifecycle.*
 import com.google.firebase.auth.AuthCredential
 import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.RoutesAppApplication
-import com.jalasoft.routesapp.data.remote.managers.UserRepository
+import com.jalasoft.routesapp.data.remote.interfaces.UserRepository
+import com.jalasoft.routesapp.util.Response
 import com.jalasoft.routesapp.util.helpers.UserTypeLogin
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -35,11 +36,13 @@ constructor(private val repository: UserRepository) : ViewModel() {
 
     fun registerUserAuth(name: String, email: String, password: String, validEmail: Boolean) = viewModelScope.launch {
         if (validEmail) {
-            val result = repository.createUserAuth(email, password)
-            if (result.message?.isNotEmpty() == true) {
-                errorMessage.value = result.message
-            } else {
-                registerUser(name, email, UserTypeLogin.NORMAL)
+            when (val result = repository.createUserAuth(email, password)) {
+                is Response.Success -> {
+                    registerUser(name, email, UserTypeLogin.NORMAL)
+                }
+                is Response.Error -> {
+                    errorMessage.value = result.message
+                }
             }
         } else {
             errorMessage.value = RoutesAppApplication.resource?.getString(R.string.reg_vm_valid_email).toString()

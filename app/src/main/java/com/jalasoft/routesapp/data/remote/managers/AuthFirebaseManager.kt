@@ -24,7 +24,7 @@ class AuthFirebaseManager(private val auth: FirebaseAuth) : AuthFirebaseDataSour
     override suspend fun loginUserAuth(email: String, password: String): Response<String> {
         return try {
             val result = auth.signInWithEmailAndPassword(email, password).await()
-            return Response.Success(result.toString())
+            Response.Success(result.toString())
         } catch (e: Exception) {
             Response.Error(e.message.toString(), null)
         }
@@ -33,7 +33,7 @@ class AuthFirebaseManager(private val auth: FirebaseAuth) : AuthFirebaseDataSour
     override suspend fun createUserAuth(email: String, password: String): Response<String> {
         return try {
             val result = auth.createUserWithEmailAndPassword(email, password).await()
-            return Response.Success(result.toString())
+            Response.Success(result.toString())
         } catch (e: Exception) {
             Response.Error(e.message.toString(), null)
         }
