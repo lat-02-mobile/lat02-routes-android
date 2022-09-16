@@ -18,7 +18,7 @@ class PossibleRouteAdapter(var possibleRoutesList: MutableList<AvailableTranspor
     private var lastSelectedPosition = -1
 
     interface IPossibleRouteListener {
-        fun onCityTap(possibleRoute: AvailableTransport)
+        fun onPossibleRouteTap(possibleRoute: AvailableTransport)
     }
 
     class PossibleRouteViewHolder(val binding: PossibleRouteItemBinding) : RecyclerView.ViewHolder(binding.root)
@@ -41,7 +41,7 @@ class PossibleRouteAdapter(var possibleRoutesList: MutableList<AvailableTranspor
             changeToSelectedItemStyle(holder, possibleRoute, primaryColor)
             if (lastSelectedPosition != -1) notifyItemChanged(lastSelectedPosition)
             lastSelectedPosition = position
-            listener.onCityTap(possibleRoute)
+            listener.onPossibleRouteTap(possibleRoute)
         }
     }
 

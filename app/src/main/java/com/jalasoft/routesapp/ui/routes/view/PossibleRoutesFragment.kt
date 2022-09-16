@@ -103,7 +103,7 @@ class PossibleRoutesFragment : Fragment(), OnMapReadyCallback, PossibleRouteAdap
         (binding.bottomSheet.recyclerPossibleRoutes.adapter as PossibleRouteAdapter).updateList(list.toMutableList())
     }
 
-    override fun onCityTap(possibleRoute: AvailableTransport) {
+    override fun onPossibleRouteTap(possibleRoute: AvailableTransport) {
         mMap?.let {
             it.clear()
             val builder = LatLngBounds.Builder()
@@ -124,10 +124,12 @@ class PossibleRoutesFragment : Fragment(), OnMapReadyCallback, PossibleRouteAdap
                 it.addMarker(MarkerOptions().position(second).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.ic_bus_stop)).anchor(0.5F, 0.5F))
                 viewModel.fetchDirections(StartLocation(first.latitude, first.longitude), EndLocation(second.latitude, second.longitude))
                 viewModel.directionsList.observe(viewLifecycleOwner) { route ->
-                    val shape = route.first().overviewPolyline?.points
-                    shape?.let { points ->
-                        val latLngList = PolyUtil.decode(points)
-                        GoogleMapsHelper.drawDotPolyline(it, latLngList)
+                    if (route.isNotEmpty()) {
+                        val shape = route.first().overviewPolyline?.points
+                        shape?.let { points ->
+                            val latLngList = PolyUtil.decode(points)
+                            GoogleMapsHelper.drawDotPolyline(it, latLngList)
+                        }
                     }
                 }
             }

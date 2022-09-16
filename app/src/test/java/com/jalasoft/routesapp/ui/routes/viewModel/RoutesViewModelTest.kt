@@ -44,23 +44,23 @@ class RoutesViewModelTest : TestCase() {
     }
 
     @Test
-    fun `Given the first call for fetching routes, when the routes screen appears, then returns all the routes from the current city`() {
-        viewModel.fetchRoutes(context)
-        assertEquals(viewModel.routesList.value, FakeRoutesData.lines)
+    fun `Given the first call for fetching the lines, when the line screen appears, then returns all the Lines from the current city`() {
+        viewModel.fetchLines(context)
+        assertEquals(viewModel._routesList.value, FakeRoutesData.lineInfo)
     }
 
     @Test
-    fun `Given the first call for fetching routes, when there is a filter criteria, then returns all the routes that match the filter criteria`() {
-        viewModel.fetchRoutes(context)
-        viewModel.filterRoutes("Line")
-        assertEquals(viewModel.routesList.value, FakeRoutesData.lines.filter { it.name.contains("Line") })
+    fun `Given the first call for fetching lines, when there is a filter criteria, then returns all the Lines that match the filter criteria`() {
+        viewModel.fetchLines(context)
+        viewModel.filterLines("Line")
+        assertEquals(viewModel._routesList.value, FakeRoutesData.lineInfo.filter { it.name.contains("Line") })
     }
 
     @Test
-    fun `Given the first call for fetching routes, when there is a filter criteria that does not match, then returns an empty result`() {
-        viewModel.fetchRoutes(context)
-        viewModel.filterRoutes("5")
-        assertTrue(viewModel.routesList.value!!.isEmpty())
+    fun `Given the first call for fetching lines, when there is a filter criteria that does not match, then returns an empty result`() {
+        viewModel.fetchLines(context)
+        viewModel.filterLines("5")
+        assertTrue(viewModel._routesList.value!!.isEmpty())
     }
 
     @Test
@@ -74,5 +74,19 @@ class RoutesViewModelTest : TestCase() {
         } ?: run {
             assertEquals(false, true)
         }
+    }
+
+    @Test
+    fun `Given the first call for fetching the line route depending on the id, then returns all the routes for the line selected `() {
+        viewModel.fetchLineRoute("fakeId")
+        assertEquals(viewModel.lineRouteList.value, FakeRoutesData.line)
+    }
+
+    @Test
+    fun `Given the first call for fetching the line route depending on the id, the function will clean the list`() {
+        viewModel.fetchLineRoute("fakeId")
+        assertTrue(viewModel.lineRouteList.value!!.isNotEmpty())
+        viewModel.cleanLineRouteList()
+        assertEquals(viewModel.lineRouteList.value, null)
     }
 }
