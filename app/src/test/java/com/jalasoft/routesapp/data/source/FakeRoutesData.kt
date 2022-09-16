@@ -3,7 +3,6 @@ package com.jalasoft.routesapp.data.source
 import android.location.Location
 import android.location.LocationManager
 import com.google.android.gms.maps.model.LatLng
-import com.jalasoft.routesapp.data.model.remote.LinePath
 import com.jalasoft.routesapp.data.model.remote.LineInfo
 import com.jalasoft.routesapp.data.model.remote.LineRoutePath
 import com.jalasoft.routesapp.util.helpers.GoogleMapsHelper
