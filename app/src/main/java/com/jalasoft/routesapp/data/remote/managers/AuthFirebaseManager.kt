@@ -30,10 +30,11 @@ class AuthFirebaseManager(private val auth: FirebaseAuth) : AuthFirebaseDataSour
         }
     }
 
-    override suspend fun createUserAuth(email: String, password: String): Response<String> {
+    override suspend fun createUserAuth(email: String, password: String): Response<String?> {
         return try {
             val result = auth.createUserWithEmailAndPassword(email, password).await()
-            Response.Success(result.toString())
+            val user = result.user
+            Response.Success(user?.uid)
         } catch (e: Exception) {
             Response.Error(e.message.toString(), null)
         }

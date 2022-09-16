@@ -4,6 +4,7 @@ import androidx.lifecycle.*
 import com.google.firebase.auth.AuthCredential
 import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.RoutesAppApplication
+import com.jalasoft.routesapp.data.model.remote.User
 import com.jalasoft.routesapp.data.remote.interfaces.UserRepository
 import com.jalasoft.routesapp.util.Response
 import com.jalasoft.routesapp.util.helpers.UserTypeLogin
@@ -38,7 +39,7 @@ constructor(private val repository: UserRepository) : ViewModel() {
         if (validEmail) {
             when (val result = repository.createUserAuth(email, password)) {
                 is Response.Success -> {
-                    registerUser(name, email, UserTypeLogin.NORMAL)
+                    result.data?.let { registerUser(it, name, email, UserTypeLogin.NORMAL) }
                 }
                 is Response.Error -> {
                     errorMessage.value = result.message
@@ -49,25 +50,28 @@ constructor(private val repository: UserRepository) : ViewModel() {
         }
     }
 
-    fun registerUser(name: String, email: String, typeLogin: UserTypeLogin) = viewModelScope.launch {
-        val result = repository.createUser(name, email, typeLogin)
-        if (result.message?.isNotEmpty() == true) {
-            errorMessage.value = result.message
-        } else {
-            registerUser.value = true
+    fun registerUser(uid: String, name: String, email: String, typeLogin: UserTypeLogin) = viewModelScope.launch {
+        when (val result = repository.createUser(uid, name, email, typeLogin)) {
+            is Response.Success -> {
+                result.data?.let { registerUser.value = true }
+            }
+            is Response.Error -> {
+                errorMessage.value = result.message
+            }
         }
     }
 
-    fun userAuthWithCredentials(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential, emailValid: Boolean) {
-        if (emailValid) {
-            registerUserWithGoogle(name, email, typeLogin, credential)
+    fun userAuthWithCredentials(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential, userData: User?) {
+        if (userData == null) {
+            registerUserWithGoogleOrFacebook(name, email, typeLogin, credential)
         } else {
+            // update if array does not contain, and if contains sign in
             singInWithCredentials(credential)
         }
     }
 
-    fun registerUserWithGoogle(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential) = viewModelScope.launch {
-        val result = repository.createUser(name, email, typeLogin)
+    fun registerUserWithGoogleOrFacebook(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential) = viewModelScope.launch {
+        val result = repository.createUser("", name, email, typeLogin)
         if (result.data?.isNotEmpty() == true) {
             singInWithCredentials(credential)
         }
@@ -114,15 +118,7 @@ constructor(private val repository: UserRepository) : ViewModel() {
     }
 
     fun validateEmailGoogleOrFacebook(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential) = viewModelScope.launch {
-        val isEmailRegistered = repository.validateEmailUser(email).data?.isEmpty() == true
-        userAuthWithCredentials(name, email, typeLogin, credential, isEmailRegistered)
+        val userData = repository.validateEmailUser(email).data?.first()
+        userAuthWithCredentials(name, email, typeLogin, credential, userData)
     }
-}
-
-@Suppress("UNCHECKED_CAST")
-class RegisterUserModelFactory(
-    private val userRepository: UserRepository
-) : ViewModelProvider.NewInstanceFactory() {
-    override fun <T : ViewModel> create(modelClass: Class<T>) =
-        (RegisterUserViewModel(userRepository) as T)
 }

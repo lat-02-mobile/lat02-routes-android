@@ -34,12 +34,13 @@ class LoginViewModelTest : TestCase() {
     private lateinit var viewModel: LoginViewModel
     private lateinit var fakeManager: FakeDataUserManager
 
+    private var uid: String = "AS2a2w2asaw21s"
     private val names: String = "test"
     private val email: String = "test@gmail.com"
     private var password: String = "test.test"
     private val typeLogin: UserTypeLogin = UserTypeLogin.GOOGLE
     private val users: MutableList<User> = mutableListOf()
-    private val user = User("asd", names, email, "0", 0, typeLogin.int, 1.0, 1.0)
+    private val user = User("asd", names, email, "0", 0, listOf(typeLogin.int), 1.0, 1.0)
 
     @Before
     public override fun setUp() {
@@ -106,7 +107,7 @@ class LoginViewModelTest : TestCase() {
     fun `Given a valid Google - Facebook Account in case the User is not registered it registers in the database and SignIn`() {
         runBlocking {
             viewModel.validateEmailGoogleOrFacebook(names, email, typeLogin, credential)
-            val result = fakeManager.createUser(names, email, typeLogin)
+            val result = fakeManager.createUser(uid, names, email, typeLogin)
             assertEquals(result.data.toString(), names)
 
             val observer = Observer<Boolean> {}
@@ -144,7 +145,7 @@ class LoginViewModelTest : TestCase() {
     fun `Given Google - Facebook Email verifies in case the Email is not register it registers the User and SignIn`() {
         runBlocking {
             viewModel.userAuthWithCredentials(names, email, typeLogin, credential, true)
-            val result = fakeManager.createUser(names, email, typeLogin)
+            val result = fakeManager.createUser(uid, names, email, typeLogin)
             assertEquals(result.data.toString(), names)
 
             val observer = Observer<Boolean> {}
@@ -178,7 +179,7 @@ class LoginViewModelTest : TestCase() {
     fun `Given Google - Facebook Email is not registered it registers the User and SignIn`() {
         runBlocking {
             viewModel.registerUserToFirebaseFromGoogleOrFacebook(names, email, typeLogin, credential)
-            val result = fakeManager.createUser(names, email, typeLogin)
+            val result = fakeManager.createUser(uid, names, email, typeLogin)
             assertEquals(result.data.toString(), names)
 
             val observer = Observer<Boolean> {}

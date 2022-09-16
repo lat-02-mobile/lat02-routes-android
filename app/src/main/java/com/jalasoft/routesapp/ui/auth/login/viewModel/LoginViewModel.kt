@@ -3,7 +3,6 @@ package com.jalasoft.routesapp.ui.auth.login.viewModel
 import android.util.Patterns
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
@@ -64,7 +63,7 @@ constructor(private val repository: UserRepository) : ViewModel() {
     }
 
     fun registerUserToFirebaseFromGoogleOrFacebook(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential) = viewModelScope.launch {
-        val result = repository.createUser(name, email, typeLogin)
+        val result = repository.createUser("", name, email, typeLogin)
         if (result.data?.isNotEmpty() == true) {
             singInWithCredentials(credential)
         }
@@ -83,12 +82,4 @@ constructor(private val repository: UserRepository) : ViewModel() {
     fun signOutUser() {
         repository.signOut()
     }
-}
-
-@Suppress("UNCHECKED_CAST")
-class LoginModelFactory(
-    private val userRepository: UserRepository
-) : ViewModelProvider.NewInstanceFactory() {
-    override fun <T : ViewModel> create(modelClass: Class<T>) =
-        (LoginViewModel(userRepository) as T)
 }

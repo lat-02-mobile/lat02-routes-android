@@ -34,13 +34,14 @@ class RegisterUserViewModelTest : TestCase() {
     private lateinit var viewModel: RegisterUserViewModel
     private lateinit var fakeManager: FakeDataUserManager
 
+    private var uid: String = "AS2a2w2asaw21s"
     private var names: String = "test"
     private var email: String = "test@gmail.com"
     private var password: String = "123456"
     private var typeLogin: UserTypeLogin = UserTypeLogin.GOOGLE
     private var confirmPassword: String = "123456"
-    private var users: MutableList<User> = mutableListOf()
-    private var user = User("asd", names, email, "0", 0, typeLogin.int, 1.0, 1.0)
+    private var users: MutableList<User> = mutableListOf(User())
+    private var user = User("asd", names, email, "0", 0, listOf(typeLogin.int), 1.0, 1.0)
 
     @Before
     public override fun setUp() {
@@ -67,7 +68,7 @@ class RegisterUserViewModelTest : TestCase() {
         runBlocking {
             viewModel.verifyRegisterUserAuth(names, email, password, confirmPassword)
             val resultAuth = fakeManager.createUserAuth(email, password)
-            val result = fakeManager.createUser(names, email, typeLogin)
+            val result = fakeManager.createUser(uid, names, email, typeLogin)
 
             assertEquals(resultAuth.data.toString(), email)
             assertEquals(result.data.toString(), names)
@@ -96,9 +97,8 @@ class RegisterUserViewModelTest : TestCase() {
     fun `Given a valid Google - Facebook Account in case the User is not registered it register in the database and SignIn`() {
         runBlocking {
             viewModel.validateEmailGoogleOrFacebook(names, email, typeLogin, credential)
-            val result = fakeManager.createUser(names, email, typeLogin)
+            val result = fakeManager.createUser(uid, names, email, typeLogin)
             assertEquals(result.data.toString(), names)
-
             val observer = Observer<Boolean> {}
             try {
                 viewModel.signInGoogleOrFacebook.observeForever(observer)
@@ -135,7 +135,7 @@ class RegisterUserViewModelTest : TestCase() {
         runBlocking {
             viewModel.registerUserAuth(names, email, password, true)
             val resultAuth = fakeManager.createUserAuth(email, password)
-            val result = fakeManager.createUser(names, email, typeLogin)
+            val result = fakeManager.createUser(uid, names, email, typeLogin)
 
             assertEquals(resultAuth.data.toString(), email)
             assertEquals(result.data.toString(), names)
@@ -164,8 +164,8 @@ class RegisterUserViewModelTest : TestCase() {
 
             try {
                 viewModel.registerUser.observeForever(observer)
-                viewModel.registerUser(names, email, UserTypeLogin.NORMAL)
-                val result = fakeManager.createUser(names, email, typeLogin)
+                viewModel.registerUser(uid, names, email, UserTypeLogin.NORMAL)
+                val result = fakeManager.createUser(uid, names, email, typeLogin)
 
                 assertEquals(result.data.toString(), names)
 
@@ -180,8 +180,8 @@ class RegisterUserViewModelTest : TestCase() {
     @Test
     fun `Given Google - Facebook Email is verify in case the Email is not register it register the User and SignIn`() {
         runBlocking {
-            viewModel.userAuthWithCredentials(names, email, typeLogin, credential, true)
-            val result = fakeManager.createUser(names, email, typeLogin)
+            viewModel.userAuthWithCredentials(names, email, typeLogin, credential, user)
+            val result = fakeManager.createUser(uid, names, email, typeLogin)
             assertEquals(result.data.toString(), names)
 
             val observer = Observer<Boolean> {}
@@ -198,8 +198,7 @@ class RegisterUserViewModelTest : TestCase() {
     @Test
     fun `Given Google - Facebook Email is verify in case the Email is registered it SignIn`() {
         runBlocking {
-            viewModel.userAuthWithCredentials(names, email, typeLogin, credential, false)
-
+            viewModel.userAuthWithCredentials(names, email, typeLogin, credential, user)
             val observer = Observer<Boolean> {}
             try {
                 viewModel.signInGoogleOrFacebook.observeForever(observer)
@@ -214,8 +213,8 @@ class RegisterUserViewModelTest : TestCase() {
     @Test
     fun `Given Google - Facebook Email is not register it register the User and SignIn`() {
         runBlocking {
-            viewModel.registerUserWithGoogle(names, email, typeLogin, credential)
-            val result = fakeManager.createUser(names, email, typeLogin)
+            viewModel.registerUserWithGoogleOrFacebook(names, email, typeLogin, credential)
+            val result = fakeManager.createUser(uid, names, email, typeLogin)
             assertEquals(result.data.toString(), names)
 
             val observer = Observer<Boolean> {}
@@ -250,7 +249,7 @@ class RegisterUserViewModelTest : TestCase() {
         runBlocking {
             viewModel.validateEmailNormal(names, email, password)
             val resultAuth = fakeManager.createUserAuth(email, password)
-            val result = fakeManager.createUser(names, email, typeLogin)
+            val result = fakeManager.createUser(uid, names, email, typeLogin)
 
             assertEquals(resultAuth.data.toString(), email)
             assertEquals(result.data.toString(), names)
