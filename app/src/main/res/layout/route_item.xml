@@ -6,7 +6,7 @@
     <data>
         <variable
             name="routeItem"
-            type="com.jalasoft.routesapp.data.model.remote.LinePath" />
+            type="com.jalasoft.routesapp.data.model.remote.LineInfo" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
