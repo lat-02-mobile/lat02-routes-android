@@ -7,22 +7,11 @@ import androidx.room.PrimaryKey
 @Entity
 data class LineRouteEntity(
     @PrimaryKey
+    val id: String,
     val idLine: String,
     val name: String,
-    @Embedded(prefix = "route")
-    val routePoints: RoutePointsHolder,
     @Embedded(prefix = "start")
     val start: Location,
     @Embedded(prefix = "end")
-    val end: Location,
-    @Embedded(prefix = "stop")
-    val stops: StopsHolder
+    val end: Location
 )
-
-class RoutePointsHolder {
-    var routePoints: List<Location>? = null
-}
-
-class StopsHolder {
-    var stops: List<Location>? = null
-}

@@ -21,7 +21,7 @@ constructor(private val repository: RouteRepository) : ViewModel() {
     var originalList: List<LinePath> = listOf()
 
     fun fetchRoutes(context: Context) = viewModelScope.launch {
-        _routesList.value = repository.getAllRouteLines(context)
+        _routesList.value = repository.getAllLines(context)
         originalList = _routesList.value!!
     }
 

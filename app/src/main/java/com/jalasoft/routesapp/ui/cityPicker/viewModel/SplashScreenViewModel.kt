@@ -21,6 +21,7 @@ constructor(private val linesRepository: RouteRepository, private val tourPoints
         val lines = linesRepository.getAllLinesToSaveLocally(context)
         if (lines.isNotEmpty()) {
             for (item in lines) {
+                getLineRoutesAndSaveLocally(item.idLine)
                 localDB.addLocalLine(item)
             }
         }
@@ -35,6 +36,13 @@ constructor(private val linesRepository: RouteRepository, private val tourPoints
             }
         }
         getTourPointsAndSaveLocally(context)
+    }
+
+    fun getLineRoutesAndSaveLocally(idLine: String) = viewModelScope.launch {
+        val lineRoute = linesRepository.getAllLinesRouteToSaveLocally(idLine)
+        if (lineRoute.isNotEmpty()) {
+            localDB.addLocalLineRoute(lineRoute)
+        }
     }
 
     fun getTourPointsAndSaveLocally(context: Context) = viewModelScope.launch {
