@@ -12,7 +12,7 @@ import java.io.Serializable
 import java.util.*
 
 data class Line(
-    val idLine: String? = null,
+    val id: String? = null,
     val categoryRef: DocumentReference? = null,
     val idCity: String = "",
     val name: String = "",
@@ -44,7 +44,7 @@ data class Line(
     }
 
     suspend fun lineToLineLocal(): LineEntity {
-        val lineId = idLine ?: ""
+        val lineId = id ?: ""
         var cate = ""
         val ena = enable ?: true
         var category: DocumentSnapshot?

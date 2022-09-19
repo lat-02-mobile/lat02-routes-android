@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jalasoft.routesapp.data.local.room.managers.LocalDataBaseManager
+import com.jalasoft.routesapp.data.local.room.interfaces.LocalDataBaseRepository
 import com.jalasoft.routesapp.data.remote.interfaces.RouteRepository
 import com.jalasoft.routesapp.data.remote.interfaces.TourPointRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,7 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SplashScreenViewModel
 @Inject
-constructor(private val linesRepository: RouteRepository, private val tourPointsRepository: TourPointRepository, private val localDB: LocalDataBaseManager) : ViewModel() {
+constructor(private val linesRepository: RouteRepository, private val tourPointsRepository: TourPointRepository, private val localDB: LocalDataBaseRepository) : ViewModel() {
     var dataSaved: MutableLiveData<Boolean> = MutableLiveData()
 
     fun getDataAndSafeLocally(context: Context) = viewModelScope.launch {

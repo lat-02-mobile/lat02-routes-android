@@ -1,7 +1,10 @@
 package com.jalasoft.routesapp.data.source
 
 import android.location.Location
+import com.jalasoft.routesapp.data.model.local.LineCategoriesEntity
+import com.jalasoft.routesapp.data.model.local.LineEntity
 import com.jalasoft.routesapp.data.model.remote.LinePath
+import com.jalasoft.routesapp.data.model.remote.LineRoutePath
 import com.jalasoft.routesapp.util.helpers.GoogleMapsHelper
 
 object FakeRoutesData {
@@ -96,4 +99,10 @@ object FakeRoutesData {
         }
         return points
     }
+    private val lineEntity = LineEntity("1", "line test", "scz", "bus", true)
+    private val lineCategory = LineCategoriesEntity("123", "bus", "bus")
+    private val lineRoutePath = LineRoutePath("123", "ruta de ida", "1234", "line test", start1, end1, points1, stops1)
+    val linesEntity = listOf(lineEntity)
+    val lineCategoriesEntity = listOf(lineCategory)
+    val lineRoutesPath = listOf(lineRoutePath)
 }

@@ -5,6 +5,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.jalasoft.routesapp.RoutesAppApplication
 import com.jalasoft.routesapp.data.api.retrofit.IGmapsService
 import com.jalasoft.routesapp.data.local.room.db.RoutesDB
+import com.jalasoft.routesapp.data.local.room.interfaces.LocalDataBaseRepository
 import com.jalasoft.routesapp.data.local.room.managers.LocalDataBaseManager
 import com.jalasoft.routesapp.data.remote.interfaces.*
 import com.jalasoft.routesapp.data.remote.managers.*
@@ -56,8 +57,8 @@ object ManagersModule {
 
     @Singleton
     @Provides
-    fun provideLocalDataBaseManager(localRoutesDB: RoutesDB): LocalDataBaseManager {
-        return LocalDataBaseManager(localRoutesDB)
+    fun provideLocalDataBaseRepository(): LocalDataBaseRepository {
+        return LocalDataBaseManager(RoutesAppApplication.routesDB as RoutesDB)
     }
 
     @Singleton
