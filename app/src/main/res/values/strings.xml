@@ -101,4 +101,8 @@
     <string name="end_of_route">end of route</string>
     <string name="bus_stop">Bus Stop</string>
 
+    <!-- Select route dialog -->
+    <string name="select_route">Select route</string>
+    <string name="no_route">No route found</string>
+
 </resources>

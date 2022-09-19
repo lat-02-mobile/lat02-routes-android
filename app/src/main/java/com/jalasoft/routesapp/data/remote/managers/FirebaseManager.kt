@@ -49,6 +49,19 @@ class FirebaseManager(val db: FirebaseFirestore) : FirebaseDataSource {
         }
     }
 
+    suspend inline fun <reified T : Any> getDocumentsWithDoubleConditionAndBoolean(collection: FirebaseCollections, field1: String, field2: String, parameter: String, boolean: Boolean): Response<List<T>> {
+        return try {
+            val result = db.collection(collection.toString())
+                .whereEqualTo(field1, parameter)
+                .whereEqualTo(field2, boolean)
+                .get()
+                .await()
+            Response.Success(result.toObjects(T::class.java))
+        } catch (e: Exception) {
+            Response.Error(e.message.toString(), null)
+        }
+    }
+
     suspend inline fun <reified T : Any> getDocumentsByReferenceWithCondition(collection: FirebaseCollections, field: String, parameter: DocumentReference): Response<List<T>> {
         return try {
             val result = db.collection(collection.toString()).whereEqualTo(field, parameter).get().await()
