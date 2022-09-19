@@ -8,7 +8,7 @@ data class User(
     val email: String? = null,
     val phoneNumber: String? = null,
     val type: Int? = null,
-    val typeLogin: List<Int>? = null,
+    val typeLogin: Int? = null,
     val createdAt: Double? = null,
     val updatedAt: Double? = null
 ) : Serializable

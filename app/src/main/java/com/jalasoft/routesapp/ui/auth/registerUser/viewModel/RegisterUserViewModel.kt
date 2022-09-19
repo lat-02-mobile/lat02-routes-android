@@ -1,11 +1,10 @@
 package com.jalasoft.routesapp.ui.auth.registerUser.viewModel
 
 import androidx.lifecycle.*
-import com.google.firebase.auth.AuthCredential
 import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.RoutesAppApplication
-import com.jalasoft.routesapp.data.model.remote.User
 import com.jalasoft.routesapp.data.remote.interfaces.UserRepository
+import com.jalasoft.routesapp.ui.auth.AuthBaseViewModel
 import com.jalasoft.routesapp.util.Response
 import com.jalasoft.routesapp.util.helpers.UserTypeLogin
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,14 +14,8 @@ import javax.inject.Inject
 @HiltViewModel
 class RegisterUserViewModel
 @Inject
-constructor(private val repository: UserRepository) : ViewModel() {
+constructor(repository: UserRepository) : AuthBaseViewModel(repository) {
     val registerUser: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>()
-    }
-    val errorMessage: MutableLiveData<String> by lazy {
-        MutableLiveData<String>()
-    }
-    val signInGoogleOrFacebook: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
     }
 
@@ -61,32 +54,6 @@ constructor(private val repository: UserRepository) : ViewModel() {
         }
     }
 
-    fun userAuthWithCredentials(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential, userData: User?) {
-        if (userData == null) {
-            registerUserWithGoogleOrFacebook(name, email, typeLogin, credential)
-        } else {
-            // update if array does not contain, and if contains sign in
-            singInWithCredentials(credential)
-        }
-    }
-
-    fun registerUserWithGoogleOrFacebook(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential) = viewModelScope.launch {
-        val result = repository.createUser("", name, email, typeLogin)
-        if (result.data?.isNotEmpty() == true) {
-            singInWithCredentials(credential)
-        }
-    }
-
-    fun singInWithCredentials(credential: AuthCredential) = viewModelScope.launch {
-        val result = repository.signInWithCredential(credential)
-        if (result.data?.isNotEmpty() == true) {
-            signInGoogleOrFacebook.value = true
-        } else {
-            signInGoogleOrFacebook.value = false
-            errorMessage.value = result.message
-        }
-    }
-
     fun validateFields(name: String, email: String, password: String, confirmPassword: String): String {
         var isValid = ""
         if (name.isEmpty()) {
@@ -115,10 +82,5 @@ constructor(private val repository: UserRepository) : ViewModel() {
     fun validateEmailNormal(name: String, email: String, password: String) = viewModelScope.launch {
         val isEmailRegistered = repository.validateEmailUser(email).data?.isEmpty() == true
         registerUserAuth(name, email, password, isEmailRegistered)
-    }
-
-    fun validateEmailGoogleOrFacebook(name: String, email: String, typeLogin: UserTypeLogin, credential: AuthCredential) = viewModelScope.launch {
-        val userData = repository.validateEmailUser(email).data?.first()
-        userAuthWithCredentials(name, email, typeLogin, credential, userData)
     }
 }

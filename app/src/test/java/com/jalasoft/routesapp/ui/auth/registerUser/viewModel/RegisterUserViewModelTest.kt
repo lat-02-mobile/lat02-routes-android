@@ -41,7 +41,7 @@ class RegisterUserViewModelTest : TestCase() {
     private var typeLogin: UserTypeLogin = UserTypeLogin.GOOGLE
     private var confirmPassword: String = "123456"
     private var users: MutableList<User> = mutableListOf(User())
-    private var user = User("asd", names, email, "0", 0, listOf(typeLogin.int), 1.0, 1.0)
+    private var user = User("asd", names, email, "0", 0, typeLogin.int, 1.0, 1.0)
 
     @Before
     public override fun setUp() {
@@ -94,43 +94,6 @@ class RegisterUserViewModelTest : TestCase() {
     }
 
     @Test
-    fun `Given a valid Google - Facebook Account in case the User is not registered it register in the database and SignIn`() {
-        runBlocking {
-            viewModel.validateEmailGoogleOrFacebook(names, email, typeLogin, credential)
-            val result = fakeManager.createUser(uid, names, email, typeLogin)
-            assertEquals(result.data.toString(), names)
-            val observer = Observer<Boolean> {}
-            try {
-                viewModel.signInGoogleOrFacebook.observeForever(observer)
-                val value = viewModel.signInGoogleOrFacebook.getOrAwaitValue()
-                assertTrue(value)
-            } finally {
-                viewModel.signInGoogleOrFacebook.removeObserver(observer)
-            }
-        }
-    }
-
-    @Test
-    fun `Given a valid Google - Facebook Account in case the User is registered it only SignIn`() {
-        users.add(user)
-        fakeManager = FakeDataUserManager(users)
-        viewModel = RegisterUserViewModel(fakeManager)
-
-        runBlocking {
-            viewModel.validateEmailGoogleOrFacebook(names, email, typeLogin, credential)
-
-            val observer = Observer<Boolean> {}
-            try {
-                viewModel.signInGoogleOrFacebook.observeForever(observer)
-                val value = viewModel.signInGoogleOrFacebook.getOrAwaitValue()
-                assertTrue(value)
-            } finally {
-                viewModel.signInGoogleOrFacebook.removeObserver(observer)
-            }
-        }
-    }
-
-    @Test
     fun `Given Email it verifies if is valid it register the UserAuth and The User in the database`() {
         runBlocking {
             viewModel.registerUserAuth(names, email, password, true)
@@ -174,85 +137,6 @@ class RegisterUserViewModelTest : TestCase() {
             } finally {
                 viewModel.registerUser.removeObserver(observer)
             }
-        }
-    }
-
-    @Test
-    fun `Given Google - Facebook Email is verify in case the Email is not register it register the User and SignIn`() {
-        runBlocking {
-            viewModel.userAuthWithCredentials(names, email, typeLogin, credential, user)
-            val result = fakeManager.createUser(uid, names, email, typeLogin)
-            assertEquals(result.data.toString(), names)
-
-            val observer = Observer<Boolean> {}
-            try {
-                viewModel.signInGoogleOrFacebook.observeForever(observer)
-                val value = viewModel.signInGoogleOrFacebook.getOrAwaitValue()
-                assertTrue(value)
-            } finally {
-                viewModel.signInGoogleOrFacebook.removeObserver(observer)
-            }
-        }
-    }
-
-    @Test
-    fun `Given Google - Facebook Email is verify in case the Email is registered it SignIn`() {
-        runBlocking {
-            viewModel.userAuthWithCredentials(names, email, typeLogin, credential, user)
-            val observer = Observer<Boolean> {}
-            try {
-                viewModel.signInGoogleOrFacebook.observeForever(observer)
-                val value = viewModel.signInGoogleOrFacebook.getOrAwaitValue()
-                assertTrue(value)
-            } finally {
-                viewModel.signInGoogleOrFacebook.removeObserver(observer)
-            }
-        }
-    }
-
-    @Test
-    fun `Given Google - Facebook Email is not register it register the User and SignIn`() {
-        runBlocking {
-            viewModel.registerUserWithGoogleOrFacebook(names, email, typeLogin, credential)
-            val result = fakeManager.createUser(uid, names, email, typeLogin)
-            assertEquals(result.data.toString(), names)
-
-            val observer = Observer<Boolean> {}
-            try {
-                viewModel.signInGoogleOrFacebook.observeForever(observer)
-                val value = viewModel.signInGoogleOrFacebook.getOrAwaitValue()
-                assertTrue(value)
-            } finally {
-                viewModel.signInGoogleOrFacebook.removeObserver(observer)
-            }
-        }
-    }
-
-    @Test
-    fun `Given Google - Facebook Email is not register and it register the user or Email is registered it SignIn`() {
-        runBlocking {
-            viewModel.singInWithCredentials(credential)
-
-            val observer = Observer<Boolean> {}
-            try {
-                viewModel.signInGoogleOrFacebook.observeForever(observer)
-                val value = viewModel.signInGoogleOrFacebook.getOrAwaitValue()
-                assertTrue(value)
-            } finally {
-                viewModel.signInGoogleOrFacebook.removeObserver(observer)
-            }
-        }
-    }
-
-    @Test
-    fun `Given Google - Facebook is verified and it is not registered it register the UserAuth and the User in the database`() {
-        runBlocking {
-            viewModel.validateEmailNormal(names, email, password)
-            val resultAuth = fakeManager.createUserAuth(email, password)
-            val result = fakeManager.createUser(uid, names, email, typeLogin)
-
-            assertEquals(resultAuth.data.toString(), email)
-            assertEquals(result.data.toString(), names)
         }
     }
 

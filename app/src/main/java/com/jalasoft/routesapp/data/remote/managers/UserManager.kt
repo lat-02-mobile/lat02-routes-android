@@ -20,7 +20,7 @@ class UserManager(private val authManager: AuthFirebaseManager, private val fire
     override suspend fun createUser(uid: String, name: String, email: String, typeLogin: UserTypeLogin): Response<String> {
         val dateStr = DateHelper.getCurrentDate()
         val date = DateHelper.convertDateToDouble(dateStr)
-        val user = User(uid, name, email, "", UserType.NORMAL.int, listOf(typeLogin.int), date, date)
+        val user = User(uid, name, email, "", UserType.NORMAL.int, typeLogin.int, date, date)
         return firebaseManager.addDocument(uid, user, FirebaseCollections.Users)
     }
 
@@ -28,7 +28,7 @@ class UserManager(private val authManager: AuthFirebaseManager, private val fire
         return authManager.createUserAuth(email, password)
     }
 
-    override suspend fun signInWithCredential(credential: AuthCredential): Response<String> {
+    override suspend fun signInWithCredential(credential: AuthCredential): Response<String?> {
         return authManager.signInUserAuth(credential)
     }
 
