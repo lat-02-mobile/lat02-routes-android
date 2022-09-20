@@ -6,5 +6,5 @@ import com.jalasoft.routesapp.data.api.models.gmaps.StartLocation
 import com.jalasoft.routesapp.util.Response
 
 interface DirectionsRepository {
-    suspend fun getDirections(startPoint: StartLocation, endPoint: EndLocation): Response<List<Route>>
+    suspend fun getDirections(startLocation: StartLocation, endLocation: EndLocation): Response<List<Route>>
 }

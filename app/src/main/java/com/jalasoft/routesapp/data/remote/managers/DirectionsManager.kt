@@ -9,7 +9,7 @@ import com.jalasoft.routesapp.data.remote.interfaces.DirectionsRepository
 import com.jalasoft.routesapp.util.Response
 import java.lang.Exception
 
-class DirectionsManager(val service: IGmapsDirections) : DirectionsRepository {
+class DirectionsManager(private val service: IGmapsDirections) : DirectionsRepository {
     override suspend fun getDirections(
         startLocation: StartLocation,
         endLocation: EndLocation

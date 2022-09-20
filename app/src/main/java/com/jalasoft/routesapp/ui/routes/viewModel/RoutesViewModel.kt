@@ -14,6 +14,7 @@ import com.jalasoft.routesapp.data.model.remote.AvailableTransport
 import com.jalasoft.routesapp.data.model.remote.LineCategoryIcons
 import com.jalasoft.routesapp.data.remote.interfaces.DirectionsRepository
 import com.jalasoft.routesapp.data.model.remote.LineInfo
+import com.jalasoft.routesapp.data.model.remote.LineRoutePath
 import com.jalasoft.routesapp.data.remote.interfaces.RouteRepository
 import com.jalasoft.routesapp.util.algorithm.RouteCalculator
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -66,7 +67,7 @@ constructor(private val repository: RouteRepository, private val gDirectionsRepo
             "https://firebasestorage.googleapis.com/v0/b/routes-app-8c8e4.appspot.com/o/lineCategories%2Fbus_white.png?alt=media&token=980b407c-2fc7-4fd2-b8da-a5504a7c7f1c",
             "https://firebasestorage.googleapis.com/v0/b/routes-app-8c8e4.appspot.com/o/lineCategories%2Fbus_black.png?alt=media&token=21c3ba52-27ed-499a-933a-a31c8f2062ba"
         )
-        val line1 = LineRoutePath("Line 1", null, "Bus", "1", points1, start1, end1, stops1, lineCategoryIcons1, "#67F5ED", 3.0)
+        val line1 = LineRoutePath("", "Line 1", "Bus", "1", points1, start1, end1, stops1, lineCategoryIcons1, "#67F5ED", 3.0)
 
         val start2 = RouteAlgorithmFakeData.coordinatesToLocation(-16.5255314, -68.1254204)
         val end2 = RouteAlgorithmFakeData.coordinatesToLocation(-16.5241937, -68.1204527)
@@ -78,7 +79,7 @@ constructor(private val repository: RouteRepository, private val gDirectionsRepo
             "https://firebasestorage.googleapis.com/v0/b/routes-app-8c8e4.appspot.com/o/lineCategories%2Fmini_bus_black.png?alt=media&token=cdda76ab-ec71-42b7-a10a-a665d6b03155"
         )
 
-        val line2 = LineRoutePath("246", null, "Mini", "2", points2, start2, end2, stops2, lineCategoryIcons2, "#6495ED", 3.2)
+        val line2 = LineRoutePath("", "246", "Mini", "2", points2, start2, end2, stops2, lineCategoryIcons2, "#6495ED", 3.2)
 
         val start3 = RouteAlgorithmFakeData.coordinatesToLocation(-16.5206262, -68.1227148)
         val end3 = RouteAlgorithmFakeData.coordinatesToLocation(-16.5244779, -68.1253892)
@@ -92,7 +93,7 @@ constructor(private val repository: RouteRepository, private val gDirectionsRepo
             "https://firebasestorage.googleapis.com/v0/b/routes-app-8c8e4.appspot.com/o/lineCategories%2Fsubway_black.png?alt=media&token=7f8c755c-da68-4b85-8bc1-1df26ecb92d8"
         )
 
-        val line3 = LineRoutePath("LA", null, "Metro", "3", points3, start3, end3, stops3, lineCategoryIcons3, "#533483", 3.4)
+        val line3 = LineRoutePath("", "LA", "Metro", "3", points3, start3, end3, stops3, lineCategoryIcons3, "#533483", 3.4)
 
         val lines = listOf(line1, line2, line3)
 
