@@ -5,7 +5,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.GeoPoint
 import com.jalasoft.routesapp.util.helpers.Constants
-import com.jalasoft.routesapp.util.helpers.GoogleMapsHelper
+import com.jalasoft.routesapp.util.helpers.LocationHelper.geoPointToLocation
 import kotlinx.coroutines.tasks.await
 import java.io.Serializable
 import java.util.*
@@ -20,7 +20,7 @@ data class TourPoint(
 ) : Serializable {
 
     suspend fun tourPointToTourPointPath(): TourPointPath {
-        val destination = destination?.let { GoogleMapsHelper.geoPointToLocation(it) }
+        val destination = destination?.let { geoPointToLocation(it) }
         var city: DocumentSnapshot?
         var cityId = ""
         idCity?.let { docRef ->

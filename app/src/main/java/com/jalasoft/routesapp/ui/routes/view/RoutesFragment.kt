@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.data.model.remote.LineInfo
-import com.jalasoft.routesapp.data.model.remote.LineRoutePath
+import com.jalasoft.routesapp.data.model.remote.LineRouteInfo
 import com.jalasoft.routesapp.databinding.FragmentRoutesBinding
 import com.jalasoft.routesapp.ui.routes.adapters.RoutesAdapter
 import com.jalasoft.routesapp.ui.routes.viewModel.RoutesViewModel
@@ -25,8 +25,7 @@ class RoutesFragment : Fragment(), RoutesAdapter.IRoutesListener {
     private val binding get() = _binding!!
     private val viewModel: RoutesViewModel by viewModels()
     private lateinit var alertDialog: AlertDialog.Builder
-    private lateinit var lineRoutePath: LineRoutePath
-    private var positionLineRoutePath: Int = 0
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -59,28 +58,6 @@ class RoutesFragment : Fragment(), RoutesAdapter.IRoutesListener {
             (binding.recyclerRoutes.adapter as RoutesAdapter).updateList(it.toMutableList())
         }
 
-        viewModel.lineRouteList.observe(viewLifecycleOwner) {
-            when {
-                it.size > 1 -> {
-                    var routeListName = arrayOf<String> ()
-                    for (i in it.indices) {
-                        routeListName += (it[i].name)
-                    }
-                    alertDialog.setItems(routeListName) { dialog, position ->
-                        dialog.dismiss()
-                        lineRoutePath = it[position]
-                        positionLineRoutePath = position
-                        viewModel.cleanLineRouteList()
-                        goToSelectedRoute(lineRoutePath, positionLineRoutePath)
-                    }
-                    val dialog = alertDialog.create()
-                    dialog.show()
-                }
-                it.size == 1 -> {
-                    goToSelectedRoute(it[0], 0)
-                }
-            }
-        }
         viewModel.fetchLines(requireContext())
     }
 
@@ -89,14 +66,29 @@ class RoutesFragment : Fragment(), RoutesAdapter.IRoutesListener {
         binding.recyclerRoutes.adapter = RoutesAdapter(mutableListOf(), this)
     }
 
-    override fun fetchLineRoute(route: LineInfo, position: Int) {
-        viewModel.fetchLineRoute(route.idLine)
+    override fun onLineTap(route: LineInfo) {
+        when {
+            route.routePaths.size > 1 -> {
+                val routeListName = route.routePaths.map {
+                    it.name
+                }
+                alertDialog.setItems(routeListName.toTypedArray()) { dialog, position ->
+                    val lineRouteInfo = route.routePaths[position]
+                    goToSelectedRoute(lineRouteInfo)
+                    dialog.dismiss()
+                }
+                val dialog = alertDialog.create()
+                dialog.show()
+            }
+            route.routePaths.size == 1 -> {
+                goToSelectedRoute(route.routePaths[0])
+            }
+        }
     }
 
-    private fun goToSelectedRoute(route: LineRoutePath, position: Int) {
+    private fun goToSelectedRoute(route: LineRouteInfo) {
         val bundle = Bundle()
         bundle.putSerializable(Constants.BUNDLE_KEY_ROUTE_SELECTED_DATA, route)
-        bundle.putSerializable(Constants.BUNDLE_KEY_ROUTE_SELECTED_POSITION, position)
         findNavController().navigate(R.id.routeSelected, bundle)
     }
 }

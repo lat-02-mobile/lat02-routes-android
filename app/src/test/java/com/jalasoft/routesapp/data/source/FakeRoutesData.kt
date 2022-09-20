@@ -4,8 +4,7 @@ import android.location.Location
 import android.location.LocationManager
 import com.google.android.gms.maps.model.LatLng
 import com.jalasoft.routesapp.data.model.remote.LineInfo
-import com.jalasoft.routesapp.data.model.remote.LineRoutePath
-import com.jalasoft.routesapp.util.helpers.GoogleMapsHelper
+import com.jalasoft.routesapp.data.model.remote.LineRouteInfo
 
 object FakeRoutesData {
     private val points1Array = listOf(
@@ -70,33 +69,44 @@ object FakeRoutesData {
         listOf(-16.5232053, -68.1245996),
         listOf(-16.5244779, -68.1253892)
     )
-    private const val idLine1 = "aqafwegtfe12"
-    private const val idLine2 = "gtgglvmsbvk1"
-    private const val idLine3 = "vmbrormfkjg9"
+    const val idLine1 = "aqafwegtfe12"
+    const val line1Name = "Line 1"
+    const val line1Category = "Bus"
+    const val line1Route1Name = "Route A"
 
-    private val start1 = GoogleMapsHelper.coordinatesToLocation(-16.52035351419114, -68.12580890707301)
-    private val end1 = GoogleMapsHelper.coordinatesToLocation(-16.524285569842718, -68.12298370418992)
+    const val idLine2 = "gtgglvmsbvk1"
+    const val line2Name = "246"
+    const val line2Category = "Mini"
+    const val line2Route1Name = "Alternative Route"
+
+    const val idLine3 = "vmbrormfkjg9"
+    const val line3Name = "LA"
+    const val line3Category = "Metro"
+    const val line3Route1Name = "Route B"
+
+    private val start1 = coordinatesToLocation(-16.52035351419114, -68.12580890707301)
+    private val end1 = coordinatesToLocation(-16.524285569842718, -68.12298370418992)
     private val points1 = arrayToMutableListOfLocation(points1Array)
     private val stops1 = arrayToMutableListOfLocation(stops1Array)
-    private val line1Info = LineInfo("Line 1", null, "Bus", idLine1)
-    private val line1 = LineRoutePath("Line 1", null, "Bus", idLine1, points1, start1, end1, stops1)
+    private val line1Info = LineInfo(idLine1, line1Name, true, line1Category)
+    private val line1RouteInfo = LineRouteInfo(line1Route1Name, idLine1, points1, start1, end1, stops1)
 
-    private val start2 = GoogleMapsHelper.coordinatesToLocation(-16.5255314, -68.1254204)
-    private val end2 = GoogleMapsHelper.coordinatesToLocation(-16.5241937, -68.1204527)
+    private val start2 = coordinatesToLocation(-16.5255314, -68.1254204)
+    private val end2 = coordinatesToLocation(-16.5241937, -68.1204527)
     private val points2 = arrayToMutableListOfLocation(points2Array)
     private val stops2 = arrayToMutableListOfLocation(stops2Array)
-    private val line2Info = LineInfo("Line 2", null, "Mini", idLine2)
-    private val line2 = LineRoutePath("Line 2", null, "Mini", idLine2, points2, start2, end2, stops2)
+    private val line2Info = LineInfo(idLine2, line2Name, true, line2Category)
+    private val line2RouteInfo = LineRouteInfo(line2Route1Name, idLine2, points2, start2, end2, stops2)
 
-    private val start3 = GoogleMapsHelper.coordinatesToLocation(-16.5206262, -68.1227148)
-    private val end3 = GoogleMapsHelper.coordinatesToLocation(-16.5244779, -68.1253892)
+    private val start3 = coordinatesToLocation(-16.5206262, -68.1227148)
+    private val end3 = coordinatesToLocation(-16.5244779, -68.1253892)
     private val points3 = arrayToMutableListOfLocation(points3Array)
     private val stops3 = arrayToMutableListOfLocation(stops3Array)
-    private val line3Info = LineInfo("LA", null, "Metro", idLine3)
-    private val line3 = LineRoutePath("LA", null, "Metro", idLine3, points3, start3, end3, stops3)
+    private val line3Info = LineInfo(idLine3, line3Name, true, line3Category)
+    private val line3RouteInfo = LineRouteInfo(line3Route1Name, idLine3, points3, start3, end3, stops3)
 
     val lineInfo = listOf(line1Info, line2Info, line3Info)
-    val line = listOf(line1, line2, line3)
+    val lineRouteInfo = listOf(line1RouteInfo, line2RouteInfo, line3RouteInfo)
 
     val directionsPointLst = listOf(
         LatLng(-16.52469, -68.12539000000001),
@@ -108,19 +118,19 @@ object FakeRoutesData {
         LatLng(-16.525540000000003, -68.1254)
     )
 
-    private fun coordinatesToLocation(lat: Double, lon: Double): Location {
+    fun arrayToMutableListOfLocation(list: List<List<Double>>): MutableList<Location> {
+        val points: MutableList<Location> = mutableListOf()
+        list.forEach {
+            val location = coordinatesToLocation(it[0], it[1])
+            points.add(location)
+        }
+        return points
+    }
+
+    fun coordinatesToLocation(lat: Double, lon: Double): Location {
         val location = Location(LocationManager.NETWORK_PROVIDER)
         location.longitude = lon
         location.latitude = lat
         return location
-    }
-
-    private fun arrayToMutableListOfLocation(list: List<List<Double>>): MutableList<Location> {
-        val points: MutableList<Location> = mutableListOf()
-        list.forEach {
-            val location = GoogleMapsHelper.coordinatesToLocation(it[0], it[1])
-            points.add(location)
-        }
-        return points
     }
 }

@@ -27,7 +27,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.jalasoft.routesapp.R
-import com.jalasoft.routesapp.data.model.remote.LineRoutePath
+import com.jalasoft.routesapp.data.model.remote.LineRouteInfo
 import com.jalasoft.routesapp.databinding.FragmentRouteSelectedBinding
 import com.jalasoft.routesapp.util.helpers.Constants
 import com.jalasoft.routesapp.util.helpers.GoogleMapsHelper
@@ -37,8 +37,7 @@ class RouteSelectedFragment : Fragment(), OnMapReadyCallback {
     private val binding get() = _binding!!
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private var mMap: GoogleMap? = null
-    private var route: LineRoutePath? = null
-    private var positionSelected = 0
+    private var route: LineRouteInfo? = null
     private val requestFINELOCATIONPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             checkPermissions(isGranted)
@@ -59,8 +58,7 @@ class RouteSelectedFragment : Fragment(), OnMapReadyCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        route = arguments?.getSerializable(Constants.BUNDLE_KEY_ROUTE_SELECTED_DATA) as LineRoutePath
-        positionSelected = arguments?.getInt(Constants.BUNDLE_KEY_ROUTE_SELECTED_POSITION) ?: 0
+        route = arguments?.getSerializable(Constants.BUNDLE_KEY_ROUTE_SELECTED_DATA) as LineRouteInfo
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         val mapFragment = childFragmentManager.findFragmentById(R.id.map_route_fragment) as? SupportMapFragment

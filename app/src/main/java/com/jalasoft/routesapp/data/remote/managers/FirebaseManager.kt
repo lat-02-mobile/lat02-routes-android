@@ -9,14 +9,11 @@ import com.jalasoft.routesapp.util.helpers.FirebaseCollections
 import kotlinx.coroutines.tasks.await
 
 class FirebaseManager(val db: FirebaseFirestore) : FirebaseDataSource {
-    fun getDocId(collection: FirebaseCollections): String {
-        return db.collection(collection.toString()).document().id
-    }
 
-    override suspend fun <T : Any> addDocument(document: T, collection: FirebaseCollections): Response<String> {
+    override suspend fun <T : Any> addDocument(documentId: String, document: T, collection: FirebaseCollections): Response<String> {
         return try {
-            val result = db.collection(collection.toString()).add(document).await()
-            return Response.Success(result.id)
+            db.collection(collection.toString()).document(documentId).set(document).await()
+            return Response.Success(documentId)
         } catch (e: Exception) {
             Response.Error(e.message.toString(), null)
         }

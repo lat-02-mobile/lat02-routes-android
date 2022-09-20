@@ -111,22 +111,33 @@ class LoginFragment : Fragment() {
             showProgress(false)
         }
         val resultObserver = Observer<Boolean> { value ->
+            showProgress(false)
             if (value) {
-                showProgress(false)
                 binding.loginEmail.setText("")
                 binding.loginPassword.setText("")
-                val intent = Intent(activity, MainActivity::class.java)
-                activity?.startActivity(intent)
-                activity?.finish()
-                Toast.makeText(context, RoutesAppApplication.resource?.getString(R.string.login_success).toString(), Toast.LENGTH_SHORT).show()
+                val phoneNumber = FirebaseAuth.getInstance().currentUser?.phoneNumber
+                if (phoneNumber == null) {
+                    findNavController().navigate(R.id.action_loginFragment_to_phoneAuthenticationFragment)
+                } else {
+                    val intent = Intent(activity, MainActivity::class.java)
+                    activity?.startActivity(intent)
+                    activity?.finish()
+                    Toast.makeText(context, RoutesAppApplication.resource?.getString(R.string.login_success).toString(), Toast.LENGTH_SHORT).show()
+                }
             }
         }
         val googleAndFacebookObserver = Observer<Boolean> { value ->
+            showProgress(false)
             if (value) {
-                val intent = Intent(activity, MainActivity::class.java)
-                activity?.startActivity(intent)
-                activity?.finish()
-                showProgress(false)
+                val phoneNumber = FirebaseAuth.getInstance().currentUser?.phoneNumber
+                if (phoneNumber == null) {
+                    findNavController().navigate(R.id.action_loginFragment_to_phoneAuthenticationFragment)
+                } else {
+                    val intent = Intent(activity, MainActivity::class.java)
+                    activity?.startActivity(intent)
+                    activity?.finish()
+                    Toast.makeText(context, RoutesAppApplication.resource?.getString(R.string.login_success).toString(), Toast.LENGTH_SHORT).show()
+                }
             }
         }
         viewModel.errorMessage.observe(this, errorObserver)
@@ -166,7 +177,7 @@ class LoginFragment : Fragment() {
             result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-            FacebookGoogleAuthUtil.handleGoogleResults(task) { displayName, email, userTypeLogin, credential ->
+            FacebookGoogleAuthUtil.handleGoogleResults(task, googleSingInClient) { displayName, email, userTypeLogin, credential ->
                 updateUI(displayName, email, userTypeLogin, credential)
             }
         }
