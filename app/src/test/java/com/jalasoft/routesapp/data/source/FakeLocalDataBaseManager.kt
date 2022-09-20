@@ -6,7 +6,7 @@ import com.jalasoft.routesapp.data.model.local.LineCategoriesEntity
 import com.jalasoft.routesapp.data.model.local.LineEntity
 import com.jalasoft.routesapp.data.model.local.TourPointEntity
 import com.jalasoft.routesapp.data.model.local.TourPointsCategoryEntity
-import com.jalasoft.routesapp.data.model.remote.LineRoutePath
+import com.jalasoft.routesapp.data.model.remote.LineRouteInfo
 
 class FakeLocalDataBaseManager : LocalDataBaseRepository {
     override fun addLocalLine(line: LineEntity) {
@@ -15,7 +15,7 @@ class FakeLocalDataBaseManager : LocalDataBaseRepository {
     override fun addLocalLineCategory(lineCategory: LineCategoriesEntity) {
     }
 
-    override fun addLocalLineRoute(lineRoutePath: List<LineRoutePath>) {
+    override fun addLocalLineRoute(lineRouteInfo: List<LineRouteInfo>) {
     }
 
     override fun addLocalRoutePoints(idLineRoute: String, routePoints: List<Location>) {

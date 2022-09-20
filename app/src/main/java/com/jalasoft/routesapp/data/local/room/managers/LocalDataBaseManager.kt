@@ -3,7 +3,7 @@ package com.jalasoft.routesapp.data.local.room.managers
 import com.jalasoft.routesapp.data.local.room.db.RoutesDB
 import com.jalasoft.routesapp.data.local.room.interfaces.LocalDataBaseRepository
 import com.jalasoft.routesapp.data.model.local.*
-import com.jalasoft.routesapp.data.model.remote.LineRoutePath
+import com.jalasoft.routesapp.data.model.remote.LineRouteInfo
 
 class LocalDataBaseManager(private val localRoutesDB: RoutesDB) : LocalDataBaseRepository {
     override fun addLocalLine(line: LineEntity) {
@@ -14,8 +14,8 @@ class LocalDataBaseManager(private val localRoutesDB: RoutesDB) : LocalDataBaseR
         localRoutesDB.lineCategoryDao().addLineCategory(lineCategory)
     }
 
-    override fun addLocalLineRoute(lineRoutePath: List<LineRoutePath>) {
-        for (item in lineRoutePath) {
+    override fun addLocalLineRoute(lineRouteInfo: List<LineRouteInfo>) {
+        for (item in lineRouteInfo) {
             val start = Location(item.start?.latitude ?: 0.0, item.start?.longitude ?: 0.0)
             val end = Location(item.end?.latitude ?: 0.0, item.end?.longitude ?: 0.0)
             val lineLocal = LineRouteEntity(item.id, item.idLine, item.name, start, end)

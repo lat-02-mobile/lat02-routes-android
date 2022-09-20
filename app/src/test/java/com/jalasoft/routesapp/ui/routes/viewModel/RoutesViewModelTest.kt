@@ -75,18 +75,4 @@ class RoutesViewModelTest : TestCase() {
             assertEquals(false, true)
         }
     }
-
-    @Test
-    fun `Given the first call for fetching the line route depending on the id, then returns all the routes for the line selected `() {
-        viewModel.fetchLineRoute("fakeId")
-        assertEquals(viewModel.lineRouteList.value, FakeRoutesData.line)
-    }
-
-    @Test
-    fun `Given the first call for fetching the line route depending on the id, the function will clean the list`() {
-        viewModel.fetchLineRoute("fakeId")
-        assertTrue(viewModel.lineRouteList.value!!.isNotEmpty())
-        viewModel.cleanLineRouteList()
-        assertEquals(viewModel.lineRouteList.value, null)
-    }
 }

@@ -51,7 +51,7 @@ class SplashScreenViewModelTest : TestCase() {
 
         try {
             viewModel.dataSaved.observeForever(observer)
-            viewModel.getDataAndSafeLocally(context)
+            viewModel.getDataAndSaveLocally(context)
 
             val value = viewModel.dataSaved.getOrAwaitValue()
             assertTrue(value)

@@ -41,7 +41,7 @@ class SplashScreenFragment : Fragment() {
         val text = RoutesAppApplication.resource?.getString(R.string.loading_data)
         progressDialog.start(text!!)
 
-        viewModel.getDataAndSafeLocally(requireContext())
+        viewModel.getDataAndSaveLocally(requireContext())
         viewModel.dataSaved.observe(viewLifecycleOwner) {
             if (it) {
                 progressDialog.stop()

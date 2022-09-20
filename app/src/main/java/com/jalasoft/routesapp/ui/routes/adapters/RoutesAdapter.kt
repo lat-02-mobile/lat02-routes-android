@@ -9,7 +9,7 @@ import com.jalasoft.routesapp.databinding.RouteItemBinding
 class RoutesAdapter(var routeList: MutableList<LineInfo>, val listener: IRoutesListener) : RecyclerView.Adapter<RoutesAdapter.RouteViewHolder>() {
 
     interface IRoutesListener {
-        fun fetchLineRoute(route: LineInfo, position: Int)
+        fun onLineTap(route: LineInfo)
     }
 
     class RouteViewHolder(val binding: RouteItemBinding) : RecyclerView.ViewHolder(binding.root)
@@ -24,7 +24,7 @@ class RoutesAdapter(var routeList: MutableList<LineInfo>, val listener: IRoutesL
         val route = routeList[position]
         holder.binding.routeItem = route
         holder.binding.container.setOnClickListener {
-            listener.fetchLineRoute(route, position)
+            listener.onLineTap(route)
         }
     }
 

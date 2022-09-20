@@ -17,7 +17,7 @@ class SplashScreenViewModel
 constructor(private val linesRepository: RouteRepository, private val tourPointsRepository: TourPointRepository, private val localDB: LocalDataBaseRepository) : ViewModel() {
     var dataSaved: MutableLiveData<Boolean> = MutableLiveData()
 
-    fun getDataAndSafeLocally(context: Context) = viewModelScope.launch {
+    fun getDataAndSaveLocally(context: Context) = viewModelScope.launch {
         val lines = linesRepository.getAllLinesToSaveLocally(context)
         if (lines.isNotEmpty()) {
             for (item in lines) {
