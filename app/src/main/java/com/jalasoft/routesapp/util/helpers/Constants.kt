@@ -4,4 +4,5 @@ object Constants {
     const val BUNDLE_KEY_ROUTE_SELECTED_DATA = "routeSelected"
     const val BUNDLE_KEY_ROUTE_SELECTED_POSITION = "routeSelectedPosition"
     const val CURRENT_SPANISH_LANGUAGE = "spa"
+    const val POLYLINE_PADDING = 250
 }

@@ -135,6 +135,7 @@ object RouteAlgorithmFakeData {
             null,
             mutableListOf(
                 LineRoutePath(
+                    "1",
                     "Line 1",
                     null,
                     "Bus",
@@ -150,6 +151,7 @@ object RouteAlgorithmFakeData {
             3,
             mutableListOf(
                 LineRoutePath(
+                    "2",
                     "LA",
                     null,
                     "Metro",
@@ -160,6 +162,7 @@ object RouteAlgorithmFakeData {
                     arrayToMutableListOfLocation(stops4_2_1).toList()
                 ),
                 LineRoutePath(
+                    "3",
                     "246",
                     null,
                     "Mini",
@@ -229,6 +232,7 @@ object RouteAlgorithmFakeData {
             4,
             mutableListOf(
                 LineRoutePath(
+                    "4",
                     "Line 1",
                     null,
                     "Bus",
@@ -239,6 +243,7 @@ object RouteAlgorithmFakeData {
                     arrayToMutableListOfLocation(stops2_1_1).toList()
                 ),
                 LineRoutePath(
+                    "5",
                     "246",
                     null,
                     "Mini",
@@ -254,6 +259,7 @@ object RouteAlgorithmFakeData {
             2,
             mutableListOf(
                 LineRoutePath(
+                    "6",
                     "LA",
                     null,
                     "Metro",
@@ -264,6 +270,7 @@ object RouteAlgorithmFakeData {
                     arrayToMutableListOfLocation(stops2_2_1).toList()
                 ),
                 LineRoutePath(
+                    "7",
                     "246",
                     null,
                     "Mini",

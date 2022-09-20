@@ -93,6 +93,9 @@
     <string name="end_of_route">Fin de la Ruta</string>
     <string name="bus_stop">Parada de Bus</string>
 
+    <string name="recommended"> (recomendada)</string>
+    <string name="route">Ruta</string>
+    <string name="minute">min</string>
     <!-- Select route dialog -->
     <string name="select_route">Seleccione una ruta</string>
     <string name="no_route">No se encontro ninguna ruta</string>
