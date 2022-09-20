@@ -2,7 +2,7 @@ package com.jalasoft.routesapp.data.source
 
 import android.content.Context
 import com.jalasoft.routesapp.data.model.remote.LineInfo
-import com.jalasoft.routesapp.data.model.remote.LineRoutePath
+import com.jalasoft.routesapp.data.model.remote.LineRouteInfo
 import com.jalasoft.routesapp.data.remote.interfaces.RouteRepository
 
 class FakeRoutesManager : RouteRepository {
@@ -10,7 +10,9 @@ class FakeRoutesManager : RouteRepository {
         return FakeRoutesData.lineInfo
     }
 
-    override suspend fun getLineRouteById(idLine: String): List<LineRoutePath> {
-        return FakeRoutesData.line
+    override suspend fun getLineRouteById(idLine: String): List<LineRouteInfo> {
+        return FakeRoutesData.lineRouteInfo.filter {
+            it.idLine == idLine
+        }
     }
 }

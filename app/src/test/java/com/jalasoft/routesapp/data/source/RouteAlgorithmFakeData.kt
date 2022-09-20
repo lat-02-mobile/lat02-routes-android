@@ -1,9 +1,10 @@
 package com.jalasoft.routesapp.data.source
 
 import android.location.Location
-import android.location.LocationManager
 import com.jalasoft.routesapp.data.model.remote.AvailableTransport
 import com.jalasoft.routesapp.data.model.remote.LineRoutePath
+import com.jalasoft.routesapp.data.source.FakeRoutesData.arrayToMutableListOfLocation
+import com.jalasoft.routesapp.data.source.FakeRoutesData.coordinatesToLocation
 
 object RouteAlgorithmFakeData {
 
@@ -126,19 +127,16 @@ object RouteAlgorithmFakeData {
         listOf(-16.5255314, -68.1254204),
         listOf(-16.5246006,	-68.1232156)
     )
-    private const val idLine1 = "aqafwegtfe12"
-    private const val idLine2 = "gtgglvmsbvk1"
-    private const val idLine3 = "vmbrormfkjg9"
 
     val result1_4 = mutableListOf(
         AvailableTransport(
             null,
             mutableListOf(
                 LineRoutePath(
-                    "Line 1",
-                    null,
-                    "Bus",
-                    idLine1,
+                    FakeRoutesData.idLine1,
+                    FakeRoutesData.line1Name,
+                    FakeRoutesData.line1Category,
+                    FakeRoutesData.line1Route1Name,
                     arrayToMutableListOfLocation(points4_1).toList(),
                     coordinatesToLocation(-16.52035351419114, -68.12580890707301),
                     coordinatesToLocation(-16.524285569842718, -68.12298370418992),
@@ -150,20 +148,20 @@ object RouteAlgorithmFakeData {
             3,
             mutableListOf(
                 LineRoutePath(
-                    "LA",
-                    null,
-                    "Metro",
-                    idLine2,
+                    FakeRoutesData.idLine3,
+                    FakeRoutesData.line3Name,
+                    FakeRoutesData.line3Category,
+                    FakeRoutesData.line3Route1Name,
                     arrayToMutableListOfLocation(points4_2_1).toList(),
                     coordinatesToLocation(-16.5206262, -68.1227148),
                     coordinatesToLocation(-16.5244779, -68.1253892),
                     arrayToMutableListOfLocation(stops4_2_1).toList()
                 ),
                 LineRoutePath(
-                    "246",
-                    null,
-                    "Mini",
-                    idLine3,
+                    FakeRoutesData.idLine2,
+                    FakeRoutesData.line2Name,
+                    FakeRoutesData.line2Category,
+                    FakeRoutesData.line2Route1Name,
                     arrayToMutableListOfLocation(points4_2_2).toList(),
                     coordinatesToLocation(-16.5255314, -68.1254204),
                     coordinatesToLocation(-16.5241937, -68.1204527),
@@ -229,20 +227,20 @@ object RouteAlgorithmFakeData {
             4,
             mutableListOf(
                 LineRoutePath(
-                    "Line 1",
-                    null,
-                    "Bus",
-                    idLine1,
+                    FakeRoutesData.idLine1,
+                    FakeRoutesData.line1Name,
+                    FakeRoutesData.line1Category,
+                    FakeRoutesData.line1Route1Name,
                     arrayToMutableListOfLocation(points2_1_1).toList(),
                     coordinatesToLocation(-16.52035351419114, -68.12580890707301),
                     coordinatesToLocation(-16.524285569842718, -68.12298370418992),
                     arrayToMutableListOfLocation(stops2_1_1).toList()
                 ),
                 LineRoutePath(
-                    "246",
-                    null,
-                    "Mini",
-                    idLine1,
+                    FakeRoutesData.idLine2,
+                    FakeRoutesData.line2Name,
+                    FakeRoutesData.line2Category,
+                    FakeRoutesData.line2Route1Name,
                     arrayToMutableListOfLocation(points2_1_2).toList(),
                     coordinatesToLocation(-16.5255314,	-68.1254204),
                     coordinatesToLocation(-16.5241937,	-68.1204527),
@@ -254,20 +252,20 @@ object RouteAlgorithmFakeData {
             2,
             mutableListOf(
                 LineRoutePath(
-                    "LA",
-                    null,
-                    "Metro",
-                    idLine1,
+                    FakeRoutesData.idLine3,
+                    FakeRoutesData.line3Name,
+                    FakeRoutesData.line3Category,
+                    FakeRoutesData.line3Route1Name,
                     arrayToMutableListOfLocation(points2_2_1).toList(),
                     coordinatesToLocation(-16.5206262, -68.1227148),
                     coordinatesToLocation(-16.5244779, -68.1253892),
                     arrayToMutableListOfLocation(stops2_2_1).toList()
                 ),
                 LineRoutePath(
-                    "246",
-                    null,
-                    "Mini",
-                    idLine1,
+                    FakeRoutesData.idLine2,
+                    FakeRoutesData.line2Name,
+                    FakeRoutesData.line2Category,
+                    FakeRoutesData.line2Route1Name,
                     arrayToMutableListOfLocation(points2Array).toList(),
                     coordinatesToLocation(-16.5255314,	-68.1254204),
                     coordinatesToLocation(-16.5241937,	-68.1204527),
@@ -276,22 +274,6 @@ object RouteAlgorithmFakeData {
             )
         )
     )
-
-    fun coordinatesToLocation(lat: Double, lon: Double): Location {
-        val location = Location(LocationManager.NETWORK_PROVIDER)
-        location.longitude = lon
-        location.latitude = lat
-        return location
-    }
-
-    fun arrayToMutableListOfLocation(list: List<List<Double>>): MutableList<Location> {
-        val points: MutableList<Location> = mutableListOf()
-        list.forEach {
-            val location = coordinatesToLocation(it[0], it[1])
-            points.add(location)
-        }
-        return points
-    }
 
     fun compareResults(result: MutableList<AvailableTransport>, resultToCompare: MutableList<AvailableTransport>): Boolean {
         if (result.size != resultToCompare.size) return false
@@ -303,7 +285,8 @@ object RouteAlgorithmFakeData {
                 if (!compareLocations(linePath.end, resultToCompare[i].transports[j].end) ||
                     !compareLocations(linePath.start, resultToCompare[i].transports[j].start) ||
                     linePath.category != resultToCompare[i].transports[j].category ||
-                    linePath.name != resultToCompare[i].transports[j].name ||
+                    linePath.lineName != resultToCompare[i].transports[j].lineName ||
+                    linePath.routeName != resultToCompare[i].transports[j].routeName ||
                     linePath.routePoints.size != resultToCompare[i].transports[j].routePoints.size ||
                     linePath.stops.size != resultToCompare[i].transports[j].stops.size
                 ) return false

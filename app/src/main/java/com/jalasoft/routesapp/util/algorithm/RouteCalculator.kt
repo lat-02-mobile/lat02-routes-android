@@ -4,6 +4,9 @@ import android.location.Location
 import com.jalasoft.routesapp.data.model.remote.AvailableTransport
 import com.jalasoft.routesapp.data.model.remote.LineRoutePath
 import com.jalasoft.routesapp.data.model.remote.LinesCandidate
+import com.jalasoft.routesapp.util.helpers.LocationHelper.getIndexOfFromLocationList
+import com.jalasoft.routesapp.util.helpers.LocationHelper.getOneRouteLine
+import com.jalasoft.routesapp.util.helpers.LocationHelper.getSubLine
 
 object RouteCalculator {
     fun calculate(lines: List<LineRoutePath>, destination: Location, origin: Location, minDistance: Double, minDistanceBtwStops: Double): MutableList<AvailableTransport> {
@@ -16,7 +19,7 @@ object RouteCalculator {
             val nearestStopToDestination = line.stops.minWith(Comparator.comparingDouble { it.distanceTo(destination).toDouble() })
 
             if (nearestStopToDestination.distanceTo(destination).toDouble() <= minDistance && nearestStopToOrigin.distanceTo(origin).toDouble() <= minDistance) {
-                LineRoutePath.getOneRouteLine(line, nearestStopToDestination, nearestStopToOrigin)?.let {
+                getOneRouteLine(line, nearestStopToDestination, nearestStopToOrigin)?.let {
                     availableTransport.add(it)
                 }
             } else {
@@ -45,11 +48,11 @@ object RouteCalculator {
     private fun joinTwoLinesWithNearStopPoints(routeFromOrigin: LineRoutePath, routeFromDestiny: LineRoutePath, stop: Location, minDistanceBtwStops: Double): AvailableTransport? {
         val nearestStop = routeFromOrigin.stops.minWith(Comparator.comparingDouble { it.distanceTo(stop).toDouble() })
         if (nearestStop.distanceTo(stop).toDouble() <= minDistanceBtwStops) {
-            val indexOfNearestStop = LineRoutePath.getIndexOfFromLocationList(nearestStop, routeFromOrigin.stops)
+            val indexOfNearestStop = getIndexOfFromLocationList(nearestStop, routeFromOrigin.stops)
             // Line A
-            val lineA = LineRoutePath.getSubLine(routeFromOrigin, nearestStop, true)
+            val lineA = getSubLine(routeFromOrigin, nearestStop, true)
             // Line B
-            val lineB = LineRoutePath.getSubLine(routeFromDestiny, stop, false)
+            val lineB = getSubLine(routeFromDestiny, stop, false)
             return AvailableTransport(indexOfNearestStop, mutableListOf(lineA, lineB))
         }
         return null
@@ -57,7 +60,7 @@ object RouteCalculator {
 
     private fun getCandidateLine(nearestStop: Location, pointToCheck: Location, minDistance: Double, line: LineRoutePath, sliceFromStart: Boolean): LineRoutePath? {
         if (nearestStop.distanceTo(pointToCheck).toDouble() <= minDistance) {
-            return LineRoutePath.getSubLine(line, nearestStop, sliceFromStart)
+            return getSubLine(line, nearestStop, sliceFromStart)
         }
         return null
     }
