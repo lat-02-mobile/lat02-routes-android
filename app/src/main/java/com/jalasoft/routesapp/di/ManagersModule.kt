@@ -2,6 +2,7 @@ package com.jalasoft.routesapp.di
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.jalasoft.routesapp.data.api.retrofit.IGmapsDirections
 import com.jalasoft.routesapp.data.api.retrofit.IGmapsService
 import com.jalasoft.routesapp.data.remote.interfaces.*
 import com.jalasoft.routesapp.data.remote.managers.*
@@ -43,6 +44,12 @@ object ManagersModule {
     @Provides
     fun providePlaceManager(retrofitService: IGmapsService): PlaceRepository {
         return PlaceManager(retrofitService)
+    }
+
+    @Singleton
+    @Provides
+    fun provideDirectionsManager(retrofitService: IGmapsDirections): DirectionsRepository {
+        return DirectionsManager(retrofitService)
     }
 
     @Singleton

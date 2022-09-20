@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/home_main_navigation"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/possibleRoutesFragment">
 
 
     <fragment
@@ -55,6 +55,11 @@
             app:argType="string"
             android:defaultValue="none" />
     </fragment>
+    <fragment
+        android:id="@+id/possibleRoutesFragment"
+        android:name="com.jalasoft.routesapp.ui.routes.view.PossibleRoutesFragment"
+        android:label="fragment_possible_routes"
+        tools:layout="@layout/fragment_possible_routes" />
 
     <fragment
         android:id="@+id/routesFragment"

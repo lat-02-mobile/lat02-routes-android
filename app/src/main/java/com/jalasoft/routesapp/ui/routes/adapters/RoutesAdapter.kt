@@ -1,4 +1,4 @@
-package com.jalasoft.routesapp.ui.routes.adapter
+package com.jalasoft.routesapp.ui.routes.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

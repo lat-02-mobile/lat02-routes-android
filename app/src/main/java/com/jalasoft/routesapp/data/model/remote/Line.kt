@@ -55,5 +55,8 @@ data class LineRoutePath(
     val routePoints: List<Location> = listOf(),
     val start: Location? = null,
     val end: Location? = null,
-    val stops: List<Location> = listOf()
+    val stops: List<Location> = listOf(),
+    val icons: LineCategoryIcons = LineCategoryIcons(),
+    val color: String = "#004696",
+    val averageVelocity: Double = 1.0
 ) : Serializable

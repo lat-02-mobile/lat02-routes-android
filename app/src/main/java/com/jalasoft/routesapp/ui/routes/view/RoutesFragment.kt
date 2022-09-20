@@ -14,7 +14,7 @@ import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.data.model.remote.LineInfo
 import com.jalasoft.routesapp.data.model.remote.LineRouteInfo
 import com.jalasoft.routesapp.databinding.FragmentRoutesBinding
-import com.jalasoft.routesapp.ui.routes.adapter.RoutesAdapter
+import com.jalasoft.routesapp.ui.routes.adapters.RoutesAdapter
 import com.jalasoft.routesapp.ui.routes.viewModel.RoutesViewModel
 import com.jalasoft.routesapp.util.helpers.Constants
 import dagger.hilt.android.AndroidEntryPoint

@@ -2,6 +2,7 @@ package com.jalasoft.routesapp.data.source
 
 import android.location.Location
 import android.location.LocationManager
+import com.google.android.gms.maps.model.LatLng
 import com.jalasoft.routesapp.data.model.remote.LineInfo
 import com.jalasoft.routesapp.data.model.remote.LineRouteInfo
 
@@ -106,6 +107,16 @@ object FakeRoutesData {
 
     val lineInfo = listOf(line1Info, line2Info, line3Info)
     val lineRouteInfo = listOf(line1RouteInfo, line2RouteInfo, line3RouteInfo)
+
+    val directionsPointLst = listOf(
+        LatLng(-16.52469, -68.12539000000001),
+        LatLng(-16.524700000000003, -68.12529),
+        LatLng(-16.52478, -68.12515),
+        LatLng(-16.524820000000002, -68.12522),
+        LatLng(-16.52493, -68.12523),
+        LatLng(-16.52523, -68.12530000000001),
+        LatLng(-16.525540000000003, -68.1254)
+    )
 
     fun arrayToMutableListOfLocation(list: List<List<Double>>): MutableList<Location> {
         val points: MutableList<Location> = mutableListOf()
