@@ -2,8 +2,12 @@ package com.jalasoft.routesapp.di
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.jalasoft.routesapp.data.api.retrofit.IGmapsDirections
+import com.jalasoft.routesapp.RoutesAppApplication
 import com.jalasoft.routesapp.data.api.retrofit.IGmapsService
+import com.jalasoft.routesapp.data.local.room.db.RoutesDB
+import com.jalasoft.routesapp.data.local.room.interfaces.LocalDataBaseRepository
+import com.jalasoft.routesapp.data.local.room.managers.LocalDataBaseManager
+import com.jalasoft.routesapp.data.api.retrofit.IGmapsDirections
 import com.jalasoft.routesapp.data.remote.interfaces.*
 import com.jalasoft.routesapp.data.remote.managers.*
 import dagger.Module
@@ -56,5 +60,17 @@ object ManagersModule {
     @Provides
     fun provideTourPointRepository(): TourPointRepository {
         return TourPointManager(FirebaseManager(FirebaseFirestore.getInstance()))
+    }
+
+    @Singleton
+    @Provides
+    fun provideLocalDataBaseRepository(): LocalDataBaseRepository {
+        return LocalDataBaseManager(RoutesAppApplication.routesDB as RoutesDB)
+    }
+
+    @Singleton
+    @Provides
+    fun provideRoutesDB(): RoutesDB {
+        return RoutesAppApplication.routesDB as RoutesDB
     }
 }

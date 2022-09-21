@@ -1,6 +1,8 @@
 package com.jalasoft.routesapp.data.source
 
 import android.location.Location
+import com.jalasoft.routesapp.data.model.local.LineCategoriesEntity
+import com.jalasoft.routesapp.data.model.local.LineEntity
 import android.location.LocationManager
 import com.google.android.gms.maps.model.LatLng
 import com.jalasoft.routesapp.data.model.remote.LineInfo
@@ -89,24 +91,29 @@ object FakeRoutesData {
     private val points1 = arrayToMutableListOfLocation(points1Array)
     private val stops1 = arrayToMutableListOfLocation(stops1Array)
     private val line1Info = LineInfo(idLine1, line1Name, true, line1Category)
-    private val line1RouteInfo = LineRouteInfo(line1Route1Name, idLine1, points1, start1, end1, stops1)
+    private val line1RouteInfo = LineRouteInfo("1", line1Route1Name, idLine1, points1, start1, end1, stops1)
 
     private val start2 = coordinatesToLocation(-16.5255314, -68.1254204)
     private val end2 = coordinatesToLocation(-16.5241937, -68.1204527)
     private val points2 = arrayToMutableListOfLocation(points2Array)
     private val stops2 = arrayToMutableListOfLocation(stops2Array)
     private val line2Info = LineInfo(idLine2, line2Name, true, line2Category)
-    private val line2RouteInfo = LineRouteInfo(line2Route1Name, idLine2, points2, start2, end2, stops2)
+    private val line2RouteInfo = LineRouteInfo("2", line2Route1Name, idLine2, points2, start2, end2, stops2)
 
     private val start3 = coordinatesToLocation(-16.5206262, -68.1227148)
     private val end3 = coordinatesToLocation(-16.5244779, -68.1253892)
     private val points3 = arrayToMutableListOfLocation(points3Array)
     private val stops3 = arrayToMutableListOfLocation(stops3Array)
     private val line3Info = LineInfo(idLine3, line3Name, true, line3Category)
-    private val line3RouteInfo = LineRouteInfo(line3Route1Name, idLine3, points3, start3, end3, stops3)
+    private val line3RouteInfo = LineRouteInfo("3", line3Route1Name, idLine3, points3, start3, end3, stops3)
+
+    private val lineEntity = LineEntity("1", "line test", "scz", "bus", true)
+    private val lineCategory = LineCategoriesEntity("123", "bus", "bus")
 
     val lineInfo = listOf(line1Info, line2Info, line3Info)
     val lineRouteInfo = listOf(line1RouteInfo, line2RouteInfo, line3RouteInfo)
+    val linesEntity = listOf(lineEntity)
+    val lineCategoriesEntity = listOf(lineCategory)
 
     val directionsPointLst = listOf(
         LatLng(-16.52469, -68.12539000000001),

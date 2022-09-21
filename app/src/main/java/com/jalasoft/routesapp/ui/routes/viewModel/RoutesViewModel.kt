@@ -78,7 +78,6 @@ constructor(private val repository: RouteRepository, private val gDirectionsRepo
             "https://firebasestorage.googleapis.com/v0/b/routes-app-8c8e4.appspot.com/o/lineCategories%2Fmini_bus_white.png?alt=media&token=e67646cd-457d-4563-a12f-55a17c478150",
             "https://firebasestorage.googleapis.com/v0/b/routes-app-8c8e4.appspot.com/o/lineCategories%2Fmini_bus_black.png?alt=media&token=cdda76ab-ec71-42b7-a10a-a665d6b03155"
         )
-
         val line2 = LineRoutePath("", "246", "Mini", "2", points2, start2, end2, stops2, lineCategoryIcons2, "#6495ED", 3.2)
 
         val start3 = RouteAlgorithmFakeData.coordinatesToLocation(-16.5206262, -68.1227148)
@@ -92,7 +91,6 @@ constructor(private val repository: RouteRepository, private val gDirectionsRepo
             "https://firebasestorage.googleapis.com/v0/b/routes-app-8c8e4.appspot.com/o/lineCategories%2Fsubway_white.png?alt=media&token=c3fe8f8e-7696-4879-b042-52e710f94842",
             "https://firebasestorage.googleapis.com/v0/b/routes-app-8c8e4.appspot.com/o/lineCategories%2Fsubway_black.png?alt=media&token=7f8c755c-da68-4b85-8bc1-1df26ecb92d8"
         )
-
         val line3 = LineRoutePath("", "LA", "Metro", "3", points3, start3, end3, stops3, lineCategoryIcons3, "#533483", 3.4)
 
         val lines = listOf(line1, line2, line3)
