@@ -114,6 +114,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
             } else if (viewModel.selectedDestination.value == null) {
                 val newLocation = getSelectedLocation()
                 viewModel.setDestination(newLocation)
+            } else {
+                findNavController().navigate(R.id.possibleRoutesFragment)
             }
         }
 

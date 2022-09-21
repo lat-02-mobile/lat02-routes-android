@@ -98,5 +98,6 @@
     <!-- Select route dialog -->
     <string name="select_route">Seleccione una ruta</string>
     <string name="no_route">No se encontro ninguna ruta</string>
+    <string name="see_details">Ver detalle</string>
 
 </resources>
