@@ -37,6 +37,7 @@ class PossibleRoutesFragment : Fragment(), OnMapReadyCallback, PossibleRouteAdap
     private val binding get() = _binding!!
     private var mMap: GoogleMap? = null
     private var index: Int = 0
+    private var isShowingDetails = false
 
     private val viewModel: RoutesViewModel by viewModels()
 
@@ -60,6 +61,17 @@ class PossibleRoutesFragment : Fragment(), OnMapReadyCallback, PossibleRouteAdap
         val mapFragment =
             childFragmentManager.findFragmentById(R.id.map_fragment) as? SupportMapFragment
         mapFragment?.getMapAsync(this)
+        binding.detailsBottomSheet.view.visibility = View.GONE
+
+        binding.btnGoBack.setOnClickListener {
+            if (isShowingDetails) {
+                binding.detailsBottomSheet.view.visibility = View.GONE
+                binding.bottomSheet.view.visibility = View.VISIBLE
+            } else {
+                findNavController().popBackStack()
+            }
+            isShowingDetails = !isShowingDetails
+        }
 
         viewModel.possibleRoutesList.observe(viewLifecycleOwner) {
             updateRecycler(it.toMutableList())
@@ -105,6 +117,9 @@ class PossibleRoutesFragment : Fragment(), OnMapReadyCallback, PossibleRouteAdap
 
     override fun onPossibleRouteTap(possibleRoute: AvailableTransport) {
         mMap?.let {
+            isShowingDetails = true
+            binding.detailsBottomSheet.view.visibility = View.VISIBLE
+            binding.bottomSheet.view.visibility = View.GONE
             it.clear()
             val builder = LatLngBounds.Builder()
             val start = possibleRoute.transports.first().routePoints.first().toLatLong()

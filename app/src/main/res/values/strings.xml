@@ -105,5 +105,7 @@
     <!-- Select route dialog -->
     <string name="select_route">Select route</string>
     <string name="no_route">No route found</string>
+    <string name="see_details">See route detail</string>
+    <string name="destination">Destination:</string>
 
 </resources>
