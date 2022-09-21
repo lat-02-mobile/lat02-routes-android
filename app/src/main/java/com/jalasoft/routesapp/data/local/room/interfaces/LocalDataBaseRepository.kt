@@ -11,4 +11,5 @@ interface LocalDataBaseRepository {
     fun addLocalStops(idLineRoute: String, stops: List<android.location.Location>)
     fun addLocalTourPoint(tourPoint: TourPointEntity)
     fun addLocalTourPointCategory(tourPointCategory: TourPointsCategoryEntity)
+    fun addLocalFavoriteDestination(favoriteDestinationEntity: FavoriteDestinationEntity)
 }

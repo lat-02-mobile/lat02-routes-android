@@ -48,4 +48,8 @@ class LocalDataBaseManager(private val localRoutesDB: RoutesDB) : LocalDataBaseR
     override fun addLocalTourPointCategory(tourPointCategory: TourPointsCategoryEntity) {
         localRoutesDB.tourPointCategoryDao().addTourPointCategory(tourPointCategory)
     }
+
+    override fun addLocalFavoriteDestination(favoriteDestinationEntity: FavoriteDestinationEntity) {
+        localRoutesDB.favoriteDestinationDao().addFavoriteDestination(favoriteDestinationEntity)
+    }
 }
