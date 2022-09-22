@@ -71,6 +71,18 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/minute" />
+                    <TextView
+                        android:id="@+id/estimated_distance_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="10dp"
+                        tools:text="200" />
+<!--                    usar text con valor/-->
+                    <TextView
+                        android:id="@+id/distance_unit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/meters" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

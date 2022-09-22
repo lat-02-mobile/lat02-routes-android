@@ -1,8 +1,8 @@
 package com.jalasoft.routesapp.ui.routes.viewModel
 
+import android.content.Context
 import android.location.Location
 import android.location.LocationManager
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,13 +12,14 @@ import com.jalasoft.routesapp.data.api.models.gmaps.Route
 import com.jalasoft.routesapp.data.api.models.gmaps.StartLocation
 import com.jalasoft.routesapp.data.model.remote.AvailableTransport
 import com.jalasoft.routesapp.data.model.remote.LineCategoryIcons
-import com.jalasoft.routesapp.data.remote.interfaces.DirectionsRepository
 import com.jalasoft.routesapp.data.model.remote.LineInfo
 import com.jalasoft.routesapp.data.model.remote.LineRoutePath
+import com.jalasoft.routesapp.data.remote.interfaces.DirectionsRepository
 import com.jalasoft.routesapp.data.remote.interfaces.RouteRepository
 import com.jalasoft.routesapp.util.algorithm.RouteCalculator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,8 +34,6 @@ constructor(private val repository: RouteRepository, private val gDirectionsRepo
     private var _possibleRoutesList: MutableLiveData<List<AvailableTransport>> = MutableLiveData()
     val possibleRoutesList: LiveData<List<AvailableTransport>> = _possibleRoutesList
     var possibleRoutesOriginalList: List<AvailableTransport> = listOf()
-    private var _directionsList: MutableLiveData<List<Route>> = MutableLiveData()
-    var directionsList: LiveData<List<Route>> = _directionsList
 
     fun fetchLines(context: Context) = viewModelScope.launch {
         _routesList.value = repository.getAllLines(context)
@@ -48,11 +47,9 @@ constructor(private val repository: RouteRepository, private val gDirectionsRepo
         return _routesList.value?.size ?: 0
     }
 
-    fun fetchDirections(startLocation: StartLocation, endLocation: EndLocation) = viewModelScope.launch {
-        val fetchedPlacesResponse = gDirectionsRepository.getDirections(startLocation, endLocation)
-        fetchedPlacesResponse.data?.let {
-            _directionsList.value = it
-            directionsList = _directionsList
+    fun fetchDirections(startLocation: StartLocation, endLocation: EndLocation): List<Route>? {
+        return runBlocking {
+            return@runBlocking gDirectionsRepository.getDirections(startLocation, endLocation).data
         }
     }
 

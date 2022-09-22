@@ -67,8 +67,7 @@ class RoutesViewModelTest : TestCase() {
     fun `Given two stops, when they belong to different transportation categories, then returns all the points to join this stops`() {
         val startLocation = StartLocation(-16.5244779,	-68.1253892)
         val endLocation = EndLocation(-16.5255314, -68.1254204)
-        viewModel.fetchDirections(startLocation, endLocation)
-        val points = viewModel.directionsList.value?.first()?.overviewPolyline?.points
+        val points = viewModel.fetchDirections(startLocation, endLocation)?.first()?.overviewPolyline?.points
         points?.let {
             assertEquals(PolyUtil.decode(it), FakeRoutesData.directionsPointLst)
         } ?: run {

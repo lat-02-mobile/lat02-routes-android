@@ -106,5 +106,9 @@
     <string name="no_route">No route found</string>
     <string name="see_details">See route detail</string>
     <string name="destination">Destination:</string>
+    <string name="walk_to_next_stop">Walk to next stop</string>
+    <string name="walk_to_first_stop">Walk from origin to stop</string>
+    <string name="walk_to_destination">Walk from stop to destination</string>
+    <string name="meters">meters</string>
 
 </resources>

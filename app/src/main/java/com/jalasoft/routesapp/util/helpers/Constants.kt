@@ -5,4 +5,6 @@ object Constants {
     const val BUNDLE_KEY_ROUTE_SELECTED_POSITION = "routeSelectedPosition"
     const val CURRENT_SPANISH_LANGUAGE = "spa"
     const val POLYLINE_PADDING = 250
+    const val AVG_WALKING_PACE = 87.1728 // meters per min
+    const val WALK_CATEGORY = "Walk"
 }
