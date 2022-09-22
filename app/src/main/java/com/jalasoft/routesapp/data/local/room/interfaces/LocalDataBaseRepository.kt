@@ -1,5 +1,6 @@
 package com.jalasoft.routesapp.data.local.room.interfaces
 
+import android.content.Context
 import com.jalasoft.routesapp.data.model.local.*
 import com.jalasoft.routesapp.data.model.remote.LineRouteInfo
 
@@ -11,5 +12,5 @@ interface LocalDataBaseRepository {
     fun addLocalStops(idLineRoute: String, stops: List<android.location.Location>)
     fun addLocalTourPoint(tourPoint: TourPointEntity)
     fun addLocalTourPointCategory(tourPointCategory: TourPointsCategoryEntity)
-    fun addLocalFavoriteDestination(favoriteDestinationEntity: FavoriteDestinationEntity)
+    fun addLocalFavoriteDestination(lat: Double, lng: Double, name: String, context: Context)
 }

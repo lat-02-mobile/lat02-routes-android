@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.jalasoft.routesapp.data.api.models.gmaps.EndLocation
 import com.jalasoft.routesapp.data.api.models.gmaps.Route
 import com.jalasoft.routesapp.data.api.models.gmaps.StartLocation
+import com.jalasoft.routesapp.data.local.room.interfaces.LocalDataBaseRepository
 import com.jalasoft.routesapp.data.model.remote.AvailableTransport
 import com.jalasoft.routesapp.data.model.remote.LineCategoryIcons
 import com.jalasoft.routesapp.data.remote.interfaces.DirectionsRepository
@@ -24,7 +25,7 @@ import javax.inject.Inject
 @HiltViewModel
 class RoutesViewModel
 @Inject
-constructor(private val repository: RouteRepository, private val gDirectionsRepository: DirectionsRepository) : ViewModel() {
+constructor(private val repository: RouteRepository, private val gDirectionsRepository: DirectionsRepository, private val localDB: LocalDataBaseRepository) : ViewModel() {
 
     var _routesList: MutableLiveData<List<LineInfo>> = MutableLiveData()
     val routesList: LiveData<List<LineInfo>> = _routesList
@@ -103,6 +104,10 @@ constructor(private val repository: RouteRepository, private val gDirectionsRepo
         val result = RouteCalculator.calculate(lines, destinationPoint, originPoint, minDistance, minDistanceBtwStops)
         _possibleRoutesList.value = result
         possibleRoutesOriginalList = _possibleRoutesList.value!!
+    }
+
+    fun saveFavoriteDestination(lat: Double, lon: Double, name: String, context: Context) {
+        localDB.addLocalFavoriteDestination(lat, lon, name, context)
     }
 }
 

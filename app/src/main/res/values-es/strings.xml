@@ -101,4 +101,14 @@
     <string name="no_route">No se encontro ninguna ruta</string>
     <string name="see_details">Ver detalle</string>
 
+    <!-- Alerts Dialog -->
+    <string name="cancel">Cancelar</string>
+    <string name="yes">Si</string>
+    <string name="save">Guardar</string>
+    <string name="sure_remove_fav_dest">¿Esta seguro/a que desea eliminar este destino favorito?</string>
+    <string name="remove_fav_dest">Eliminar Destino Favorito</string>
+    <string name="save_dest">Guardar Destino</string>
+    <string name="choose_name_for_new_fav_dest">Por favor elige un nombre para guardar estas coordenadas como un destino favorito</string>
+    <string name="write_name">Escribe un nombre</string>
+
 </resources>

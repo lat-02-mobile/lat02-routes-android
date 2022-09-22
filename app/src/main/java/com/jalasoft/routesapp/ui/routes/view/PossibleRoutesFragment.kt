@@ -1,10 +1,13 @@
 package com.jalasoft.routesapp.ui.routes.view
 
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -71,6 +74,27 @@ class PossibleRoutesFragment : Fragment(), OnMapReadyCallback, PossibleRouteAdap
                 findNavController().popBackStack()
             }
             isShowingDetails = !isShowingDetails
+        }
+
+        binding.detailsBottomSheet.imbSaveFavorite.setOnClickListener {
+            val builder = AlertDialog.Builder(binding.root.context)
+            builder.setTitle(R.string.save_dest)
+            builder.setMessage(R.string.choose_name_for_new_fav_dest)
+            val input = EditText(context)
+
+            input.inputType = InputType.TYPE_CLASS_TEXT
+            builder.setView(input)
+
+            builder.setPositiveButton(R.string.save) { _, _ ->
+                val name = input.text.toString()
+                viewModel.saveFavoriteDestination(-16.52476, -68.11937, name, requireContext())
+                binding.detailsBottomSheet.imbSaveFavorite.setImageResource(R.drawable.ic_baseline_favorite_24)
+            }
+            builder.setNegativeButton(R.string.cancel) { dialog, _ ->
+                dialog.cancel()
+            }
+            builder.setCancelable(true)
+            builder.show()
         }
 
         viewModel.possibleRoutesList.observe(viewLifecycleOwner) {

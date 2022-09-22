@@ -1,7 +1,6 @@
 package com.jalasoft.routesapp.data.local.room.db
 
 import android.content.Context
-import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -38,7 +37,7 @@ abstract class RoutesDB : RoomDatabase() {
 
         private val MIGRATION_1_2 = object : Migration(1, 2) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("CREATE TABLE IF NOT EXISTS `FavoriteDestinationEntity` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `destlatitude` DOUBLE NOT NULL, `destlongitude` DOUBLE NOT NULL, `cityId` TEXT NOT NULL, `userId` TEXT NOT NULL)")
+                database.execSQL("CREATE TABLE IF NOT EXISTS `FavoriteDestinationEntity` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `destlatitude` DOUBLE NOT NULL, `destlongitude` DOUBLE NOT NULL, `cityId` TEXT NOT NULL, `userId` TEXT NOT NULL, `createdAt` DOUBLE NOT NULL)")
             }
         }
     }

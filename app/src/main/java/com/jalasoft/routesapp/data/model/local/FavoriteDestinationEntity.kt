@@ -12,5 +12,6 @@ data class FavoriteDestinationEntity(
     @Embedded(prefix = "dest")
     val destination: Location,
     val cityId: String,
-    val userId: String
+    val userId: String,
+    val createdAt: Double
 )
