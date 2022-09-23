@@ -3,15 +3,17 @@ package com.jalasoft.routesapp.data.model.remote
 import android.location.Location
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
+import com.jalasoft.routesapp.data.model.local.LineEntity
+import com.jalasoft.routesapp.util.helpers.Constants
 import kotlinx.coroutines.tasks.await
 import java.io.Serializable
 import java.util.*
 
 data class Line(
-    val categoryRef: DocumentReference? = null,
-    val enable: Boolean? = null,
     val id: String = "",
+    val categoryRef: DocumentReference? = null,
     val idCity: String = "",
+    val enable: Boolean? = null,
     val name: String = ""
 ) : Serializable {
     suspend fun lineToLineInfo(routePaths: List<LineRouteInfo>): LineInfo {
@@ -27,6 +29,24 @@ data class Line(
             }
         }
         return LineInfo(id, name, enable, categoryName, routePaths)
+    }
+
+    suspend fun lineToLineLocal(): LineEntity {
+        var cate = ""
+        val ena = enable ?: true
+        var category: DocumentSnapshot?
+        var categoryName = ""
+        categoryRef?.let { docRef ->
+            category = docRef.get().await()
+            category?.let {
+                val currLang = Locale.getDefault().isO3Language
+                categoryName =
+                    if (currLang == Constants.CURRENT_SPANISH_LANGUAGE) it.toObject(LineCategories::class.java)?.nameEsp ?: ""
+                    else it.toObject(LineCategories::class.java)?.nameEng ?: ""
+            }
+            cate = categoryName
+        }
+        return LineEntity(id, name, idCity, cate, ena)
     }
 }
 

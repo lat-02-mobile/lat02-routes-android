@@ -45,6 +45,7 @@ class FirebaseManager(val db: FirebaseFirestore) : FirebaseDataSource {
             Response.Error(e.message.toString(), null)
         }
     }
+
     suspend inline fun <reified T : Any> getDocumentsWithDoubleConditionAndBoolean(collection: FirebaseCollections, field1: String, field2: String, parameter: String, boolean: Boolean): Response<List<T>> {
         return try {
             val result = db.collection(collection.toString())

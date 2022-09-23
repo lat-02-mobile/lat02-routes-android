@@ -1,6 +1,8 @@
 package com.jalasoft.routesapp.data.remote.managers
 
 import android.content.Context
+import com.jalasoft.routesapp.data.model.local.LineCategoriesEntity
+import com.jalasoft.routesapp.data.model.local.LineEntity
 import com.jalasoft.routesapp.data.model.remote.*
 import com.jalasoft.routesapp.data.remote.interfaces.RouteRepository
 import com.jalasoft.routesapp.util.PreferenceManager
@@ -20,6 +22,41 @@ class RouteManager(private val firebaseManager: FirebaseManager) : RouteReposito
         }
         return listOf()
     }
+
+    override suspend fun getAllLinesToSaveLocally(context: Context): List<LineEntity> {
+        val currentCityId = PreferenceManager.getCurrentCityID(context)
+        val result = firebaseManager.getDocumentsWithCondition<Line>(FirebaseCollections.Lines, "idCity", currentCityId).data
+        if (result != null) {
+            val lineLocal = result.map {
+                it.lineToLineLocal()
+            }
+            return lineLocal
+        }
+        return listOf()
+    }
+
+    override suspend fun getAllLinesCategoryToSaveLocally(): List<LineCategoriesEntity> {
+        val result = firebaseManager.getAllDocuments<LineCategories>(FirebaseCollections.LineCategories).data
+        if (result != null) {
+            val lineCategories = result.map {
+                it.lineCategoriesToLineCategoriesLocal()
+            }
+            return lineCategories
+        }
+        return listOf()
+    }
+
+    override suspend fun getAllLinesRouteToSaveLocally(idLine: String): List<LineRouteInfo> {
+        val result = firebaseManager.getDocumentsWithCondition<LineRoute>(FirebaseCollections.LineRoute, "idLine", idLine).data
+        if (result != null) {
+            val lineRoutes = result.map {
+                it.lineRouteToLineRouteInfo()
+            }
+            return lineRoutes
+        }
+        return listOf()
+    }
+
     override suspend fun getLineRouteById(idLine: String): List<LineRouteInfo> {
         val result = firebaseManager.getDocumentsWithCondition<LineRoute>(FirebaseCollections.LineRoute, "idLine", idLine).data
         if (result != null) {
