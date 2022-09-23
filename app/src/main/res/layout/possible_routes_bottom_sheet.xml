@@ -27,7 +27,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerPossibleRoutes"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="250dp"
         tools:listitem="@layout/possible_route_item"
         android:state_pressed="true"/>
 

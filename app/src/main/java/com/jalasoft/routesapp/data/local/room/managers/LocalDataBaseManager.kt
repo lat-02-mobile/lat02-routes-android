@@ -56,7 +56,7 @@ class LocalDataBaseManager(private val localRoutesDB: RoutesDB) : LocalDataBaseR
     override fun addLocalFavoriteDestination(lat: Double, lng: Double, name: String, context: Context) {
         val currentCityId = PreferenceManager.getCurrentCityID(context)
         val user = FirebaseAuth.getInstance().currentUser
-        val userId = user?.providerId ?: ""
+        val userId = user?.uid ?: ""
         val destination = Location(lat, lng)
         val dateStr = DateHelper.getCurrentDate()
         val date = DateHelper.convertDateToDouble(dateStr)
@@ -67,7 +67,7 @@ class LocalDataBaseManager(private val localRoutesDB: RoutesDB) : LocalDataBaseR
     override fun getFavoriteDestinationByCityAndUserId(context: Context): List<FavoriteDestinationEntity> {
         val currentCityId = PreferenceManager.getCurrentCityID(context)
         val user = FirebaseAuth.getInstance().currentUser
-        val userId = user?.providerId ?: ""
+        val userId = user?.uid ?: ""
         return localRoutesDB.favoriteDestinationDao().getFavoriteDestinationsByCityId(currentCityId, userId)
     }
 

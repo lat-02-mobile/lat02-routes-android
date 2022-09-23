@@ -5,40 +5,42 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/view"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-    app:behavior_peekHeight="60dp">
+    app:behavior_peekHeight="65dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp">
+        android:layout_margin="10dp">
         <TextView
             android:id="@+id/tv_destination"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="23sp"
+            android:textSize="18sp"
             android:textStyle="bold"
             android:paddingStart="10dp"
             android:textColor="@color/color_primary_gradient"
             android:text="@string/destination"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
+
         <TextView
             android:id="@+id/tv_destination_name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="23sp"
-            android:textStyle="bold"
             android:paddingStart="10dp"
             android:textColor="@color/color_secondary"
-            android:text="Destination name"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/favorite_button"
+            app:layout_constraintStart_toEndOf="@id/tv_destination"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_destination"/>
+            tools:text="Destination name" />
         <ImageButton
-            android:id="@+id/imb_save_favorite"
+            android:id="@+id/favorite_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_baseline_favorite_border_24"
@@ -56,14 +58,14 @@
             android:textStyle="bold"
             android:paddingStart="10dp"
             android:textColor="@color/gray_color"
-            android:text="From Origin name"
+            tools:text="From Origin name"
             app:layout_constraintTop_toBottomOf="@id/tv_destination"
             app:layout_constraintStart_toStartOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerPossibleRoutes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/route_details_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
         tools:listitem="@layout/possible_route_item"
         android:state_pressed="true"/>
 </LinearLayout>

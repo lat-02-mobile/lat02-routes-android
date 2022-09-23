@@ -29,7 +29,7 @@ object LocationHelper {
             val indexDestinationPoint = getIndexOfFromLocationList(nearestStopToDestination, line.routePoints)
 
             val newRoutePoints = line.routePoints.slice(indexOriginPoint..indexDestinationPoint)
-            val newLine = LineRoutePath(line.idLine, line.lineName, line.category, line.routeName, newRoutePoints, line.start, line.end, newStops)
+            val newLine = LineRoutePath(line.idLine, line.lineName, line.category, line.routeName, newRoutePoints, line.start, line.end, newStops, line.icons, line.color, line.averageVelocity)
             return AvailableTransport(null, mutableListOf(newLine))
         }
         return null
@@ -45,11 +45,11 @@ object LocationHelper {
         return if (sliceFromStart) {
             val newStops = line.stops.slice(0..intersectionStopIndex)
             val newRoutePoints = line.routePoints.slice(0..intersectionRoutePointIndex)
-            LineRoutePath(line.idLine, line.lineName, line.category, line.routeName, newRoutePoints, line.start, line.end, newStops)
+            LineRoutePath(line.idLine, line.lineName, line.category, line.routeName, newRoutePoints, line.start, line.end, newStops, line.icons, line.color, line.averageVelocity)
         } else {
             val newStops = line.stops.slice(intersectionStopIndex until line.stops.size)
             val newRoutePoints = line.routePoints.slice(intersectionRoutePointIndex until line.routePoints.size)
-            LineRoutePath(line.idLine, line.lineName, line.category, line.routeName, newRoutePoints, line.start, line.end, newStops)
+            LineRoutePath(line.idLine, line.lineName, line.category, line.routeName, newRoutePoints, line.start, line.end, newStops, line.icons, line.color, line.averageVelocity)
         }
     }
 
