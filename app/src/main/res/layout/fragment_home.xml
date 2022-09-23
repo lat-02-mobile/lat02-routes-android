@@ -70,7 +70,12 @@
         <include
             android:id="@+id/bottom_layout_1"
             layout="@layout/bottom_sheet_dialog" />
-
+        <include
+            android:id="@+id/possible_route_bottom_layout"
+            layout="@layout/possible_routes_bottom_sheet"/>
+        <include
+            android:id="@+id/route_details_bottom_layout"
+            layout="@layout/route_details_bottom_sheet"/>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

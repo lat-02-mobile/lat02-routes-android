@@ -1,111 +1,73 @@
 package com.jalasoft.routesapp.ui.home.view
 
-import android.Manifest
-import android.annotation.SuppressLint
-import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.content.res.ColorStateList
+import android.location.Geocoder
 import android.location.Location
-import android.location.LocationManager
-import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.*
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.SearchView
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.*
-import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.MarkerOptions
+import com.google.maps.android.PolyUtil
 import com.jalasoft.routesapp.R
-import com.jalasoft.routesapp.data.api.models.gmaps.Place
-import com.jalasoft.routesapp.databinding.FragmentHomeBinding
-import com.jalasoft.routesapp.ui.home.adapters.PlaceAdapter
-import com.jalasoft.routesapp.ui.home.viewModel.HomeViewModel
-import com.jalasoft.routesapp.util.PreferenceManager
-import dagger.hilt.android.AndroidEntryPoint
+import com.jalasoft.routesapp.data.api.models.gmaps.EndLocation
+import com.jalasoft.routesapp.data.api.models.gmaps.StartLocation
+import com.jalasoft.routesapp.data.model.local.RouteDetail
+import com.jalasoft.routesapp.data.model.local.RouteDetail.Companion.getRouteDetailFromLocationList
+import com.jalasoft.routesapp.data.model.remote.AvailableTransport
+import com.jalasoft.routesapp.ui.routes.adapters.PossibleRouteAdapter
+import com.jalasoft.routesapp.ui.routes.adapters.RouteDetailsAdapter
+import com.jalasoft.routesapp.util.Extensions.toLatLong
+import com.jalasoft.routesapp.util.Extensions.toLocation
+import com.jalasoft.routesapp.util.helpers.Constants
+import com.jalasoft.routesapp.util.helpers.GoogleMapsHelper
+import com.jalasoft.routesapp.util.helpers.WalkDirection
 
-@AndroidEntryPoint
-class HomeFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener, PlaceAdapter.IPlaceListener {
+enum class HomeSelectionStatus {
+    SELECTING_POINTS, SHOWING_POSSIBLE_ROUTES, SHOWING_ROUTE_DETAILS
+}
 
-    private lateinit var mBottomSheetDialog: LinearLayout
-    private lateinit var sheetBehavior: BottomSheetBehavior<LinearLayout>
-    private lateinit var mFusedLocationClient: FusedLocationProviderClient
-
-    private var markerOrigin: Marker? = null
-    private var markerDestination: Marker? = null
-    private var mMap: GoogleMap? = null
-    private var _binding: FragmentHomeBinding? = null
-    private val binding get() = _binding!!
-    private val viewModel: HomeViewModel by viewModels()
-
-    private val requestFINELOCATIONPermissionLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-            checkPermissions(isGranted)
-        }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+class HomeFragment : HomeBaseFragment(), PossibleRouteAdapter.IPossibleRouteListener {
+    private var homeSelectionStatus = HomeSelectionStatus.SELECTING_POINTS
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setButtons()
-        setRecycler()
-        setMap()
-        setBottomPopup()
-        setObservers()
+        binding.possibleRouteBottomLayout.view.visibility = View.GONE
+        binding.routeDetailsBottomLayout.view.visibility = View.GONE
+        setUpButtons()
+        setPossibleRoutesRecycler()
+        setRouteDetailRecycler()
     }
 
-    override fun onMapReady(googleMap: GoogleMap) {
-        googleMap.setMapStyle(
-            MapStyleOptions.loadRawResourceStyle(
-                requireContext(),
-                R.raw.style_silver
-            )
-        )
-        mMap = googleMap
-        mMap?.setOnMarkerClickListener(this)
-        setMapOnCurrentCity()
-    }
-
-    override fun onPlaceTap(place: Place) {
-        val locationLatLng = LatLng(place.geometry.location.lat, place.geometry.location.lng)
-        moveToLocation(locationLatLng, 17F)
-        sheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-    }
-
-    override fun onMarkerClick(marker: Marker): Boolean {
-        if (marker == markerOrigin) {
-            viewModel.selectedOrigin.value = null
-        } else if (marker == markerDestination) {
-            viewModel.selectedDestination.value = null
+    private fun setUpButtons() {
+        // Go back button
+        binding.btnGoBack.visibility = View.GONE
+        binding.btnGoBack.setOnClickListener {
+            when (homeSelectionStatus) {
+                HomeSelectionStatus.SELECTING_POINTS -> {
+                    if (viewModel.selectedDestination.value != null) {
+                        viewModel.setDestination(null)
+                    } else {
+                        viewModel.setOrigin(null)
+                    }
+                }
+                HomeSelectionStatus.SHOWING_POSSIBLE_ROUTES -> {
+                    mMap?.clear()
+                    homeSelectionStatus = HomeSelectionStatus.SELECTING_POINTS
+                    binding.possibleRouteBottomLayout.view.visibility = View.GONE
+                    binding.bottomLayout1.bottomSheetLayout.visibility = View.VISIBLE
+                }
+                HomeSelectionStatus.SHOWING_ROUTE_DETAILS -> {
+                    homeSelectionStatus = HomeSelectionStatus.SHOWING_POSSIBLE_ROUTES
+                    binding.routeDetailsBottomLayout.view.visibility = View.GONE
+                    binding.possibleRouteBottomLayout.view.visibility = View.VISIBLE
+                }
+            }
         }
-        marker.remove()
-        return true
-    }
 
-    // Methods for setups
-    private fun setButtons() {
         // Next button
         binding.btnCheckNextLocation.setOnClickListener {
             if (viewModel.selectedOrigin.value == null) {
@@ -115,204 +77,119 @@ class HomeFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
                 val newLocation = getSelectedLocation()
                 viewModel.setDestination(newLocation)
             } else {
-                findNavController().navigate(R.id.possibleRoutesFragment)
+                viewModel.getPossibleRoutes()
+                homeSelectionStatus = HomeSelectionStatus.SHOWING_POSSIBLE_ROUTES
+                binding.bottomLayout1.bottomSheetLayout.visibility = View.GONE
+                binding.possibleRouteBottomLayout.view.visibility = View.VISIBLE
             }
         }
 
-        // Go back button
-        binding.btnGoBack.visibility = View.GONE
-        binding.btnGoBack.setOnClickListener {
-            if (viewModel.selectedDestination.value != null) {
-                viewModel.setDestination(null)
-                markerDestination?.remove()
-            } else {
-                viewModel.setOrigin(null)
-                markerOrigin?.remove()
-            }
+        binding.routeDetailsBottomLayout.favoriteButton.setOnClickListener {
+            Toast.makeText(requireContext(), "Added favorite", Toast.LENGTH_SHORT).show()
         }
 
-        // Get current location button
-        binding.btnCurrentLocation.setOnClickListener {
-            if (isLocationPermissionGranted()) {
-                getLocation()
-            }
+        viewModel.possibleRoutesList.observe(viewLifecycleOwner) {
+            updatePossibleRouteRecycler(it.toMutableList())
         }
     }
 
-    private fun setObservers() {
-        val statusTextView = binding.bottomLayout1.tvSelectLocationStatus
-        viewModel.fetchedPlaces.observe(viewLifecycleOwner) {
-            (binding.bottomLayout1.placesRecycler.adapter as PlaceAdapter).updateList(it.toMutableList())
-        }
-
-        viewModel.selectedDestination.observe(viewLifecycleOwner) {
-            if (it != null) {
-                binding.btnCheckNextLocation.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.color_secondary))
-                statusTextView.text = getString(R.string.done)
-                Toast.makeText(requireContext(), getString(R.string.go_next_step), Toast.LENGTH_LONG).show()
-            } else {
-                statusTextView.text = getString(R.string.select_a_destination)
-                binding.btnCheckNextLocation.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.color_primary))
-            }
-        }
-
-        viewModel.selectedOrigin.observe(viewLifecycleOwner) {
-            if (it != null) {
-                binding.btnGoBack.visibility = View.VISIBLE
-                statusTextView.text = getString(R.string.select_a_destination)
-            } else {
-                binding.btnCheckNextLocation.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.color_primary))
-                binding.btnGoBack.visibility = View.GONE
-                statusTextView.text = getString(R.string.select_an_origin)
-            }
-        }
+    private fun setPossibleRoutesRecycler() {
+        binding.possibleRouteBottomLayout.recyclerPossibleRoutes.layoutManager = LinearLayoutManager(requireContext())
+        binding.possibleRouteBottomLayout.recyclerPossibleRoutes.adapter = PossibleRouteAdapter(mutableListOf(), this)
     }
 
-    private fun setMap() {
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-        val mapFragment =
-            childFragmentManager.findFragmentById(R.id.map_fragment) as? SupportMapFragment
-        mapFragment?.getMapAsync(this)
+    private fun updatePossibleRouteRecycler(list: List<AvailableTransport>) {
+        (binding.possibleRouteBottomLayout.recyclerPossibleRoutes.adapter as PossibleRouteAdapter).updateList(list.toMutableList())
     }
 
-    private fun setRecycler() {
-        binding.bottomLayout1.placesRecycler.layoutManager = LinearLayoutManager(requireContext())
-        binding.bottomLayout1.placesRecycler.adapter = PlaceAdapter(mutableListOf(), this)
+    private fun setRouteDetailRecycler() {
+        binding.routeDetailsBottomLayout.routeDetailsRecycler.layoutManager = LinearLayoutManager(requireContext())
+        binding.routeDetailsBottomLayout.routeDetailsRecycler.adapter = RouteDetailsAdapter(mutableListOf())
     }
 
-    private fun setBottomPopup() {
-        binding.bottomLayout1.placesSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                query?.let {
-                    val currentLat = PreferenceManager.getCurrentLocationLat(requireContext())
-                    val currentLng = PreferenceManager.getCurrentLocationLng(requireContext())
-                    viewModel.searchPlaces(query, "$currentLat $currentLng")
+    private fun updateRouteDetailRecycler(list: List<RouteDetail>) {
+        (binding.routeDetailsBottomLayout.routeDetailsRecycler.adapter as RouteDetailsAdapter).updateList(list.toMutableList())
+    }
+
+    override fun onPossibleRouteTap(possibleRoute: AvailableTransport) {
+        mMap?.let {
+            homeSelectionStatus = HomeSelectionStatus.SHOWING_ROUTE_DETAILS
+//            binding.progressBar.visibility = View.VISIBLE
+            val details = mutableListOf<RouteDetail>()
+            updateRouteDetailRecycler(details.toList())
+            binding.routeDetailsBottomLayout.view.visibility = View.VISIBLE
+            binding.possibleRouteBottomLayout.view.visibility = View.GONE
+            it.clear()
+            val origin = LatLng(-16.52093, -68.1242)
+            val destination = LatLng(-16.52476, -68.11937)
+            val originName = Geocoder(requireContext()).getFromLocation(origin.latitude, origin.longitude, 1)
+            val destinationName = Geocoder(requireContext()).getFromLocation(destination.latitude, destination.longitude, 1)
+
+            binding.routeDetailsBottomLayout.tvDestinationName.text = destinationName.first().thoroughfare
+            binding.routeDetailsBottomLayout.tvOriginName.text = originName.first().thoroughfare
+            addMarker(it, origin, R.drawable.ic_origin)
+            addMarker(it, destination, R.drawable.ic_start_route)
+
+            val builder = LatLngBounds.Builder()
+            val start = possibleRoute.transports.first().routePoints.first().toLatLong()
+            val end = possibleRoute.transports.last().routePoints.last().toLatLong()
+            drawWalkingPath(StartLocation(origin.latitude, origin.longitude), EndLocation(start.latitude, start.longitude), it) { list ->
+                list.map { location ->
+                    builder.include(location.toLatLong())
                 }
-                return true
+                details.add(0, getRouteDetailFromLocationList("", list, walkDirection = WalkDirection.TO_FIRST_STOP))
             }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return true
-            }
-        })
-
-        mBottomSheetDialog = requireView().findViewById(R.id.bottom_layout_1)
-        sheetBehavior = BottomSheetBehavior.from(mBottomSheetDialog)
-
-        sheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
-            override fun onStateChanged(bottomSheet: View, newState: Int) {
-                if (newState == BottomSheetBehavior.STATE_EXPANDED) {
-                    binding.bottomLayout1.btnArrowPopupState.rotation = 0F
-                } else if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
-                    binding.bottomLayout1.btnArrowPopupState.rotation = 180F
+            addMarker(it, start, R.drawable.ic_start_route)
+            addMarker(it, end, R.drawable.ic_end_route)
+            for (line in possibleRoute.transports) {
+                GoogleMapsHelper.drawPolyline(it, line.routePoints.map { point -> point.toLatLong() }, line.color)
+                val lineRouteName = "${line.routeName}, ${line.lineName}"
+                details.add(getRouteDetailFromLocationList(lineRouteName, line.routePoints, line.icons, line.category, line.averageVelocity))
+                line.routePoints.map { location ->
+                    builder.include(location.toLatLong())
                 }
             }
-            override fun onSlide(bottomSheet: View, slideOffset: Float) {
-            }
-        })
-    }
-
-    // Methods for map, location and permissions
-    @SuppressLint("MissingPermission")
-    private fun isLocationPermissionGranted(): Boolean {
-        when {
-            ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED -> {
-                mMap?.isMyLocationEnabled = true
-                return true
-            }
-            shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> {
-                AlertDialog.Builder(requireContext()).setTitle(getString(R.string.access_location_permission))
-                    .setMessage(getString(R.string.allow_get_precise_location_permission))
-                    .setPositiveButton(getString(R.string.allow)) { _, _ ->
-                        requestFINELOCATIONPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-                    }.show()
-                return false
-            }
-            else -> {
-                requestFINELOCATIONPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-                return false
-            }
-        }
-    }
-
-    @SuppressLint("MissingPermission")
-    private fun checkPermissions(isGranted: Boolean) {
-        if (isGranted) {
-            mMap?.isMyLocationEnabled = true
-            getLocation()
-        } else {
-            Toast.makeText(
-                requireContext(),
-                getString(R.string.give_the_app_precise_location_permissions),
-                Toast.LENGTH_LONG
-            ).show()
-            // Redirect the user to the app settings to give permissions manually
-            val intent = Intent()
-            intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-            val uri = Uri.fromParts("package", activity?.packageName, null)
-            intent.data = uri
-            requireContext().startActivity(intent)
-        }
-    }
-
-    @SuppressLint("MissingPermission")
-    private fun getLocation() {
-        if (isLocationEnabled()) {
-            mFusedLocationClient.lastLocation.addOnCompleteListener { task ->
-                val location: Location? = task.result
-                if (location != null) {
-                    val newLatLng = LatLng(location.latitude, location.longitude)
-                    moveToLocation(newLatLng, 13F)
+            if (possibleRoute.transports.size > 1) {
+                val first = possibleRoute.transports.first().routePoints.last().toLatLong()
+                val second = possibleRoute.transports.last().routePoints.first().toLatLong()
+                addMarker(it, first, R.drawable.ic_bus_stop)
+                addMarker(it, second, R.drawable.ic_bus_stop)
+                drawWalkingPath(StartLocation(first.latitude, first.longitude), EndLocation(second.latitude, second.longitude), it) { list ->
+                    list.map { location ->
+                        builder.include(location.toLatLong())
+                    }
+                    details.add(2, getRouteDetailFromLocationList("", list, walkDirection = WalkDirection.TO_NEXT_STOP))
                 }
             }
-        } else {
-            Toast.makeText(requireContext(), getString(R.string.turn_on_location), Toast.LENGTH_LONG).show()
-            val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-            startActivity(intent)
+            drawWalkingPath(StartLocation(end.latitude, end.longitude), EndLocation(destination.latitude, destination.longitude), it) { list ->
+                list.map { location ->
+                    builder.include(location.toLatLong())
+                }
+                details.add(getRouteDetailFromLocationList("", list, walkDirection = WalkDirection.TO_DESTINATION))
+//                binding.progressBar.visibility = View.GONE
+                updateRouteDetailRecycler(details.toList())
+            }
+            val bounds = builder.build()
+            val cu = CameraUpdateFactory.newLatLngBounds(bounds, Constants.POLYLINE_PADDING)
+            mMap?.animateCamera(cu)
         }
     }
 
-    private fun isLocationEnabled(): Boolean {
-        val locationManager: LocationManager =
-            activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-    }
-
-    private fun moveToLocation(location: LatLng, zoom: Float) {
-        val cameraTargetLocation = CameraUpdateFactory.newLatLngZoom(location, zoom)
-        mMap?.animateCamera(cameraTargetLocation)
-    }
-
-    private fun setMapOnCurrentCity() {
-        val currentLat = PreferenceManager.getCurrentLocationLat(requireContext())
-        val currentLng = PreferenceManager.getCurrentLocationLng(requireContext())
-        if (currentLat != PreferenceManager.NOT_FOUND && currentLng != PreferenceManager.NOT_FOUND) {
-            val location = LatLng(currentLat.toDouble(), currentLng.toDouble())
-            moveToLocation(location, 11F)
-        } else {
-            findNavController().navigate(R.id.action_homeFragment_to_cityPickerFragment)
-        }
-    }
-
-    private fun getSelectedLocation(): LatLng? {
-        val cameraLocation = mMap?.cameraPosition?.target
-        val markerCamera = cameraLocation?.let { MarkerOptions().position(it) }
-        if (markerCamera != null) {
-            if (viewModel.selectedOrigin.value == null) {
-                markerCamera.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_origin))
-                markerOrigin = mMap?.addMarker(markerCamera)
-            } else {
-                markerCamera.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_destination))
-                markerDestination = mMap?.addMarker(markerCamera)
+    private fun drawWalkingPath(startLocation: StartLocation, endLocation: EndLocation, googleMap: GoogleMap, completion: (list: List<Location>) -> Unit) {
+        val result = viewModel.fetchDirections(startLocation, endLocation)
+        result?.let { route ->
+            if (route.isNotEmpty()) {
+                val shape = route.first().overviewPolyline?.points
+                shape?.let { points ->
+                    val latLngList = PolyUtil.decode(points)
+                    GoogleMapsHelper.drawDotPolyline(googleMap, latLngList)
+                    completion(latLngList.map { it.toLocation() })
+                }
             }
         }
-        return if (cameraLocation != null) {
-            LatLng(cameraLocation.latitude, cameraLocation.longitude)
-        } else {
-            null
-        }
+    }
+
+    private fun addMarker(googleMap: GoogleMap, point: LatLng, withDrawable: Int) {
+        googleMap.addMarker(MarkerOptions().position(point).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), withDrawable)).anchor(0.5F, 0.5F))
     }
 }

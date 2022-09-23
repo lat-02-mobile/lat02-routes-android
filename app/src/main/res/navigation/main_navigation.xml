@@ -55,11 +55,6 @@
             app:argType="string"
             android:defaultValue="none" />
     </fragment>
-    <fragment
-        android:id="@+id/possibleRoutesFragment"
-        android:name="com.jalasoft.routesapp.ui.routes.view.PossibleRoutesFragment"
-        android:label="fragment_possible_routes"
-        tools:layout="@layout/fragment_possible_routes" />
 
     <fragment
         android:id="@+id/routesFragment"
