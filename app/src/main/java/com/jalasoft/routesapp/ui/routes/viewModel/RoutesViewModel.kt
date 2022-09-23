@@ -11,6 +11,7 @@ import com.jalasoft.routesapp.data.api.models.gmaps.EndLocation
 import com.jalasoft.routesapp.data.api.models.gmaps.Route
 import com.jalasoft.routesapp.data.api.models.gmaps.StartLocation
 import com.jalasoft.routesapp.data.local.room.interfaces.LocalDataBaseRepository
+import com.jalasoft.routesapp.data.model.local.FavoriteDestinationEntity
 import com.jalasoft.routesapp.data.model.remote.AvailableTransport
 import com.jalasoft.routesapp.data.model.remote.LineCategoryIcons
 import com.jalasoft.routesapp.data.remote.interfaces.DirectionsRepository
@@ -108,6 +109,14 @@ constructor(private val repository: RouteRepository, private val gDirectionsRepo
 
     fun saveFavoriteDestination(lat: Double, lon: Double, name: String, context: Context) {
         localDB.addLocalFavoriteDestination(lat, lon, name, context)
+    }
+
+    fun getFavoriteDestinationsByCityAndUserId(context: Context): List<FavoriteDestinationEntity> {
+        return localDB.getFavoriteDestinationByCityAndUserId(context)
+    }
+
+    fun deleteFavoriteDestination(favoriteDestinationEntity: FavoriteDestinationEntity) {
+        localDB.deleteFavoriteDestination(favoriteDestinationEntity)
     }
 }
 

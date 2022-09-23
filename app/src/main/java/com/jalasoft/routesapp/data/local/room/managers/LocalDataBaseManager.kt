@@ -63,4 +63,15 @@ class LocalDataBaseManager(private val localRoutesDB: RoutesDB) : LocalDataBaseR
         val favoriteDestination = FavoriteDestinationEntity(0, name, destination, currentCityId, userId, date)
         localRoutesDB.favoriteDestinationDao().addFavoriteDestination(favoriteDestination)
     }
+
+    override fun getFavoriteDestinationByCityAndUserId(context: Context): List<FavoriteDestinationEntity> {
+        val currentCityId = PreferenceManager.getCurrentCityID(context)
+        val user = FirebaseAuth.getInstance().currentUser
+        val userId = user?.providerId ?: ""
+        return localRoutesDB.favoriteDestinationDao().getFavoriteDestinationsByCityId(currentCityId, userId)
+    }
+
+    override fun deleteFavoriteDestination(favoriteDestinationEntity: FavoriteDestinationEntity) {
+        localRoutesDB.favoriteDestinationDao().deleteFavoriteDestination(favoriteDestinationEntity)
+    }
 }

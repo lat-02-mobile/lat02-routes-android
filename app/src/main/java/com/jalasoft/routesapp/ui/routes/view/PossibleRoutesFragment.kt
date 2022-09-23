@@ -1,5 +1,6 @@
 package com.jalasoft.routesapp.ui.routes.view
 
+import android.location.LocationManager
 import android.os.Bundle
 import android.text.InputType
 import android.util.Log
@@ -22,8 +23,10 @@ import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.maps.android.PolyUtil
 import com.jalasoft.routesapp.R
+import com.jalasoft.routesapp.RoutesAppApplication
 import com.jalasoft.routesapp.data.api.models.gmaps.EndLocation
 import com.jalasoft.routesapp.data.api.models.gmaps.StartLocation
+import com.jalasoft.routesapp.data.model.local.FavoriteDestinationEntity
 import com.jalasoft.routesapp.data.model.remote.AvailableTransport
 import com.jalasoft.routesapp.databinding.FragmentPossibleRoutesBinding
 import com.jalasoft.routesapp.ui.routes.adapters.PossibleRouteAdapter
@@ -41,6 +44,8 @@ class PossibleRoutesFragment : Fragment(), OnMapReadyCallback, PossibleRouteAdap
     private var mMap: GoogleMap? = null
     private var index: Int = 0
     private var isShowingDetails = false
+    private var isFavorite = false
+    private var favoriteDestination: FavoriteDestinationEntity? = null
 
     private val viewModel: RoutesViewModel by viewModels()
 
@@ -77,24 +82,11 @@ class PossibleRoutesFragment : Fragment(), OnMapReadyCallback, PossibleRouteAdap
         }
 
         binding.detailsBottomSheet.imbSaveFavorite.setOnClickListener {
-            val builder = AlertDialog.Builder(binding.root.context)
-            builder.setTitle(R.string.save_dest)
-            builder.setMessage(R.string.choose_name_for_new_fav_dest)
-            val input = EditText(context)
-
-            input.inputType = InputType.TYPE_CLASS_TEXT
-            builder.setView(input)
-
-            builder.setPositiveButton(R.string.save) { _, _ ->
-                val name = input.text.toString()
-                viewModel.saveFavoriteDestination(-16.52476, -68.11937, name, requireContext())
-                binding.detailsBottomSheet.imbSaveFavorite.setImageResource(R.drawable.ic_baseline_favorite_24)
+            if (isFavorite) {
+                onTapDeleteFavorite()
+            } else {
+                onTapSaveFavorite()
             }
-            builder.setNegativeButton(R.string.cancel) { dialog, _ ->
-                dialog.cancel()
-            }
-            builder.setCancelable(true)
-            builder.show()
         }
 
         viewModel.possibleRoutesList.observe(viewLifecycleOwner) {
@@ -140,6 +132,13 @@ class PossibleRoutesFragment : Fragment(), OnMapReadyCallback, PossibleRouteAdap
     }
 
     override fun onPossibleRouteTap(possibleRoute: AvailableTransport) {
+        isFavorite = verifyFavoriteDestination()
+        if (isFavorite) {
+            binding.detailsBottomSheet.imbSaveFavorite.setImageResource(R.drawable.ic_baseline_favorite_24)
+        } else {
+            binding.detailsBottomSheet.imbSaveFavorite.setImageResource(R.drawable.ic_baseline_favorite_border_24)
+        }
+
         mMap?.let {
             isShowingDetails = true
             binding.detailsBottomSheet.view.visibility = View.VISIBLE
@@ -176,6 +175,73 @@ class PossibleRoutesFragment : Fragment(), OnMapReadyCallback, PossibleRouteAdap
             val cu = CameraUpdateFactory.newLatLngBounds(bounds, Constants.POLYLINE_PADDING)
             mMap?.animateCamera(cu)
         }
+    }
+
+    private fun verifyFavoriteDestination(): Boolean {
+        var isFavorite = false
+        val newDestination = android.location.Location(LocationManager.NETWORK_PROVIDER)
+        newDestination.latitude = -16.524715 // -16.524412
+        newDestination.longitude = -68.119393 // -68.119111
+        val destinations = android.location.Location(LocationManager.NETWORK_PROVIDER)
+        val list = viewModel.getFavoriteDestinationsByCityAndUserId(requireContext())
+
+        return if (list.isEmpty()) {
+            false
+        } else {
+            for (item in list) {
+                destinations.latitude = item.destination.latitude // -16.52476
+                destinations.longitude = item.destination.longitude // -68.11937
+
+                val dist = destinations.distanceTo(newDestination)
+                isFavorite = dist < 8
+                if (isFavorite) {
+                    favoriteDestination = item
+                }
+            }
+            isFavorite
+        }
+    }
+
+    private fun onTapSaveFavorite() {
+        val builder = AlertDialog.Builder(binding.root.context)
+        builder.setTitle(R.string.save_dest)
+        builder.setMessage(R.string.choose_name_for_new_fav_dest)
+        val input = EditText(context)
+
+        input.inputType = InputType.TYPE_CLASS_TEXT
+        builder.setView(input)
+
+        builder.setPositiveButton(R.string.save) { _, _ ->
+            isFavorite = true
+            val name = input.text.toString()
+            viewModel.saveFavoriteDestination(-16.52476, -68.11937, name, requireContext())
+            binding.detailsBottomSheet.imbSaveFavorite.setImageResource(R.drawable.ic_baseline_favorite_24)
+        }
+        builder.setNegativeButton(R.string.cancel) { dialog, _ ->
+            dialog.cancel()
+        }
+        builder.setCancelable(true)
+        builder.show()
+    }
+
+    private fun onTapDeleteFavorite() {
+        val builder = AlertDialog.Builder(binding.root.context)
+        builder.setTitle(R.string.remove_fav_dest)
+        val name = favoriteDestination?.name ?: ""
+        val message = RoutesAppApplication.resource?.getString(R.string.sure_remove_fav_dest).toString() + " " + name
+        builder.setMessage(message)
+        builder.setPositiveButton(R.string.yes) { _, _ ->
+            if (favoriteDestination != null) {
+                isFavorite = false
+                viewModel.deleteFavoriteDestination(favoriteDestination as FavoriteDestinationEntity)
+                binding.detailsBottomSheet.imbSaveFavorite.setImageResource(R.drawable.ic_baseline_favorite_border_24)
+            }
+        }
+        builder.setNegativeButton(R.string.cancel) { dialog, _ ->
+            dialog.cancel()
+        }
+        builder.setCancelable(true)
+        builder.show()
     }
 
     override fun onDestroy() {

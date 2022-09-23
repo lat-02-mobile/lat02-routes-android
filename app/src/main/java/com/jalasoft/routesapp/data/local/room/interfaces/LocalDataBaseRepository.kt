@@ -13,4 +13,6 @@ interface LocalDataBaseRepository {
     fun addLocalTourPoint(tourPoint: TourPointEntity)
     fun addLocalTourPointCategory(tourPointCategory: TourPointsCategoryEntity)
     fun addLocalFavoriteDestination(lat: Double, lng: Double, name: String, context: Context)
+    fun getFavoriteDestinationByCityAndUserId(context: Context): List<FavoriteDestinationEntity>
+    fun deleteFavoriteDestination(favoriteDestinationEntity: FavoriteDestinationEntity)
 }
