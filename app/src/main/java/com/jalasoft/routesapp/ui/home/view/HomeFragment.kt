@@ -18,8 +18,8 @@ import com.jalasoft.routesapp.data.api.models.gmaps.StartLocation
 import com.jalasoft.routesapp.data.model.local.RouteDetail
 import com.jalasoft.routesapp.data.model.local.RouteDetail.Companion.getRouteDetailFromLocationList
 import com.jalasoft.routesapp.data.model.remote.AvailableTransport
-import com.jalasoft.routesapp.ui.routes.adapters.PossibleRouteAdapter
-import com.jalasoft.routesapp.ui.routes.adapters.RouteDetailsAdapter
+import com.jalasoft.routesapp.ui.home.adapters.PossibleRouteAdapter
+import com.jalasoft.routesapp.ui.home.adapters.RouteDetailsAdapter
 import com.jalasoft.routesapp.util.Extensions.toLatLong
 import com.jalasoft.routesapp.util.Extensions.toLocation
 import com.jalasoft.routesapp.util.helpers.Constants
@@ -56,6 +56,9 @@ class HomeFragment : HomeBaseFragment(), PossibleRouteAdapter.IPossibleRouteList
                 }
                 HomeSelectionStatus.SHOWING_POSSIBLE_ROUTES -> {
                     mMap?.clear()
+                    binding.btnCheckNextLocation.visibility = View.VISIBLE
+                    binding.btnCurrentLocation.visibility = View.VISIBLE
+                    binding.pin.visibility = View.VISIBLE
                     homeSelectionStatus = HomeSelectionStatus.SELECTING_POINTS
                     binding.possibleRouteBottomLayout.view.visibility = View.GONE
                     binding.bottomLayout1.bottomSheetLayout.visibility = View.VISIBLE
@@ -77,6 +80,9 @@ class HomeFragment : HomeBaseFragment(), PossibleRouteAdapter.IPossibleRouteList
                 val newLocation = getSelectedLocation()
                 viewModel.setDestination(newLocation)
             } else {
+                binding.btnCheckNextLocation.visibility = View.GONE
+                binding.btnCurrentLocation.visibility = View.GONE
+                binding.pin.visibility = View.GONE
                 viewModel.getPossibleRoutes()
                 homeSelectionStatus = HomeSelectionStatus.SHOWING_POSSIBLE_ROUTES
                 binding.bottomLayout1.bottomSheetLayout.visibility = View.GONE
