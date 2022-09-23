@@ -1,5 +1,6 @@
 package com.jalasoft.routesapp.ui.routes.view
 
+import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
@@ -148,6 +149,11 @@ class PossibleRoutesFragment : Fragment(), OnMapReadyCallback, PossibleRouteAdap
             it.clear()
             val origin = LatLng(-16.52093, -68.1242)
             val destination = LatLng(-16.52476, -68.11937)
+            val originName = Geocoder(requireContext()).getFromLocation(origin.latitude, origin.longitude, 1)
+            val destinationName = Geocoder(requireContext()).getFromLocation(destination.latitude, destination.longitude, 1)
+
+            binding.detailsBottomSheet.tvDestinationName.text = destinationName.first().thoroughfare
+            binding.detailsBottomSheet.tvOriginName.text = originName.first().thoroughfare
             addMarker(it, origin, R.drawable.ic_origin)
             addMarker(it, destination, R.drawable.ic_start_route)
 
@@ -155,6 +161,9 @@ class PossibleRoutesFragment : Fragment(), OnMapReadyCallback, PossibleRouteAdap
             val start = possibleRoute.transports.first().routePoints.first().toLatLong()
             val end = possibleRoute.transports.last().routePoints.last().toLatLong()
             drawWalkingPath(StartLocation(origin.latitude, origin.longitude), EndLocation(start.latitude, start.longitude), it) { list ->
+                list.map { location ->
+                    builder.include(location.toLatLong())
+                }
                 details.add(0, getRouteDetailFromLocationList("", list, walkDirection = WalkDirection.TO_FIRST_STOP))
             }
             addMarker(it, start, R.drawable.ic_start_route)
@@ -173,10 +182,16 @@ class PossibleRoutesFragment : Fragment(), OnMapReadyCallback, PossibleRouteAdap
                 addMarker(it, first, R.drawable.ic_bus_stop)
                 addMarker(it, second, R.drawable.ic_bus_stop)
                 drawWalkingPath(StartLocation(first.latitude, first.longitude), EndLocation(second.latitude, second.longitude), it) { list ->
+                    list.map { location ->
+                        builder.include(location.toLatLong())
+                    }
                     details.add(2, getRouteDetailFromLocationList("", list, walkDirection = WalkDirection.TO_NEXT_STOP))
                 }
             }
             drawWalkingPath(StartLocation(end.latitude, end.longitude), EndLocation(destination.latitude, destination.longitude), it) { list ->
+                list.map { location ->
+                    builder.include(location.toLatLong())
+                }
                 details.add(getRouteDetailFromLocationList("", list, walkDirection = WalkDirection.TO_DESTINATION))
                 binding.progressBar.visibility = View.GONE
                 updateRouteDetailRecycler(details.toList())
