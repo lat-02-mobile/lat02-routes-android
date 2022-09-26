@@ -1,5 +1,6 @@
 package com.jalasoft.routesapp.ui.home.viewModel
 
+import android.content.Context
 import android.location.Location
 import android.location.LocationManager
 import androidx.lifecycle.LiveData
@@ -11,6 +12,8 @@ import com.jalasoft.routesapp.data.api.models.gmaps.EndLocation
 import com.jalasoft.routesapp.data.api.models.gmaps.Place
 import com.jalasoft.routesapp.data.api.models.gmaps.Route
 import com.jalasoft.routesapp.data.api.models.gmaps.StartLocation
+import com.jalasoft.routesapp.data.local.room.interfaces.LocalDataBaseRepository
+import com.jalasoft.routesapp.data.model.local.FavoriteDestinationEntity
 import com.jalasoft.routesapp.data.model.remote.AvailableTransport
 import com.jalasoft.routesapp.data.model.remote.LineCategoryIcons
 import com.jalasoft.routesapp.data.model.remote.LineRoutePath
@@ -25,7 +28,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel
 @Inject
-constructor(private val placeManager: PlaceRepository, private val gDirectionsRepository: DirectionsRepository) : ViewModel() {
+constructor(private val placeManager: PlaceRepository, private val gDirectionsRepository: DirectionsRepository, private val localDB: LocalDataBaseRepository) : ViewModel() {
     val fetchedPlaces: MutableLiveData<List<Place>> by lazy {
         MutableLiveData<List<Place>>(listOf())
     }
@@ -110,6 +113,18 @@ constructor(private val placeManager: PlaceRepository, private val gDirectionsRe
 
         val result = RouteCalculator.calculate(lines, destinationPoint, originPoint, minDistance, minDistanceBtwStops)
         _possibleRoutesList.value = result
+    }
+
+    fun saveFavoriteDestination(lat: Double, lon: Double, name: String, context: Context) {
+        localDB.addLocalFavoriteDestination(lat, lon, name, context)
+    }
+
+    fun getFavoriteDestinationsByCityAndUserId(context: Context): List<FavoriteDestinationEntity> {
+        return localDB.getFavoriteDestinationByCityAndUserId(context)
+    }
+
+    fun deleteFavoriteDestination(favoriteDestinationEntity: FavoriteDestinationEntity) {
+        localDB.deleteFavoriteDestination(favoriteDestinationEntity)
     }
 }
 

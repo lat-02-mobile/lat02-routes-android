@@ -2,9 +2,12 @@ package com.jalasoft.routesapp.ui.home.view
 
 import android.location.Geocoder
 import android.location.Location
+import android.location.LocationManager
 import android.os.Bundle
+import android.text.InputType
 import android.view.View
-import android.widget.Toast
+import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -13,8 +16,10 @@ import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.maps.android.PolyUtil
 import com.jalasoft.routesapp.R
+import com.jalasoft.routesapp.RoutesAppApplication
 import com.jalasoft.routesapp.data.api.models.gmaps.EndLocation
 import com.jalasoft.routesapp.data.api.models.gmaps.StartLocation
+import com.jalasoft.routesapp.data.model.local.FavoriteDestinationEntity
 import com.jalasoft.routesapp.data.model.local.RouteDetail
 import com.jalasoft.routesapp.data.model.local.RouteDetail.Companion.getRouteDetailFromLocationList
 import com.jalasoft.routesapp.data.model.remote.AvailableTransport
@@ -32,6 +37,8 @@ enum class HomeSelectionStatus {
 
 class HomeFragment : HomeBaseFragment(), PossibleRouteAdapter.IPossibleRouteListener {
     private var homeSelectionStatus = HomeSelectionStatus.SELECTING_POINTS
+    private var isFavorite = false
+    private var favoriteDestination: FavoriteDestinationEntity? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -91,7 +98,11 @@ class HomeFragment : HomeBaseFragment(), PossibleRouteAdapter.IPossibleRouteList
         }
 
         binding.routeDetailsBottomLayout.favoriteButton.setOnClickListener {
-            Toast.makeText(requireContext(), "Added favorite", Toast.LENGTH_SHORT).show()
+            if (isFavorite) {
+                onTapDeleteFavorite()
+            } else {
+                onTapSaveFavorite()
+            }
         }
 
         viewModel.possibleRoutesList.observe(viewLifecycleOwner) {
@@ -117,7 +128,20 @@ class HomeFragment : HomeBaseFragment(), PossibleRouteAdapter.IPossibleRouteList
         (binding.routeDetailsBottomLayout.routeDetailsRecycler.adapter as RouteDetailsAdapter).updateList(list.toMutableList())
     }
 
-    override fun onPossibleRouteTap(possibleRoute: AvailableTransport) {
+    override fun onPossibleRouteTap(possibleRoute: AvailableTransport, position: Int) {
+        // destination Hardcoded TODO change by selected destination when join other features
+        isFavorite = if (position == 0) {
+            // near from the saved destination
+            verifyFavoriteDestination(-16.524715, -68.119393)
+        } else {
+            // far from the saved destination
+            verifyFavoriteDestination(-16.524412, -68.119111)
+        }
+        if (isFavorite) {
+            binding.routeDetailsBottomLayout.favoriteButton.setImageResource(R.drawable.ic_baseline_favorite_24)
+        } else {
+            binding.routeDetailsBottomLayout.favoriteButton.setImageResource(R.drawable.ic_baseline_favorite_border_24)
+        }
         mMap?.let {
             homeSelectionStatus = HomeSelectionStatus.SHOWING_ROUTE_DETAILS
 //            binding.progressBar.visibility = View.VISIBLE
@@ -197,5 +221,73 @@ class HomeFragment : HomeBaseFragment(), PossibleRouteAdapter.IPossibleRouteList
 
     private fun addMarker(googleMap: GoogleMap, point: LatLng, withDrawable: Int) {
         googleMap.addMarker(MarkerOptions().position(point).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), withDrawable)).anchor(0.5F, 0.5F))
+    }
+
+    private fun verifyFavoriteDestination(lat: Double, lng: Double): Boolean {
+        var isFavorite = false
+        val newDestination = Location(LocationManager.NETWORK_PROVIDER)
+        newDestination.latitude = lat
+        newDestination.longitude = lng // -16.524412 -68.119111
+        val destinations = Location(LocationManager.NETWORK_PROVIDER)
+        val list = viewModel.getFavoriteDestinationsByCityAndUserId(requireContext())
+
+        return if (list.isEmpty()) {
+            false
+        } else {
+            for (item in list) {
+                destinations.latitude = item.destination.latitude
+                destinations.longitude = item.destination.longitude
+
+                val dist = destinations.distanceTo(newDestination)
+                isFavorite = dist < 8
+                if (isFavorite) {
+                    favoriteDestination = item
+                }
+            }
+            isFavorite
+        }
+    }
+
+    private fun onTapSaveFavorite() {
+        val builder = AlertDialog.Builder(binding.root.context)
+        builder.setTitle(R.string.save_dest)
+        builder.setMessage(R.string.choose_name_for_new_fav_dest)
+        val input = EditText(context)
+
+        input.inputType = InputType.TYPE_CLASS_TEXT
+        input.setPaddingRelative(20, 20, 20, 20)
+        builder.setView(input)
+
+        builder.setPositiveButton(R.string.save) { _, _ ->
+            isFavorite = true
+            val name = input.text.toString()
+            viewModel.saveFavoriteDestination(-16.52476, -68.11937, name, requireContext())
+            binding.routeDetailsBottomLayout.favoriteButton.setImageResource(R.drawable.ic_baseline_favorite_24)
+        }
+        builder.setNegativeButton(R.string.cancel) { dialog, _ ->
+            dialog.cancel()
+        }
+        builder.setCancelable(true)
+        builder.show()
+    }
+
+    private fun onTapDeleteFavorite() {
+        val builder = AlertDialog.Builder(binding.root.context)
+        builder.setTitle(R.string.remove_fav_dest)
+        val name = favoriteDestination?.name ?: ""
+        val message = RoutesAppApplication.resource?.getString(R.string.sure_remove_fav_dest).toString() + " " + name
+        builder.setMessage(message)
+        builder.setPositiveButton(R.string.yes) { _, _ ->
+            if (favoriteDestination != null) {
+                isFavorite = false
+                viewModel.deleteFavoriteDestination(favoriteDestination as FavoriteDestinationEntity)
+                binding.routeDetailsBottomLayout.favoriteButton.setImageResource(R.drawable.ic_baseline_favorite_border_24)
+            }
+        }
+        builder.setNegativeButton(R.string.cancel) { dialog, _ ->
+            dialog.cancel()
+        }
+        builder.setCancelable(true)
+        builder.show()
     }
 }

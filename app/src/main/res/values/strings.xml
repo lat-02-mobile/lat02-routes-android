@@ -112,4 +112,14 @@
     <string name="walk_to_destination">Walk from stop to destination</string>
     <string name="meters">%d meters</string>
 
+    <!-- Alerts Dialog -->
+    <string name="cancel">Cancel</string>
+    <string name="yes">Yes</string>
+    <string name="save">Save</string>
+    <string name="sure_remove_fav_dest">Are you sure you want to remove the favorite destination</string>
+    <string name="remove_fav_dest">Remove Favorite destination</string>
+    <string name="save_dest">Save Destination</string>
+    <string name="choose_name_for_new_fav_dest">Please choose a name for save these coordinates as a favorite destination</string>
+    <string name="write_name">Write a name</string>
+
 </resources>
