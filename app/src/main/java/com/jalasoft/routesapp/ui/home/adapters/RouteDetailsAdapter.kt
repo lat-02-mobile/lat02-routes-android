@@ -1,4 +1,4 @@
-package com.jalasoft.routesapp.ui.routes.adapters
+package com.jalasoft.routesapp.ui.home.adapters
 
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -28,7 +28,6 @@ class RouteDetailsAdapter(var routesList: MutableList<RouteDetail>) : RecyclerVi
         holder.binding.recommendedText.setTextColor(Color.BLACK)
         holder.binding.routeName.setTextColor(Color.BLACK)
         holder.binding.estimatedTimeText.setTextColor(Color.BLACK)
-        holder.binding.minText.setTextColor(Color.BLACK)
         holder.binding.transportImage.setBackgroundColor(Color.WHITE)
         holder.binding.transportImage.setColorFilter(Color.BLACK)
         holder.binding.recommendedText.visibility = View.GONE
@@ -47,13 +46,10 @@ class RouteDetailsAdapter(var routesList: MutableList<RouteDetail>) : RecyclerVi
                 transformations(CircleCropTransformation())
             }
         }
-        holder.binding.distanceUnit.setTextColor(Color.BLACK)
         holder.binding.estimatedDistanceText.setTextColor(Color.BLACK)
 
-        val estimatedDistance = "${routeDetail.estimatedDistance} "
-        holder.binding.estimatedDistanceText.text = estimatedDistance
-        val estimatedTime = "${routeDetail.estimatedTime} "
-        holder.binding.estimatedTimeText.text = estimatedTime
+        holder.binding.estimatedDistanceText.text = holder.binding.root.context.getString(R.string.meters, routeDetail.estimatedDistance)
+        holder.binding.estimatedTimeText.text = holder.binding.root.context.getString(R.string.minute, routeDetail.estimatedTime)
     }
 
     override fun getItemCount(): Int {

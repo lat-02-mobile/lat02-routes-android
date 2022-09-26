@@ -95,14 +95,14 @@
 
     <string name="recommended"> (recomendada)</string>
     <string name="route">Ruta</string>
-    <string name="minute">min</string>
+    <string name="minute">%d min</string>
     <!-- Select route dialog -->
     <string name="select_route">Seleccione una ruta</string>
     <string name="no_route">No se encontro ninguna ruta</string>
     <string name="see_details">Ver detalle</string>
     <string name="destination">Destino:</string>
     <string name="walk_to_next_stop">Caminar a la siguiente parada</string>
-    <string name="meters">metros</string>
+    <string name="meters">%d metros</string>
     <string name="walk_to_first_stop">Caminar del origen a la parada</string>
     <string name="walk_to_destination">Caminar de la parada al destino</string>
 
