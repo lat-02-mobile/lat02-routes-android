@@ -16,7 +16,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.google.firebase.FirebaseApp
 import com.jalasoft.routesapp.MainActivity
 import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.RoutesAppApplication
@@ -34,11 +33,6 @@ class PhoneAuthenticationFragment : Fragment() {
     private lateinit var textInputLayout: TextInputLayout
     private lateinit var textInputEditText: TextInputEditText
     private var dialogInitialized: Boolean = false
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        FirebaseApp.initializeApp(context)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

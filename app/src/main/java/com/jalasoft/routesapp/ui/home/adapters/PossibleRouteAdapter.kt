@@ -1,4 +1,4 @@
-package com.jalasoft.routesapp.ui.routes.adapters
+package com.jalasoft.routesapp.ui.home.adapters
 
 import android.annotation.SuppressLint
 import android.graphics.Color.*
@@ -34,10 +34,11 @@ class PossibleRouteAdapter(var possibleRoutesList: MutableList<AvailableTranspor
         if (position == 0) holder.binding.recommendedText.visibility = View.VISIBLE
         else holder.binding.recommendedText.visibility = View.GONE
         val currentRouteIndex = " ${position + 1} "
-        val estimatedTimeText = possibleRoute.calculateEstimatedTimeToArrive().toString() + " "
+
         val primaryColor = ContextCompat.getColor(holder.binding.root.context, R.color.color_primary_gradient)
-        changeToUnselectedItemStyle(holder, possibleRoute, currentRouteIndex, estimatedTimeText)
-        holder.binding.possibleRouteContainer.setOnClickListener {
+        changeToUnselectedItemStyle(holder, possibleRoute, currentRouteIndex, possibleRoute.calculateEstimatedTimeToArrive())
+        holder.binding.estimatedDistanceText.visibility = View.GONE
+        holder.binding.mainContainer.setOnClickListener {
             changeToSelectedItemStyle(holder, possibleRoute, primaryColor)
             if (lastSelectedPosition != -1) notifyItemChanged(lastSelectedPosition)
             lastSelectedPosition = position
@@ -60,14 +61,13 @@ class PossibleRouteAdapter(var possibleRoutesList: MutableList<AvailableTranspor
         }
     }
 
-    private fun changeToUnselectedItemStyle(holder: PossibleRouteViewHolder, possibleRoute: AvailableTransport, currentRouteIndex: String, estimatedTime: String) {
+    private fun changeToUnselectedItemStyle(holder: PossibleRouteViewHolder, possibleRoute: AvailableTransport, currentRouteIndex: String, estimatedTime: Int) {
         holder.binding.itemIndex.text = currentRouteIndex
-        holder.binding.estimatedTimeText.text = estimatedTime
+        holder.binding.estimatedTimeText.text = holder.binding.root.context.getString(R.string.minute, estimatedTime)
         holder.binding.itemIndex.setTextColor(BLACK)
         holder.binding.recommendedText.setTextColor(BLACK)
         holder.binding.routeName.setTextColor(BLACK)
         holder.binding.estimatedTimeText.setTextColor(BLACK)
-        holder.binding.minText.setTextColor(BLACK)
         holder.binding.transportImage.setBackgroundColor(WHITE)
         holder.binding.transportImage.setColorFilter(BLACK)
         holder.binding.transportImage.load(possibleRoute.transports.first().icons.whiteUrl) {
@@ -82,7 +82,6 @@ class PossibleRouteAdapter(var possibleRoutesList: MutableList<AvailableTranspor
         holder.binding.itemIndex.setTextColor(WHITE)
         holder.binding.routeName.setTextColor(WHITE)
         holder.binding.estimatedTimeText.setTextColor(WHITE)
-        holder.binding.minText.setTextColor(WHITE)
         holder.binding.recommendedText.setTextColor(WHITE)
         holder.binding.transportImage.setColorFilter(WHITE)
         holder.binding.transportImage.setBackgroundColor(TRANSPARENT)

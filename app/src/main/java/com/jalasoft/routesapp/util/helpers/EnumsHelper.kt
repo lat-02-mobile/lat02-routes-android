@@ -19,3 +19,7 @@ enum class UserTypeLogin(val int: Int) {
     FACEBOOK(2),
     GOOGLE(3)
 }
+
+enum class WalkDirection {
+    TO_FIRST_STOP, TO_NEXT_STOP, TO_DESTINATION, IS_NOT_WALKING
+}

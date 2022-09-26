@@ -30,6 +30,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
+        android:id="@+id/pin"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginBottom="40dp"
@@ -66,11 +67,15 @@
             android:src="@drawable/ic_baseline_my_location_24"
             app:layout_anchor="@id/bottom_layout_1"
             app:layout_anchorGravity="end" />
-
         <include
             android:id="@+id/bottom_layout_1"
             layout="@layout/bottom_sheet_dialog" />
-
+        <include
+            android:id="@+id/possible_route_bottom_layout"
+            layout="@layout/possible_routes_bottom_sheet"/>
+        <include
+            android:id="@+id/route_details_bottom_layout"
+            layout="@layout/route_details_bottom_sheet"/>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

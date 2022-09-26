@@ -15,7 +15,9 @@
             app:destination="@id/registerUserFragment" />
         <action
             android:id="@+id/action_loginFragment_to_phoneAuthenticationFragment"
-            app:destination="@id/phoneAuthenticationFragment" />
+            app:destination="@id/phoneAuthenticationFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
 
     </fragment>
     <fragment
@@ -25,7 +27,9 @@
         tools:layout="@layout/fragment_register_user" >
         <action
             android:id="@+id/action_registerUserFragment_to_phoneAuthenticationFragment"
-            app:destination="@id/phoneAuthenticationFragment" />
+            app:destination="@id/phoneAuthenticationFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/phoneAuthenticationFragment"

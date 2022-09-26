@@ -21,10 +21,14 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        if (FirebaseAuth.getInstance().currentUser == null) {
-            val intent = Intent(this, AuthActivity::class.java)
-            startActivity(intent)
-            finish()
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        if (currentUser == null) {
+            goToAuthActivity()
+        } else {
+            val phoneNumber = currentUser.phoneNumber
+            if (phoneNumber == null || phoneNumber.isEmpty()) {
+                goToAuthActivity()
+            }
         }
 
         supportActionBar?.hide()
@@ -39,5 +43,10 @@ class MainActivity : AppCompatActivity() {
                 binding.bottomNavigation.visibility = View.VISIBLE
             }
         }
+    }
+    private fun goToAuthActivity() {
+        val intent = Intent(this, AuthActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }
