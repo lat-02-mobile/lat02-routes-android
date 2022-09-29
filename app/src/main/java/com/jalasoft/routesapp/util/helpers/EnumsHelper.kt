@@ -20,6 +20,11 @@ enum class UserTypeLogin(val int: Int) {
     GOOGLE(3)
 }
 
+enum class FilterType {
+    ALL,
+    CATEGORY
+}
+
 enum class WalkDirection {
     TO_FIRST_STOP, TO_NEXT_STOP, TO_DESTINATION, IS_NOT_WALKING
 }

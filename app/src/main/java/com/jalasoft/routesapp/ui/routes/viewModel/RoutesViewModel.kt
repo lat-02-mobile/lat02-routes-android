@@ -31,4 +31,18 @@ constructor(private val repository: RouteRepository) : ViewModel() {
         }
         return _routesList.value?.size ?: 0
     }
+
+    fun filterByCategory(filter: FilterType) {
+        when (filter) {
+            FilterType.CATEGORY -> {
+                val newList = mutableListOf<LineInfo>()
+                newList.addAll(_routesList.value ?: listOf())
+                newList.sortBy { it.category }
+                _routesList.value = newList
+            }
+            FilterType.ALL -> {
+                _routesList.value = originalList
+            }
+        }
+    }
 }
