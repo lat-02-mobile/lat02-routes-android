@@ -1,11 +1,9 @@
 package com.jalasoft.routesapp.data.source
 
+import android.content.Context
 import android.location.Location
 import com.jalasoft.routesapp.data.local.room.interfaces.LocalDataBaseRepository
-import com.jalasoft.routesapp.data.model.local.LineCategoriesEntity
-import com.jalasoft.routesapp.data.model.local.LineEntity
-import com.jalasoft.routesapp.data.model.local.TourPointEntity
-import com.jalasoft.routesapp.data.model.local.TourPointsCategoryEntity
+import com.jalasoft.routesapp.data.model.local.*
 import com.jalasoft.routesapp.data.model.remote.LineRouteInfo
 
 class FakeLocalDataBaseManager : LocalDataBaseRepository {
@@ -28,5 +26,20 @@ class FakeLocalDataBaseManager : LocalDataBaseRepository {
     }
 
     override fun addLocalTourPointCategory(tourPointCategory: TourPointsCategoryEntity) {
+    }
+
+    override fun addLocalFavoriteDestination(
+        lat: Double,
+        lng: Double,
+        name: String,
+        context: Context
+    ) {
+    }
+
+    override fun getFavoriteDestinationByCityAndUserId(context: Context): List<FavoriteDestinationEntity> {
+        return arrayListOf()
+    }
+
+    override fun deleteFavoriteDestination(favoriteDestinationEntity: FavoriteDestinationEntity) {
     }
 }

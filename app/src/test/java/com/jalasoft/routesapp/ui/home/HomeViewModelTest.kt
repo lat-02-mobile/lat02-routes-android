@@ -4,6 +4,7 @@ import com.google.maps.android.PolyUtil
 import com.jalasoft.routesapp.data.api.models.gmaps.EndLocation
 import com.jalasoft.routesapp.data.api.models.gmaps.StartLocation
 import com.jalasoft.routesapp.data.source.FakeDirectionsManager
+import com.jalasoft.routesapp.data.source.FakeLocalDataBaseManager
 import com.jalasoft.routesapp.data.source.FakePlaceManager
 import com.jalasoft.routesapp.data.source.FakeRoutesData
 import com.jalasoft.routesapp.ui.home.viewModel.HomeViewModel
@@ -30,6 +31,7 @@ class HomeViewModelTest : TestCase() {
     private lateinit var viewModel: HomeViewModel
     private lateinit var fakeManager: FakePlaceManager
     private lateinit var fakeDirectionsManager: FakeDirectionsManager
+    private lateinit var fakeLocalDatabaseManager: FakeLocalDataBaseManager
 
     @Before
     public override fun setUp() {
@@ -37,7 +39,8 @@ class HomeViewModelTest : TestCase() {
         hiltRule.inject()
         fakeManager = FakePlaceManager()
         fakeDirectionsManager = FakeDirectionsManager()
-        viewModel = HomeViewModel(fakeManager, fakeDirectionsManager)
+        fakeLocalDatabaseManager = FakeLocalDataBaseManager()
+        viewModel = HomeViewModel(fakeManager, fakeDirectionsManager, fakeLocalDatabaseManager)
     }
 
     @Test

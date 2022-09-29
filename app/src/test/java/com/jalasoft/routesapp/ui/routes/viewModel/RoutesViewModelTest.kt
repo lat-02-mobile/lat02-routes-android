@@ -52,7 +52,14 @@ class RoutesViewModelTest : TestCase() {
     }
 
     @Test
-    fun `Given a filter category criteria, then returns Lines in respective order`() {
+    fun `Given a filter criteria, then returns all Lines`() {
+        viewModel.fetchLines(context)
+        viewModel.filterByCategory(FilterType.ALL)
+        assertEquals(viewModel.routesList.value, FakeRoutesData.lineInfo)
+    }
+
+    @Test
+    fun `Given a filter category criteria, then returns all Lines in order`() {
         viewModel.fetchLines(context)
         viewModel.filterByCategory(FilterType.CATEGORY)
         assertEquals(viewModel.routesList.value, FakeRoutesData.lineInfo.sortedBy { it.category })
