@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry
 import com.jalasoft.routesapp.data.source.FakeRoutesData
 import com.jalasoft.routesapp.data.source.FakeRoutesManager
+import com.jalasoft.routesapp.util.helpers.FilterType
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
@@ -48,6 +49,13 @@ class RoutesViewModelTest : TestCase() {
         viewModel.fetchLines(context)
         viewModel.filterLines("Line")
         assertEquals(viewModel.routesList.value, FakeRoutesData.lineInfo.filter { it.name.contains("Line") })
+    }
+
+    @Test
+    fun `Given a filter category criteria, then returns Lines in respective order`() {
+        viewModel.fetchLines(context)
+        viewModel.filterByCategory(FilterType.CATEGORY)
+        assertEquals(viewModel.routesList.value, FakeRoutesData.lineInfo.sortedBy { it.category })
     }
 
     @Test
