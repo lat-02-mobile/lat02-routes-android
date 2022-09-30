@@ -26,7 +26,8 @@ data class RouteDetail(
             walkDirection: WalkDirection = WalkDirection.IS_NOT_WALKING
         ): RouteDetail {
             val distance = GoogleMapsHelper.getLocationListDistance(list)
-            val estimatedTime = distance / averageVelocity / 60
+            // As the distance divided by average velocity is in seconds, its necessary divided it by 60 to get the minutes
+            val estimatedTime = (distance / averageVelocity) / 60 // Estimated time in minutes
             return RouteDetail(routeName, category, whiteIcon, blackIcon, estimatedTime.roundToInt(), distance.roundToInt(), walkDirection)
         }
     }
