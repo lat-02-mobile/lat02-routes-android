@@ -10,14 +10,21 @@ enum class FirebaseCollections {
     Tourpoints,
     TourpointsCategory
 }
+
 enum class UserType(val int: Int) {
     NORMAL(0),
     ADMIN(1),
 }
+
 enum class UserTypeLogin(val int: Int) {
     NORMAL(1),
     FACEBOOK(2),
     GOOGLE(3)
+}
+
+enum class FilterType {
+    ALL,
+    CATEGORY
 }
 
 enum class WalkDirection {

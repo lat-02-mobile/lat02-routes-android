@@ -78,7 +78,11 @@
     <string name="reg_val_code">Código</string>
     <string name="reg_val_resend">Reenviar</string>
     <string name="routes">Rutas</string>
+
+    <!-- Routes page -->
     <string name="search_route_hint">Buscar</string>
+    <string name="show_all">Show All</string>
+    <string name="by_category">By Category</string>
 
     <!-- Search origin and destination-->
     <string name="search_origin_destination_hint">Buscar lugares</string>

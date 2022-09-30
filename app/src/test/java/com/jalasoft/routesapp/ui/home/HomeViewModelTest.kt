@@ -6,6 +6,10 @@ import com.jalasoft.routesapp.data.api.models.gmaps.StartLocation
 import com.jalasoft.routesapp.data.model.remote.AvailableTransport
 import com.jalasoft.routesapp.data.model.remote.LineRoutePath
 import com.jalasoft.routesapp.data.source.*
+import com.jalasoft.routesapp.data.source.FakeDirectionsManager
+import com.jalasoft.routesapp.data.source.FakeLocalDataBaseManager
+import com.jalasoft.routesapp.data.source.FakePlaceManager
+import com.jalasoft.routesapp.data.source.FakeRoutesData
 import com.jalasoft.routesapp.ui.home.viewModel.HomeViewModel
 import com.jalasoft.routesapp.util.Extensions.toLatLong
 import dagger.hilt.android.testing.HiltAndroidRule

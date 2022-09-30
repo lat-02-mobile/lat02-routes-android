@@ -85,6 +85,8 @@
 
     <!-- Routes page -->
     <string name="search_route_hint">Search</string>
+    <string name="show_all">Show All</string>
+    <string name="by_category">By Category</string>
 
     <!-- Search origin and destination-->
     <string name="search_origin_destination_hint">Search places</string>
