@@ -2,10 +2,13 @@ package com.jalasoft.routesapp.ui.routes.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -17,6 +20,7 @@ import com.jalasoft.routesapp.databinding.FragmentRoutesBinding
 import com.jalasoft.routesapp.ui.routes.adapters.RoutesAdapter
 import com.jalasoft.routesapp.ui.routes.viewModel.RoutesViewModel
 import com.jalasoft.routesapp.util.helpers.Constants
+import com.jalasoft.routesapp.util.helpers.FilterType
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -59,6 +63,36 @@ class RoutesFragment : Fragment(), RoutesAdapter.IRoutesListener {
         }
 
         viewModel.fetchLines(requireContext())
+
+        binding.topAppBar.setOnMenuItemClickListener(object : Toolbar.OnMenuItemClickListener {
+            override fun onMenuItemClick(item: MenuItem?): Boolean {
+                requireActivity().menuInflater
+                item?.let {
+                    if (item.itemId == R.id.filter_options) {
+                        val itemView = binding.root.findViewById<View>(R.id.filter_options)
+                        val popupMenu = PopupMenu(requireContext(), itemView)
+                        popupMenu.menuInflater.inflate(R.menu.route_page_menu_details, popupMenu.menu)
+                        popupMenu.show()
+                        popupMenu.setOnMenuItemClickListener(object : PopupMenu.OnMenuItemClickListener {
+                            override fun onMenuItemClick(item: MenuItem?): Boolean {
+                                item?.let {
+                                    if (item.itemId == R.id.filter_show_all) {
+                                        viewModel.filterByCategory(FilterType.ALL)
+                                        return true
+                                    } else if (item.itemId == R.id.filter_by_category) {
+                                        viewModel.filterByCategory(FilterType.CATEGORY)
+                                        return true
+                                    }
+                                }
+                                return false
+                            }
+                        })
+                        return true
+                    }
+                }
+                return false
+            }
+        })
     }
 
     private fun setRecycler() {

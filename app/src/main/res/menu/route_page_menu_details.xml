@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/filter_show_all"
+        android:icon="@drawable/ic_baseline_filter_list_24"
+        android:title="@string/show_all"
+       />
+    <item
+        android:id="@+id/filter_by_category"
+        android:title="@string/by_category"
+        android:icon="@drawable/ic_baseline_filter_list_24"
+       >
+    </item>
+</menu>
