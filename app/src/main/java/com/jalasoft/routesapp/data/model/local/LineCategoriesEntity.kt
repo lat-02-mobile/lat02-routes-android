@@ -8,5 +8,7 @@ data class LineCategoriesEntity(
     @PrimaryKey
     val id: String,
     val nameEng: String,
-    val nameEsp: String
+    val nameEsp: String,
+    val whiteIcon: String,
+    val blackIcon: String
 )

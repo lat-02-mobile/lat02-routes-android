@@ -13,4 +13,12 @@ interface LineCategoriesDao {
 
     @Query("SELECT * FROM linecategoriesentity")
     fun getAllLinesCategory(): List<LineCategoriesEntity>
+
+    @Query(
+        "SELECT category.id as id, category.nameEng, category.nameEsp, " +
+            "category.whiteIcon, category.blackIcon " +
+            "FROM linecategoriesentity AS category " +
+            "WHERE category.nameEsp = :name OR category.nameEng = :name"
+    )
+    fun getCategoryByName(name: String): LineCategoriesEntity
 }

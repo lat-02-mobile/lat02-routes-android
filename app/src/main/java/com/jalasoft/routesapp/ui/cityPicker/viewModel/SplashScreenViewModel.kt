@@ -18,6 +18,8 @@ constructor(private val linesRepository: RouteRepository, private val tourPoints
     var dataSaved: MutableLiveData<Boolean> = MutableLiveData()
 
     fun getDataAndSaveLocally(context: Context) = viewModelScope.launch {
+        localDB.deleteAllRoutePointsHolder()
+        localDB.deleteAllStopsHolder()
         val lines = linesRepository.getAllLinesToSaveLocally(context)
         if (lines.isNotEmpty()) {
             for (item in lines) {

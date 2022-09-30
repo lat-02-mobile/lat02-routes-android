@@ -47,8 +47,8 @@ open class HomeBaseFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
     private lateinit var sheetBehavior: BottomSheetBehavior<LinearLayout>
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private var _binding: FragmentHomeBinding? = null
-    private var markerOrigin: Marker? = null
-    private var markerDestination: Marker? = null
+    var markerOrigin: Marker? = null
+    var markerDestination: Marker? = null
 
     val viewModel: HomeViewModel by viewModels()
     val binding get() = _binding!!

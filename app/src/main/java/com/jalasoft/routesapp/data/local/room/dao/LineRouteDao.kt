@@ -21,4 +21,16 @@ interface LineRouteDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addStops(stopsHolder: StopsHolder)
+
+    @Transaction
+    @Query("SELECT * FROM linerouteentity")
+    fun getAllLineRoutePointsStops(): List<LineRoutePointsStopsLine>
+
+    @Transaction
+    @Query("DELETE FROM routepointsholder")
+    fun deleteAllRoutePointsHolder()
+
+    @Transaction
+    @Query("DELETE FROM stopsholder")
+    fun deleteAllStopsHolder()
 }

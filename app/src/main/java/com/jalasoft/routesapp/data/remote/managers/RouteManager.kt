@@ -49,10 +49,9 @@ class RouteManager(private val firebaseManager: FirebaseManager) : RouteReposito
     override suspend fun getAllLinesRouteToSaveLocally(idLine: String): List<LineRouteInfo> {
         val result = firebaseManager.getDocumentsWithCondition<LineRoute>(FirebaseCollections.LineRoute, "idLine", idLine).data
         if (result != null) {
-            val lineRoutes = result.map {
+            return result.map {
                 it.lineRouteToLineRouteInfo()
             }
-            return lineRoutes
         }
         return listOf()
     }
@@ -60,10 +59,9 @@ class RouteManager(private val firebaseManager: FirebaseManager) : RouteReposito
     override suspend fun getLineRouteById(idLine: String): List<LineRouteInfo> {
         val result = firebaseManager.getDocumentsWithCondition<LineRoute>(FirebaseCollections.LineRoute, "idLine", idLine).data
         if (result != null) {
-            val lineRouteList = result.map {
+            return result.map {
                 it.lineRouteToLineRouteInfo()
             }
-            return lineRouteList
         }
         return listOf()
     }

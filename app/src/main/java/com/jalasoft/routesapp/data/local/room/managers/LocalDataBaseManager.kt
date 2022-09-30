@@ -6,6 +6,7 @@ import com.jalasoft.routesapp.data.local.room.db.RoutesDB
 import com.jalasoft.routesapp.data.local.room.interfaces.LocalDataBaseRepository
 import com.jalasoft.routesapp.data.model.local.*
 import com.jalasoft.routesapp.data.model.remote.LineRouteInfo
+import com.jalasoft.routesapp.data.model.remote.LineRoutePath
 import com.jalasoft.routesapp.util.PreferenceManager
 import com.jalasoft.routesapp.util.helpers.DateHelper
 
@@ -22,7 +23,7 @@ class LocalDataBaseManager(private val localRoutesDB: RoutesDB) : LocalDataBaseR
         for (item in lineRouteInfo) {
             val start = Location(item.start?.latitude ?: 0.0, item.start?.longitude ?: 0.0)
             val end = Location(item.end?.latitude ?: 0.0, item.end?.longitude ?: 0.0)
-            val lineLocal = LineRouteEntity(item.id, item.idLine, item.name, start, end)
+            val lineLocal = LineRouteEntity(item.id, item.idLine, item.name, item.averageVelocity, item.color, start, end)
             localRoutesDB.lineRouteDao().addLineRoute(lineLocal)
             addLocalRoutePoints(item.id, item.routePoints)
             addLocalStops(item.id, item.stops)
@@ -73,5 +74,30 @@ class LocalDataBaseManager(private val localRoutesDB: RoutesDB) : LocalDataBaseR
 
     override fun deleteFavoriteDestination(favoriteDestinationEntity: FavoriteDestinationEntity) {
         localRoutesDB.favoriteDestinationDao().deleteFavoriteDestination(favoriteDestinationEntity)
+    }
+
+    override fun getAllLineRoutePaths(context: Context): List<LineRoutePath> {
+        val routePointsStops = localRoutesDB.lineRouteDao().getAllLineRoutePointsStops()
+        val lineRoutePaths = routePointsStops.map {
+            val lineRoute = it.lineRoute
+            val line = it.line
+            val routePoints = it.routePoints.map { it.points.toAndroidLocation() }
+            val stops = it.stops.map { it.stop.toAndroidLocation() }
+            val category = localRoutesDB.lineCategoryDao().getCategoryByName(line.category)
+            LineRoutePath(
+                line.idLine, line.name, category.nameEsp, lineRoute.name, routePoints,
+                lineRoute.start.toAndroidLocation(), lineRoute.end.toAndroidLocation(),
+                stops, category.whiteIcon, category.blackIcon, lineRoute.color, lineRoute.averageVelocity
+            )
+        }
+        return lineRoutePaths
+    }
+
+    override fun deleteAllRoutePointsHolder() {
+        localRoutesDB.lineRouteDao().deleteAllRoutePointsHolder()
+    }
+
+    override fun deleteAllStopsHolder() {
+        localRoutesDB.lineRouteDao().deleteAllStopsHolder()
     }
 }

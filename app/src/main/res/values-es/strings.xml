@@ -96,6 +96,7 @@
     <string name="recommended"> (recomendada)</string>
     <string name="route">Ruta</string>
     <string name="minute">%d min</string>
+    <string name="calculating_route">Calculando rutas …</string>
     <!-- Select route dialog -->
     <string name="select_route">Seleccione una ruta</string>
     <string name="no_route">No se encontro ninguna ruta</string>
