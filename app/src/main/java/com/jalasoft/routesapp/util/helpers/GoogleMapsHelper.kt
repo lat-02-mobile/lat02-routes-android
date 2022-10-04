@@ -8,12 +8,9 @@ import android.location.Location
 import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
-import com.google.android.gms.maps.model.BitmapDescriptor
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
 
 object GoogleMapsHelper {
-    fun drawPolyline(mMap: GoogleMap, list: List<LatLng>, hexColor: String = "#004696") {
+    fun drawPolyline(mMap: GoogleMap, list: List<LatLng>, hexColor: String = Constants.DEFAULT_POLYLINE_COLOR) {
         mMap.addPolyline(
             PolylineOptions()
                 .addAll(list)
@@ -23,7 +20,7 @@ object GoogleMapsHelper {
         )
     }
 
-    fun drawDotPolyline(mMap: GoogleMap, list: List<LatLng>, hexColor: String = "#004696") {
+    fun drawDotPolyline(mMap: GoogleMap, list: List<LatLng>, hexColor: String = Constants.DEFAULT_POLYLINE_COLOR) {
         val dot: PatternItem = Dot()
         val gap: PatternItem = Gap(8.toFloat())
         val pattern = listOf(gap, dot)
@@ -49,6 +46,7 @@ object GoogleMapsHelper {
 
     // Estimated time in minutes
     fun getEstimatedTimeToArrive(averageVelocityMetersSec: Double, totalDistanceMeters: Double): Double {
+        if (averageVelocityMetersSec == 0.0) return 1.0
         return (totalDistanceMeters * (1 / averageVelocityMetersSec)) / 60
     }
 

@@ -7,6 +7,7 @@ import com.jalasoft.routesapp.data.api.models.gmaps.StartLocation
 import com.jalasoft.routesapp.data.api.retrofit.IGmapsDirections
 import com.jalasoft.routesapp.data.remote.interfaces.DirectionsRepository
 import com.jalasoft.routesapp.util.Response
+import com.jalasoft.routesapp.util.helpers.Constants
 import java.lang.Exception
 
 class DirectionsManager(private val service: IGmapsDirections) : DirectionsRepository {
@@ -17,7 +18,7 @@ class DirectionsManager(private val service: IGmapsDirections) : DirectionsRepos
         try {
             val from = startLocation.lat.toString() + "," + startLocation.lng.toString()
             val to = endLocation.lat.toString() + "," + endLocation.lng.toString()
-            val response = service.getDirection(from, to, BuildConfig.GOOGLE_DIRECTIONS_API_KEY)
+            val response = service.getDirection(from, to, Constants.DIRECTIONS_MODE, BuildConfig.GOOGLE_DIRECTIONS_API_KEY)
             if (response.isSuccessful) {
                 return Response.Success(response.body()?.routes ?: listOf())
             }

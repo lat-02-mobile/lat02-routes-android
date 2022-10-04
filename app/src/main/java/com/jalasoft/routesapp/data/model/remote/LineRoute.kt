@@ -15,7 +15,9 @@ data class LineRoute(
     val start: GeoPoint? = null,
     val end: GeoPoint? = null,
     val routePoints: List<GeoPoint> = listOf(),
-    val stops: List<GeoPoint> = listOf()
+    val stops: List<GeoPoint> = listOf(),
+    val color: String = "",
+    val averageVelocity: String = "0.0"
 ) : Serializable {
     fun lineRouteToLineRouteInfo(): LineRouteInfo {
         val routePoints = geoPointListToLocationList(routePoints)
@@ -23,7 +25,7 @@ data class LineRoute(
         val end = end?.let { geoPointToLocation(it) }
         val stops = geoPointListToLocationList(stops)
 
-        return LineRouteInfo(id, name, idLine, routePoints, start, end, stops)
+        return LineRouteInfo(id, name, idLine, routePoints, start, end, stops, color, averageVelocity.toDouble())
     }
 }
 
@@ -34,5 +36,7 @@ data class LineRouteInfo(
     val routePoints: List<Location> = listOf(),
     val start: Location? = null,
     val end: Location? = null,
-    val stops: List<Location> = listOf()
+    val stops: List<Location> = listOf(),
+    val color: String = "",
+    val averageVelocity: Double = 0.0
 ) : Serializable

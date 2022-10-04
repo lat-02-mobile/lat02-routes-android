@@ -19,9 +19,9 @@
     <string name="reg_vm_valid_email">The Email is being used in another account</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="facebook_app_id" translatable="false">3146525082229053</string>
-    <string name="fb_login_protocol_scheme" translatable="false">fb3146525082229053</string>
-    <string name="facebook_client_token" translatable="false">131412692dc6c5687212fa62aa82474a</string>
+    <string name="facebook_app_id" translatable="false">{FB_APP_ID}</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb{FB_APP_ID}</string>
+    <string name="facebook_client_token" translatable="false">{FB_CLIENT_TOKEN}</string>
 
     <!--  Startup page  -->
     <string name="txt_login">You don\'t have an account yet?</string>
@@ -104,6 +104,7 @@
     <string name="recommended"> (recommended)</string>
     <string name="route">Route</string>
     <string name="minute">%d min</string>
+    <string name="calculating_route">Calculating routes …</string>
     <!-- Select route dialog -->
     <string name="select_route">Select route</string>
     <string name="no_route">No route found</string>

@@ -40,7 +40,7 @@ class RouteDetailsAdapter(var routesList: MutableList<RouteDetail>) : RecyclerVi
         if (routeDetail.walkDirection != WalkDirection.IS_NOT_WALKING) {
             holder.binding.transportImage.setImageResource(R.drawable.ic_baseline_directions_walk_24)
         } else {
-            holder.binding.transportImage.load(routeDetail.icon.blackUrl) {
+            holder.binding.transportImage.load(routeDetail.blackIcon) {
                 crossfade(true)
                 placeholder(R.drawable.ic_bus_stop)
                 transformations(CircleCropTransformation())

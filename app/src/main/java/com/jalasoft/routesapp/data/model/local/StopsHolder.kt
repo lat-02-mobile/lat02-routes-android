@@ -15,7 +15,7 @@ data class StopsHolder(
 )
 
 data class LineRouteStops(
-    @Embedded val user: LineRouteEntity,
+    @Embedded val lineRoute: LineRouteEntity,
     @Relation(
         parentColumn = "id",
         entityColumn = "idLineRoute"

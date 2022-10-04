@@ -11,6 +11,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
@@ -25,11 +26,13 @@ import com.jalasoft.routesapp.data.model.local.RouteDetail.Companion.getRouteDet
 import com.jalasoft.routesapp.data.model.remote.AvailableTransport
 import com.jalasoft.routesapp.ui.home.adapters.PossibleRouteAdapter
 import com.jalasoft.routesapp.ui.home.adapters.RouteDetailsAdapter
+import com.jalasoft.routesapp.util.CustomProgressDialog
 import com.jalasoft.routesapp.util.Extensions.toLatLong
 import com.jalasoft.routesapp.util.Extensions.toLocation
 import com.jalasoft.routesapp.util.helpers.Constants
 import com.jalasoft.routesapp.util.helpers.GoogleMapsHelper
 import com.jalasoft.routesapp.util.helpers.WalkDirection
+import kotlinx.coroutines.*
 
 enum class HomeSelectionStatus {
     SELECTING_POINTS, SHOWING_POSSIBLE_ROUTES, SHOWING_ROUTE_DETAILS
@@ -39,6 +42,7 @@ class HomeFragment : HomeBaseFragment(), PossibleRouteAdapter.IPossibleRouteList
     private var homeSelectionStatus = HomeSelectionStatus.SELECTING_POINTS
     private var isFavorite = false
     private var favoriteDestination: FavoriteDestinationEntity? = null
+    private val progressDialog by lazy { CustomProgressDialog(requireActivity()) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -63,12 +67,21 @@ class HomeFragment : HomeBaseFragment(), PossibleRouteAdapter.IPossibleRouteList
                 }
                 HomeSelectionStatus.SHOWING_POSSIBLE_ROUTES -> {
                     mMap?.clear()
+                    viewModel.clearPossibleRoutes()
                     binding.btnCheckNextLocation.visibility = View.VISIBLE
                     binding.btnCurrentLocation.visibility = View.VISIBLE
                     binding.pin.visibility = View.VISIBLE
                     homeSelectionStatus = HomeSelectionStatus.SELECTING_POINTS
                     binding.possibleRouteBottomLayout.view.visibility = View.GONE
                     binding.bottomLayout1.bottomSheetLayout.visibility = View.VISIBLE
+                    val selectedOrigin = viewModel.selectedOrigin.value ?: return@setOnClickListener
+                    val selectedDestination = viewModel.selectedDestination.value ?: return@setOnClickListener
+                    val markerOrigin = MarkerOptions().position(selectedOrigin)
+                    val markerDestination = MarkerOptions().position(selectedDestination)
+                    markerOrigin.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_origin))
+                    markerDestination.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_destination))
+                    this.markerOrigin = mMap?.addMarker(markerOrigin)
+                    this.markerDestination = mMap?.addMarker(markerDestination)
                 }
                 HomeSelectionStatus.SHOWING_ROUTE_DETAILS -> {
                     homeSelectionStatus = HomeSelectionStatus.SHOWING_POSSIBLE_ROUTES
@@ -83,18 +96,29 @@ class HomeFragment : HomeBaseFragment(), PossibleRouteAdapter.IPossibleRouteList
             if (viewModel.selectedOrigin.value == null) {
                 val newLocation = getSelectedLocation()
                 viewModel.setOrigin(newLocation)
-            } else if (viewModel.selectedDestination.value == null) {
+                return@setOnClickListener
+            }
+            if (viewModel.selectedDestination.value == null) {
                 val newLocation = getSelectedLocation()
                 viewModel.setDestination(newLocation)
-            } else {
-                binding.btnCheckNextLocation.visibility = View.GONE
-                binding.btnCurrentLocation.visibility = View.GONE
-                binding.pin.visibility = View.GONE
-                viewModel.getPossibleRoutes()
-                homeSelectionStatus = HomeSelectionStatus.SHOWING_POSSIBLE_ROUTES
-                binding.bottomLayout1.bottomSheetLayout.visibility = View.GONE
-                binding.possibleRouteBottomLayout.view.visibility = View.VISIBLE
+                return@setOnClickListener
             }
+            val origin = viewModel.selectedOrigin.value ?: return@setOnClickListener
+            val destination = viewModel.selectedDestination.value ?: return@setOnClickListener
+            if (origin.toLocation().distanceTo(destination.toLocation()) <= Constants.MINIMUM_DISTANCE_ORIGIN_DESTINATION) {
+                mMap?.let {
+                    drawWalkingPath(StartLocation(origin.latitude, origin.longitude), EndLocation(destination.latitude, destination.longitude), it) {}
+                }
+            } else {
+                val lineRoutePaths = viewModel.getRoutePaths(requireContext())
+                viewModel.getPossibleRoutes(lineRoutePaths, origin, destination)
+            }
+            binding.btnCheckNextLocation.visibility = View.GONE
+            binding.btnCurrentLocation.visibility = View.GONE
+            binding.pin.visibility = View.GONE
+            homeSelectionStatus = HomeSelectionStatus.SHOWING_POSSIBLE_ROUTES
+            binding.bottomLayout1.bottomSheetLayout.visibility = View.GONE
+            binding.possibleRouteBottomLayout.view.visibility = View.VISIBLE
         }
 
         binding.routeDetailsBottomLayout.favoriteButton.setOnClickListener {
@@ -129,14 +153,9 @@ class HomeFragment : HomeBaseFragment(), PossibleRouteAdapter.IPossibleRouteList
     }
 
     override fun onPossibleRouteTap(possibleRoute: AvailableTransport, position: Int) {
-        // destination Hardcoded TODO change by selected destination when join other features
-        isFavorite = if (position == 0) {
-            // near from the saved destination
-            verifyFavoriteDestination(-16.524715, -68.119393)
-        } else {
-            // far from the saved destination
-            verifyFavoriteDestination(-16.524412, -68.119111)
-        }
+        val selectedOrigin = viewModel.selectedOrigin.value ?: return
+        val selectedDestination = viewModel.selectedDestination.value ?: return
+        isFavorite = verifyFavoriteDestination(selectedDestination.latitude, selectedDestination.longitude)
         if (isFavorite) {
             binding.routeDetailsBottomLayout.favoriteButton.setImageResource(R.drawable.ic_baseline_favorite_24)
         } else {
@@ -144,37 +163,36 @@ class HomeFragment : HomeBaseFragment(), PossibleRouteAdapter.IPossibleRouteList
         }
         mMap?.let {
             homeSelectionStatus = HomeSelectionStatus.SHOWING_ROUTE_DETAILS
-//            binding.progressBar.visibility = View.VISIBLE
+            val text = RoutesAppApplication.resource?.getString(R.string.calculating_route)
+            progressDialog.start(text!!)
             val details = mutableListOf<RouteDetail>()
             updateRouteDetailRecycler(details.toList())
             binding.routeDetailsBottomLayout.view.visibility = View.VISIBLE
             binding.possibleRouteBottomLayout.view.visibility = View.GONE
             it.clear()
-            val origin = LatLng(-16.52093, -68.1242)
-            val destination = LatLng(-16.52476, -68.11937)
-            val originName = Geocoder(requireContext()).getFromLocation(origin.latitude, origin.longitude, 1)
-            val destinationName = Geocoder(requireContext()).getFromLocation(destination.latitude, destination.longitude, 1)
+            val originName = Geocoder(requireContext()).getFromLocation(selectedOrigin.latitude, selectedOrigin.longitude, 1)
+            val destinationName = Geocoder(requireContext()).getFromLocation(selectedDestination.latitude, selectedDestination.longitude, 1)
 
             binding.routeDetailsBottomLayout.tvDestinationName.text = destinationName.first().thoroughfare
             binding.routeDetailsBottomLayout.tvOriginName.text = originName.first().thoroughfare
-            addMarker(it, origin, R.drawable.ic_origin)
-            addMarker(it, destination, R.drawable.ic_start_route)
+            addMarker(it, selectedOrigin, R.drawable.ic_origin)
+            addMarker(it, selectedDestination, R.drawable.ic_start_route)
 
             val builder = LatLngBounds.Builder()
             val start = possibleRoute.transports.first().routePoints.first().toLatLong()
             val end = possibleRoute.transports.last().routePoints.last().toLatLong()
-            drawWalkingPath(StartLocation(origin.latitude, origin.longitude), EndLocation(start.latitude, start.longitude), it) { list ->
+            drawWalkingPath(StartLocation(selectedOrigin.latitude, selectedOrigin.longitude), EndLocation(start.latitude, start.longitude), it) { list ->
                 list.map { location ->
                     builder.include(location.toLatLong())
                 }
-                details.add(0, getRouteDetailFromLocationList("", list, walkDirection = WalkDirection.TO_FIRST_STOP))
+                details.add(0, getRouteDetailFromLocationList("", list, blackIcon = "", whiteIcon = "", walkDirection = WalkDirection.TO_FIRST_STOP))
             }
             addMarker(it, start, R.drawable.ic_start_route)
             addMarker(it, end, R.drawable.ic_end_route)
             for (line in possibleRoute.transports) {
                 GoogleMapsHelper.drawPolyline(it, line.routePoints.map { point -> point.toLatLong() }, line.color)
                 val lineRouteName = "${line.routeName}, ${line.lineName}"
-                details.add(getRouteDetailFromLocationList(lineRouteName, line.routePoints, line.icons, line.category, line.averageVelocity))
+                details.add(getRouteDetailFromLocationList(lineRouteName, line.routePoints, line.whiteIcon, line.blackIcon, line.category, line.averageVelocity))
                 line.routePoints.map { location ->
                     builder.include(location.toLatLong())
                 }
@@ -188,17 +206,17 @@ class HomeFragment : HomeBaseFragment(), PossibleRouteAdapter.IPossibleRouteList
                     list.map { location ->
                         builder.include(location.toLatLong())
                     }
-                    details.add(2, getRouteDetailFromLocationList("", list, walkDirection = WalkDirection.TO_NEXT_STOP))
+                    details.add(2, getRouteDetailFromLocationList("", list, blackIcon = "", whiteIcon = "", walkDirection = WalkDirection.TO_NEXT_STOP))
                 }
             }
-            drawWalkingPath(StartLocation(end.latitude, end.longitude), EndLocation(destination.latitude, destination.longitude), it) { list ->
+            drawWalkingPath(StartLocation(end.latitude, end.longitude), EndLocation(selectedDestination.latitude, selectedDestination.longitude), it) { list ->
                 list.map { location ->
                     builder.include(location.toLatLong())
                 }
-                details.add(getRouteDetailFromLocationList("", list, walkDirection = WalkDirection.TO_DESTINATION))
-//                binding.progressBar.visibility = View.GONE
+                details.add(getRouteDetailFromLocationList("", list, blackIcon = "", whiteIcon = "", walkDirection = WalkDirection.TO_DESTINATION))
                 updateRouteDetailRecycler(details.toList())
             }
+            progressDialog.stop()
             val bounds = builder.build()
             val cu = CameraUpdateFactory.newLatLngBounds(bounds, Constants.POLYLINE_PADDING)
             mMap?.animateCamera(cu)
@@ -227,7 +245,7 @@ class HomeFragment : HomeBaseFragment(), PossibleRouteAdapter.IPossibleRouteList
         var isFavorite = false
         val newDestination = Location(LocationManager.NETWORK_PROVIDER)
         newDestination.latitude = lat
-        newDestination.longitude = lng // -16.524412 -68.119111
+        newDestination.longitude = lng
         val destinations = Location(LocationManager.NETWORK_PROVIDER)
         val list = viewModel.getFavoriteDestinationsByCityAndUserId(requireContext())
 
@@ -239,7 +257,7 @@ class HomeFragment : HomeBaseFragment(), PossibleRouteAdapter.IPossibleRouteList
                 destinations.longitude = item.destination.longitude
 
                 val dist = destinations.distanceTo(newDestination)
-                isFavorite = dist < 8
+                isFavorite = dist < Constants.MINIMUM_DISTANCE_TO_STILL_FAVORITE
                 if (isFavorite) {
                     favoriteDestination = item
                 }
@@ -261,8 +279,10 @@ class HomeFragment : HomeBaseFragment(), PossibleRouteAdapter.IPossibleRouteList
         builder.setPositiveButton(R.string.save) { _, _ ->
             isFavorite = true
             val name = input.text.toString()
-            viewModel.saveFavoriteDestination(-16.52476, -68.11937, name, requireContext())
-            binding.routeDetailsBottomLayout.favoriteButton.setImageResource(R.drawable.ic_baseline_favorite_24)
+            viewModel.selectedDestination.value?.let { destination ->
+                viewModel.saveFavoriteDestination(destination.latitude, destination.longitude, name, requireContext())
+                binding.routeDetailsBottomLayout.favoriteButton.setImageResource(R.drawable.ic_baseline_favorite_24)
+            }
         }
         builder.setNegativeButton(R.string.cancel) { dialog, _ ->
             dialog.cancel()

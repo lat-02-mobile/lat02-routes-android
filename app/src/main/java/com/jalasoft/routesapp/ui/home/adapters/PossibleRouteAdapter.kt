@@ -70,7 +70,7 @@ class PossibleRouteAdapter(var possibleRoutesList: MutableList<AvailableTranspor
         holder.binding.estimatedTimeText.setTextColor(BLACK)
         holder.binding.transportImage.setBackgroundColor(WHITE)
         holder.binding.transportImage.setColorFilter(BLACK)
-        holder.binding.transportImage.load(possibleRoute.transports.first().icons.whiteUrl) {
+        holder.binding.transportImage.load(possibleRoute.transports.first().whiteIcon) {
             crossfade(true)
             placeholder(R.drawable.ic_bus_stop)
             transformations(CircleCropTransformation())
@@ -85,7 +85,7 @@ class PossibleRouteAdapter(var possibleRoutesList: MutableList<AvailableTranspor
         holder.binding.recommendedText.setTextColor(WHITE)
         holder.binding.transportImage.setColorFilter(WHITE)
         holder.binding.transportImage.setBackgroundColor(TRANSPARENT)
-        holder.binding.transportImage.load(possibleRoute.transports.first().icons.blackUrl) {
+        holder.binding.transportImage.load(possibleRoute.transports.first().blackIcon) {
             crossfade(true)
             placeholder(R.drawable.ic_bus_stop)
             transformations(CircleCropTransformation())

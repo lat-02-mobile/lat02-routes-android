@@ -15,7 +15,7 @@ data class RoutePointsHolder(
 )
 
 data class LineRoutePoints(
-    @Embedded val user: LineRouteEntity,
+    @Embedded val lineRoute: LineRouteEntity,
     @Relation(
         parentColumn = "id",
         entityColumn = "idLineRoute"

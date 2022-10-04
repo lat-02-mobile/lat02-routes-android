@@ -108,7 +108,7 @@ object FakeRoutesData {
     private val line3RouteInfo = LineRouteInfo("3", line3Route1Name, idLine3, points3, start3, end3, stops3)
 
     private val lineEntity = LineEntity("1", "line test", "scz", "bus", true)
-    private val lineCategory = LineCategoriesEntity("123", "bus", "bus")
+    private val lineCategory = LineCategoriesEntity("123", "bus", "bus", "", "")
 
     val lineInfo = listOf(line1Info, line2Info, line3Info)
     val lineRouteInfo = listOf(line1RouteInfo, line2RouteInfo, line3RouteInfo)

@@ -56,15 +56,7 @@ data class LineInfo(
     val enable: Boolean? = null,
     val category: String = "",
     val routePaths: List<LineRouteInfo> = listOf()
-) {
-    fun toLineRoutePaths(): List<LineRoutePath> {
-        val lineRoutePathList = mutableListOf<LineRoutePath>()
-        routePaths.map { route ->
-            lineRoutePathList.add(LineRoutePath(id, name, category, route.name, route.routePoints, route.start, route.end, route.stops))
-        }
-        return lineRoutePathList.toList()
-    }
-}
+)
 
 // class to be used in algorithm
 data class LineRoutePath(
@@ -76,7 +68,8 @@ data class LineRoutePath(
     val start: Location? = null,
     val end: Location? = null,
     val stops: List<Location> = listOf(),
-    val icons: LineCategoryIcons = LineCategoryIcons(),
+    val whiteIcon: String = Constants.DEFAULT_CATEGORY_WHITE_ICON,
+    val blackIcon: String = Constants.DEFAULT_CATEGORY_BLACK_ICON,
     val color: String = "#004696",
     val averageVelocity: Double = 1.0
 ) : Serializable

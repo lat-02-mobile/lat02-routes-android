@@ -5,6 +5,7 @@ import android.location.Location
 import com.jalasoft.routesapp.data.local.room.interfaces.LocalDataBaseRepository
 import com.jalasoft.routesapp.data.model.local.*
 import com.jalasoft.routesapp.data.model.remote.LineRouteInfo
+import com.jalasoft.routesapp.data.model.remote.LineRoutePath
 
 class FakeLocalDataBaseManager : LocalDataBaseRepository {
     override fun addLocalLine(line: LineEntity) {
@@ -37,9 +38,19 @@ class FakeLocalDataBaseManager : LocalDataBaseRepository {
     }
 
     override fun getFavoriteDestinationByCityAndUserId(context: Context): List<FavoriteDestinationEntity> {
-        return arrayListOf()
+        return listOf()
     }
 
     override fun deleteFavoriteDestination(favoriteDestinationEntity: FavoriteDestinationEntity) {
+    }
+
+    override fun getAllLineRoutePaths(context: Context): List<LineRoutePath> {
+        return listOf()
+    }
+
+    override fun deleteAllRoutePointsHolder() {
+    }
+
+    override fun deleteAllStopsHolder() {
     }
 }

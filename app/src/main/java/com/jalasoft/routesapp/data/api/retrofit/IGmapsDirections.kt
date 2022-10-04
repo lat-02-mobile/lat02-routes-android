@@ -11,6 +11,7 @@ interface IGmapsDirections {
     suspend fun getDirection(
         @Query("origin") origin: String,
         @Query("destination") destination: String,
+        @Query("mode") mode: String,
         @Query("key") apiKey: String
     ): Response<DirectionResponse>
 }
