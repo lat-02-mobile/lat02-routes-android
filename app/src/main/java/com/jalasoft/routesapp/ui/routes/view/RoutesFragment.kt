@@ -62,7 +62,7 @@ class RoutesFragment : Fragment(), RoutesAdapter.IRoutesListener {
             (binding.recyclerRoutes.adapter as RoutesAdapter).updateList(it.toMutableList())
         }
 
-        viewModel.fetchLines(requireContext())
+        viewModel.fetchLines()
 
         binding.topAppBar.setOnMenuItemClickListener(object : Toolbar.OnMenuItemClickListener {
             override fun onMenuItemClick(item: MenuItem?): Boolean {

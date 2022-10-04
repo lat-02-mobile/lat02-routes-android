@@ -1,28 +1,25 @@
 package com.jalasoft.routesapp.ui.routes.viewModel
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.jalasoft.routesapp.data.local.room.interfaces.RouteLocalRepository
 import com.jalasoft.routesapp.data.model.remote.LineInfo
-import com.jalasoft.routesapp.data.remote.interfaces.RouteRepository
 import com.jalasoft.routesapp.util.helpers.FilterType
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class RoutesViewModel
 @Inject
-constructor(private val repository: RouteRepository) : ViewModel() {
+constructor(private val routeLocalDB: RouteLocalRepository) : ViewModel() {
 
     private var _routesList: MutableLiveData<List<LineInfo>> = MutableLiveData()
     val routesList: LiveData<List<LineInfo>> = _routesList
     var originalList: List<LineInfo> = listOf()
 
-    fun fetchLines(context: Context) = viewModelScope.launch {
-        _routesList.value = repository.getAllLines(context)
+    fun fetchLines() {
+        _routesList.value = routeLocalDB.getAllLines()
         originalList = _routesList.value ?: listOf()
     }
 

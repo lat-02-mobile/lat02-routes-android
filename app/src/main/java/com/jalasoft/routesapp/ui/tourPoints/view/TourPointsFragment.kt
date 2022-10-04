@@ -37,7 +37,7 @@ class TourPointsFragment : Fragment(), TourPointsAdapter.ITourPointsListener {
             binding.progressBar.visibility = View.GONE
             (binding.recyclerTourPoints.adapter as TourPointsAdapter).updateList(it.toMutableList())
         }
-        viewModel.fetchTourPoints(requireContext())
+        viewModel.fetchTourPoints()
     }
 
     private fun setRecycler() {
