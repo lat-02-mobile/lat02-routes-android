@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.text.InputType
 import android.view.View
 import android.widget.EditText
+import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -15,6 +16,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.maps.android.PolyUtil
 import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.RoutesAppApplication
@@ -43,11 +45,13 @@ class HomeFragment : HomeBaseFragment(), PossibleRouteAdapter.IPossibleRouteList
     private var isFavorite = false
     private var favoriteDestination: FavoriteDestinationEntity? = null
     private val progressDialog by lazy { CustomProgressDialog(requireActivity()) }
+    private lateinit var possibleRoutesBottomSheetBehavior: BottomSheetBehavior<LinearLayout>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.possibleRouteBottomLayout.view.visibility = View.GONE
         binding.routeDetailsBottomLayout.view.visibility = View.GONE
+        possibleRoutesBottomSheetBehavior = BottomSheetBehavior.from(binding.possibleRouteBottomLayout.view)
         setUpButtons()
         setPossibleRoutesRecycler()
         setRouteDetailRecycler()
@@ -112,6 +116,7 @@ class HomeFragment : HomeBaseFragment(), PossibleRouteAdapter.IPossibleRouteList
             } else {
                 val lineRoutePaths = viewModel.getRoutePaths(requireContext())
                 viewModel.getPossibleRoutes(lineRoutePaths, origin, destination)
+                if (viewModel.possibleRoutesList.value?.isNotEmpty() == true) possibleRoutesBottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             }
             binding.btnCheckNextLocation.visibility = View.GONE
             binding.btnCurrentLocation.visibility = View.GONE
