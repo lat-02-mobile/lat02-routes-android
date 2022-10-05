@@ -44,7 +44,7 @@ class FakeLocalDataBaseManager : LocalDataBaseRepository {
     override fun deleteFavoriteDestination(favoriteDestinationEntity: FavoriteDestinationEntity) {
     }
 
-    override fun getAllLineRoutePaths(context: Context): List<LineRoutePath> {
+    override fun getAllLineRoutePaths(context: Context, cityId: String): List<LineRoutePath> {
         return listOf()
     }
 

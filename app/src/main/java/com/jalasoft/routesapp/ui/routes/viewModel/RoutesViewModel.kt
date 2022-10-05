@@ -18,8 +18,8 @@ constructor(private val routeLocalDB: RouteLocalRepository) : ViewModel() {
     val routesList: LiveData<List<LineInfo>> = _routesList
     var originalList: List<LineInfo> = listOf()
 
-    fun fetchLines() {
-        _routesList.value = routeLocalDB.getAllLines()
+    fun fetchLines(cityId: String) {
+        _routesList.value = routeLocalDB.getAllLinesByCityId(cityId)
         originalList = _routesList.value ?: listOf()
     }
 

@@ -13,4 +13,10 @@ interface TourPointDao {
 
     @Query("SELECT * FROM tourpointentity")
     fun getAllTourPoints(): List<TourPointEntity>
+
+    @Query(
+        "SELECT * FROM tourpointentity " +
+            "WHERE idCity = :cityId"
+    )
+    fun getAllTourPointsByCityId(cityId: String): List<TourPointEntity>
 }

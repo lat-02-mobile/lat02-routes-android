@@ -31,10 +31,10 @@ import com.jalasoft.routesapp.ui.home.adapters.RouteDetailsAdapter
 import com.jalasoft.routesapp.util.CustomProgressDialog
 import com.jalasoft.routesapp.util.Extensions.toLatLong
 import com.jalasoft.routesapp.util.Extensions.toLocation
+import com.jalasoft.routesapp.util.PreferenceManager
 import com.jalasoft.routesapp.util.helpers.Constants
 import com.jalasoft.routesapp.util.helpers.GoogleMapsHelper
 import com.jalasoft.routesapp.util.helpers.WalkDirection
-import kotlinx.coroutines.*
 
 enum class HomeSelectionStatus {
     SELECTING_POINTS, SHOWING_POSSIBLE_ROUTES, SHOWING_ROUTE_DETAILS
@@ -114,7 +114,8 @@ class HomeFragment : HomeBaseFragment(), PossibleRouteAdapter.IPossibleRouteList
                     drawWalkingPath(StartLocation(origin.latitude, origin.longitude), EndLocation(destination.latitude, destination.longitude), it) {}
                 }
             } else {
-                val lineRoutePaths = viewModel.getRoutePaths(requireContext())
+                val currentCityId = PreferenceManager.getCurrentCityID(requireContext())
+                val lineRoutePaths = viewModel.getRoutePaths(requireContext(), currentCityId)
                 viewModel.getPossibleRoutes(lineRoutePaths, origin, destination)
                 if (viewModel.possibleRoutesList.value?.isNotEmpty() == true) possibleRoutesBottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             }

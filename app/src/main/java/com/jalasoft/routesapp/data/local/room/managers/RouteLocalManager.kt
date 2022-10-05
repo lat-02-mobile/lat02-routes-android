@@ -7,12 +7,13 @@ import java.util.*
 
 class RouteLocalManager(private val localRoutesDB: RoutesDB) : RouteLocalRepository {
 
-    override fun getAllLines(): List<LineInfo> {
+    override fun getAllLinesByCityId(cityId: String): List<LineInfo> {
         val routePointsStops = localRoutesDB.lineRouteDao().getAllLineRoutePointsStops()
         var lineInfoList = mutableListOf<LineInfo>()
         for (routePointStop in routePointsStops) {
             val lineRoute = routePointStop.lineRoute
             val line = routePointStop.line
+            if (line.idCity != cityId) continue
             val routePoints = routePointStop.routePoints.map { it.points.toAndroidLocation() }
             val stops = routePointStop.stops.map { it.stop.toAndroidLocation() }
             val lineRouteInfoList = LineRouteInfo(

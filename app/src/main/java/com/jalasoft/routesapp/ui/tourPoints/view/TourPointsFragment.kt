@@ -11,6 +11,7 @@ import com.jalasoft.routesapp.data.model.remote.TourPointPath
 import com.jalasoft.routesapp.databinding.FragmentTourPointsBinding
 import com.jalasoft.routesapp.ui.tourPoints.adapter.TourPointsAdapter
 import com.jalasoft.routesapp.ui.tourPoints.viewModel.TourPointsViewModel
+import com.jalasoft.routesapp.util.PreferenceManager
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -37,7 +38,8 @@ class TourPointsFragment : Fragment(), TourPointsAdapter.ITourPointsListener {
             binding.progressBar.visibility = View.GONE
             (binding.recyclerTourPoints.adapter as TourPointsAdapter).updateList(it.toMutableList())
         }
-        viewModel.fetchTourPoints()
+        val currentCityId = PreferenceManager.getCurrentCityID(requireContext())
+        viewModel.fetchTourPoints(currentCityId)
     }
 
     private fun setRecycler() {

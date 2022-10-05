@@ -40,34 +40,34 @@ class RoutesViewModelTest : TestCase() {
 
     @Test
     fun `Given the first call for fetching the lines, when the line screen appears, then returns all the Lines from the current city`() {
-        viewModel.fetchLines()
+        viewModel.fetchLines("")
         assertEquals(viewModel.routesList.value, FakeRoutesData.lineInfo)
     }
 
     @Test
     fun `Given the first call for fetching lines, when there is a filter criteria, then returns all the Lines that match the filter criteria`() {
-        viewModel.fetchLines()
+        viewModel.fetchLines("")
         viewModel.filterLines("Line")
         assertEquals(viewModel.routesList.value, FakeRoutesData.lineInfo.filter { it.name.contains("Line") })
     }
 
     @Test
     fun `Given a filter criteria, then returns all Lines`() {
-        viewModel.fetchLines()
+        viewModel.fetchLines("")
         viewModel.filterByCategory(FilterType.ALL)
         assertEquals(viewModel.routesList.value, FakeRoutesData.lineInfo)
     }
 
     @Test
     fun `Given a filter category criteria, then returns all Lines in order`() {
-        viewModel.fetchLines()
+        viewModel.fetchLines("")
         viewModel.filterByCategory(FilterType.CATEGORY)
         assertEquals(viewModel.routesList.value, FakeRoutesData.lineInfo.sortedBy { it.category })
     }
 
     @Test
     fun `Given the first call for fetching lines, when there is a filter criteria that does not match, then returns an empty result`() {
-        viewModel.fetchLines()
+        viewModel.fetchLines("")
         viewModel.filterLines("5")
         assertTrue(viewModel.routesList.value!!.isEmpty())
     }

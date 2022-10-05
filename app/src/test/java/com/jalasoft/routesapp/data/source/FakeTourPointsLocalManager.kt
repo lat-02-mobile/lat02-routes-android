@@ -4,7 +4,8 @@ import com.jalasoft.routesapp.data.local.room.interfaces.TourPointLocalRepositor
 import com.jalasoft.routesapp.data.model.remote.TourPointPath
 
 class FakeTourPointsLocalManager : TourPointLocalRepository {
-    override fun getAllTourPoints(): List<TourPointPath> {
+
+    override fun getAllTourPointsByCityId(cityId: String): List<TourPointPath> {
         return FakeTourPointData.tourPoints
     }
 }

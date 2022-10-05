@@ -76,19 +76,22 @@ class LocalDataBaseManager(private val localRoutesDB: RoutesDB) : LocalDataBaseR
         localRoutesDB.favoriteDestinationDao().deleteFavoriteDestination(favoriteDestinationEntity)
     }
 
-    override fun getAllLineRoutePaths(context: Context): List<LineRoutePath> {
+    override fun getAllLineRoutePaths(context: Context, cityId: String): List<LineRoutePath> {
         val routePointsStops = localRoutesDB.lineRouteDao().getAllLineRoutePointsStops()
-        val lineRoutePaths = routePointsStops.map {
-            val lineRoute = it.lineRoute
-            val line = it.line
-            val routePoints = it.routePoints.map { it.points.toAndroidLocation() }
-            val stops = it.stops.map { it.stop.toAndroidLocation() }
+        val lineRoutePaths = mutableListOf<LineRoutePath>()
+        for (routePointStop in routePointsStops) {
+            val lineRoute = routePointStop.lineRoute
+            val line = routePointStop.line
+            if (cityId != line.idCity) continue
+            val routePoints = routePointStop.routePoints.map { it.points.toAndroidLocation() }
+            val stops = routePointStop.stops.map { it.stop.toAndroidLocation() }
             val category = localRoutesDB.lineCategoryDao().getCategoryByName(line.category)
-            LineRoutePath(
+            val newLineRoutePath = LineRoutePath(
                 line.idLine, line.name, category.nameEsp, lineRoute.name, routePoints,
                 lineRoute.start.toAndroidLocation(), lineRoute.end.toAndroidLocation(),
                 stops, category.whiteIcon, category.blackIcon, lineRoute.color, lineRoute.averageVelocity
             )
+            lineRoutePaths.add(newLineRoutePath)
         }
         return lineRoutePaths
     }

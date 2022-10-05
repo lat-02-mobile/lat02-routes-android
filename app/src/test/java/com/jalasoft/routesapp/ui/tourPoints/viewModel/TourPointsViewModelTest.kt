@@ -39,7 +39,7 @@ class TourPointsViewModelTest : TestCase() {
 
     @Test
     fun `Given the first call for fetching tourPoints, when the tourPoints list screen appears, then returns all the tourPoints from the current city`() {
-        viewModel.fetchTourPoints()
+        viewModel.fetchTourPoints("")
         assertEquals(viewModel._tourPointsList.value, FakeTourPointData.tourPoints)
     }
 }
