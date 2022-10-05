@@ -17,7 +17,8 @@ constructor(private val tourPointLocalDB: TourPointLocalRepository) : ViewModel(
     var originalList: List<TourPointPath> = listOf()
 
     fun fetchTourPoints(cityId: String) {
-        _tourPointsList.value = tourPointLocalDB.getAllTourPointsByCityId(cityId)
-        originalList = _tourPointsList.value!!
+        val tourPointList = tourPointLocalDB.getAllTourPointsByCityId(cityId)
+        _tourPointsList.value = tourPointList
+        originalList = tourPointList
     }
 }
