@@ -8,6 +8,10 @@ import com.jalasoft.routesapp.data.local.room.db.RoutesDB
 import com.jalasoft.routesapp.data.local.room.interfaces.LocalDataBaseRepository
 import com.jalasoft.routesapp.data.local.room.managers.LocalDataBaseManager
 import com.jalasoft.routesapp.data.api.retrofit.IGmapsDirections
+import com.jalasoft.routesapp.data.local.room.interfaces.RouteLocalRepository
+import com.jalasoft.routesapp.data.local.room.interfaces.TourPointLocalRepository
+import com.jalasoft.routesapp.data.local.room.managers.RouteLocalManager
+import com.jalasoft.routesapp.data.local.room.managers.TourPointLocalManager
 import com.jalasoft.routesapp.data.remote.interfaces.*
 import com.jalasoft.routesapp.data.remote.managers.*
 import dagger.Module
@@ -72,5 +76,17 @@ object ManagersModule {
     @Provides
     fun provideRoutesDB(): RoutesDB {
         return RoutesAppApplication.routesDB as RoutesDB
+    }
+
+    @Singleton
+    @Provides
+    fun provideRoutesLocalRepository(): RouteLocalRepository {
+        return RouteLocalManager(RoutesAppApplication.routesDB as RoutesDB)
+    }
+
+    @Singleton
+    @Provides
+    fun provideTourPointsLocalRepository(): TourPointLocalRepository {
+        return TourPointLocalManager(RoutesAppApplication.routesDB as RoutesDB)
     }
 }

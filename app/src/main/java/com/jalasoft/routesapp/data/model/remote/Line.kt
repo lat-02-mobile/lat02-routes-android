@@ -28,7 +28,7 @@ data class Line(
                     else it.toObject(LineCategories::class.java)?.nameEng ?: ""
             }
         }
-        return LineInfo(id, name, enable, categoryName, routePaths)
+        return LineInfo(id, name, enable, categoryName, routePaths.toMutableList())
     }
 
     suspend fun lineToLineLocal(): LineEntity {
@@ -55,7 +55,7 @@ data class LineInfo(
     val name: String = "",
     val enable: Boolean? = null,
     val category: String = "",
-    val routePaths: List<LineRouteInfo> = listOf()
+    val routePaths: MutableList<LineRouteInfo> = mutableListOf()
 )
 
 // class to be used in algorithm

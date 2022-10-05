@@ -19,6 +19,7 @@ import com.jalasoft.routesapp.data.model.remote.LineRouteInfo
 import com.jalasoft.routesapp.databinding.FragmentRoutesBinding
 import com.jalasoft.routesapp.ui.routes.adapters.RoutesAdapter
 import com.jalasoft.routesapp.ui.routes.viewModel.RoutesViewModel
+import com.jalasoft.routesapp.util.PreferenceManager
 import com.jalasoft.routesapp.util.helpers.Constants
 import com.jalasoft.routesapp.util.helpers.FilterType
 import dagger.hilt.android.AndroidEntryPoint
@@ -62,7 +63,8 @@ class RoutesFragment : Fragment(), RoutesAdapter.IRoutesListener {
             (binding.recyclerRoutes.adapter as RoutesAdapter).updateList(it.toMutableList())
         }
 
-        viewModel.fetchLines(requireContext())
+        val currentCityId = PreferenceManager.getCurrentCityID(requireContext())
+        viewModel.fetchLines(currentCityId)
 
         binding.topAppBar.setOnMenuItemClickListener(object : Toolbar.OnMenuItemClickListener {
             override fun onMenuItemClick(item: MenuItem?): Boolean {

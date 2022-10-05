@@ -69,8 +69,8 @@ constructor(private val placeManager: PlaceRepository, private val gDirectionsRe
         _possibleRoutesList.value = result
     }
 
-    fun getRoutePaths(context: Context): List<LineRoutePath> {
-        return localDB.getAllLineRoutePaths(context)
+    fun getRoutePaths(context: Context, cityId: String): List<LineRoutePath> {
+        return localDB.getAllLineRoutePaths(context, cityId)
     }
 
     fun clearPossibleRoutes() {
