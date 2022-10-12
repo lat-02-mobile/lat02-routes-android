@@ -97,12 +97,7 @@ class FavoritesFragment : Fragment(), FavoriteAdapter.IFavoriteListener {
                 builder.setMessage(requireContext().getString(R.string.set_a_new_name_for_this_fav_dest, targetFav.name))
 
                 val textInputLayout = TextInputLayout(requireContext())
-                textInputLayout.setPadding(
-                    80,
-                    0,
-                    80,
-                    0
-                )
+                textInputLayout.setPadding(80, 0, 80, 0)
                 val input = EditText(requireContext())
                 input.setBackgroundResource(android.R.color.transparent)
                 textInputLayout.hint = requireContext().getString(R.string.new_name)
@@ -141,5 +136,6 @@ class FavoritesFragment : Fragment(), FavoriteAdapter.IFavoriteListener {
     }
 
     override fun onFavoriteTap(fav: FavoriteDestinationEntity) {
+        TODO("Not yet implemented")
     }
 }
