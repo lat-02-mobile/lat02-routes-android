@@ -72,7 +72,11 @@
         android:name="com.jalasoft.routesapp.ui.routes.view.RouteSelectedFragment"
         android:label="fragment_route"
         tools:layout="@layout/fragment_route_selected" />
-
+    <fragment
+        android:id="@+id/favoritesFragment"
+        android:name="com.jalasoft.routesapp.ui.favorites.view.FavoritesFragment"
+        android:label="fragment_favorites"
+        tools:layout="@layout/fragment_favorites" />
 
 
 </navigation>
