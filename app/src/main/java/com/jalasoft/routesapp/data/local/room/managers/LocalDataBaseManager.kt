@@ -72,6 +72,10 @@ class LocalDataBaseManager(private val localRoutesDB: RoutesDB) : LocalDataBaseR
         return localRoutesDB.favoriteDestinationDao().getFavoriteDestinationsByCityId(currentCityId, userId)
     }
 
+    override fun editFavoriteDestination(favDest: FavoriteDestinationEntity) {
+        localRoutesDB.favoriteDestinationDao().editFavoriteDestination(favDest)
+    }
+
     override fun deleteFavoriteDestination(favoriteDestinationEntity: FavoriteDestinationEntity) {
         localRoutesDB.favoriteDestinationDao().deleteFavoriteDestination(favoriteDestinationEntity)
     }

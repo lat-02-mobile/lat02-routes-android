@@ -134,6 +134,9 @@ dependencies {
     
     // Utilities for Maps SDK for Android
     implementation 'com.google.maps.android:android-maps-utils:2.4.0'
+
+    // Swipe Decorator
+    implementation 'com.github.xabaras:RecyclerViewSwipeDecorator:1.4'
 }
 
 apply plugin: 'com.google.gms.google-services'

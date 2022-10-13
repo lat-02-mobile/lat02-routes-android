@@ -11,6 +11,9 @@ interface FavoriteDestinationDao {
     @Query("SELECT * FROM favoritedestinationentity WHERE cityId=:cityId AND userId=:userId")
     fun getFavoriteDestinationsByCityId(cityId: String, userId: String): List<FavoriteDestinationEntity>
 
+    @Update
+    fun editFavoriteDestination(favoriteDestinationEntity: FavoriteDestinationEntity)
+
     @Delete
     fun deleteFavoriteDestination(favoriteDestinationEntity: FavoriteDestinationEntity)
 }

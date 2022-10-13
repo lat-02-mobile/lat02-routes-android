@@ -41,6 +41,9 @@ class FakeLocalDataBaseManager : LocalDataBaseRepository {
         return listOf()
     }
 
+    override fun editFavoriteDestination(favDest: FavoriteDestinationEntity) {
+    }
+
     override fun deleteFavoriteDestination(favoriteDestinationEntity: FavoriteDestinationEntity) {
     }
 
