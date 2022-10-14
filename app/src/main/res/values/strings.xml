@@ -133,5 +133,7 @@
     <string name="new_name">New Name</string>
     <string name="search_favorites">Search Favorites</string>
     <string name="there_are_no_favorites_yet">There are no favorites yet</string>
+    <string name="address">Address:&#160;</string>
+    <string name="search_best_route">Search best route</string>
 
 </resources>
