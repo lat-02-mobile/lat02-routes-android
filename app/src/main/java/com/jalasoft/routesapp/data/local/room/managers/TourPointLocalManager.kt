@@ -9,7 +9,7 @@ class TourPointLocalManager(private val localRoutesDB: RoutesDB) : TourPointLoca
     override fun getAllTourPointsByCityId(cityId: String): List<TourPointPath> {
         val tourPoints = localRoutesDB.tourPointDao().getAllTourPointsByCityId(cityId)
         return tourPoints.map {
-            TourPointPath(it.idCity, it.name, it.address, it.destination.toAndroidLocation(), it.urlImage, it.category)
+            TourPointPath(it.idCity, it.name, it.address, it.destination.toAndroidLocation(), it.urlImage, it.category, it.categoryIcon)
         }
     }
 }

@@ -11,6 +11,7 @@ import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +24,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -40,12 +42,19 @@ import com.jalasoft.routesapp.ui.home.viewModel.HomeViewModel
 import com.jalasoft.routesapp.util.PreferenceManager
 import dagger.hilt.android.AndroidEntryPoint
 
+enum class SelectPointsStatus {
+    ORIGIN, DESTINATION, BOTH
+}
+
 @AndroidEntryPoint
 open class HomeBaseFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener, PlaceAdapter.IPlaceListener {
 
     private lateinit var mBottomSheetDialog: LinearLayout
     private lateinit var sheetBehavior: BottomSheetBehavior<LinearLayout>
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
+    var selectPointsStatus = SelectPointsStatus.ORIGIN
+
+    val args: HomeFragmentArgs by navArgs()
     private var _binding: FragmentHomeBinding? = null
     var markerOrigin: Marker? = null
     var markerDestination: Marker? = null
@@ -96,7 +105,10 @@ open class HomeBaseFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
         )
         mMap = googleMap
         mMap?.setOnMarkerClickListener(this)
-        setMapOnCurrentCity()
+
+        if (args.preSelectDestCoords == null) {
+            setMapOnCurrentCity()
+        }
     }
 
     override fun onPlaceTap(place: Place) {
@@ -123,25 +135,41 @@ open class HomeBaseFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
 
         viewModel.selectedDestination.observe(viewLifecycleOwner) {
             if (it != null) {
-                binding.btnCheckNextLocation.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.color_secondary))
-                statusTextView.text = getString(R.string.done)
-                Toast.makeText(requireContext(), getString(R.string.go_next_step), Toast.LENGTH_LONG).show()
+                binding.btnGoBack.visibility = View.VISIBLE
+                if (viewModel.selectedOrigin.value != null) {
+                    statusTextView.text = getString(R.string.done)
+                    Toast.makeText(requireContext(), getString(R.string.go_next_step), Toast.LENGTH_LONG).show()
+                    binding.btnCheckNextLocation.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.color_secondary))
+                } else {
+                    statusTextView.text = getString(R.string.select_an_origin)
+                }
             } else {
                 markerDestination?.remove()
                 statusTextView.text = getString(R.string.select_a_destination)
                 binding.btnCheckNextLocation.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.color_primary))
+                if (viewModel.selectedOrigin.value == null) {
+                    binding.btnGoBack.visibility = View.GONE
+                }
             }
         }
 
         viewModel.selectedOrigin.observe(viewLifecycleOwner) {
             if (it != null) {
                 binding.btnGoBack.visibility = View.VISIBLE
-                statusTextView.text = getString(R.string.select_a_destination)
+                if (viewModel.selectedDestination.value != null) {
+                    statusTextView.text = getString(R.string.done)
+                    Toast.makeText(requireContext(), getString(R.string.go_next_step), Toast.LENGTH_LONG).show()
+                    binding.btnCheckNextLocation.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.color_secondary))
+                } else {
+                    statusTextView.text = getString(R.string.select_a_destination)
+                }
             } else {
                 markerOrigin?.remove()
-                binding.btnCheckNextLocation.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.color_primary))
-                binding.btnGoBack.visibility = View.GONE
                 statusTextView.text = getString(R.string.select_an_origin)
+                binding.btnCheckNextLocation.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.color_primary))
+                if (viewModel.selectedDestination.value == null) {
+                    binding.btnGoBack.visibility = View.GONE
+                }
             }
         }
     }
@@ -259,7 +287,8 @@ open class HomeBaseFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
     }
 
-    private fun moveToLocation(location: LatLng, zoom: Float) {
+    fun moveToLocation(location: LatLng, zoom: Float) {
+        Log.d("home", "moving")
         val cameraTargetLocation = CameraUpdateFactory.newLatLngZoom(location, zoom)
         mMap?.animateCamera(cameraTargetLocation)
     }
@@ -279,10 +308,10 @@ open class HomeBaseFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
         val cameraLocation = mMap?.cameraPosition?.target
         val markerCamera = cameraLocation?.let { MarkerOptions().position(it) }
         if (markerCamera != null) {
-            if (viewModel.selectedOrigin.value == null) {
+            if (selectPointsStatus == SelectPointsStatus.ORIGIN) {
                 markerCamera.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_origin))
                 markerOrigin = mMap?.addMarker(markerCamera)
-            } else {
+            } else if (selectPointsStatus == SelectPointsStatus.DESTINATION) {
                 markerCamera.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_destination))
                 markerDestination = mMap?.addMarker(markerCamera)
             }

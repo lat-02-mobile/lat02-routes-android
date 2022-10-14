@@ -21,6 +21,9 @@ class TourPointsAdapter(var tourPointsList: MutableList<TourPointPath>, val list
 
     override fun onBindViewHolder(holder: TourPointViewHolder, position: Int) {
         holder.binding.tourPointItem = tourPointsList[position]
+        holder.binding.tourPointContainer.setOnClickListener {
+            listener.gotoTourPoint(tourPointsList[position], position)
+        }
     }
 
     override fun getItemCount(): Int {

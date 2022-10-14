@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jalasoft.routesapp.data.model.remote.TourPointPath
 import com.jalasoft.routesapp.databinding.FragmentTourPointsBinding
@@ -24,7 +25,7 @@ class TourPointsFragment : Fragment(), TourPointsAdapter.ITourPointsListener {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentTourPointsBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -48,6 +49,7 @@ class TourPointsFragment : Fragment(), TourPointsAdapter.ITourPointsListener {
     }
 
     override fun gotoTourPoint(tourPointPath: TourPointPath, position: Int) {
-        // TODO
+        val direction = TourPointsFragmentDirections.actionTourPointsFragmentToTourPointDetailFragment(tourPointPathData = tourPointPath)
+        findNavController().navigate(direction)
     }
 }

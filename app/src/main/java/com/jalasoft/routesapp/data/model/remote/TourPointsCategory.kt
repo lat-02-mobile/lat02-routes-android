@@ -6,7 +6,8 @@ import java.io.Serializable
 data class TourPointsCategory(
     val id: String = "",
     val descriptionEng: String = "",
-    val descriptionEsp: String = ""
+    val descriptionEsp: String = "",
+    val icon: String = ""
 ) : Serializable {
 
     fun tourPointCategoryToTourPointCategoryLocal(): TourPointsCategoryEntity {
