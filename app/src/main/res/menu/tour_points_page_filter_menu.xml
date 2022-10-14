@@ -2,8 +2,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/filter_action"
+        android:id="@+id/tour_points_filter_action"
         android:icon="@drawable/ic_filter"
         android:title="@string/filter"
-        app:showAsAction="always"/>
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/tour_points_filter_show_all"
+                android:icon="@drawable/ic_baseline_filter_list_24"
+                android:title="@string/show_all"
+                />
+            <item
+                android:id="@+id/tour_points_filter_by_category"
+                android:title="@string/by_category"
+                android:icon="@drawable/ic_baseline_filter_list_24"
+                >
+            </item>
+        </menu>
+    </item>
 </menu>

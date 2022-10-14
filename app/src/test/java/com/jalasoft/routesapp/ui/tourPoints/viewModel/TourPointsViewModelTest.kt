@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry
 import com.jalasoft.routesapp.data.source.FakeTourPointData
 import com.jalasoft.routesapp.data.source.FakeTourPointsLocalManager
+import com.jalasoft.routesapp.util.helpers.FilterType
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
@@ -41,5 +42,32 @@ class TourPointsViewModelTest : TestCase() {
     fun `Given the first call for fetching tourPoints, when the tourPoints list screen appears, then returns all the tourPoints from the current city`() {
         viewModel.fetchTourPoints("")
         assertEquals(viewModel._tourPointsList.value, FakeTourPointData.tourPoints)
+    }
+
+    @Test
+    fun `Given a filter criteria, then returns all Lines`() {
+        viewModel.fetchTourPoints("")
+        viewModel.sortQuery = FilterType.ALL
+        viewModel.applyFilterAndSort()
+        assertEquals(viewModel._tourPointsList.value, FakeTourPointData.tourPoints)
+    }
+
+    @Test
+    fun `Given a filter category criteria, then returns all tourPoints in order`() {
+        viewModel.fetchTourPoints("")
+        viewModel.sortQuery = FilterType.CATEGORY
+        viewModel.applyFilterAndSort()
+        val sortedTourPoints = viewModel.originalList.sortedBy { it.categoryName }
+        assertEquals(viewModel._tourPointsList.value, sortedTourPoints)
+    }
+
+    @Test
+    fun `Given a filter category and query criteria, then returns all the filtered tourPoints in order`() {
+        viewModel.fetchTourPoints("")
+        viewModel.sortQuery = FilterType.CATEGORY
+        viewModel.searchQuery = "City"
+        viewModel.applyFilterAndSort()
+        val sortedTourPoints = viewModel.originalList.sortedBy { it.categoryName }
+        assertEquals(viewModel._tourPointsList.value, sortedTourPoints)
     }
 }
