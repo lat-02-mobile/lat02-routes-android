@@ -17,32 +17,9 @@ data class TourPoint(
     val address: String? = "",
     val destination: GeoPoint? = null,
     val urlImage: String? = "",
-    val tourPointsCategoryRef: DocumentReference? = null
+    val tourPointsCategoryRef: DocumentReference? = null,
+    val categoryId: String? = ""
 ) : Serializable {
-
-    suspend fun tourPointToTourPointPath(): TourPointPath {
-        val destination = destination?.let { geoPointToLocation(it) }
-        var city: DocumentSnapshot?
-        var cityId = ""
-        idCity?.let { docRef ->
-            city = docRef.get().await()
-            city?.let {
-                cityId = it.toObject(City::class.java)?.id ?: ""
-            }
-        }
-        var category: DocumentSnapshot?
-        var categoryName = ""
-        tourPointsCategoryRef?.let { docRef ->
-            category = docRef.get().await()
-            category?.let {
-                val currLang = Locale.getDefault().isO3Language
-                categoryName =
-                    if (currLang == Constants.CURRENT_SPANISH_LANGUAGE) it.toObject(TourPointsCategory::class.java)?.descriptionEsp ?: ""
-                    else it.toObject(TourPointsCategory::class.java)?.descriptionEng ?: ""
-            }
-        }
-        return TourPointPath(cityId, name, address, destination, urlImage, categoryName)
-    }
 
     suspend fun tourPointToTourPointLocal(): TourPointEntity {
         val dest = destination?.let { geoPointToLocation(it) }
@@ -71,7 +48,7 @@ data class TourPoint(
                     else it.toObject(TourPointsCategory::class.java)?.descriptionEng ?: ""
             }
         }
-        return TourPointEntity(cityId, mName, mAddress, destination, mUrlImage, categoryName)
+        return TourPointEntity(cityId, mName, mAddress, destination, mUrlImage, categoryName, categoryId ?: "")
     }
 }
 
@@ -81,5 +58,6 @@ data class TourPointPath(
     val address: String? = "",
     val destination: Location? = null,
     val urlImage: String? = "",
-    val category: String? = ""
+    val category: TourPointsCategory? = null,
+    val categoryName: String? = ""
 ) : Serializable

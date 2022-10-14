@@ -22,6 +22,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -34,11 +35,17 @@ import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.data.api.models.gmaps.Place
+import com.google.android.gms.maps.model.Polyline
 import com.jalasoft.routesapp.databinding.FragmentHomeBinding
 import com.jalasoft.routesapp.ui.home.adapters.PlaceAdapter
 import com.jalasoft.routesapp.ui.home.viewModel.HomeViewModel
+import com.jalasoft.routesapp.ui.tourPoints.viewModel.TourPointsViewModel
+import com.jalasoft.routesapp.util.Extensions.toLatLong
 import com.jalasoft.routesapp.util.PreferenceManager
+import com.jalasoft.routesapp.util.helpers.GoogleMapsHelper
+import com.jalasoft.routesapp.util.helpers.ImageHelper
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 open class HomeBaseFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener, PlaceAdapter.IPlaceListener {
@@ -51,8 +58,13 @@ open class HomeBaseFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
     var markerDestination: Marker? = null
 
     val viewModel: HomeViewModel by viewModels()
+    private val tourPointsViewModel: TourPointsViewModel by viewModels()
     val binding get() = _binding!!
     var mMap: GoogleMap? = null
+    var tourPointsMarkers: MutableList<Marker> = mutableListOf()
+    var polylines: MutableList<Polyline> = mutableListOf()
+    var startEndMarkers: MutableList<Marker> = mutableListOf()
+    var isTourPointsEnabled = false
 
     private val requestFINELOCATIONPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
@@ -75,6 +87,9 @@ open class HomeBaseFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
         setMap()
         setBottomPopup()
         setObserversForHomeBaseFragment()
+
+        isTourPointsEnabled = PreferenceManager.getTourPointsSetting(requireContext())
+        if (isTourPointsEnabled) drawTourPoints()
     }
 
     // Methods for setups
@@ -87,6 +102,7 @@ open class HomeBaseFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
         }
     }
 
+    @SuppressLint("PotentialBehaviorOverride")
     override fun onMapReady(googleMap: GoogleMap) {
         googleMap.setMapStyle(
             MapStyleOptions.loadRawResourceStyle(
@@ -96,7 +112,11 @@ open class HomeBaseFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
         )
         mMap = googleMap
         mMap?.setOnMarkerClickListener(this)
+        mMap?.setOnInfoWindowClickListener {
+            it.hideInfoWindow()
+        }
         setMapOnCurrentCity()
+        loadTourPoints()
     }
 
     override fun onPlaceTap(place: Place) {
@@ -111,7 +131,9 @@ open class HomeBaseFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
         } else if (marker == markerDestination) {
             viewModel.selectedDestination.value = null
         }
-        marker.remove()
+        marker.showInfoWindow()
+        moveToLocation(marker.position, 16F)
+        marker.setInfoWindowAnchor(0.5F, 0.25F)
         return true
     }
 
@@ -144,6 +166,35 @@ open class HomeBaseFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
                 statusTextView.text = getString(R.string.select_an_origin)
             }
         }
+    }
+
+    fun drawTourPoints() {
+        tourPointsViewModel.tourPoints.observe(viewLifecycleOwner) { tourPoints ->
+            tourPoints.forEach { tourPoint ->
+                val map = mMap ?: return@forEach
+                val destination = tourPoint.destination ?: return@forEach
+                lifecycleScope.launch {
+                    val category = tourPoint.category ?: return@launch
+                    val name = tourPoint.name ?: ""
+                    val categoryName = tourPoint.categoryName ?: ""
+                    val icon = ImageHelper.getBitMapFromUrl(requireContext(), category.icon)
+                    val newMarker = map.addMarker(
+                        MarkerOptions()
+                            .position(destination.toLatLong())
+                            .icon(icon)
+                            .title(name.uppercase())
+                            .snippet(categoryName.uppercase())
+                            .anchor(0.5F, 0.5F)
+                    )
+                    if (newMarker != null) tourPointsMarkers.add(newMarker)
+                }
+            }
+        }
+    }
+
+    private fun loadTourPoints() {
+        val currentCityId = PreferenceManager.getCurrentCityID(requireContext())
+        tourPointsViewModel.fetchTourPoints(currentCityId)
     }
 
     private fun setMap() {
@@ -185,8 +236,7 @@ open class HomeBaseFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
                     binding.bottomLayout1.btnArrowPopupState.rotation = 180F
                 }
             }
-            override fun onSlide(bottomSheet: View, slideOffset: Float) {
-            }
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
         })
     }
 
@@ -292,5 +342,9 @@ open class HomeBaseFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
         } else {
             null
         }
+    }
+
+    fun addMarker(googleMap: GoogleMap, point: LatLng, withDrawable: Int, anchorX: Float = 0.5F, anchorY: Float = 0.5F): Marker? {
+        return googleMap.addMarker(MarkerOptions().position(point).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), withDrawable)).anchor(anchorX, anchorY))
     }
 }

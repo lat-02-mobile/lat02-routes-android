@@ -40,4 +40,12 @@
     <style name="CustomDialogTheme">
         <item name="android:windowBackground">@color/transparent_background</item>
     </style>
+
+    <style name="CustomAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/bg_dialog</item>
+    </style>
+
+    <style name="CustomSwitch" parent="Theme.AppCompat.Light">
+        <item name="android:colorControlActivated">@color/color_primary_gradient</item>
+    </style>
 </resources>

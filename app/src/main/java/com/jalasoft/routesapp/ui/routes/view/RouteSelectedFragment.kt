@@ -18,6 +18,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -28,10 +30,18 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.data.model.remote.LineRouteInfo
+import com.jalasoft.routesapp.databinding.DialogSettingsBinding
 import com.jalasoft.routesapp.databinding.FragmentRouteSelectedBinding
+import com.jalasoft.routesapp.ui.tourPoints.viewModel.TourPointsViewModel
+import com.jalasoft.routesapp.util.Extensions.toLatLong
+import com.jalasoft.routesapp.util.PreferenceManager
 import com.jalasoft.routesapp.util.helpers.Constants
 import com.jalasoft.routesapp.util.helpers.GoogleMapsHelper
+import com.jalasoft.routesapp.util.helpers.ImageHelper
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class RouteSelectedFragment : Fragment(), OnMapReadyCallback {
     private var _binding: FragmentRouteSelectedBinding? = null
     private val binding get() = _binding!!
@@ -42,6 +52,9 @@ class RouteSelectedFragment : Fragment(), OnMapReadyCallback {
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             checkPermissions(isGranted)
         }
+    private val tourPointsViewModel: TourPointsViewModel by viewModels()
+    var tourPointsMarkers: MutableList<Marker> = mutableListOf()
+    var isTourPointsEnabled = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,6 +77,40 @@ class RouteSelectedFragment : Fragment(), OnMapReadyCallback {
         val mapFragment = childFragmentManager.findFragmentById(R.id.map_route_fragment) as? SupportMapFragment
         mapFragment?.getMapAsync(this)
         btnActions()
+
+        isTourPointsEnabled = PreferenceManager.getTourPointsSetting(requireContext())
+        if (isTourPointsEnabled) drawTourPoints()
+
+        val dialogBuilder = AlertDialog.Builder(requireContext(), R.style.CustomAlertDialog)
+        val inflater = LayoutInflater.from(requireContext())
+        val dialogSetting = DialogSettingsBinding.inflate(inflater)
+        dialogBuilder.setView(dialogSetting.root)
+        val dialog = dialogBuilder.create()
+
+        binding.btnSettings.setOnClickListener {
+            dialogSetting.switchTourPoints.isChecked = isTourPointsEnabled
+            dialog.show()
+        }
+
+        dialogSetting.btnAccept.setOnClickListener {
+            isTourPointsEnabled = dialogSetting.switchTourPoints.isChecked
+            PreferenceManager.saveTourPointsSetting(requireContext(), isTourPointsEnabled)
+            dialog.dismiss()
+            if (tourPointsMarkers.isEmpty() && !isTourPointsEnabled) return@setOnClickListener
+            if (tourPointsMarkers.isNotEmpty() && !isTourPointsEnabled) {
+                tourPointsMarkers.map { marker ->
+                    marker.isVisible = false
+                }
+                return@setOnClickListener
+            }
+            if (tourPointsMarkers.isNotEmpty() && isTourPointsEnabled) {
+                tourPointsMarkers.forEach { marker ->
+                    marker.isVisible = true
+                }
+                return@setOnClickListener
+            }
+            drawTourPoints()
+        }
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -83,12 +130,13 @@ class RouteSelectedFragment : Fragment(), OnMapReadyCallback {
         val rEnd = nRoute.end ?: return
         val start = GoogleMapsHelper.locationToLatLng(rStart)
         val end = GoogleMapsHelper.locationToLatLng(rEnd)
-        mMap?.addMarker(MarkerOptions().position(start).title(R.string.start_of_route.toString()).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.ic_start_route)))
-        mMap?.addMarker(MarkerOptions().position(end).title(R.string.end_of_route.toString()).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.ic_end_route)))
+        mMap?.addMarker(MarkerOptions().position(start).title(R.string.start_of_route.toString()).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.ic_start_route)).anchor(0.5F, 0.5F))
+        mMap?.addMarker(MarkerOptions().position(end).title(R.string.end_of_route.toString()).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.ic_end_route)).anchor(0.5F, 0.5F))
 
         moveToLocation(start, 15F)
         addStopMarkers(nRoute.stops)
         drawPolyline(nRoute.routePoints)
+        loadTourPoints()
     }
 
     private fun btnActions() {
@@ -101,17 +149,17 @@ class RouteSelectedFragment : Fragment(), OnMapReadyCallback {
         if (mMap == null) { return }
         for (i in list) {
             mMap?.addMarker(
-                MarkerOptions().position(GoogleMapsHelper.locationToLatLng(i)).title(R.string.bus_stop.toString()).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.ic_bus_stop))
+                MarkerOptions().position(GoogleMapsHelper.locationToLatLng(i)).title(R.string.bus_stop.toString()).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.ic_bus_stop)).anchor(0.5F, 0.5F)
             )
         }
     }
 
     private fun drawPolyline(list: List<Location>) {
-        if (mMap == null) { return }
+        val map = mMap ?: return
         for (i in list.indices) {
             val item = list[i]
             if (item == list.last()) {
-                mMap?.addPolyline(
+                map.addPolyline(
                     PolylineOptions()
                         .add(GoogleMapsHelper.locationToLatLng(list[i - 1]), GoogleMapsHelper.locationToLatLng(item))
                         .width(10f)
@@ -119,7 +167,7 @@ class RouteSelectedFragment : Fragment(), OnMapReadyCallback {
                         .geodesic(true)
                 )
             } else {
-                mMap?.addPolyline(
+                map.addPolyline(
                     PolylineOptions()
                         .add(GoogleMapsHelper.locationToLatLng(item), GoogleMapsHelper.locationToLatLng(list[i + 1]))
                         .width(10f)
@@ -170,7 +218,7 @@ class RouteSelectedFragment : Fragment(), OnMapReadyCallback {
             // Redirect the user to the app settings to give permissions manually
             val intent = Intent()
             intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-            val uri = Uri.fromParts("package", activity?.packageName ?: null, null)
+            val uri = Uri.fromParts("package", activity?.packageName, null)
             intent.data = uri
             requireContext().startActivity(intent)
         }
@@ -202,5 +250,34 @@ class RouteSelectedFragment : Fragment(), OnMapReadyCallback {
     private fun moveToLocation(location: LatLng, zoom: Float) {
         val cameraTargetLocation = CameraUpdateFactory.newLatLngZoom(location, zoom)
         mMap?.animateCamera(cameraTargetLocation)
+    }
+
+    private fun drawTourPoints() {
+        tourPointsViewModel.tourPoints.observe(viewLifecycleOwner) { tourPoints ->
+            tourPoints.forEach { tourPoint ->
+                val map = mMap ?: return@forEach
+                val destination = tourPoint.destination ?: return@forEach
+                lifecycleScope.launch {
+                    val category = tourPoint.category ?: return@launch
+                    val name = tourPoint.name ?: ""
+                    val categoryName = tourPoint.categoryName ?: ""
+                    val icon = ImageHelper.getBitMapFromUrl(requireContext(), category.icon)
+                    val newMarker = map.addMarker(
+                        MarkerOptions()
+                            .position(destination.toLatLong())
+                            .icon(icon)
+                            .title(name.uppercase())
+                            .snippet(categoryName.uppercase())
+                            .anchor(0.5F, 0.5F)
+                    )
+                    if (newMarker != null) tourPointsMarkers.add(newMarker)
+                }
+            }
+        }
+    }
+
+    private fun loadTourPoints() {
+        val currentCityId = PreferenceManager.getCurrentCityID(requireContext())
+        tourPointsViewModel.fetchTourPoints(currentCityId)
     }
 }

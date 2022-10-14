@@ -125,4 +125,7 @@
     <string name="choose_name_for_new_fav_dest">Please choose a name for save these coordinates as a favorite destination</string>
     <string name="write_name">Write a name</string>
 
+    <!-- Setting Button -->
+    <string name="disable_enable_tourpoints">Disable/Enable tourpoints</string>
+
 </resources>

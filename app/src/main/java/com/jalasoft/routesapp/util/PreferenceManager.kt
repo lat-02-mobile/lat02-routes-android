@@ -8,6 +8,7 @@ object PreferenceManager {
     private const val CURRENT_CITY_LNG = "current_city_lng"
     private const val CURRENT_CITY = "current_city"
     private const val CURRENT_CITY_ID = "current_city_id"
+    private const val IS_TOUR_POINTS_ENABLED = "is_tour_points_enabled"
     const val NOT_FOUND = "null"
 
     fun saveCurrentLocation(context: Context, valueLat: String, valueLng: String, cityName: String, cityID: String) {
@@ -16,6 +17,16 @@ object PreferenceManager {
         pref.edit().putString(CURRENT_CITY_LNG, valueLng).apply()
         pref.edit().putString(CURRENT_CITY, cityName).apply()
         pref.edit().putString(CURRENT_CITY_ID, cityID).apply()
+    }
+
+    fun saveTourPointsSetting(context: Context, isTourPointsEnabled: Boolean) {
+        val pref = context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE)
+        pref.edit().putBoolean(IS_TOUR_POINTS_ENABLED, isTourPointsEnabled).apply()
+    }
+
+    fun getTourPointsSetting(context: Context): Boolean {
+        val pref = context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE)
+        return pref.getBoolean(IS_TOUR_POINTS_ENABLED, false)
     }
 
     fun getCurrentLocationLat(context: Context): String {
