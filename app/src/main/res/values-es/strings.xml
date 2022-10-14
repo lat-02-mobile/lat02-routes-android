@@ -121,6 +121,8 @@
     <string name="choose_name_for_new_fav_dest">Por favor elige un nombre para guardar estas coordenadas como un destino favorito</string>
     <string name="write_name">Escribe un nombre</string>
 
+    <!-- Setting Button -->
+    <string name="disable_enable_tourpoints">Deshabilitar/Habilitar sitios</string>
     <!--  Favorites List  -->
     <string name="edit_favorite_destination">Editar destino favorito</string>
     <string name="set_a_new_name_for_this_fav_dest">Por favor, escriba un nuevo nombre para "%s"</string>
