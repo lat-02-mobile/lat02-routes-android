@@ -11,7 +11,6 @@ import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -288,7 +287,6 @@ open class HomeBaseFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
     }
 
     fun moveToLocation(location: LatLng, zoom: Float) {
-        Log.d("home", "moving")
         val cameraTargetLocation = CameraUpdateFactory.newLatLngZoom(location, zoom)
         mMap?.animateCamera(cameraTargetLocation)
     }
