@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 data class FavoriteDestinationEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val name: String,
+    var name: String,
     @Embedded(prefix = "dest")
     val destination: Location,
     val cityId: String,

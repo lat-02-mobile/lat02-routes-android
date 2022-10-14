@@ -15,6 +15,7 @@ interface LocalDataBaseRepository {
     fun addLocalTourPointCategory(tourPointCategory: TourPointsCategoryEntity)
     fun addLocalFavoriteDestination(lat: Double, lng: Double, name: String, context: Context)
     fun getFavoriteDestinationByCityAndUserId(context: Context): List<FavoriteDestinationEntity>
+    fun editFavoriteDestination(favDest: FavoriteDestinationEntity)
     fun deleteFavoriteDestination(favoriteDestinationEntity: FavoriteDestinationEntity)
     fun getAllLineRoutePaths(context: Context, cityId: String): List<LineRoutePath>
     fun deleteAllRoutePointsHolder()

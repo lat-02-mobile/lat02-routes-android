@@ -127,5 +127,13 @@
 
     <!-- Setting Button -->
     <string name="disable_enable_tourpoints">Disable/Enable tourpoints</string>
+    <!--  Favorites List  -->
+    <string name="edit_favorite_destination">Edit favorite Destination</string>
+    <string name="set_a_new_name_for_this_fav_dest">Please set a new name for "%s"</string>
+    <string name="are_you_sure_you_want_to_remove_this_fav_dest">Are you sure you want to remove the favorite destination %s?</string>
+    <string name="fav_dest_created_at">Created at: %s</string>
+    <string name="new_name">New Name</string>
+    <string name="search_favorites">Search Favorites</string>
+    <string name="there_are_no_favorites_yet">There are no favorites yet</string>
 
 </resources>

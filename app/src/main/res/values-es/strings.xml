@@ -123,5 +123,13 @@
 
     <!-- Setting Button -->
     <string name="disable_enable_tourpoints">Deshabilitar/Habilitar sitios</string>
+    <!--  Favorites List  -->
+    <string name="edit_favorite_destination">Editar destino favorito</string>
+    <string name="set_a_new_name_for_this_fav_dest">Por favor, escriba un nuevo nombre para "%s"</string>
+    <string name="are_you_sure_you_want_to_remove_this_fav_dest">Esta seguro/a que desea eliminar %s?</string>
+    <string name="fav_dest_created_at">Creado el: %s</string>
+    <string name="new_name">Nuevo Nombre</string>
+    <string name="search_favorites">Buscar Favoritos</string>
+    <string name="there_are_no_favorites_yet">Aun no hay favoritos</string>
 
 </resources>
