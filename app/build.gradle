@@ -6,6 +6,8 @@ plugins {
     id 'dagger.hilt.android.plugin'
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
     id 'androidx.navigation.safeargs.kotlin'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
 }
 
 apply from: "$project.rootDir/jacoco.gradle"
@@ -137,6 +139,14 @@ dependencies {
 
     // Swipe Decorator
     implementation 'com.github.xabaras:RecyclerViewSwipeDecorator:1.4'
+
+    // Crashlytics and Analytics
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+
+    //Amplitude
+    implementation 'com.amplitude:analytics-android:1.4.4'
+    //implementation files('libs/amplitude-android-2.23.2-with-dependencies.jar')
 }
 
 apply plugin: 'com.google.gms.google-services'

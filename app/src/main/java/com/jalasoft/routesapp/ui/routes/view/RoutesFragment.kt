@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.amplitude.android.Amplitude
 import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.data.model.remote.LineInfo
 import com.jalasoft.routesapp.data.model.remote.LineRouteInfo
@@ -30,6 +31,7 @@ class RoutesFragment : Fragment(), RoutesAdapter.IRoutesListener {
     private val binding get() = _binding!!
     private val viewModel: RoutesViewModel by viewModels()
     private lateinit var alertDialog: AlertDialog.Builder
+    var amplitude: Amplitude? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,6 +45,7 @@ class RoutesFragment : Fragment(), RoutesAdapter.IRoutesListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setRecycler()
+        amplitude = PreferenceManager.getAmplitude(binding.root.context.applicationContext)
         binding.progressBar.visibility = View.VISIBLE
         alertDialog = AlertDialog.Builder(requireContext())
         alertDialog.setTitle(getString(R.string.select_route))
@@ -68,6 +71,14 @@ class RoutesFragment : Fragment(), RoutesAdapter.IRoutesListener {
 
         binding.topAppBar.setOnMenuItemClickListener(object : Toolbar.OnMenuItemClickListener {
             override fun onMenuItemClick(item: MenuItem?): Boolean {
+                amplitude!!.track("Register Filter button")
+                /*val amplitudes = Amplitude(
+                    Configuration(
+                        apiKey = "",
+                        context = binding.root.context.applicationContext
+                    )
+                )*/
+                // amplitudes.track("Register Filter button")
                 requireActivity().menuInflater
                 item?.let {
                     if (item.itemId == R.id.filter_options) {
@@ -103,6 +114,13 @@ class RoutesFragment : Fragment(), RoutesAdapter.IRoutesListener {
     }
 
     override fun onLineTap(route: LineInfo) {
+        /*val amplitudes = Amplitude(
+            Configuration(
+                apiKey = "",
+                context = binding.root.context.applicationContext
+            )
+        )
+        amplitudes.track("Register Button Route Selected")*/
         when {
             route.routePaths.size > 1 -> {
                 val routeListName = route.routePaths.map {
@@ -120,6 +138,7 @@ class RoutesFragment : Fragment(), RoutesAdapter.IRoutesListener {
                 goToSelectedRoute(route.routePaths[0])
             }
         }
+        // amplitude?.track("Register Select Route")
     }
 
     private fun goToSelectedRoute(route: LineRouteInfo) {

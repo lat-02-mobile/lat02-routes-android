@@ -134,4 +134,7 @@
     <string name="search_favorites">Search Favorites</string>
     <string name="there_are_no_favorites_yet">There are no favorites yet</string>
 
+    <!-- Keys Strings -->
+    <string name="amplitude_api_key" translatable="false">{AMPLITUDE_API_KEY}</string>
+
 </resources>
