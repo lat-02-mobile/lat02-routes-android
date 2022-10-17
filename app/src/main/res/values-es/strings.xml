@@ -131,5 +131,7 @@
     <string name="new_name">Nuevo Nombre</string>
     <string name="search_favorites">Buscar Favoritos</string>
     <string name="there_are_no_favorites_yet">Aun no hay favoritos</string>
+    <string name="address">Direccion:&#160;</string>
+    <string name="search_best_route">Buscar mejor ruta</string>
 
 </resources>

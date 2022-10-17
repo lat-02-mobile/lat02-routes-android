@@ -14,5 +14,6 @@
     <color name="background_color_1">#ddd</color>
     <color name="transparent_background">#00000000</color>
     <color name="gray_color">#A9A9B0</color>
+    <color name="gray_color2">#868e96</color>
     <color name="custom_dialog_background">#70000000</color>
 </resources>

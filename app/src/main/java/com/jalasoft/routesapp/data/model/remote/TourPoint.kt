@@ -39,16 +39,19 @@ data class TourPoint(
         }
         var category: DocumentSnapshot?
         var categoryName = ""
+        var categoryIcon = ""
         tourPointsCategoryRef?.let { docRef ->
             category = docRef.get().await()
             category?.let {
+                val targetCategory = it.toObject(TourPointsCategory::class.java)
                 val currLang = Locale.getDefault().isO3Language
+                categoryIcon = targetCategory?.icon ?: ""
                 categoryName =
-                    if (currLang == Constants.CURRENT_SPANISH_LANGUAGE) it.toObject(TourPointsCategory::class.java)?.descriptionEsp ?: ""
-                    else it.toObject(TourPointsCategory::class.java)?.descriptionEng ?: ""
+                    if (currLang == Constants.CURRENT_SPANISH_LANGUAGE) targetCategory?.descriptionEsp ?: ""
+                    else targetCategory?.descriptionEng ?: ""
             }
         }
-        return TourPointEntity(cityId, mName, mAddress, destination, mUrlImage, categoryName, categoryId ?: "")
+        return TourPointEntity(cityId, mName, mAddress, destination, mUrlImage, categoryIcon, categoryName, categoryId ?: "")
     }
 }
 
@@ -58,6 +61,7 @@ data class TourPointPath(
     val address: String? = "",
     val destination: Location? = null,
     val urlImage: String? = "",
+    val categoryIcon: String? = "",
     val category: TourPointsCategory? = null,
     val categoryName: String? = ""
 ) : Serializable

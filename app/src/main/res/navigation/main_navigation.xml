@@ -16,6 +16,11 @@
             app:destination="@id/cityPickerFragment"
             app:popUpTo="@id/homeFragment"
             app:popUpToInclusive="true" />
+        <argument
+            android:name="preSelectDestCoords"
+            app:argType="com.google.android.gms.maps.model.LatLng"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -65,7 +70,11 @@
         android:id="@+id/tourPointsFragment"
         android:name="com.jalasoft.routesapp.ui.tourPoints.view.TourPointsFragment"
         android:label="fragment_tour_points"
-        tools:layout="@layout/fragment_tour_points" />
+        tools:layout="@layout/fragment_tour_points" >
+        <action
+            android:id="@+id/action_tourPointsFragment_to_tourPointDetailFragment"
+            app:destination="@id/tourPointDetailFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/routeSelected"
@@ -77,6 +86,18 @@
         android:name="com.jalasoft.routesapp.ui.favorites.view.FavoritesFragment"
         android:label="fragment_favorites"
         tools:layout="@layout/fragment_favorites" />
+    <fragment
+        android:id="@+id/tourPointDetailFragment"
+        android:name="com.jalasoft.routesapp.ui.tourPoints.view.TourPointDetailFragment"
+        android:label="fragment_tour_point_detail"
+        tools:layout="@layout/fragment_tour_point_detail" >
+        <argument
+            android:name="tourPointPathData"
+            app:argType="com.jalasoft.routesapp.data.model.remote.TourPointPath" />
+        <action
+            android:id="@+id/action_tourPointDetailFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
 
 
 </navigation>
