@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.amplitude.android.Amplitude
 import com.jalasoft.routesapp.AuthActivity
 import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.data.remote.managers.AuthFirebaseManager
@@ -23,6 +24,7 @@ class SettingsFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: SettingsViewModel by viewModels()
+    private lateinit var amplitude: Amplitude
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,6 +38,7 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val currentCity = PreferenceManager.getCurrentCity(requireContext())
+        amplitude = PreferenceManager.getAmplitude(binding.root.context.applicationContext)
 
         binding.btnSetCity.text = if (currentCity != PreferenceManager.NOT_FOUND) currentCity else getString(R.string.city_not_set_yet)
 
@@ -46,6 +49,7 @@ class SettingsFragment : Fragment() {
         binding.btnLogout.setOnClickListener {
             AuthFirebaseManager.signOutUser()
             PreferenceManager.deleteAllData(requireContext())
+            Amplitude.END_SESSION_EVENT
             val intent = Intent(activity, AuthActivity::class.java)
             activity?.startActivity(intent)
             activity?.finish()

@@ -17,7 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private var amplitude: Amplitude? = null
+    private lateinit var amplitude: Amplitude
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +29,8 @@ class MainActivity : AppCompatActivity() {
         if (currentUser == null) {
             goToAuthActivity()
         } else {
-            amplitude?.setUserId(currentUser?.email)
+            amplitude.setUserId(currentUser.uid)
+            amplitude.startNewSessionIfNeeded(amplitude.sessionId)
             val phoneNumber = currentUser.phoneNumber
             if (phoneNumber == null || phoneNumber.isEmpty()) {
                 goToAuthActivity()

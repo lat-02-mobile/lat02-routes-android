@@ -146,7 +146,6 @@ dependencies {
 
     //Amplitude
     implementation 'com.amplitude:analytics-android:1.4.4'
-    //implementation files('libs/amplitude-android-2.23.2-with-dependencies.jar')
 }
 
 apply plugin: 'com.google.gms.google-services'
