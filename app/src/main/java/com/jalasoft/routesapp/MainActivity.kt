@@ -7,24 +7,29 @@ import android.view.View
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.amplitude.android.Amplitude
 import com.google.firebase.auth.FirebaseAuth
 import com.jalasoft.routesapp.databinding.ActivityMainBinding
+import com.jalasoft.routesapp.util.PreferenceManager
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private var amplitude: Amplitude? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        amplitude = PreferenceManager.getAmplitude(binding.root.context.applicationContext)
         val currentUser = FirebaseAuth.getInstance().currentUser
         if (currentUser == null) {
             goToAuthActivity()
         } else {
+            amplitude?.setUserId(currentUser?.email)
             val phoneNumber = currentUser.phoneNumber
             if (phoneNumber == null || phoneNumber.isEmpty()) {
                 goToAuthActivity()

@@ -3,7 +3,7 @@ package com.jalasoft.routesapp.util
 import android.content.Context
 import com.amplitude.android.Amplitude
 import com.amplitude.android.Configuration
-import com.jalasoft.routesapp.R
+import com.jalasoft.routesapp.BuildConfig
 
 object PreferenceManager {
     private const val PREFERENCES_KEY = "routes_app_preferences"
@@ -49,8 +49,8 @@ object PreferenceManager {
     fun getAmplitude(context: Context): Amplitude {
         return Amplitude(
             Configuration(
-                apiKey = context.getString(R.string.amplitude_api_key),
-                context = context.applicationContext
+                apiKey = BuildConfig.AMPLITUDE_API_KEY,
+                context = context
             )
         )
     }

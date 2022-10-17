@@ -24,7 +24,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.amplitude.android.Amplitude
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -33,7 +32,6 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.firebase.auth.FirebaseAuth
 import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.data.api.models.gmaps.Place
 import com.jalasoft.routesapp.databinding.FragmentHomeBinding
@@ -51,7 +49,6 @@ open class HomeBaseFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
     private var _binding: FragmentHomeBinding? = null
     var markerOrigin: Marker? = null
     var markerDestination: Marker? = null
-    var amplitude: Amplitude? = null
 
     val viewModel: HomeViewModel by viewModels()
     val binding get() = _binding!!
@@ -78,9 +75,6 @@ open class HomeBaseFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
         setMap()
         setBottomPopup()
         setObserversForHomeBaseFragment()
-        amplitude = PreferenceManager.getAmplitude(binding.root.context)
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        amplitude?.setUserId(currentUser?.email)
     }
 
     // Methods for setups
