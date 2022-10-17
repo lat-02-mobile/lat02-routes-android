@@ -13,6 +13,7 @@ data class TourPointEntity(
     @Embedded(prefix = "dest")
     val destination: Location,
     val urlImage: String,
+    val categoryIcon: String = "",
     val categoryName: String,
     val categoryId: String
 )
