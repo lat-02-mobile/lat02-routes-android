@@ -10,8 +10,8 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
 
 object GoogleMapsHelper {
-    fun drawPolyline(mMap: GoogleMap, list: List<LatLng>, hexColor: String = Constants.DEFAULT_POLYLINE_COLOR) {
-        mMap.addPolyline(
+    fun drawPolyline(mMap: GoogleMap, list: List<LatLng>, hexColor: String = Constants.DEFAULT_POLYLINE_COLOR): Polyline {
+        return mMap.addPolyline(
             PolylineOptions()
                 .addAll(list)
                 .width(18f)
@@ -20,12 +20,12 @@ object GoogleMapsHelper {
         )
     }
 
-    fun drawDotPolyline(mMap: GoogleMap, list: List<LatLng>, hexColor: String = Constants.DEFAULT_POLYLINE_COLOR) {
+    fun drawDotPolyline(mMap: GoogleMap, list: List<LatLng>, hexColor: String = Constants.DEFAULT_POLYLINE_COLOR): Polyline {
         val dot: PatternItem = Dot()
         val gap: PatternItem = Gap(8.toFloat())
         val pattern = listOf(gap, dot)
 
-        mMap.addPolyline(
+        return mMap.addPolyline(
             PolylineOptions()
                 .addAll(list)
                 .width(18f)

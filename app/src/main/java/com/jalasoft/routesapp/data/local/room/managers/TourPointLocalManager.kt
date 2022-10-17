@@ -7,9 +7,15 @@ import com.jalasoft.routesapp.data.model.remote.TourPointPath
 class TourPointLocalManager(private val localRoutesDB: RoutesDB) : TourPointLocalRepository {
 
     override fun getAllTourPointsByCityId(cityId: String): List<TourPointPath> {
-        val tourPoints = localRoutesDB.tourPointDao().getAllTourPointsByCityId(cityId)
-        return tourPoints.map {
-            TourPointPath(it.idCity, it.name, it.address, it.destination.toAndroidLocation(), it.urlImage, it.category, it.categoryIcon)
+        val tourPointsCategoryWithTourPoints = localRoutesDB.tourPointCategoryDao().getAllTourPointsCategoryWithTourPointsByCityId(cityId)
+        var tourPointPaths = mutableListOf<TourPointPath>()
+        tourPointsCategoryWithTourPoints.forEach {
+            val category = it.tourPointCategory.toTourPointCategory()
+            it.tourPoints.forEach { tourPoint ->
+                val tourPointPath = TourPointPath(tourPoint.idCity, tourPoint.name, tourPoint.address, tourPoint.destination.toAndroidLocation(), tourPoint.urlImage, category.icon, category, tourPoint.categoryName)
+                tourPointPaths.add(tourPointPath)
+            }
         }
+        return tourPointPaths
     }
 }

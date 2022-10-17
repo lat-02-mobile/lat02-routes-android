@@ -17,35 +17,9 @@ data class TourPoint(
     val address: String? = "",
     val destination: GeoPoint? = null,
     val urlImage: String? = "",
-    val tourPointsCategoryRef: DocumentReference? = null
+    val tourPointsCategoryRef: DocumentReference? = null,
+    val categoryId: String? = ""
 ) : Serializable {
-
-    suspend fun tourPointToTourPointPath(): TourPointPath {
-        val destination = destination?.let { geoPointToLocation(it) }
-        var city: DocumentSnapshot?
-        var cityId = ""
-        idCity?.let { docRef ->
-            city = docRef.get().await()
-            city?.let {
-                cityId = it.toObject(City::class.java)?.id ?: ""
-            }
-        }
-        var category: DocumentSnapshot?
-        var categoryName = ""
-        var categoryIcon = ""
-        tourPointsCategoryRef?.let { docRef ->
-            category = docRef.get().await()
-            category?.let {
-                val targetCategory = it.toObject(TourPointsCategory::class.java)
-                val currLang = Locale.getDefault().isO3Language
-                categoryIcon = targetCategory?.icon ?: ""
-                categoryName =
-                    if (currLang == Constants.CURRENT_SPANISH_LANGUAGE) targetCategory?.descriptionEsp ?: ""
-                    else targetCategory?.descriptionEng ?: ""
-            }
-        }
-        return TourPointPath(cityId, name, address, destination, urlImage, categoryName, categoryIcon)
-    }
 
     suspend fun tourPointToTourPointLocal(): TourPointEntity {
         val dest = destination?.let { geoPointToLocation(it) }
@@ -77,7 +51,7 @@ data class TourPoint(
                     else targetCategory?.descriptionEng ?: ""
             }
         }
-        return TourPointEntity(cityId, mName, mAddress, destination, mUrlImage, categoryName, categoryIcon)
+        return TourPointEntity(cityId, mName, mAddress, destination, mUrlImage, categoryIcon, categoryName, categoryId ?: "")
     }
 }
 
@@ -87,6 +61,7 @@ data class TourPointPath(
     val address: String? = "",
     val destination: Location? = null,
     val urlImage: String? = "",
-    val category: String? = "",
-    val categoryIcon: String? = ""
+    val categoryIcon: String? = "",
+    val category: TourPointsCategory? = null,
+    val categoryName: String? = ""
 ) : Serializable

@@ -10,6 +10,7 @@ import androidx.navigation.fragment.navArgs
 import coil.load
 import com.google.android.gms.maps.model.LatLng
 import com.jalasoft.routesapp.databinding.FragmentTourPointDetailBinding
+import com.jalasoft.routesapp.util.helpers.Constants
 import java.util.*
 
 class TourPointDetailFragment : Fragment() {
@@ -30,7 +31,11 @@ class TourPointDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.tvTourPointName.text = args.tourPointPathData.name
-        binding.tvTourPointCategory.text = args.tourPointPathData.category?.capitalize(Locale.ROOT) ?: ""
+        val currLang = Locale.getDefault().isO3Language
+        if (currLang == Constants.CURRENT_SPANISH_LANGUAGE) {
+            binding.tvTourPointCategory.text = args.tourPointPathData.category?.descriptionEsp?.capitalize(Locale.ROOT) ?: ""
+        } else binding.tvTourPointCategory.text = args.tourPointPathData.category?.descriptionEng?.capitalize(Locale.ROOT) ?: ""
+
         binding.tvTourPointAddress.text = args.tourPointPathData.address
 
         binding.ivTourPoint.load(args.tourPointPathData.urlImage)

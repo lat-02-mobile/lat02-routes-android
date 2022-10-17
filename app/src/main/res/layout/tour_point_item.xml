@@ -41,7 +41,7 @@
                 android:textColor="@color/color_primary"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:text="@{tourPointItem.category}"
+                android:text="@{tourPointItem.categoryName}"
                 tools:text="Museum" />
 
         </LinearLayout>
