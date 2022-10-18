@@ -93,7 +93,8 @@
         tools:layout="@layout/fragment_favorites" >
         <action
             android:id="@+id/action_favoritesFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/homeFragment" />
     </fragment>
     <fragment
         android:id="@+id/tourPointDetailFragment"
@@ -105,7 +106,8 @@
             app:argType="com.jalasoft.routesapp.data.model.remote.TourPointPath" />
         <action
             android:id="@+id/action_tourPointDetailFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/homeFragment" />
     </fragment>
 
 
