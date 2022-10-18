@@ -133,6 +133,6 @@
     <string name="there_are_no_favorites_yet">Aun no hay favoritos</string>
     <string name="address">Direccion:&#160;</string>
     <string name="search_best_route">Buscar mejor ruta</string>
-    <string name="preselected_destination">Destino Preseleccionado</string>
+    <string name="preselected_destination">Destino Preseleccionado:</string>
 
 </resources>
