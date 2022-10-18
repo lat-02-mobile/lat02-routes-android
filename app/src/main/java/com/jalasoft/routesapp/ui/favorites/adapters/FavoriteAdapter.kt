@@ -24,6 +24,9 @@ class FavoriteAdapter(var favoritesList: MutableList<FavoriteDestinationEntity>,
     override fun onBindViewHolder(holder: FavoriteViewHolder, position: Int) {
         holder.binding.favoriteItem = favoritesList[position]
         holder.binding.tvDate.text = holder.binding.root.context.getString(R.string.fav_dest_created_at, DateHelper.convertDoubleToTime(favoritesList[position].createdAt))
+        holder.binding.favContainer.setOnClickListener {
+            listener.onFavoriteTap(favoritesList[position])
+        }
     }
 
     override fun getItemCount(): Int {

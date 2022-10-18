@@ -21,6 +21,11 @@
             app:argType="com.google.android.gms.maps.model.LatLng"
             app:nullable="true"
             android:defaultValue="@null" />
+        <argument
+            android:name="preDestName"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -85,7 +90,12 @@
         android:id="@+id/favoritesFragment"
         android:name="com.jalasoft.routesapp.ui.favorites.view.FavoritesFragment"
         android:label="fragment_favorites"
-        tools:layout="@layout/fragment_favorites" />
+        tools:layout="@layout/fragment_favorites" >
+        <action
+            android:id="@+id/action_favoritesFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/homeFragment" />
+    </fragment>
     <fragment
         android:id="@+id/tourPointDetailFragment"
         android:name="com.jalasoft.routesapp.ui.tourPoints.view.TourPointDetailFragment"
@@ -96,7 +106,8 @@
             app:argType="com.jalasoft.routesapp.data.model.remote.TourPointPath" />
         <action
             android:id="@+id/action_tourPointDetailFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/homeFragment" />
     </fragment>
 
 

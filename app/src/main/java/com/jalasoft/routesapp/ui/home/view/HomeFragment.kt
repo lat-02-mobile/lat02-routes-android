@@ -10,14 +10,11 @@ import android.view.View
 import android.widget.EditText
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.maps.android.PolyUtil
 import com.jalasoft.routesapp.R
@@ -45,7 +42,6 @@ enum class HomeSelectionStatus {
 
 class HomeFragment : HomeBaseFragment(), PossibleRouteAdapter.IPossibleRouteListener {
     private var homeSelectionStatus = HomeSelectionStatus.SELECTING_POINTS
-    private var isOriginLastSet = false
     private var isFavorite = false
     private var favoriteDestination: FavoriteDestinationEntity? = null
     private val progressDialog by lazy { CustomProgressDialog(requireActivity()) }
@@ -71,28 +67,15 @@ class HomeFragment : HomeBaseFragment(), PossibleRouteAdapter.IPossibleRouteList
                 HomeSelectionStatus.SELECTING_POINTS -> {
                     when (selectPointsStatus) {
                         SelectPointsStatus.ORIGIN -> {
-                            if (viewModel.selectedDestination.value != null) {
-                                viewModel.setDestination(null)
-                                selectPointsStatus = SelectPointsStatus.DESTINATION
-                                if (args.preSelectDestCoords != null) {
-                                    findNavController().popBackStack()
-                                }
-                            }
+                            return@setOnClickListener
                         }
                         SelectPointsStatus.DESTINATION -> {
-                            if (viewModel.selectedOrigin.value != null) {
-                                viewModel.setOrigin(null)
-                                selectPointsStatus = SelectPointsStatus.ORIGIN
-                            }
+                            viewModel.setOrigin(null)
+                            selectPointsStatus = SelectPointsStatus.ORIGIN
                         }
                         SelectPointsStatus.BOTH -> {
-                            if (isOriginLastSet) {
-                                viewModel.setOrigin(null)
-                                selectPointsStatus = SelectPointsStatus.ORIGIN
-                            } else {
-                                viewModel.setDestination(null)
-                                selectPointsStatus = SelectPointsStatus.DESTINATION
-                            }
+                            viewModel.setDestination(null)
+                            selectPointsStatus = SelectPointsStatus.DESTINATION
                         }
                     }
                 }
@@ -105,15 +88,6 @@ class HomeFragment : HomeBaseFragment(), PossibleRouteAdapter.IPossibleRouteList
                     homeSelectionStatus = HomeSelectionStatus.SELECTING_POINTS
                     binding.possibleRouteBottomLayout.view.visibility = View.GONE
                     binding.bottomLayout1.bottomSheetLayout.visibility = View.VISIBLE
-                    val selectedOrigin = viewModel.selectedOrigin.value ?: return@setOnClickListener
-                    val selectedDestination =
-                        viewModel.selectedDestination.value ?: return@setOnClickListener
-                    val markerOrigin = MarkerOptions().position(selectedOrigin)
-                    val markerDestination = MarkerOptions().position(selectedDestination)
-                    markerOrigin.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_origin))
-                    markerDestination.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_destination))
-                    this.markerOrigin = mMap?.addMarker(markerOrigin)
-                    this.markerDestination = mMap?.addMarker(markerDestination)
                 }
                 HomeSelectionStatus.SHOWING_ROUTE_DETAILS -> {
                     homeSelectionStatus = HomeSelectionStatus.SHOWING_POSSIBLE_ROUTES
@@ -125,27 +99,22 @@ class HomeFragment : HomeBaseFragment(), PossibleRouteAdapter.IPossibleRouteList
 
         // Next button
         binding.btnCheckNextLocation.setOnClickListener {
-            var newLocation: LatLng? = null
-            if (selectPointsStatus != SelectPointsStatus.BOTH) {
-                newLocation = getSelectedLocation()
-            }
             when (selectPointsStatus) {
                 SelectPointsStatus.ORIGIN -> {
+                    val newLocation = getSelectedLocation() ?: LatLng(0.0, 0.0)
+                    markerOrigin = addMarker(mMap, newLocation, R.drawable.ic_origin)
                     viewModel.setOrigin(newLocation)
-                    if (viewModel.selectedDestination.value == null) {
-                        selectPointsStatus = SelectPointsStatus.DESTINATION
-                    } else {
-                        isOriginLastSet = true
-                        selectPointsStatus = SelectPointsStatus.BOTH
-                    }
+                    selectPointsStatus = if (args.preSelectDestCoords != null) {
+                        markerDestination = addMarker(mMap, args.preSelectDestCoords ?: LatLng(0.0, 0.0), R.drawable.ic_destination)
+                        viewModel.setDestination(args.preSelectDestCoords)
+                        SelectPointsStatus.BOTH
+                    } else SelectPointsStatus.DESTINATION
                 }
                 SelectPointsStatus.DESTINATION -> {
+                    val newLocation = getSelectedLocation() ?: LatLng(0.0, 0.0)
+                    markerDestination = addMarker(mMap, newLocation, R.drawable.ic_destination)
                     viewModel.setDestination(newLocation)
-                    selectPointsStatus = if (viewModel.selectedOrigin.value == null) {
-                        SelectPointsStatus.ORIGIN
-                    } else {
-                        SelectPointsStatus.BOTH
-                    }
+                    selectPointsStatus = SelectPointsStatus.BOTH
                 }
                 SelectPointsStatus.BOTH -> {
                     val origin = viewModel.selectedOrigin.value ?: return@setOnClickListener
@@ -219,18 +188,6 @@ class HomeFragment : HomeBaseFragment(), PossibleRouteAdapter.IPossibleRouteList
 
         viewModel.possibleRoutesList.observe(viewLifecycleOwner) {
             updatePossibleRouteRecycler(it.toMutableList())
-        }
-    }
-
-    override fun onMapReady(googleMap: GoogleMap) {
-        super.onMapReady(googleMap)
-        if (args.preSelectDestCoords != null) {
-            selectPointsStatus = SelectPointsStatus.ORIGIN
-            viewModel.setDestination(args.preSelectDestCoords)
-            val newMarker = MarkerOptions().position(args.preSelectDestCoords!!)
-            newMarker.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_destination))
-            markerDestination = mMap?.addMarker(newMarker)
-            moveToLocation(args.preSelectDestCoords!!, 15F)
         }
     }
 
