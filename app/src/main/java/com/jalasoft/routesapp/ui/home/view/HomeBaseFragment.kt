@@ -95,9 +95,21 @@ open class HomeBaseFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
         setMap()
         setBottomPopup()
         setObserversForHomeBaseFragment()
+        setupViews()
+    }
 
+    // Configuring some views
+    private fun setupViews() {
+        // Enabling tour points
         isTourPointsEnabled = PreferenceManager.getTourPointsSetting(requireContext())
         if (isTourPointsEnabled) drawTourPoints()
+
+        // Showing PreSelected Destination
+        binding.preDestContainer.visibility = View.GONE
+        if (args.preDestName != null) {
+            binding.preDestContainer.visibility = View.VISIBLE
+            binding.tvPreDestName.text = args.preDestName
+        }
     }
 
     // Methods for setups
@@ -124,9 +136,7 @@ open class HomeBaseFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
         mMap?.setOnInfoWindowClickListener {
             it.hideInfoWindow()
         }
-        if (args.preSelectDestCoords == null) {
-            setMapOnCurrentCity()
-        }
+        setMapOnCurrentCity()
         loadTourPoints()
     }
 
@@ -154,42 +164,29 @@ open class HomeBaseFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
             (binding.bottomLayout1.placesRecycler.adapter as PlaceAdapter).updateList(it.toMutableList())
         }
 
-        viewModel.selectedDestination.observe(viewLifecycleOwner) {
-            if (it != null) {
-                binding.btnGoBack.visibility = View.VISIBLE
-                if (viewModel.selectedOrigin.value != null) {
-                    statusTextView.text = getString(R.string.done)
-                    Toast.makeText(requireContext(), getString(R.string.go_next_step), Toast.LENGTH_LONG).show()
-                    binding.btnCheckNextLocation.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.color_secondary))
-                } else {
-                    statusTextView.text = getString(R.string.select_an_origin)
-                }
-            } else {
-                markerDestination?.remove()
-                statusTextView.text = getString(R.string.select_a_destination)
-                binding.btnCheckNextLocation.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.color_primary))
-                if (viewModel.selectedOrigin.value == null) {
-                    binding.btnGoBack.visibility = View.GONE
-                }
-            }
-        }
-
         viewModel.selectedOrigin.observe(viewLifecycleOwner) {
             if (it != null) {
+                binding.preDestContainer.visibility = View.GONE
                 binding.btnGoBack.visibility = View.VISIBLE
-                if (viewModel.selectedDestination.value != null) {
-                    statusTextView.text = getString(R.string.done)
-                    Toast.makeText(requireContext(), getString(R.string.go_next_step), Toast.LENGTH_LONG).show()
-                    binding.btnCheckNextLocation.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.color_secondary))
-                } else {
-                    statusTextView.text = getString(R.string.select_a_destination)
-                }
+                statusTextView.text = getString(R.string.select_a_destination)
             } else {
                 markerOrigin?.remove()
                 statusTextView.text = getString(R.string.select_an_origin)
+                binding.btnGoBack.visibility = View.GONE
+            }
+        }
+
+        viewModel.selectedDestination.observe(viewLifecycleOwner) {
+            if (it != null) {
+                binding.btnGoBack.visibility = View.VISIBLE
+                statusTextView.text = getString(R.string.done)
+                Toast.makeText(requireContext(), getString(R.string.go_next_step), Toast.LENGTH_LONG).show()
+                binding.btnCheckNextLocation.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.color_secondary))
+            } else {
+                markerDestination?.remove()
                 binding.btnCheckNextLocation.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.color_primary))
-                if (viewModel.selectedDestination.value == null) {
-                    binding.btnGoBack.visibility = View.GONE
+                if (viewModel.selectedOrigin.value != null) {
+                    statusTextView.text = getString(R.string.select_a_destination)
                 }
             }
         }
@@ -354,16 +351,6 @@ open class HomeBaseFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
 
     fun getSelectedLocation(): LatLng? {
         val cameraLocation = mMap?.cameraPosition?.target
-        val markerCamera = cameraLocation?.let { MarkerOptions().position(it) }
-        if (markerCamera != null) {
-            if (selectPointsStatus == SelectPointsStatus.ORIGIN) {
-                markerCamera.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_origin))
-                markerOrigin = mMap?.addMarker(markerCamera)
-            } else if (selectPointsStatus == SelectPointsStatus.DESTINATION) {
-                markerCamera.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_destination))
-                markerDestination = mMap?.addMarker(markerCamera)
-            }
-        }
         return if (cameraLocation != null) {
             LatLng(cameraLocation.latitude, cameraLocation.longitude)
         } else {

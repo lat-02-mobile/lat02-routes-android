@@ -9,9 +9,11 @@ import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.textfield.TextInputLayout
 import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.data.model.local.FavoriteDestinationEntity
@@ -136,6 +138,10 @@ class FavoritesFragment : Fragment(), FavoriteAdapter.IFavoriteListener {
     }
 
     override fun onFavoriteTap(fav: FavoriteDestinationEntity) {
-        TODO("Not yet implemented")
+        val direction = FavoritesFragmentDirections.actionFavoritesFragmentToHomeFragment(
+            preSelectDestCoords = LatLng(fav.destination.latitude, fav.destination.longitude),
+            preDestName = fav.name
+        )
+        findNavController().navigate(direction)
     }
 }
