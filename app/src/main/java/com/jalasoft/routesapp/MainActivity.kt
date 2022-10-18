@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
             goToAuthActivity()
         } else {
             amplitude.setUserId(currentUser.uid)
-            amplitude.startNewSessionIfNeeded(amplitude.sessionId)
+            com.amplitude.api.Amplitude.getInstance().trackSessionEvents(true)
             val phoneNumber = currentUser.phoneNumber
             if (phoneNumber == null || phoneNumber.isEmpty()) {
                 goToAuthActivity()
