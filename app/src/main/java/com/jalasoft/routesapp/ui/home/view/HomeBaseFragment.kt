@@ -106,10 +106,6 @@ open class HomeBaseFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
 
         // Showing PreSelected Destination
         binding.preDestContainer.visibility = View.GONE
-        if (args.preDestName != null) {
-            binding.preDestContainer.visibility = View.VISIBLE
-            binding.tvPreDestName.text = args.preDestName
-        }
     }
 
     // Methods for setups
@@ -170,6 +166,10 @@ open class HomeBaseFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
                 binding.btnGoBack.visibility = View.VISIBLE
                 statusTextView.text = getString(R.string.select_a_destination)
             } else {
+                if (args.preDestName != null) {
+                    binding.preDestContainer.visibility = View.VISIBLE
+                    binding.tvPreDestName.text = args.preDestName
+                }
                 markerOrigin?.remove()
                 statusTextView.text = getString(R.string.select_an_origin)
                 binding.btnGoBack.visibility = View.GONE
@@ -358,7 +358,7 @@ open class HomeBaseFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
         }
     }
 
-    fun addMarker(googleMap: GoogleMap, point: LatLng, withDrawable: Int, anchorX: Float = 0.5F, anchorY: Float = 0.5F): Marker? {
-        return googleMap.addMarker(MarkerOptions().position(point).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), withDrawable)).anchor(anchorX, anchorY))
+    fun addMarker(googleMap: GoogleMap?, point: LatLng, withDrawable: Int, anchorX: Float = 0.5F, anchorY: Float = 0.5F): Marker? {
+        return googleMap?.addMarker(MarkerOptions().position(point).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), withDrawable)).anchor(anchorX, anchorY))
     }
 }

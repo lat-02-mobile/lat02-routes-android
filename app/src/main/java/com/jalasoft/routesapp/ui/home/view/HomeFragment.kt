@@ -102,17 +102,17 @@ class HomeFragment : HomeBaseFragment(), PossibleRouteAdapter.IPossibleRouteList
             when (selectPointsStatus) {
                 SelectPointsStatus.ORIGIN -> {
                     val newLocation = getSelectedLocation() ?: LatLng(0.0, 0.0)
-                    markerOrigin = addMarker(mMap!!, newLocation, R.drawable.ic_origin)
+                    markerOrigin = addMarker(mMap, newLocation, R.drawable.ic_origin)
                     viewModel.setOrigin(newLocation)
                     selectPointsStatus = if (args.preSelectDestCoords != null) {
-                        markerDestination = addMarker(mMap!!, args.preSelectDestCoords!!, R.drawable.ic_destination)
+                        markerDestination = addMarker(mMap, args.preSelectDestCoords ?: LatLng(0.0, 0.0), R.drawable.ic_destination)
                         viewModel.setDestination(args.preSelectDestCoords)
                         SelectPointsStatus.BOTH
                     } else SelectPointsStatus.DESTINATION
                 }
                 SelectPointsStatus.DESTINATION -> {
                     val newLocation = getSelectedLocation() ?: LatLng(0.0, 0.0)
-                    markerDestination = addMarker(mMap!!, newLocation, R.drawable.ic_destination)
+                    markerDestination = addMarker(mMap, newLocation, R.drawable.ic_destination)
                     viewModel.setDestination(newLocation)
                     selectPointsStatus = SelectPointsStatus.BOTH
                 }
