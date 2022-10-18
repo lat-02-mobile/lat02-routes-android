@@ -42,7 +42,10 @@ class TourPointDetailFragment : Fragment() {
 
         binding.btnSetAsDestination.setOnClickListener {
             args.tourPointPathData.destination?.let {
-                val direction = TourPointDetailFragmentDirections.actionTourPointDetailFragmentToHomeFragment(preSelectDestCoords = LatLng(it.latitude, it.longitude))
+                val direction = TourPointDetailFragmentDirections.actionTourPointDetailFragmentToHomeFragment(
+                    preSelectDestCoords = LatLng(it.latitude, it.longitude),
+                    preDestName = args.tourPointPathData.name
+                )
                 findNavController().navigate(direction)
             }
         }

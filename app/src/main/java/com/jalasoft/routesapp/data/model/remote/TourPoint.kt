@@ -1,6 +1,8 @@
 package com.jalasoft.routesapp.data.model.remote
 
 import android.location.Location
+import android.os.Parcel
+import android.os.Parcelable
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.GeoPoint
@@ -64,4 +66,40 @@ data class TourPointPath(
     val categoryIcon: String? = "",
     val category: TourPointsCategory? = null,
     val categoryName: String? = ""
-) : Serializable
+) : Serializable, Parcelable {
+    constructor(parcel: Parcel) : this(
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readParcelable(Location::class.java.classLoader),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readSerializable() as TourPointsCategory?,
+        parcel.readString()
+    ) {
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(idCity)
+        parcel.writeString(name)
+        parcel.writeString(address)
+        parcel.writeParcelable(destination, flags)
+        parcel.writeString(urlImage)
+        parcel.writeString(categoryIcon)
+        parcel.writeString(categoryName)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<TourPointPath> {
+        override fun createFromParcel(parcel: Parcel): TourPointPath {
+            return TourPointPath(parcel)
+        }
+
+        override fun newArray(size: Int): Array<TourPointPath?> {
+            return arrayOfNulls(size)
+        }
+    }
+}

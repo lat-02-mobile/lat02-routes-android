@@ -1,6 +1,9 @@
 package com.jalasoft.routesapp.util
 
 import android.content.Context
+import com.amplitude.android.Amplitude
+import com.amplitude.android.Configuration
+import com.jalasoft.routesapp.BuildConfig
 
 object PreferenceManager {
     private const val PREFERENCES_KEY = "routes_app_preferences"
@@ -52,5 +55,14 @@ object PreferenceManager {
     fun getCurrentCityID(context: Context): String {
         val pref = context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE)
         return pref.getString(CURRENT_CITY_ID, NOT_FOUND) ?: NOT_FOUND
+    }
+
+    fun getAmplitude(context: Context): Amplitude {
+        return Amplitude(
+            Configuration(
+                apiKey = BuildConfig.AMPLITUDE_API_KEY,
+                context = context
+            )
+        )
     }
 }

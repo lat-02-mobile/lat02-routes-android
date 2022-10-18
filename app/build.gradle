@@ -6,6 +6,8 @@ plugins {
     id 'dagger.hilt.android.plugin'
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
     id 'androidx.navigation.safeargs.kotlin'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
 }
 
 apply from: "$project.rootDir/jacoco.gradle"
@@ -37,11 +39,13 @@ android {
             testCoverageEnabled true
             buildConfigField 'String', 'GOOGLE_DIRECTIONS_API_KEY', '\"$GOOGLE_DIRECTIONS_API_KEY\"'
             buildConfigField 'String', 'GOOGLE_PLACE_API_KEY', '\"$GOOGLE_PLACE_API_KEY\"'
+            buildConfigField 'String', 'AMPLITUDE_API_KEY', '\"AMPLITUDE_API_KEY\"'
         }
         release {
             minifyEnabled false
             buildConfigField 'String', 'GOOGLE_DIRECTIONS_API_KEY', '\"$GOOGLE_DIRECTIONS_API_KEY\"'
             buildConfigField 'String', 'GOOGLE_PLACE_API_KEY', '\"$GOOGLE_PLACE_API_KEY\"'
+            buildConfigField 'String', 'AMPLITUDE_API_KEY', '\"$AMPLITUDE_API_KEY\"'
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -163,6 +167,14 @@ dependencies {
 
     // Swipe Decorator
     implementation 'com.github.xabaras:RecyclerViewSwipeDecorator:1.4'
+
+    // Crashlytics and Analytics
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+
+    //Amplitude
+    implementation 'com.amplitude:analytics-android:1.4.4'
+    implementation 'com.amplitude:android-sdk:2.36.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

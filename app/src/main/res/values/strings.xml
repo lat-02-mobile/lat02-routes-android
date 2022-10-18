@@ -134,5 +134,6 @@
     <string name="there_are_no_favorites_yet">There are no favorites yet</string>
     <string name="address">Address:&#160;</string>
     <string name="search_best_route">Search best route</string>
+    <string name="preselected_destination">Pre-Selected Destination:</string>
 
 </resources>
