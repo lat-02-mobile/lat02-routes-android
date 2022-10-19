@@ -37,10 +37,38 @@ android {
     buildTypes {
         debug {
             testCoverageEnabled true
+            buildConfigField 'String', 'GOOGLE_DIRECTIONS_API_KEY', '\"$GOOGLE_DIRECTIONS_API_KEY\"'
+            buildConfigField 'String', 'GOOGLE_PLACE_API_KEY', '\"$GOOGLE_PLACE_API_KEY\"'
+            buildConfigField 'String', 'AMPLITUDE_API_KEY', '\"AMPLITUDE_API_KEY\"'
         }
         release {
             minifyEnabled false
+            buildConfigField 'String', 'GOOGLE_DIRECTIONS_API_KEY', '\"$GOOGLE_DIRECTIONS_API_KEY\"'
+            buildConfigField 'String', 'GOOGLE_PLACE_API_KEY', '\"$GOOGLE_PLACE_API_KEY\"'
+            buildConfigField 'String', 'AMPLITUDE_API_KEY', '\"$AMPLITUDE_API_KEY\"'
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    flavorDimensions 'mode'
+    productFlavors {
+        staging {
+            dimension 'mode'
+            manifestPlaceholders = [
+                    GOOGLE_MAPS_API_KEY: '$GOOGLE_MAPS_API_KEY',
+                    FB_APP_ID:'$FB_APP_ID',
+                    FB_CLIENT_TOKEN: '$FB_CLIENT_TOKEN'
+            ]
+            signingConfig signingConfigs.debug
+        }
+        production {
+            dimension 'mode'
+            manifestPlaceholders = [
+                    GOOGLE_MAPS_API_KEY: '$GOOGLE_MAPS_API_KEY',
+                    FB_APP_ID:'$FB_APP_ID',
+                    FB_CLIENT_TOKEN: '$FB_CLIENT_TOKEN'
+            ]
+            signingConfig signingConfigs.debug
         }
     }
 
