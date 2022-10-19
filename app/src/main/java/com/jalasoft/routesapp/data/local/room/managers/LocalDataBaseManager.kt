@@ -23,7 +23,7 @@ class LocalDataBaseManager(private val localRoutesDB: RoutesDB) : LocalDataBaseR
         for (item in lineRouteInfo) {
             val start = Location(item.start?.latitude ?: 0.0, item.start?.longitude ?: 0.0)
             val end = Location(item.end?.latitude ?: 0.0, item.end?.longitude ?: 0.0)
-            val lineLocal = LineRouteEntity(item.id, item.idLine, item.name, item.averageVelocity, item.color, start, end)
+            val lineLocal = LineRouteEntity(item.id, item.idLine, item.name, item.averageVelocity, item.color, start, end, item.createAt, item.updateAt)
             localRoutesDB.lineRouteDao().addLineRoute(lineLocal)
             addLocalRoutePoints(item.id, item.routePoints)
             addLocalStops(item.id, item.stops)

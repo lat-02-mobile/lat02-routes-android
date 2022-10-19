@@ -19,9 +19,6 @@
     <string name="reg_vm_valid_email">The Email is being used in another account</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="facebook_app_id" translatable="false">{FB_APP_ID}</string>
-    <string name="fb_login_protocol_scheme" translatable="false">fb{FB_APP_ID}</string>
-    <string name="facebook_client_token" translatable="false">{FB_CLIENT_TOKEN}</string>
 
     <!--  Startup page  -->
     <string name="txt_login">You don\'t have an account yet?</string>

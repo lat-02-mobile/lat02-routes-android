@@ -15,5 +15,7 @@ data class TourPointEntity(
     val urlImage: String,
     val categoryIcon: String = "",
     val categoryName: String,
-    val categoryId: String
+    val categoryId: String,
+    val createAt: Long,
+    val updateAt: Long
 )

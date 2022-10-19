@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.facebook.CallbackManager
+import com.facebook.FacebookSdk
 import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -59,6 +60,7 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         userIsLogged()
+        FacebookSdk.sdkInitialize(requireContext())
 
         callbackManager = CallbackManager.Factory.create()
         fbLoginManager = LoginManager.getInstance()

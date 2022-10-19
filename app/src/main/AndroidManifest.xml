@@ -24,8 +24,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RoutesApp"
         tools:targetApi="31">
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
-        <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="fb${FB_APP_ID}"/>
+        <meta-data android:name="com.facebook.sdk.ClientToken" android:value="${FB_CLIENT_TOKEN}"/>
 
         <activity android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" />

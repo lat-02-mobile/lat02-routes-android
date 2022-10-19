@@ -16,7 +16,8 @@ interface LineCategoriesDao {
 
     @Query(
         "SELECT category.id as id, category.nameEng, category.nameEsp, " +
-            "category.whiteIcon, category.blackIcon " +
+            "category.whiteIcon, category.blackIcon, " +
+            "category.createAt, category.updateAt " +
             "FROM linecategoriesentity AS category " +
             "WHERE category.nameEsp = :name OR category.nameEng = :name"
     )

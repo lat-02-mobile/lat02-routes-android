@@ -30,7 +30,7 @@ class RouteLocalManager(private val localRoutesDB: RoutesDB) : RouteLocalReposit
             val currLang = Locale.getDefault().isO3Language
             var categoryName = if (currLang == "spa") category.nameEsp else category.nameEng
             lineInfoList.add(
-                LineInfo(line.idLine, line.name, line.enable, categoryName, mutableListOf(lineRouteInfoList))
+                LineInfo(line.idLine, line.name, line.enable, categoryName, mutableListOf(lineRouteInfoList), line.createAt, line.updateAt)
             )
         }
         return lineInfoList

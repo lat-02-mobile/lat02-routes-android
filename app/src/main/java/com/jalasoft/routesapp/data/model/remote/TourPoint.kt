@@ -3,6 +3,7 @@ package com.jalasoft.routesapp.data.model.remote
 import android.location.Location
 import android.os.Parcel
 import android.os.Parcelable
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.GeoPoint
@@ -20,7 +21,9 @@ data class TourPoint(
     val destination: GeoPoint? = null,
     val urlImage: String? = "",
     val tourPointsCategoryRef: DocumentReference? = null,
-    val categoryId: String? = ""
+    val categoryId: String? = "",
+    val createAt: Timestamp = Timestamp.now(),
+    val updateAt: Timestamp = Timestamp.now()
 ) : Serializable {
 
     suspend fun tourPointToTourPointLocal(): TourPointEntity {
@@ -53,7 +56,7 @@ data class TourPoint(
                     else targetCategory?.descriptionEng ?: ""
             }
         }
-        return TourPointEntity(cityId, mName, mAddress, destination, mUrlImage, categoryIcon, categoryName, categoryId ?: "")
+        return TourPointEntity(cityId, mName, mAddress, destination, mUrlImage, categoryIcon, categoryName, categoryId ?: "", createAt.toDate().time, updateAt.toDate().time)
     }
 }
 
@@ -65,7 +68,9 @@ data class TourPointPath(
     val urlImage: String? = "",
     val categoryIcon: String? = "",
     val category: TourPointsCategory? = null,
-    val categoryName: String? = ""
+    val categoryName: String? = "",
+    val createAt: Long = 0,
+    val updateAt: Long = 0
 ) : Serializable, Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),
