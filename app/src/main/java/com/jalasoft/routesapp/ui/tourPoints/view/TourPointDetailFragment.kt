@@ -44,7 +44,8 @@ class TourPointDetailFragment : Fragment() {
             args.tourPointPathData.destination?.let {
                 val direction = TourPointDetailFragmentDirections.actionTourPointDetailFragmentToHomeFragment(
                     preSelectDestCoords = LatLng(it.latitude, it.longitude),
-                    preDestName = args.tourPointPathData.name
+                    preDestName = args.tourPointPathData.name,
+                    preDestSnippet = args.tourPointPathData.categoryName?.uppercase(Locale.ROOT)
                 )
                 findNavController().navigate(direction)
             }

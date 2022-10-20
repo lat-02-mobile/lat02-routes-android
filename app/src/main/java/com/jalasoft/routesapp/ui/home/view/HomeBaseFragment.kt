@@ -143,12 +143,6 @@ open class HomeBaseFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
     }
 
     override fun onMarkerClick(marker: Marker): Boolean {
-        if (marker == markerOrigin) {
-            viewModel.selectedOrigin.value = null
-        } else if (marker == markerDestination) {
-            viewModel.selectedDestination.value = null
-        }
-        marker.showInfoWindow()
         moveToLocation(marker.position, 16F)
         return true
     }
@@ -170,6 +164,8 @@ open class HomeBaseFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
                     binding.tvPreDestName.text = args.preDestName
                 }
                 markerOrigin?.remove()
+                markerOrigin?.title = ""
+                markerOrigin?.snippet = ""
                 statusTextView.text = getString(R.string.select_an_origin)
                 binding.btnGoBack.visibility = View.GONE
             }
@@ -183,6 +179,8 @@ open class HomeBaseFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
                 binding.btnCheckNextLocation.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.color_secondary))
             } else {
                 markerDestination?.remove()
+                markerDestination?.title = ""
+                markerDestination?.snippet = ""
                 binding.btnCheckNextLocation.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.color_primary))
                 if (viewModel.selectedOrigin.value != null) {
                     statusTextView.text = getString(R.string.select_a_destination)
