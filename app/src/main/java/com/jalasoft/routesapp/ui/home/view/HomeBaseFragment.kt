@@ -144,7 +144,6 @@ open class HomeBaseFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
 
     override fun onMarkerClick(marker: Marker): Boolean {
         moveToLocation(marker.position, 16F)
-        marker.setInfoWindowAnchor(0.5F, 0.25F)
         return true
     }
 
@@ -199,14 +198,13 @@ open class HomeBaseFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
                     val category = tourPoint.category ?: return@launch
                     val name = tourPoint.name ?: ""
                     val categoryName = tourPoint.categoryName ?: ""
-                    val icon = ImageHelper.getBitMapFromUrl(requireContext(), category.icon)
+                    val icon = ImageHelper.getBitMapFromUrl(requireContext(), category.icon) ?: return@launch
                     val newMarker = map.addMarker(
                         MarkerOptions()
                             .position(destination.toLatLong())
                             .icon(icon)
                             .title(name.uppercase())
                             .snippet(categoryName.uppercase())
-                            .anchor(0.5F, 0.5F)
                     )
                     if (newMarker != null) tourPointsMarkers.add(newMarker)
                 }
