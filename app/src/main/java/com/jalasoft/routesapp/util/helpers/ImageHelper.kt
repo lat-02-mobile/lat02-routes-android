@@ -10,13 +10,14 @@ import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 
 object ImageHelper {
-    suspend fun getBitMapFromUrl(context: Context, imageUrl: String): BitmapDescriptor {
+    suspend fun getBitMapFromUrl(context: Context, imageUrl: String): BitmapDescriptor? {
         val loader = ImageLoader(context)
         val request = ImageRequest.Builder(context)
             .data(imageUrl)
             .build()
-        val result = (loader.execute(request) as SuccessResult).drawable
-        val bitmap = (result as BitmapDrawable).bitmap.scale(300, 300, false)
+        val result = (loader.execute(request) as? SuccessResult) ?: return null
+        val drawable = result.drawable
+        val bitmap = (drawable as BitmapDrawable).bitmap.scale(80, 110, false)
         return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
 }
