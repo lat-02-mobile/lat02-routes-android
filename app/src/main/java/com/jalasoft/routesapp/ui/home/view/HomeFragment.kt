@@ -15,6 +15,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.Marker
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.maps.android.PolyUtil
 import com.jalasoft.routesapp.R
@@ -59,6 +60,73 @@ class HomeFragment : HomeBaseFragment(), PossibleRouteAdapter.IPossibleRouteList
         setRouteDetailRecycler()
     }
 
+    override fun onMarkerClick(marker: Marker): Boolean {
+        if (marker != markerOrigin && marker != markerDestination && marker.title != markerOrigin?.title && marker.title != markerDestination?.title) {
+            val newLocation = LatLng(marker.position.latitude, marker.position.longitude)
+            val snippet = marker.snippet ?: ""
+            val title = marker.title ?: ""
+            selectPoint(newLocation, title, snippet)
+        }
+        return super.onMarkerClick(marker)
+    }
+
+    private fun selectPoint(newLocation: LatLng, markerTitle: String = "", markerSnippet: String = "") {
+        when (selectPointsStatus) {
+            SelectPointsStatus.ORIGIN -> {
+                markerOrigin = addMarker(mMap, newLocation, R.drawable.ic_origin)
+                markerOrigin?.title = markerTitle
+                markerOrigin?.snippet = markerSnippet
+                markerOrigin?.showInfoWindow()
+                viewModel.setOrigin(newLocation)
+                selectPointsStatus = if (args.preSelectDestCoords != null) {
+                    markerDestination = addMarker(mMap, args.preSelectDestCoords ?: LatLng(0.0, 0.0), R.drawable.ic_destination)
+                    markerDestination?.title = args.preDestName
+                    markerDestination?.snippet = args.preDestSnippet
+                    markerDestination?.showInfoWindow()
+                    viewModel.setDestination(args.preSelectDestCoords)
+                    SelectPointsStatus.BOTH
+                } else SelectPointsStatus.DESTINATION
+            }
+            SelectPointsStatus.DESTINATION -> {
+                markerDestination = addMarker(mMap, newLocation, R.drawable.ic_destination)
+                markerDestination?.title = markerTitle
+                markerDestination?.snippet = markerSnippet
+                markerDestination?.showInfoWindow()
+                viewModel.setDestination(newLocation)
+                selectPointsStatus = SelectPointsStatus.BOTH
+            }
+            SelectPointsStatus.BOTH -> {
+                if (markerTitle.isNotEmpty()) return
+                val origin = viewModel.selectedOrigin.value ?: return
+                val destination =
+                    viewModel.selectedDestination.value ?: return
+                if (origin.toLocation().distanceTo(destination.toLocation()) <= Constants.MINIMUM_DISTANCE_ORIGIN_DESTINATION
+                ) {
+                    mMap?.let {
+                        drawWalkingPath(
+                            StartLocation(origin.latitude, origin.longitude),
+                            EndLocation(destination.latitude, destination.longitude),
+                            it
+                        ) {}
+                    }
+                } else {
+                    val currentCityId = PreferenceManager.getCurrentCityID(requireContext())
+                    val lineRoutePaths =
+                        viewModel.getRoutePaths(requireContext(), currentCityId)
+                    viewModel.getPossibleRoutes(lineRoutePaths, origin, destination)
+                    if (viewModel.possibleRoutesList.value?.isNotEmpty() == true) possibleRoutesBottomSheetBehavior.state =
+                        BottomSheetBehavior.STATE_EXPANDED
+                }
+                binding.btnCheckNextLocation.visibility = View.GONE
+                binding.btnCurrentLocation.visibility = View.GONE
+                binding.pin.visibility = View.GONE
+                homeSelectionStatus = HomeSelectionStatus.SHOWING_POSSIBLE_ROUTES
+                binding.bottomLayout1.bottomSheetLayout.visibility = View.GONE
+                binding.possibleRouteBottomLayout.view.visibility = View.VISIBLE
+            }
+        }
+    }
+
     private fun setUpButtons() {
         // Go back button
         binding.btnGoBack.visibility = View.GONE
@@ -99,52 +167,8 @@ class HomeFragment : HomeBaseFragment(), PossibleRouteAdapter.IPossibleRouteList
 
         // Next button
         binding.btnCheckNextLocation.setOnClickListener {
-            when (selectPointsStatus) {
-                SelectPointsStatus.ORIGIN -> {
-                    val newLocation = getSelectedLocation() ?: LatLng(0.0, 0.0)
-                    markerOrigin = addMarker(mMap, newLocation, R.drawable.ic_origin)
-                    viewModel.setOrigin(newLocation)
-                    selectPointsStatus = if (args.preSelectDestCoords != null) {
-                        markerDestination = addMarker(mMap, args.preSelectDestCoords ?: LatLng(0.0, 0.0), R.drawable.ic_destination)
-                        viewModel.setDestination(args.preSelectDestCoords)
-                        SelectPointsStatus.BOTH
-                    } else SelectPointsStatus.DESTINATION
-                }
-                SelectPointsStatus.DESTINATION -> {
-                    val newLocation = getSelectedLocation() ?: LatLng(0.0, 0.0)
-                    markerDestination = addMarker(mMap, newLocation, R.drawable.ic_destination)
-                    viewModel.setDestination(newLocation)
-                    selectPointsStatus = SelectPointsStatus.BOTH
-                }
-                SelectPointsStatus.BOTH -> {
-                    val origin = viewModel.selectedOrigin.value ?: return@setOnClickListener
-                    val destination =
-                        viewModel.selectedDestination.value ?: return@setOnClickListener
-                    if (origin.toLocation().distanceTo(destination.toLocation()) <= Constants.MINIMUM_DISTANCE_ORIGIN_DESTINATION
-                    ) {
-                        mMap?.let {
-                            drawWalkingPath(
-                                StartLocation(origin.latitude, origin.longitude),
-                                EndLocation(destination.latitude, destination.longitude),
-                                it
-                            ) {}
-                        }
-                    } else {
-                        val currentCityId = PreferenceManager.getCurrentCityID(requireContext())
-                        val lineRoutePaths =
-                            viewModel.getRoutePaths(requireContext(), currentCityId)
-                        viewModel.getPossibleRoutes(lineRoutePaths, origin, destination)
-                        if (viewModel.possibleRoutesList.value?.isNotEmpty() == true) possibleRoutesBottomSheetBehavior.state =
-                            BottomSheetBehavior.STATE_EXPANDED
-                    }
-                    binding.btnCheckNextLocation.visibility = View.GONE
-                    binding.btnCurrentLocation.visibility = View.GONE
-                    binding.pin.visibility = View.GONE
-                    homeSelectionStatus = HomeSelectionStatus.SHOWING_POSSIBLE_ROUTES
-                    binding.bottomLayout1.bottomSheetLayout.visibility = View.GONE
-                    binding.possibleRouteBottomLayout.view.visibility = View.VISIBLE
-                }
-            }
+            val newLocation = getSelectedLocation() ?: LatLng(0.0, 0.0)
+            selectPoint(newLocation)
         }
 
         binding.routeDetailsBottomLayout.favoriteButton.setOnClickListener {

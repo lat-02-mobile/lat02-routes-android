@@ -10,7 +10,7 @@ import java.lang.Exception
 class PlaceManager(val service: IGmapsService) : PlaceRepository {
     override suspend fun getAllPlaces(criteria: String, location: String): Response<List<Place>> {
         try {
-            val response = service.getPlaces(criteria, BuildConfig.GOOGLE_PLACE_API_KEY, location)
+            val response = service.getPlaces(criteria, BuildConfig.GOOGLE_MAPS_API_KEY, location)
             if (response.isSuccessful) {
                 return Response.Success(response.body()?.results ?: listOf())
             }
