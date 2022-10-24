@@ -1,9 +1,6 @@
 package com.jalasoft.routesapp.data.local.room.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.jalasoft.routesapp.data.model.local.TourPointCategoryWithTourPoints
 import com.jalasoft.routesapp.data.model.local.TourPointsCategoryEntity
 
@@ -22,4 +19,7 @@ interface TourPointCategoryDao {
             "WHERE idCity = :cityId"
     )
     fun getAllTourPointsCategoryWithTourPointsByCityId(cityId: String): List<TourPointCategoryWithTourPoints>
+
+    @Update(entity = TourPointsCategoryEntity::class)
+    fun updateTourPointCategory(tourPointsCategoryEntity: TourPointsCategoryEntity)
 }

@@ -1,9 +1,6 @@
 package com.jalasoft.routesapp.data.local.room.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.jalasoft.routesapp.data.model.local.LineCategoriesEntity
 
 @Dao
@@ -22,4 +19,7 @@ interface LineCategoriesDao {
             "WHERE category.nameEsp = :name OR category.nameEng = :name"
     )
     fun getCategoryByName(name: String): LineCategoriesEntity
+
+    @Update(entity = LineCategoriesEntity::class)
+    fun updateLinesCategory(linesCategoryEntity: LineCategoriesEntity)
 }

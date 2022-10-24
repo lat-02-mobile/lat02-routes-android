@@ -14,4 +14,12 @@ class FakeTourPointsManager : TourPointRepository {
     override suspend fun getAllTourPointsCategoriesToSaveLocally(): List<TourPointsCategoryEntity> {
         return FakeTourPointData.tourPointsCategoryEntity
     }
+
+    override suspend fun searchForUpdatedTourPoints(context: Context, tourPointLastUpdated: Long): List<TourPointEntity> {
+        return FakeTourPointData.tourPointsEntity
+    }
+
+    override suspend fun searchForUpdatedTourPointsCategory(tourPointCategoryLastUpdated: Long): List<TourPointsCategoryEntity> {
+        return FakeTourPointData.tourPointsCategoryEntity
+    }
 }

@@ -7,8 +7,8 @@ import androidx.room.Relation
 
 @Entity
 data class RoutePointsHolder(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    @PrimaryKey
+    val position: Int,
     val idLineRoute: String,
     @Embedded(prefix = "route")
     val points: Location

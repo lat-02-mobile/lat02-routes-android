@@ -9,7 +9,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.jalasoft.routesapp.data.local.room.dao.*
 import com.jalasoft.routesapp.data.model.local.*
 
-@Database(entities = [LineEntity::class, LineCategoriesEntity::class, LineRouteEntity::class, RoutePointsHolder::class, StopsHolder::class, TourPointEntity::class, TourPointsCategoryEntity::class, FavoriteDestinationEntity::class], version = 3, exportSchema = false)
+@Database(entities = [LineEntity::class, LineCategoriesEntity::class, LineRouteEntity::class, RoutePointsHolder::class, StopsHolder::class, TourPointEntity::class, TourPointsCategoryEntity::class, FavoriteDestinationEntity::class, SyncHistoryEntity::class], version = 3, exportSchema = false)
 abstract class RoutesDB : RoomDatabase() {
     abstract fun lineDao(): LineDao
     abstract fun lineCategoryDao(): LineCategoriesDao
@@ -17,6 +17,7 @@ abstract class RoutesDB : RoomDatabase() {
     abstract fun tourPointDao(): TourPointDao
     abstract fun tourPointCategoryDao(): TourPointCategoryDao
     abstract fun favoriteDestinationDao(): FavoriteDestinationDao
+    abstract fun syncHistoryDao(): SyncHistoryDao
 
     companion object {
         @Volatile
@@ -53,6 +54,52 @@ abstract class RoutesDB : RoomDatabase() {
                 database.execSQL("ALTER TABLE `TourPointEntity` ADD COLUMN updateAt INTEGER NOT NULL DEFAULT 0")
                 database.execSQL("ALTER TABLE `TourPointCategoryEntity` ADD COLUMN createAt INTEGER NOT NULL DEFAULT 0")
                 database.execSQL("ALTER TABLE `TourPointCategoryEntity` ADD COLUMN updateAt INTEGER NOT NULL DEFAULT 0")
+                database.execSQL("CREATE TABLE IF NOT EXISTS `SyncHistoryEntity` (`cityId` TEXT PRIMARY KEY NOT NULL, `lineCategoryLastUpdated` INTEGER NOT NULL DEFAULT 0, `linesLastUpdated` INTEGER NOT NULL DEFAULT 0, `lineRoutesLastUpdated` INTEGER NOT NULL DEFAULT 0, `TourPointCategoryLastUpdated` INTEGER NOT NULL DEFAULT 0, `TourPointLastUpdated` INTEGER NOT NULL DEFAULT 0)")
+                database.execSQL(
+                    "CREATE TABLE `NewRoutePointsHolder` " +
+                        "(`position` INTEGER NOT NULL," +
+                        "`idLineRoute` TEXT NOT NULL," +
+                        "`routelatitude` DOUBLE NOT NULL, " +
+                        "`routelongitude` DOUBLE NOT NULL," +
+                        "PRIMARY KEY(" +
+                        "`position`)" +
+                        ")"
+                )
+                database.execSQL(
+                    "INSERT INTO NewRoutePointsHolder(position," +
+                        "Id," +
+                        "idLineRoute," +
+                        "routelatitude," +
+                        "routelongitude" +
+                        ")" +
+                        "SELECT (" +
+                        "id -1" +
+                        ") as Id, idLineRoute, routelatitude, routelongitude  FROM RoutePointsHolder"
+                )
+                database.execSQL("DROP TABLE RoutePointsHolder")
+                database.execSQL("ALTER TABLE NewRoutePointsHolder RENAME TO RoutePointsHolder")
+                database.execSQL(
+                    "CREATE TABLE `NewStopsHolder`" +
+                        "(`position` INTEGER NOT NULL," +
+                        "`idLineRoute` TEXT NOT NULL," +
+                        "`stoplatitude` DOUBLE NOT NULL, " +
+                        "`stoplongitude` DOUBLE NOT NULL," +
+                        "PRIMARY KEY(`position`)" +
+                        ")"
+                )
+                database.execSQL(
+                    "INSERT INTO NewStopsHolder(position," +
+                        "Id," +
+                        "idLineRoute," +
+                        "stoplatitude," +
+                        "stoplongitude" +
+                        ")" +
+                        "SELECT (" +
+                        "id -1" +
+                        ") as Id, idLineRoute, stoplatitude, stoplongitude  FROM StopsHolder"
+                )
+                database.execSQL("DROP TABLE StopsHolder")
+                database.execSQL("ALTER TABLE NewStopsHolder RENAME TO StopsHolder")
             }
         }
     }

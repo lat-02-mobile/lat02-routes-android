@@ -5,6 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jalasoft.routesapp.data.local.room.interfaces.LocalDataBaseRepository
+import com.jalasoft.routesapp.data.local.room.interfaces.RouteLocalRepository
+import com.jalasoft.routesapp.data.local.room.interfaces.TourPointLocalRepository
 import com.jalasoft.routesapp.data.remote.interfaces.RouteRepository
 import com.jalasoft.routesapp.data.remote.interfaces.TourPointRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,17 +16,17 @@ import javax.inject.Inject
 @HiltViewModel
 class SplashScreenViewModel
 @Inject
-constructor(private val linesRepository: RouteRepository, private val tourPointsRepository: TourPointRepository, private val localDB: LocalDataBaseRepository) : ViewModel() {
+constructor(private val linesRepository: RouteRepository, private val tourPointsRepository: TourPointRepository, private val tourPointLocalRepository: TourPointLocalRepository, private val routeLocalRepository: RouteLocalRepository, private val localDB: LocalDataBaseRepository) : ViewModel() {
     var dataSaved: MutableLiveData<Boolean> = MutableLiveData()
 
     fun getDataAndSaveLocally(context: Context) = viewModelScope.launch {
-        localDB.deleteAllRoutePointsHolder()
-        localDB.deleteAllStopsHolder()
+        routeLocalRepository.deleteAllRoutePointsHolder()
+        routeLocalRepository.deleteAllStopsHolder()
         val lines = linesRepository.getAllLinesToSaveLocally(context)
         if (lines.isNotEmpty()) {
             for (item in lines) {
                 getLineRoutesAndSaveLocally(item.idLine)
-                localDB.addLocalLine(item)
+                routeLocalRepository.addLocalLine(item)
             }
         }
         getLinesCategoryAndSaveLocally(context)
@@ -34,7 +36,7 @@ constructor(private val linesRepository: RouteRepository, private val tourPoints
         val linesCategory = linesRepository.getAllLinesCategoryToSaveLocally()
         if (linesCategory.isNotEmpty()) {
             for (item in linesCategory) {
-                localDB.addLocalLineCategory(item)
+                routeLocalRepository.addLocalLineCategory(item)
             }
         }
         getTourPointsAndSaveLocally(context)
@@ -43,7 +45,7 @@ constructor(private val linesRepository: RouteRepository, private val tourPoints
     fun getLineRoutesAndSaveLocally(idLine: String) = viewModelScope.launch {
         val lineRoute = linesRepository.getAllLinesRouteToSaveLocally(idLine)
         if (lineRoute.isNotEmpty()) {
-            localDB.addLocalLineRoute(lineRoute)
+            routeLocalRepository.addLocalLineRoute(lineRoute)
         }
     }
 
@@ -51,19 +53,24 @@ constructor(private val linesRepository: RouteRepository, private val tourPoints
         val tourPoints = tourPointsRepository.getAllTourPointsToSaveLocally(context)
         if (tourPoints.isNotEmpty()) {
             for (item in tourPoints) {
-                localDB.addLocalTourPoint(item)
+                tourPointLocalRepository.addLocalTourPoint(item)
             }
         }
-        getTourPointsCategoryAndSaveLocally()
+        getTourPointsCategoryAndSaveLocally(context)
     }
 
-    fun getTourPointsCategoryAndSaveLocally() = viewModelScope.launch {
+    fun getTourPointsCategoryAndSaveLocally(context: Context) = viewModelScope.launch {
         val tourPointsCategory = tourPointsRepository.getAllTourPointsCategoriesToSaveLocally()
         if (tourPointsCategory.isNotEmpty()) {
             for (item in tourPointsCategory) {
-                localDB.addLocalTourPointCategory(item)
+                tourPointLocalRepository.addLocalTourPointCategory(item)
             }
         }
+        addSyncHistory(context)
+    }
+
+    fun addSyncHistory(context: Context) {
+        localDB.addSyncHistory(context)
         dataSaved.value = true
     }
 }

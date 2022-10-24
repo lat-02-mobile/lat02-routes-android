@@ -3,10 +3,9 @@ package com.jalasoft.routesapp.ui.cityPicker
 import android.content.Context
 import androidx.lifecycle.Observer
 import androidx.test.platform.app.InstrumentationRegistry
-import com.jalasoft.routesapp.data.source.FakeLocalDataBaseManager
-import com.jalasoft.routesapp.data.source.FakeRoutesManager
-import com.jalasoft.routesapp.data.source.FakeTourPointsManager
-import com.jalasoft.routesapp.data.source.getOrAwaitValue
+import com.jalasoft.routesapp.data.local.room.interfaces.RouteLocalRepository
+import com.jalasoft.routesapp.data.local.room.interfaces.TourPointLocalRepository
+import com.jalasoft.routesapp.data.source.*
 import com.jalasoft.routesapp.ui.cityPicker.viewModel.SplashScreenViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -32,6 +31,8 @@ class SplashScreenViewModelTest : TestCase() {
     private lateinit var fakeLocalDataBaseManager: FakeLocalDataBaseManager
     private lateinit var fakeRoutesManager: FakeRoutesManager
     private lateinit var fakeTourPointsManager: FakeTourPointsManager
+    private lateinit var fakeTourPointLocalRepository: TourPointLocalRepository
+    private lateinit var fakeRouteLocalRepository: RouteLocalRepository
     private lateinit var context: Context
 
     @Before
@@ -41,7 +42,9 @@ class SplashScreenViewModelTest : TestCase() {
         fakeRoutesManager = FakeRoutesManager()
         fakeTourPointsManager = FakeTourPointsManager()
         fakeLocalDataBaseManager = FakeLocalDataBaseManager()
-        viewModel = SplashScreenViewModel(fakeRoutesManager, fakeTourPointsManager, fakeLocalDataBaseManager)
+        fakeTourPointLocalRepository = FakeTourPointsLocalManager()
+        fakeRouteLocalRepository = FakeRoutesLocalManager()
+        viewModel = SplashScreenViewModel(fakeRoutesManager, fakeTourPointsManager, fakeTourPointLocalRepository, fakeRouteLocalRepository, fakeLocalDataBaseManager)
         context = InstrumentationRegistry.getInstrumentation().context
     }
 

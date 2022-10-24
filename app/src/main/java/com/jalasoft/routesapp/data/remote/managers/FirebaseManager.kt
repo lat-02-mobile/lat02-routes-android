@@ -1,5 +1,6 @@
 package com.jalasoft.routesapp.data.remote.managers
 
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.jalasoft.routesapp.data.model.remote.User
@@ -62,6 +63,33 @@ class FirebaseManager(val db: FirebaseFirestore) : FirebaseDataSource {
     suspend inline fun <reified T : Any> getDocumentsByReferenceWithCondition(collection: FirebaseCollections, field: String, parameter: DocumentReference): Response<List<T>> {
         return try {
             val result = db.collection(collection.toString()).whereEqualTo(field, parameter).get().await()
+            Response.Success(result.toObjects(T::class.java))
+        } catch (e: Exception) {
+            Response.Error(e.message.toString(), null)
+        }
+    }
+
+    suspend inline fun <reified T : Any> getDocumentsWithConditionByDate(collection: FirebaseCollections, field: String, parameter: Timestamp): Response<List<T>> {
+        return try {
+            val result = db.collection(collection.toString()).whereGreaterThan(field, parameter).get().await()
+            Response.Success(result.toObjects(T::class.java))
+        } catch (e: Exception) {
+            Response.Error(e.message.toString(), null)
+        }
+    }
+
+    suspend inline fun <reified T : Any> getDocumentsWithConditionAndByDate(collection: FirebaseCollections, field: String, parameter: String, fieldDate: String, parameterDate: Timestamp): Response<List<T>> {
+        return try {
+            val result = db.collection(collection.toString()).whereEqualTo(field, parameter).whereGreaterThan(fieldDate, parameterDate).get().await()
+            Response.Success(result.toObjects(T::class.java))
+        } catch (e: Exception) {
+            Response.Error(e.message.toString(), null)
+        }
+    }
+
+    suspend inline fun <reified T : Any> getDocumentsByReferenceAndDate(collection: FirebaseCollections, field: String, parameter: DocumentReference, fieldDate: String, parameterDate: Timestamp): Response<List<T>> {
+        return try {
+            val result = db.collection(collection.toString()).whereEqualTo(field, parameter).whereGreaterThan(fieldDate, parameterDate).get().await()
             Response.Success(result.toObjects(T::class.java))
         } catch (e: Exception) {
             Response.Error(e.message.toString(), null)

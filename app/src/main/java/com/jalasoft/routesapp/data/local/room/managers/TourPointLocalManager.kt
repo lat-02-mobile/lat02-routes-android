@@ -2,6 +2,8 @@ package com.jalasoft.routesapp.data.local.room.managers
 
 import com.jalasoft.routesapp.data.local.room.db.RoutesDB
 import com.jalasoft.routesapp.data.local.room.interfaces.TourPointLocalRepository
+import com.jalasoft.routesapp.data.model.local.TourPointEntity
+import com.jalasoft.routesapp.data.model.local.TourPointsCategoryEntity
 import com.jalasoft.routesapp.data.model.remote.TourPointPath
 
 class TourPointLocalManager(private val localRoutesDB: RoutesDB) : TourPointLocalRepository {
@@ -17,5 +19,21 @@ class TourPointLocalManager(private val localRoutesDB: RoutesDB) : TourPointLoca
             }
         }
         return tourPointPaths
+    }
+
+    override fun addLocalTourPoint(tourPoint: TourPointEntity) {
+        localRoutesDB.tourPointDao().addTourPoint(tourPoint)
+    }
+
+    override fun addLocalTourPointCategory(tourPointCategory: TourPointsCategoryEntity) {
+        localRoutesDB.tourPointCategoryDao().addTourPointCategory(tourPointCategory)
+    }
+
+    override fun updateLocalTourPoint(tourPoint: TourPointEntity) {
+        localRoutesDB.tourPointDao().updateTourPoint(tourPoint)
+    }
+
+    override fun updateLocalTourPointCategory(tourPointCategory: TourPointsCategoryEntity) {
+        localRoutesDB.tourPointCategoryDao().updateTourPointCategory(tourPointCategory)
     }
 }
