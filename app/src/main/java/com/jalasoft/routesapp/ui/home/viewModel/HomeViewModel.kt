@@ -26,6 +26,7 @@ import com.jalasoft.routesapp.util.PreferenceManager
 import com.jalasoft.routesapp.util.algorithm.RouteCalculator
 import com.jalasoft.routesapp.util.helpers.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.*
@@ -96,7 +97,7 @@ constructor(private val placeManager: PlaceRepository, private val gDirectionsRe
         localDB.deleteFavoriteDestination(favoriteDestinationEntity)
     }
 
-    fun checkForUpdatedData(context: Context) = viewModelScope.launch {
+    fun checkForUpdatedData(context: Context) = viewModelScope.launch(Dispatchers.IO) {
         val localHistory = localDB.getSyncHistory(context)
         if (localHistory.isNotEmpty()) {
             val history = localHistory.first()
@@ -112,7 +113,7 @@ constructor(private val placeManager: PlaceRepository, private val gDirectionsRe
         }
     }
 
-    fun updateLocalLines(context: Context, history: SyncHistoryEntity) = viewModelScope.launch {
+    fun updateLocalLines(context: Context, history: SyncHistoryEntity) = viewModelScope.launch(Dispatchers.IO) {
         val resultList = routeRepository.searchForUpdatedLines(context, history.linesLastUpdated)
         if (resultList.isNotEmpty()) {
             for (item in resultList) {
@@ -131,7 +132,7 @@ constructor(private val placeManager: PlaceRepository, private val gDirectionsRe
         updateTourPoints(context, history)
     }
 
-    fun updateLocalLineRoutes(idLine: String, history: SyncHistoryEntity) = viewModelScope.launch {
+    fun updateLocalLineRoutes(idLine: String, history: SyncHistoryEntity) = viewModelScope.launch(Dispatchers.IO) {
         val resultList = routeRepository.searchForUpdatedLineRoutes(idLine, history.lineRoutesLastUpdated)
         if (resultList.isNotEmpty()) {
             routeLocalRepository.updateLocalLineRoutes(resultList)
@@ -140,7 +141,7 @@ constructor(private val placeManager: PlaceRepository, private val gDirectionsRe
         }
     }
 
-    fun updateTourPointsCategory(history: SyncHistoryEntity) = viewModelScope.launch {
+    fun updateTourPointsCategory(history: SyncHistoryEntity) = viewModelScope.launch(Dispatchers.IO) {
         val resultList = tourPointsRepository.searchForUpdatedTourPointsCategory(history.TourPointCategoryLastUpdated)
         if (resultList.isNotEmpty()) {
             for (item in resultList) {
@@ -151,7 +152,7 @@ constructor(private val placeManager: PlaceRepository, private val gDirectionsRe
         }
     }
 
-    fun updateTourPoints(context: Context, history: SyncHistoryEntity) = viewModelScope.launch {
+    fun updateTourPoints(context: Context, history: SyncHistoryEntity) = viewModelScope.launch(Dispatchers.IO) {
         val resultList = tourPointsRepository.searchForUpdatedTourPoints(context, history.TourPointLastUpdated)
         if (resultList.isNotEmpty()) {
             for (item in resultList) {
