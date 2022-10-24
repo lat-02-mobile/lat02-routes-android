@@ -107,39 +107,39 @@ abstract class RoutesDB : RoomDatabase() {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL(
                     "CREATE TABLE `NewRoutePointsHolder` " +
-                            "(`position` INTEGER NOT NULL," +
-                            "`idLineRoute` TEXT NOT NULL," +
-                            "`routelatitude` DOUBLE NOT NULL, " +
-                            "`routelongitude` DOUBLE NOT NULL," +
-                            "PRIMARY KEY(`position`,`idLineRoute`)" +
-                            ")"
+                        "(`position` INTEGER NOT NULL," +
+                        "`idLineRoute` TEXT NOT NULL," +
+                        "`routelatitude` DOUBLE NOT NULL, " +
+                        "`routelongitude` DOUBLE NOT NULL," +
+                        "PRIMARY KEY(`position`,`idLineRoute`)" +
+                        ")"
                 )
                 database.execSQL(
                     "INSERT INTO NewRoutePointsHolder(position," +
-                            "idLineRoute," +
-                            "routelatitude," +
-                            "routelongitude" +
-                            ")" +
-                            "SELECT position, idLineRoute, routelatitude, routelongitude FROM RoutePointsHolder"
+                        "idLineRoute," +
+                        "routelatitude," +
+                        "routelongitude" +
+                        ")" +
+                        "SELECT position, idLineRoute, routelatitude, routelongitude FROM RoutePointsHolder"
                 )
                 database.execSQL("DROP TABLE RoutePointsHolder")
                 database.execSQL("ALTER TABLE NewRoutePointsHolder RENAME TO RoutePointsHolder")
                 database.execSQL(
                     "CREATE TABLE `NewStopsHolder`" +
-                            "(`position` INTEGER NOT NULL," +
-                            "`idLineRoute` TEXT NOT NULL," +
-                            "`stoplatitude` DOUBLE NOT NULL, " +
-                            "`stoplongitude` DOUBLE NOT NULL," +
-                            "PRIMARY KEY(`position`, `idLineRoute`)" +
-                            ")"
+                        "(`position` INTEGER NOT NULL," +
+                        "`idLineRoute` TEXT NOT NULL," +
+                        "`stoplatitude` DOUBLE NOT NULL, " +
+                        "`stoplongitude` DOUBLE NOT NULL," +
+                        "PRIMARY KEY(`position`, `idLineRoute`)" +
+                        ")"
                 )
                 database.execSQL(
                     "INSERT INTO NewStopsHolder(position," +
-                            "idLineRoute," +
-                            "stoplatitude," +
-                            "stoplongitude" +
-                            ")" +
-                            "SELECT position, idLineRoute, stoplatitude, stoplongitude FROM StopsHolder"
+                        "idLineRoute," +
+                        "stoplatitude," +
+                        "stoplongitude" +
+                        ")" +
+                        "SELECT position, idLineRoute, stoplatitude, stoplongitude FROM StopsHolder"
                 )
                 database.execSQL("DROP TABLE StopsHolder")
                 database.execSQL("ALTER TABLE NewStopsHolder RENAME TO StopsHolder")
