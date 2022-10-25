@@ -54,5 +54,8 @@ class SettingsFragment : Fragment() {
             activity?.startActivity(intent)
             activity?.finish()
         }
+        binding.btnRouteEditor.setOnClickListener {
+            findNavController().navigate(R.id.action_settingsFragment_to_routeEditorFragment)
+        }
     }
 }

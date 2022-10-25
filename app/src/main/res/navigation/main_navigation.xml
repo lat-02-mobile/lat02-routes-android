@@ -40,6 +40,9 @@
         <action
             android:id="@+id/action_settingsFragment_to_cityPickerFragment"
             app:destination="@id/cityPickerFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_routeEditorFragment"
+            app:destination="@id/routeEditorFragment" />
     </fragment>
     <fragment
         android:id="@+id/cityPickerFragment"
@@ -114,6 +117,11 @@
             app:destination="@id/homeFragment"
             app:popUpTo="@id/homeFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/routeEditorFragment"
+        android:name="com.jalasoft.routesapp.ui.adminPages.routeEditor.view.RouteEditorFragment"
+        android:label="fragment_route_editor"
+        tools:layout="@layout/fragment_route_editor" />
 
 
 </navigation>

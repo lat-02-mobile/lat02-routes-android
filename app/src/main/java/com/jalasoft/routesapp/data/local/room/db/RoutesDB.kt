@@ -9,7 +9,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.jalasoft.routesapp.data.local.room.dao.*
 import com.jalasoft.routesapp.data.model.local.*
 
-@Database(entities = [LineEntity::class, LineCategoriesEntity::class, LineRouteEntity::class, RoutePointsHolder::class, StopsHolder::class, TourPointEntity::class, TourPointsCategoryEntity::class, FavoriteDestinationEntity::class], version = 2, exportSchema = false)
+@Database(entities = [LineEntity::class, LineCategoriesEntity::class, LineRouteEntity::class, RoutePointsHolder::class, StopsHolder::class, TourPointEntity::class, TourPointsCategoryEntity::class, FavoriteDestinationEntity::class], version = 3, exportSchema = false)
 abstract class RoutesDB : RoomDatabase() {
     abstract fun lineDao(): LineDao
     abstract fun lineCategoryDao(): LineCategoriesDao
