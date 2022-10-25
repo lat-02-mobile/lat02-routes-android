@@ -19,15 +19,23 @@ constructor(private val lineRepository: RouteRepository) : ViewModel() {
     var originalList: List<LineAux> = listOf()
     var searchQuery = ""
 
-    fun fetchLines(cityId: String) = viewModelScope.launch {
+    fun fetchLines() = viewModelScope.launch {
         _lineList.value = lineRepository.getAllLines()
         originalList = _lineList.value ?: listOf()
     }
 
-    fun filterLines(criteria: String): Int {
-        _lineList.value = originalList.filter { line ->
-            line.name.lowercase().contains(criteria.lowercase())
+    fun applyFilterAndSort() {
+        if (searchQuery.isEmpty()) return
+        var filteredTourPoints = originalList
+        filteredTourPoints = filterByQuery(searchQuery, filteredTourPoints)
+        _lineList.value = filteredTourPoints
+    }
+
+    private fun filterByQuery(query: String, linesList: List<LineAux>): List<LineAux> {
+        if (searchQuery.isEmpty()) return linesList
+        return linesList.filter { line ->
+            val name = line.name ?: return@filter false
+            name.lowercase().contains(query.lowercase())
         }
-        return _lineList.value?.size ?: 0
     }
 }
