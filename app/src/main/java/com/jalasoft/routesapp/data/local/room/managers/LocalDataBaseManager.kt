@@ -43,6 +43,10 @@ class LocalDataBaseManager(private val localRoutesDB: RoutesDB) : LocalDataBaseR
         localRoutesDB.syncHistoryDao().addSyncHistoryDao(history)
     }
 
+    override fun addSyncHistory(syncHistoryEntity: SyncHistoryEntity) {
+        localRoutesDB.syncHistoryDao().addSyncHistoryDao(syncHistoryEntity)
+    }
+
     override fun getSyncHistory(context: Context): List<SyncHistoryEntity> {
         val currentCityId = PreferenceManager.getCurrentCityID(context)
         return localRoutesDB.syncHistoryDao().getAllSyncHisotry(currentCityId)

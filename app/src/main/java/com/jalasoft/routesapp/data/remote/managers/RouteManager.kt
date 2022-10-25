@@ -58,11 +58,10 @@ class RouteManager(private val firebaseManager: FirebaseManager) : RouteReposito
         return listOf()
     }
 
-    override suspend fun searchForUpdatedLines(context: Context, linesLastUpdated: Long): List<LineEntity> {
-        val currentCityId = PreferenceManager.getCurrentCityID(context)
+    override suspend fun searchForUpdatedLines(cityId: String, linesLastUpdated: Long): List<LineEntity> {
         val date = DateHelper.fromTimestamp(linesLastUpdated)
         val lastUpdated = Timestamp(date)
-        val result = firebaseManager.getDocumentsWithConditionAndByDate<Line>(FirebaseCollections.Lines, "idCity", currentCityId, "updateAt", lastUpdated).data
+        val result = firebaseManager.getDocumentsWithConditionAndByDate<Line>(FirebaseCollections.Lines, "idCity", cityId, "updateAt", lastUpdated).data
         if (result != null) {
             val lineLocal = result.map {
                 it.lineToLineLocal()

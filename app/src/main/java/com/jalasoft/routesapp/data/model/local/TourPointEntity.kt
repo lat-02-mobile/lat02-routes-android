@@ -6,8 +6,9 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class TourPointEntity(
-    val idCity: String,
     @PrimaryKey
+    val id: String,
+    val idCity: String,
     val name: String,
     val address: String,
     @Embedded(prefix = "dest")

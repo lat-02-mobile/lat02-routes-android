@@ -14,7 +14,7 @@ class TourPointLocalManager(private val localRoutesDB: RoutesDB) : TourPointLoca
         tourPointsCategoryWithTourPoints.forEach {
             val category = it.tourPointCategory.toTourPointCategory()
             it.tourPoints.forEach { tourPoint ->
-                val tourPointPath = TourPointPath(tourPoint.idCity, tourPoint.name, tourPoint.address, tourPoint.destination.toAndroidLocation(), tourPoint.urlImage, category.icon, category, tourPoint.categoryName)
+                val tourPointPath = TourPointPath(tourPoint.id, tourPoint.idCity, tourPoint.name, tourPoint.address, tourPoint.destination.toAndroidLocation(), tourPoint.urlImage, category.icon, category, tourPoint.categoryName)
                 tourPointPaths.add(tourPointPath)
             }
         }

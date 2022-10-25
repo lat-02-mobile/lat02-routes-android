@@ -50,11 +50,10 @@ abstract class RoutesDB : RoomDatabase() {
                 database.execSQL("ALTER TABLE `LineRouteEntity` ADD COLUMN updateAt INTEGER NOT NULL DEFAULT 0")
                 database.execSQL("ALTER TABLE `LineCategoriesEntity` ADD COLUMN createAt INTEGER NOT NULL DEFAULT 0")
                 database.execSQL("ALTER TABLE `LineCategoriesEntity` ADD COLUMN updateAt INTEGER NOT NULL DEFAULT 0")
-                database.execSQL("ALTER TABLE `TourPointEntity` ADD COLUMN createAt INTEGER NOT NULL DEFAULT 0")
-                database.execSQL("ALTER TABLE `TourPointEntity` ADD COLUMN updateAt INTEGER NOT NULL DEFAULT 0")
                 database.execSQL("ALTER TABLE `TourPointCategoryEntity` ADD COLUMN createAt INTEGER NOT NULL DEFAULT 0")
                 database.execSQL("ALTER TABLE `TourPointCategoryEntity` ADD COLUMN updateAt INTEGER NOT NULL DEFAULT 0")
                 database.execSQL("CREATE TABLE IF NOT EXISTS `SyncHistoryEntity` (`cityId` TEXT PRIMARY KEY NOT NULL, `lineCategoryLastUpdated` INTEGER NOT NULL DEFAULT 0, `linesLastUpdated` INTEGER NOT NULL DEFAULT 0, `lineRoutesLastUpdated` INTEGER NOT NULL DEFAULT 0, `TourPointCategoryLastUpdated` INTEGER NOT NULL DEFAULT 0, `TourPointLastUpdated` INTEGER NOT NULL DEFAULT 0)")
+
                 database.execSQL(
                     "CREATE TABLE `NewRoutePointsHolder` " +
                         "(`position` INTEGER NOT NULL," +
@@ -97,6 +96,26 @@ abstract class RoutesDB : RoomDatabase() {
                 )
                 database.execSQL("DROP TABLE StopsHolder")
                 database.execSQL("ALTER TABLE NewStopsHolder RENAME TO StopsHolder")
+
+                database.execSQL(
+                    "CREATE TABLE `NewTourPointEntity` " +
+                        "(`id` TEXT NOT NULL," +
+                        "`idCity` TEXT NOT NULL," +
+                        "`name` TEXT NOT NULL," +
+                        "`address` TEXT NOT NULL," +
+                        "`urlImage` TEXT NOT NULL," +
+                        "`categoryIcon` TEXT NOT NULL," +
+                        "`categoryName` TEXT NOT NULL," +
+                        "`categoryId` TEXT NOT NULL," +
+                        "`createAt` INTEGER NOT NULL DEFAULT 0," +
+                        "`updateAt` INTEGER NOT NULL DEFAULT 0," +
+                        "`destlatitud` DOUBLE NOT NULL, " +
+                        "`destlongitude` DOUBLE NOT NULL," +
+                        "PRIMARY KEY(`id`, `idLineRoute`)" +
+                        ")"
+                )
+                database.execSQL("DROP TABLE TourPointEntity")
+                database.execSQL("ALTER TABLE NewTourPointEntity RENAME TO TourPointEntity")
             }
         }
     }

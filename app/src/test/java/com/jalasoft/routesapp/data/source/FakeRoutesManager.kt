@@ -23,7 +23,7 @@ class FakeRoutesManager : RouteRepository {
         return FakeRoutesData.lineCategoriesEntity
     }
 
-    override suspend fun searchForUpdatedLines(context: Context, linesLastUpdated: Long): List<LineEntity> {
+    override suspend fun searchForUpdatedLines(cityId: String, linesLastUpdated: Long): List<LineEntity> {
         return FakeRoutesData.linesEntity
     }
 

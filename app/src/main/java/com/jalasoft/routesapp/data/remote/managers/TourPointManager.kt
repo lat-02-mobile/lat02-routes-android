@@ -37,9 +37,8 @@ class TourPointManager(private val firebaseManager: FirebaseManager) : TourPoint
         return listOf()
     }
 
-    override suspend fun searchForUpdatedTourPoints(context: Context, tourPointLastUpdated: Long): List<TourPointEntity> {
-        val currentCityId = PreferenceManager.getCurrentCityID(context)
-        val cityRef = firebaseManager.db.document("${FirebaseCollections.Cities}/$currentCityId")
+    override suspend fun searchForUpdatedTourPoints(cityId: String, tourPointLastUpdated: Long): List<TourPointEntity> {
+        val cityRef = firebaseManager.db.document("${FirebaseCollections.Cities}/$cityId")
         val date = DateHelper.fromTimestamp(tourPointLastUpdated)
         val lastUpdated = Timestamp(date)
         val result = firebaseManager.getDocumentsByReferenceAndDate<TourPoint>(FirebaseCollections.Tourpoints, "idCity", cityRef, "updateAt", lastUpdated).data

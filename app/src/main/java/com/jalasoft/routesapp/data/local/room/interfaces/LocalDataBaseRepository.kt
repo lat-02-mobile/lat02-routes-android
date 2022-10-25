@@ -9,6 +9,7 @@ interface LocalDataBaseRepository {
     fun editFavoriteDestination(favDest: FavoriteDestinationEntity)
     fun deleteFavoriteDestination(favoriteDestinationEntity: FavoriteDestinationEntity)
     fun addSyncHistory(context: Context)
+    fun addSyncHistory(syncHistoryEntity: SyncHistoryEntity)
     fun getSyncHistory(context: Context): List<SyncHistoryEntity>
     fun updateSyncHistory(syncHistoryEntity: SyncHistoryEntity)
 }

@@ -15,7 +15,7 @@ class FakeTourPointsManager : TourPointRepository {
         return FakeTourPointData.tourPointsCategoryEntity
     }
 
-    override suspend fun searchForUpdatedTourPoints(context: Context, tourPointLastUpdated: Long): List<TourPointEntity> {
+    override suspend fun searchForUpdatedTourPoints(cityId: String, tourPointLastUpdated: Long): List<TourPointEntity> {
         return FakeTourPointData.tourPointsEntity
     }
 

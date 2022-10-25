@@ -15,6 +15,7 @@ import java.io.Serializable
 import java.util.*
 
 data class TourPoint(
+    val id: String? = "",
     val idCity: DocumentReference? = null,
     val name: String? = "",
     val address: String? = "",
@@ -31,6 +32,7 @@ data class TourPoint(
         val lat = dest?.latitude ?: 0.0
         val lng = dest?.longitude ?: 0.0
         val destination = com.jalasoft.routesapp.data.model.local.Location(lat, lng)
+        val mId = id ?: ""
         val mName = name ?: ""
         val mAddress = address ?: ""
         val mUrlImage = urlImage ?: ""
@@ -56,11 +58,12 @@ data class TourPoint(
                     else targetCategory?.descriptionEng ?: ""
             }
         }
-        return TourPointEntity(cityId, mName, mAddress, destination, mUrlImage, categoryIcon, categoryName, categoryId ?: "", createAt.toDate().time, updateAt.toDate().time)
+        return TourPointEntity(mId, cityId, mName, mAddress, destination, mUrlImage, categoryIcon, categoryName, categoryId ?: "", createAt.toDate().time, updateAt.toDate().time)
     }
 }
 
 data class TourPointPath(
+    val id: String? = "",
     val idCity: String? = "",
     val name: String? = "",
     val address: String? = "",
@@ -73,6 +76,7 @@ data class TourPointPath(
     val updateAt: Long = 0
 ) : Serializable, Parcelable {
     constructor(parcel: Parcel) : this(
+        parcel.readString(),
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),

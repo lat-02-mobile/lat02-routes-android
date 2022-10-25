@@ -89,4 +89,10 @@ object ManagersModule {
     fun provideTourPointsLocalRepository(): TourPointLocalRepository {
         return TourPointLocalManager(RoutesAppApplication.routesDB as RoutesDB)
     }
+
+    @Singleton
+    @Provides
+    fun provideSyncDataRepository(localDB: LocalDataBaseRepository, tourPointRepository: TourPointRepository, tourPointLocalRepository: TourPointLocalRepository, routeRepository: RouteRepository, routeLocalRepository: RouteLocalRepository): SyncDataRepository {
+        return SyncDataManager(localDB, tourPointRepository, tourPointLocalRepository, routeRepository, routeLocalRepository)
+    }
 }
