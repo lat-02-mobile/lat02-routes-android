@@ -2,13 +2,11 @@ package com.jalasoft.routesapp.data.model.local
 
 import androidx.room.Embedded
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 import androidx.room.Relation
 
-@Entity
+@Entity(primaryKeys = ["position", "idLineRoute"])
 data class StopsHolder(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    val position: Int,
     val idLineRoute: String,
     @Embedded(prefix = "stop")
     var stop: Location

@@ -3,8 +3,14 @@ package com.jalasoft.routesapp.ui.home
 import com.google.maps.android.PolyUtil
 import com.jalasoft.routesapp.data.api.models.gmaps.EndLocation
 import com.jalasoft.routesapp.data.api.models.gmaps.StartLocation
+import com.jalasoft.routesapp.data.local.room.interfaces.RouteLocalRepository
+import com.jalasoft.routesapp.data.local.room.interfaces.TourPointLocalRepository
 import com.jalasoft.routesapp.data.model.remote.AvailableTransport
 import com.jalasoft.routesapp.data.model.remote.LineRoutePath
+import com.jalasoft.routesapp.data.remote.interfaces.RouteRepository
+import com.jalasoft.routesapp.data.remote.interfaces.SyncDataRepository
+import com.jalasoft.routesapp.data.remote.interfaces.TourPointRepository
+import com.jalasoft.routesapp.data.remote.managers.SyncDataManager
 import com.jalasoft.routesapp.data.source.*
 import com.jalasoft.routesapp.data.source.FakeDirectionsManager
 import com.jalasoft.routesapp.data.source.FakeLocalDataBaseManager
@@ -36,6 +42,11 @@ class HomeViewModelTest : TestCase() {
     private lateinit var fakeManager: FakePlaceManager
     private lateinit var fakeDirectionsManager: FakeDirectionsManager
     private lateinit var fakeLocalDataBaseManager: FakeLocalDataBaseManager
+    private lateinit var fakeTourPointRepository: TourPointRepository
+    private lateinit var fakeTourPointLocalRepository: TourPointLocalRepository
+    private lateinit var fakeRouteRepository: RouteRepository
+    private lateinit var fakeRouteLocalRepository: RouteLocalRepository
+    private lateinit var syncDataRepository: SyncDataRepository
     private lateinit var line1: LineRoutePath
     private lateinit var line2: LineRoutePath
 
@@ -46,7 +57,12 @@ class HomeViewModelTest : TestCase() {
         fakeManager = FakePlaceManager()
         fakeDirectionsManager = FakeDirectionsManager()
         fakeLocalDataBaseManager = FakeLocalDataBaseManager()
-        viewModel = HomeViewModel(fakeManager, fakeDirectionsManager, fakeLocalDataBaseManager)
+        fakeTourPointRepository = FakeTourPointsManager()
+        fakeRouteRepository = FakeRoutesManager()
+        fakeTourPointLocalRepository = FakeTourPointsLocalManager()
+        fakeRouteLocalRepository = FakeRoutesLocalManager()
+        syncDataRepository = SyncDataManager(fakeLocalDataBaseManager, fakeTourPointRepository, fakeTourPointLocalRepository, fakeRouteRepository, fakeRouteLocalRepository)
+        viewModel = HomeViewModel(fakeManager, fakeDirectionsManager, fakeLocalDataBaseManager, fakeRouteLocalRepository, syncDataRepository)
 
         val start1 = FakeRoutesData.coordinatesToLocation(-16.52035351419114, -68.12580890707301)
         val end1 = FakeRoutesData.coordinatesToLocation(-16.524285569842718, -68.12298370418992)

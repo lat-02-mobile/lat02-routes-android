@@ -1,6 +1,7 @@
 package com.jalasoft.routesapp.data.model.remote
 
 import android.location.Location
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.jalasoft.routesapp.data.model.local.LineEntity
@@ -14,7 +15,9 @@ data class Line(
     val categoryRef: DocumentReference? = null,
     val idCity: String = "",
     val enable: Boolean? = null,
-    val name: String = ""
+    val name: String = "",
+    val createAt: Timestamp = Timestamp.now(),
+    val updateAt: Timestamp = Timestamp.now()
 ) : Serializable {
     suspend fun lineToLineInfo(routePaths: List<LineRouteInfo>): LineInfo {
         var category: DocumentSnapshot?
@@ -28,7 +31,7 @@ data class Line(
                     else it.toObject(LineCategories::class.java)?.nameEng ?: ""
             }
         }
-        return LineInfo(id, name, enable, categoryName, routePaths.toMutableList())
+        return LineInfo(id, name, enable, categoryName, routePaths.toMutableList(), createAt.toDate().time, updateAt.toDate().time)
     }
 
     suspend fun lineToLineLocal(): LineEntity {
@@ -46,7 +49,7 @@ data class Line(
             }
             cate = categoryName
         }
-        return LineEntity(id, name, idCity, cate, ena)
+        return LineEntity(id, name, idCity, cate, ena, createAt.toDate().time, updateAt.toDate().time)
     }
 }
 
@@ -55,7 +58,9 @@ data class LineInfo(
     val name: String = "",
     val enable: Boolean? = null,
     val category: String = "",
-    val routePaths: MutableList<LineRouteInfo> = mutableListOf()
+    val routePaths: MutableList<LineRouteInfo> = mutableListOf(),
+    val createAt: Long = 0,
+    val updatedAt: Long = 0
 )
 
 data class LineAux(

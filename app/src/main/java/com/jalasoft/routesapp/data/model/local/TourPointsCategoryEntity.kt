@@ -12,7 +12,9 @@ data class TourPointsCategoryEntity(
     val id: String,
     val icon: String,
     val descriptionEng: String,
-    val descriptionEsp: String
+    val descriptionEsp: String,
+    val createAt: Long,
+    val updateAt: Long
 ) {
     fun toTourPointCategory(): TourPointsCategory {
         return TourPointsCategory(id, icon, descriptionEng, descriptionEsp)

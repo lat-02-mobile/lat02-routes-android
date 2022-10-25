@@ -20,4 +20,8 @@ object DateHelper {
         val df = SimpleDateFormat("yyyy-MM-dd HH:mm")
         return df.parse(date).time.toDouble()
     }
+
+    fun fromTimestamp(value: Long): Date {
+        return Date(value)
+    }
 }

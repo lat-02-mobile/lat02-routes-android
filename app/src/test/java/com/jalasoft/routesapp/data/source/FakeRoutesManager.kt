@@ -18,4 +18,16 @@ class FakeRoutesManager : RouteRepository {
     override suspend fun getAllLinesRouteToSaveLocally(idLine: String): List<LineRouteInfo> {
         return FakeRoutesData.lineRouteInfo
     }
+
+    override suspend fun searchForUpdatedLineCategory(lineCategoryLastUpdated: Long): List<LineCategoriesEntity> {
+        return FakeRoutesData.lineCategoriesEntity
+    }
+
+    override suspend fun searchForUpdatedLines(cityId: String, linesLastUpdated: Long): List<LineEntity> {
+        return FakeRoutesData.linesEntity
+    }
+
+    override suspend fun searchForUpdatedLineRoutes(idLine: String, lineRoutesLastUpdated: Long): List<LineRouteInfo> {
+        return FakeRoutesData.lineRouteInfo
+    }
 }

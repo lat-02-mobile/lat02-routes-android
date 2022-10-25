@@ -11,4 +11,7 @@ interface RouteRepository {
     suspend fun getAllLinesCategoryToSaveLocally(): List<LineCategoriesEntity>
     suspend fun getAllLinesRouteToSaveLocally(idLine: String): List<LineRouteInfo>
     suspend fun getAllLines(): List<LineAux>
+    suspend fun searchForUpdatedLineCategory(lineCategoryLastUpdated: Long): List<LineCategoriesEntity>
+    suspend fun searchForUpdatedLines(cityId: String, linesLastUpdated: Long): List<LineEntity>
+    suspend fun searchForUpdatedLineRoutes(idLine: String, lineRoutesLastUpdated: Long): List<LineRouteInfo>
 }
