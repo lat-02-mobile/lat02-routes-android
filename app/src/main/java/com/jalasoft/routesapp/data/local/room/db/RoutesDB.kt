@@ -9,7 +9,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.jalasoft.routesapp.data.local.room.dao.*
 import com.jalasoft.routesapp.data.model.local.*
 
-@Database(entities = [LineEntity::class, LineCategoriesEntity::class, LineRouteEntity::class, RoutePointsHolder::class, StopsHolder::class, TourPointEntity::class, TourPointsCategoryEntity::class, FavoriteDestinationEntity::class, SyncHistoryEntity::class], version = 4, exportSchema = false)
+@Database(entities = [LineEntity::class, LineCategoriesEntity::class, LineRouteEntity::class, RoutePointsHolder::class, StopsHolder::class, TourPointEntity::class, TourPointsCategoryEntity::class, FavoriteDestinationEntity::class, SyncHistoryEntity::class], version = 3, exportSchema = false)
 abstract class RoutesDB : RoomDatabase() {
     abstract fun lineDao(): LineDao
     abstract fun lineCategoryDao(): LineCategoriesDao
@@ -28,7 +28,7 @@ abstract class RoutesDB : RoomDatabase() {
                 val instance = Room.databaseBuilder(context, RoutesDB::class.java, "RoutesDB")
                     .allowMainThreadQueries()
                     .fallbackToDestructiveMigration()
-                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
                     .build()
 
                 INSTANCE = instance
@@ -61,13 +61,11 @@ abstract class RoutesDB : RoomDatabase() {
                         "`idLineRoute` TEXT NOT NULL," +
                         "`routelatitude` DOUBLE NOT NULL, " +
                         "`routelongitude` DOUBLE NOT NULL," +
-                        "PRIMARY KEY(" +
-                        "`position`)" +
+                        "PRIMARY KEY(`position`, `idLineRoute`)" +
                         ")"
                 )
                 database.execSQL(
-                    "INSERT INTO NewRoutePointsHolder(position," +
-                        "Id," +
+                    "INSERT INTO NewRoutePointsHolder(Id," +
                         "idLineRoute," +
                         "routelatitude," +
                         "routelongitude" +
@@ -84,12 +82,11 @@ abstract class RoutesDB : RoomDatabase() {
                         "`idLineRoute` TEXT NOT NULL," +
                         "`stoplatitude` DOUBLE NOT NULL, " +
                         "`stoplongitude` DOUBLE NOT NULL," +
-                        "PRIMARY KEY(`position`)" +
+                        "PRIMARY KEY(`position`, `idLineRoute`)" +
                         ")"
                 )
                 database.execSQL(
-                    "INSERT INTO NewStopsHolder(position," +
-                        "Id," +
+                    "INSERT INTO NewStopsHolder(Id," +
                         "idLineRoute," +
                         "stoplatitude," +
                         "stoplongitude" +
@@ -97,49 +94,6 @@ abstract class RoutesDB : RoomDatabase() {
                         "SELECT (" +
                         "id -1" +
                         ") as Id, idLineRoute, stoplatitude, stoplongitude  FROM StopsHolder"
-                )
-                database.execSQL("DROP TABLE StopsHolder")
-                database.execSQL("ALTER TABLE NewStopsHolder RENAME TO StopsHolder")
-            }
-        }
-
-        private val MIGRATION_3_4 = object : Migration(3, 4) {
-            override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL(
-                    "CREATE TABLE `NewRoutePointsHolder` " +
-                        "(`position` INTEGER NOT NULL," +
-                        "`idLineRoute` TEXT NOT NULL," +
-                        "`routelatitude` DOUBLE NOT NULL, " +
-                        "`routelongitude` DOUBLE NOT NULL," +
-                        "PRIMARY KEY(`position`,`idLineRoute`)" +
-                        ")"
-                )
-                database.execSQL(
-                    "INSERT INTO NewRoutePointsHolder(position," +
-                        "idLineRoute," +
-                        "routelatitude," +
-                        "routelongitude" +
-                        ")" +
-                        "SELECT position, idLineRoute, routelatitude, routelongitude FROM RoutePointsHolder"
-                )
-                database.execSQL("DROP TABLE RoutePointsHolder")
-                database.execSQL("ALTER TABLE NewRoutePointsHolder RENAME TO RoutePointsHolder")
-                database.execSQL(
-                    "CREATE TABLE `NewStopsHolder`" +
-                        "(`position` INTEGER NOT NULL," +
-                        "`idLineRoute` TEXT NOT NULL," +
-                        "`stoplatitude` DOUBLE NOT NULL, " +
-                        "`stoplongitude` DOUBLE NOT NULL," +
-                        "PRIMARY KEY(`position`, `idLineRoute`)" +
-                        ")"
-                )
-                database.execSQL(
-                    "INSERT INTO NewStopsHolder(position," +
-                        "idLineRoute," +
-                        "stoplatitude," +
-                        "stoplongitude" +
-                        ")" +
-                        "SELECT position, idLineRoute, stoplatitude, stoplongitude FROM StopsHolder"
                 )
                 database.execSQL("DROP TABLE StopsHolder")
                 database.execSQL("ALTER TABLE NewStopsHolder RENAME TO StopsHolder")
