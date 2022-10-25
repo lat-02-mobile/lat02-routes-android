@@ -11,12 +11,13 @@ import com.jalasoft.routesapp.data.api.models.gmaps.Place
 import com.jalasoft.routesapp.data.api.models.gmaps.Route
 import com.jalasoft.routesapp.data.api.models.gmaps.StartLocation
 import com.jalasoft.routesapp.data.local.room.interfaces.LocalDataBaseRepository
+import com.jalasoft.routesapp.data.local.room.interfaces.RouteLocalRepository
 import com.jalasoft.routesapp.data.model.local.FavoriteDestinationEntity
 import com.jalasoft.routesapp.data.model.remote.AvailableTransport
 import com.jalasoft.routesapp.data.model.remote.LineRoutePath
-import com.jalasoft.routesapp.data.remote.interfaces.DirectionsRepository
-import com.jalasoft.routesapp.data.remote.interfaces.PlaceRepository
+import com.jalasoft.routesapp.data.remote.interfaces.*
 import com.jalasoft.routesapp.util.Extensions.toLocation
+import com.jalasoft.routesapp.util.PreferenceManager
 import com.jalasoft.routesapp.util.algorithm.RouteCalculator
 import com.jalasoft.routesapp.util.helpers.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,7 +28,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel
 @Inject
-constructor(private val placeManager: PlaceRepository, private val gDirectionsRepository: DirectionsRepository, private val localDB: LocalDataBaseRepository) : ViewModel() {
+constructor(private val placeManager: PlaceRepository, private val gDirectionsRepository: DirectionsRepository, private val localDB: LocalDataBaseRepository, private val routeLocalRepository: RouteLocalRepository, private val syncDataRepository: SyncDataRepository) : ViewModel() {
     val fetchedPlaces: MutableLiveData<List<Place>> by lazy {
         MutableLiveData<List<Place>>(listOf())
     }
@@ -70,7 +71,7 @@ constructor(private val placeManager: PlaceRepository, private val gDirectionsRe
     }
 
     fun getRoutePaths(context: Context, cityId: String): List<LineRoutePath> {
-        return localDB.getAllLineRoutePaths(context, cityId)
+        return routeLocalRepository.getAllLineRoutePaths(context, cityId)
     }
 
     fun clearPossibleRoutes() {
@@ -87,5 +88,11 @@ constructor(private val placeManager: PlaceRepository, private val gDirectionsRe
 
     fun deleteFavoriteDestination(favoriteDestinationEntity: FavoriteDestinationEntity) {
         localDB.deleteFavoriteDestination(favoriteDestinationEntity)
+    }
+
+    fun checkForUpdatedData(context: Context) = viewModelScope.launch {
+        val currentCityId = PreferenceManager.getCurrentCityID(context)
+        val result = localDB.getSyncHistory(context)
+        syncDataRepository.updateLocalLineCategory(currentCityId, result)
     }
 }

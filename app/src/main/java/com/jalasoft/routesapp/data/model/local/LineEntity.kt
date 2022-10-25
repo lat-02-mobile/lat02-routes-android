@@ -10,5 +10,7 @@ data class LineEntity(
     val name: String,
     val idCity: String,
     val category: String,
-    val enable: Boolean
+    val enable: Boolean,
+    val createAt: Long,
+    val updateAt: Long
 )

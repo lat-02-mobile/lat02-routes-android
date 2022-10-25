@@ -340,6 +340,7 @@ open class HomeBaseFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarker
         if (currentLat != PreferenceManager.NOT_FOUND && currentLng != PreferenceManager.NOT_FOUND) {
             val location = LatLng(currentLat.toDouble(), currentLng.toDouble())
             moveToLocation(location, 11F)
+            viewModel.checkForUpdatedData(requireContext())
         } else {
             findNavController().navigate(R.id.action_homeFragment_to_cityPickerFragment)
         }

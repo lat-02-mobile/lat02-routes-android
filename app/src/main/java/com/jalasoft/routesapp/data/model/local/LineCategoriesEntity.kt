@@ -10,5 +10,7 @@ data class LineCategoriesEntity(
     val nameEng: String,
     val nameEsp: String,
     val whiteIcon: String,
-    val blackIcon: String
+    val blackIcon: String,
+    val createAt: Long,
+    val updateAt: Long
 )

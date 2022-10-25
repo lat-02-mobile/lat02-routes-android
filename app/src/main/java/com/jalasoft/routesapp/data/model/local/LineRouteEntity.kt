@@ -16,7 +16,9 @@ data class LineRouteEntity(
     @Embedded(prefix = "start")
     val start: Location,
     @Embedded(prefix = "end")
-    val end: Location
+    val end: Location,
+    val createAt: Long,
+    val updateAt: Long
 )
 
 data class LineRoutePointsStopsLine(
