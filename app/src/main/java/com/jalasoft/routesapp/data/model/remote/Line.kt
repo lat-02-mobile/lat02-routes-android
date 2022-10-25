@@ -58,6 +58,15 @@ data class LineInfo(
     val routePaths: MutableList<LineRouteInfo> = mutableListOf()
 )
 
+data class LineAux(
+    val id: String = "",
+    val name: String = "",
+    val enable: Boolean? = null,
+    val category: String = "",
+    val idCity: String = "",
+    val cityName: String = ""
+)
+
 // class to be used in algorithm
 data class LineRoutePath(
     val idLine: String = "",

@@ -1,12 +1,16 @@
 package com.jalasoft.routesapp.data.remote.managers
 
 import android.content.Context
+import com.google.firebase.firestore.DocumentSnapshot
 import com.jalasoft.routesapp.data.model.local.LineCategoriesEntity
 import com.jalasoft.routesapp.data.model.local.LineEntity
 import com.jalasoft.routesapp.data.model.remote.*
 import com.jalasoft.routesapp.data.remote.interfaces.RouteRepository
 import com.jalasoft.routesapp.util.PreferenceManager
+import com.jalasoft.routesapp.util.helpers.Constants
 import com.jalasoft.routesapp.util.helpers.FirebaseCollections
+import kotlinx.coroutines.tasks.await
+import java.util.*
 
 class RouteManager(private val firebaseManager: FirebaseManager) : RouteRepository {
 
@@ -39,6 +43,36 @@ class RouteManager(private val firebaseManager: FirebaseManager) : RouteReposito
             return result.map {
                 it.lineRouteToLineRouteInfo()
             }
+        }
+        return listOf()
+    }
+
+    override suspend fun getAllLines(): List<LineAux> {
+        val list: MutableList<LineAux> = mutableListOf()
+        val result = firebaseManager.getAllDocuments<Line>(FirebaseCollections.LineRoute).data
+        if (result != null) {
+            result.map {
+                val resultCity = firebaseManager.getDocumentsWithCondition<City>(FirebaseCollections.Cities, "id", it.idCity).data
+                if (resultCity != null) {
+                    val city = resultCity.first()
+                    var cate = ""
+                    var category: DocumentSnapshot?
+                    var categoryName = ""
+                    it.categoryRef?.let { docRef ->
+                        category = docRef.get().await()
+                        category?.let { ref ->
+                            val currLang = Locale.getDefault().isO3Language
+                            categoryName =
+                                if (currLang == Constants.CURRENT_SPANISH_LANGUAGE) ref.toObject(LineCategories::class.java)?.nameEsp ?: ""
+                                else ref.toObject(LineCategories::class.java)?.nameEng ?: ""
+                        }
+                        cate = categoryName
+                    }
+                    val line = LineAux(it.id, it.name, it.enable, cate, it.idCity, city.name)
+                    list.add(line)
+                }
+            }
+            return list
         }
         return listOf()
     }

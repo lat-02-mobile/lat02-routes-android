@@ -114,6 +114,11 @@
             app:destination="@id/homeFragment"
             app:popUpTo="@id/homeFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/linesAdminFragment"
+        android:name="com.jalasoft.routesapp.ui.adminPages.lines.view.LinesAdminFragment"
+        android:label="fragment_lines_admin"
+        tools:layout="@layout/fragment_lines_admin" />
 
 
 </navigation>

@@ -136,4 +136,7 @@
     <string name="search_best_route">Search best route</string>
     <string name="preselected_destination">Pre-Selected Destination:</string>
 
+    <!-- Lines Administration Page -->
+    <string name="linesa_title">Lines Administration Page</string>
+
 </resources>

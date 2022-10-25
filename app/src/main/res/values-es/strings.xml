@@ -135,4 +135,7 @@
     <string name="search_best_route">Buscar mejor ruta</string>
     <string name="preselected_destination">Destino Preseleccionado:</string>
 
+    <!-- Lines Administration Page -->
+    <string name="linesa_title">Página de administración de líneas</string>
+
 </resources>
