@@ -27,7 +27,7 @@ import com.jalasoft.routesapp.util.helpers.GoogleMapsHelper
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class RouteEditorFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener {
+class RouteEditorFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener, GoogleMap.OnCameraMoveListener {
 
     private var _binding: FragmentRouteEditorBinding? = null
     private val binding get() = _binding!!
@@ -71,6 +71,7 @@ class RouteEditorFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerCl
         viewModel.errorMessage.observe(this, errorObserver)
     }
 
+    @SuppressLint("PotentialBehaviorOverride")
     override fun onMapReady(googleMap: GoogleMap) {
         googleMap.setMapStyle(
             MapStyleOptions.loadRawResourceStyle(
@@ -80,6 +81,10 @@ class RouteEditorFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerCl
         )
         mMap = googleMap
         route = arguments?.getSerializable(Constants.BUNDLE_KEY_ROUTE_SELECTED_DATA) as LineRouteInfo
+        map.setOnMarkerClickListener(this)
+        map.setOnMapClickListener(this)
+        map.setOnCameraMoveListener(this)
+
         if (route.stops.isEmpty()) {
             setMapOnCurrentCity()
         } else {
@@ -96,7 +101,6 @@ class RouteEditorFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerCl
         }
     }
 
-    @SuppressLint("PotentialBehaviorOverride")
     private fun setMarkers() {
         val builder = LatLngBounds.Builder()
 
@@ -113,8 +117,6 @@ class RouteEditorFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerCl
                 }
             }
         }
-        map.setOnMarkerClickListener(this)
-        map.setOnMapClickListener(this)
 
         val bounds = builder.build()
         val cu = CameraUpdateFactory.newLatLngBounds(bounds, Constants.POLYLINE_PADDING)
@@ -150,5 +152,11 @@ class RouteEditorFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerCl
             binding.btnAddStop.setImageResource(R.drawable.ic_bus_stop_no_bg)
             binding.btnAddStop.background.setTint(requireContext().getColor(R.color.color_primary))
         }
+    }
+
+    override fun onCameraMove() {
+        binding.btnSort.isEnabled = false
+        changeStopButton(false)
+        binding.btnAddPoint.setImageResource(R.drawable.ic_baseline_add_24)
     }
 }
