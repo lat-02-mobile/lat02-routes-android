@@ -33,4 +33,13 @@ interface LineRouteDao {
     @Transaction
     @Query("DELETE FROM stopsholder")
     fun deleteAllStopsHolder()
+
+    @Update(entity = LineRouteEntity::class)
+    fun updateLineRoutes(lineRouteEntity: LineRouteEntity)
+
+    @Update(entity = RoutePointsHolder::class)
+    fun updateRoutePoints(routePointsHolder: RoutePointsHolder)
+
+    @Update(entity = StopsHolder::class)
+    fun updateStops(stopsHolder: StopsHolder)
 }

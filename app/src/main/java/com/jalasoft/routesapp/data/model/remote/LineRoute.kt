@@ -1,6 +1,7 @@
 package com.jalasoft.routesapp.data.model.remote
 
 import android.location.Location
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.GeoPoint
 import com.jalasoft.routesapp.util.helpers.LocationHelper.geoPointListToLocationList
@@ -17,7 +18,9 @@ data class LineRoute(
     val routePoints: List<GeoPoint> = listOf(),
     val stops: List<GeoPoint> = listOf(),
     val color: String = "",
-    val averageVelocity: String = "0.0"
+    val averageVelocity: String = "0.0",
+    val createAt: Timestamp = Timestamp.now(),
+    val updateAt: Timestamp = Timestamp.now()
 ) : Serializable {
     fun lineRouteToLineRouteInfo(): LineRouteInfo {
         val routePoints = geoPointListToLocationList(routePoints)
@@ -25,7 +28,7 @@ data class LineRoute(
         val end = end?.let { geoPointToLocation(it) }
         val stops = geoPointListToLocationList(stops)
 
-        return LineRouteInfo(id, name, idLine, routePoints, start, end, stops, color, averageVelocity.toDouble())
+        return LineRouteInfo(id, name, idLine, routePoints, start, end, stops, color, averageVelocity.toDouble(), createAt.toDate().time, updateAt.toDate().time)
     }
 }
 
@@ -38,5 +41,7 @@ data class LineRouteInfo(
     val end: Location? = null,
     val stops: List<Location> = listOf(),
     val color: String = "",
-    val averageVelocity: Double = 0.0
+    val averageVelocity: Double = 0.0,
+    val createAt: Long = 0,
+    val updateAt: Long = 0
 ) : Serializable
