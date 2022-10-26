@@ -1,13 +1,13 @@
 package com.jalasoft.routesapp.util.helpers
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
+import android.graphics.*
 import android.location.Location
 import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
+import android.graphics.Bitmap.Config.ARGB_8888
+import com.google.maps.android.ui.IconGenerator
 
 object GoogleMapsHelper {
     fun drawPolyline(mMap: GoogleMap, list: List<LatLng>, hexColor: String = Constants.DEFAULT_POLYLINE_COLOR): Polyline {
@@ -77,5 +77,32 @@ object GoogleMapsHelper {
 
     fun locationToLatLng(location: Location): LatLng {
         return LatLng(location.latitude, location.longitude)
+    }
+
+    fun getBitmapMarker(context: Context, resourceId: Int, text: String): Bitmap? {
+        val resources = context.resources
+        val scale: Float = resources.displayMetrics.density
+        val iconGen = IconGenerator(context)
+        val drawable = ContextCompat.getDrawable(context, resourceId) ?: return null
+        iconGen.setBackground(drawable)
+
+        var bitmap = iconGen.makeIcon()
+        bitmap = bitmap.copy(ARGB_8888, true)
+        val canvas = Canvas(bitmap)
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+        paint.color = Color.WHITE // Text color
+
+        paint.textSize = 14 * scale // Text size
+
+        paint.setShadowLayer(1f, 0f, 1f, Color.WHITE) // Text shadow
+
+        val bounds = Rect()
+        paint.getTextBounds(text, 0, text.length, bounds)
+
+        val x = if (text.length == 1) ((bitmap.width / 2) - 10) else (bounds.width() / 2)
+        val y = bitmap.height - bounds.height()
+        canvas.drawText(text, x.toFloat(), y.toFloat(), paint)
+
+        return bitmap
     }
 }

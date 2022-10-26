@@ -40,9 +40,6 @@
         <action
             android:id="@+id/action_settingsFragment_to_cityPickerFragment"
             app:destination="@id/cityPickerFragment" />
-        <action
-            android:id="@+id/action_settingsFragment_to_routeEditorFragment"
-            app:destination="@id/routeEditorFragment" />
     </fragment>
     <fragment
         android:id="@+id/cityPickerFragment"
