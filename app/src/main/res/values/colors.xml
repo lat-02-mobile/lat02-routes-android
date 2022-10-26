@@ -11,6 +11,7 @@
     <color name="color_secondary">#383838</color>
     <color name="color_primary_gradient">#BF004696</color>
     <color name="red_color">#FF0000</color>
+    <color name="delete_color">#B21F1F</color>
     <color name="background_color_1">#ddd</color>
     <color name="transparent_background">#00000000</color>
     <color name="gray_color">#A9A9B0</color>

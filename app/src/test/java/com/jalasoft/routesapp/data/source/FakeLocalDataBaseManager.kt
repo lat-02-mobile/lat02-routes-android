@@ -21,6 +21,9 @@ class FakeLocalDataBaseManager : LocalDataBaseRepository {
     override fun addSyncHistory(context: Context) {
     }
 
+    override fun addSyncHistory(syncHistoryEntity: SyncHistoryEntity) {
+    }
+
     override fun getSyncHistory(context: Context): List<SyncHistoryEntity> {
         return listOf()
     }

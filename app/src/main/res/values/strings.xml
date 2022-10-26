@@ -136,4 +136,7 @@
     <string name="search_best_route">Search best route</string>
     <string name="preselected_destination">Pre-Selected Destination:</string>
 
+    <string name="sort_label">Sort</string>
+    <string name="add_remove_stops">Add or remove stops</string>
+    <string name="add_remove_points">Add or remove points</string>
 </resources>

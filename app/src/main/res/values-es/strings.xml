@@ -134,5 +134,8 @@
     <string name="address">Direccion:&#160;</string>
     <string name="search_best_route">Buscar mejor ruta</string>
     <string name="preselected_destination">Destino Preseleccionado:</string>
+    <string name="sort_label">Ordenar</string>
+    <string name="add_remove_stops">Añadir o eliminar stops</string>
+    <string name="add_remove_points">Añadir o eliminar puntos</string>
 
 </resources>
