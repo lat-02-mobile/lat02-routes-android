@@ -25,6 +25,7 @@ constructor(private val firebaseManager: FirebaseManager) : ViewModel() {
     }
 
     fun callRouteDetails() = viewModelScope.launch {
+        // TODO: change the route id after getting the list of routes to show the details for the corresponding route details
         when (val result = firebaseManager.getDocumentsWithCondition<LineRoute>(FirebaseCollections.LineRoute, "id", "fPzkYkakqvqDsmTNXFqq")) {
             is Response.Success -> {
                 lineRoute.value = result.data?.firstOrNull()

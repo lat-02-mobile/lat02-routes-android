@@ -61,6 +61,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
+        app:backgroundTint="@color/delete_color"
         android:src="@drawable/ic_bus_stop_no_bg"
         app:tint="@color/white"
         app:layout_constraintStart_toStartOf="parent"

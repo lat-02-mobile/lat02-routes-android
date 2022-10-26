@@ -147,10 +147,8 @@ class RouteEditorFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerCl
     private fun changeStopButton(isMarkerStop: Boolean) {
         if (isMarkerStop) {
             binding.btnAddStop.setImageResource(R.drawable.delete_bust_stop)
-            binding.btnAddStop.background.setTint(requireContext().getColor(R.color.delete_color))
         } else {
             binding.btnAddStop.setImageResource(R.drawable.ic_bus_stop_no_bg)
-            binding.btnAddStop.background.setTint(requireContext().getColor(R.color.color_primary))
         }
     }
 
