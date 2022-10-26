@@ -13,6 +13,7 @@ import java.util.*
 data class Line(
     val id: String = "",
     val categoryRef: DocumentReference? = null,
+    val idCategory: String = "",
     val idCity: String = "",
     val enable: Boolean? = null,
     val name: String = "",
@@ -70,7 +71,7 @@ data class LineAux(
     val category: String = "",
     val idCity: String = "",
     val cityName: String = ""
-)
+) : Serializable
 
 // class to be used in algorithm
 data class LineRoutePath(

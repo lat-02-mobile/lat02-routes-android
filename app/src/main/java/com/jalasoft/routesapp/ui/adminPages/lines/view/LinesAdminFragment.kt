@@ -7,11 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.data.model.remote.LineAux
 import com.jalasoft.routesapp.databinding.FragmentLinesAdminBinding
 import com.jalasoft.routesapp.ui.adminPages.lines.adapter.LinesAdminAdapter
 import com.jalasoft.routesapp.ui.adminPages.lines.viewModel.LinesAdminViewModel
+import com.jalasoft.routesapp.util.helpers.Constants
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -65,7 +68,9 @@ class LinesAdminFragment : Fragment(), LinesAdminAdapter.ILinesAdminListener {
         binding.recyclerLinesAdministrator.adapter = LinesAdminAdapter(mutableListOf(), this)
     }
 
-    override fun gotoEditLine(lineAux: LineAux, position: Int) {
-        TODO("Not yet implemented")
+    override fun gotoEditLine(lineAux: LineAux) {
+        val bundle = Bundle()
+        bundle.putSerializable(Constants.BUNDLE_KEY_LINE_ADMIN_SELECTED_DATA, lineAux)
+        findNavController().navigate(R.id.linesAdminDetailFragment, bundle)
     }
 }

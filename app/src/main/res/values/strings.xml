@@ -138,5 +138,10 @@
 
     <!-- Lines Administration Page -->
     <string name="linesa_title">Lines Administration Page</string>
+    <string name="linesa_btn_edit">Edit Line</string>
+    <string name="linesa_btn_save">Save Line</string>
+    <string name="linesa_text_cat">Select Category</string>
+    <string name="linesa_text_city">Select City</string>
+    <string name="linesa_switch_enable">Enable Line</string>
 
 </resources>

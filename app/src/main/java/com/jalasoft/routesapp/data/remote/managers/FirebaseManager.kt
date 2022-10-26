@@ -11,6 +11,10 @@ import kotlinx.coroutines.tasks.await
 
 class FirebaseManager(val db: FirebaseFirestore) : FirebaseDataSource {
 
+    fun getDocId(collection: FirebaseCollections): String {
+        return db.collection(collection.toString()).document().id
+    }
+
     override suspend fun <T : Any> addDocument(documentId: String, document: T, collection: FirebaseCollections): Response<String> {
         return try {
             db.collection(collection.toString()).document(documentId).set(document).await()

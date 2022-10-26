@@ -118,7 +118,16 @@
         android:id="@+id/linesAdminFragment"
         android:name="com.jalasoft.routesapp.ui.adminPages.lines.view.LinesAdminFragment"
         android:label="fragment_lines_admin"
-        tools:layout="@layout/fragment_lines_admin" />
+        tools:layout="@layout/fragment_lines_admin" >
+        <action
+            android:id="@+id/action_linesAdminFragment_to_linesAdminDetailFragment"
+            app:destination="@id/linesAdminDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/linesAdminDetailFragment"
+        android:name="com.jalasoft.routesapp.ui.adminPages.lines.view.LinesAdminDetailFragment"
+        android:label="fragment_lines_admin_detail"
+        tools:layout="@layout/fragment_lines_admin_detail" />
 
 
 </navigation>

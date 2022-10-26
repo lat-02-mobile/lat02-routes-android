@@ -137,5 +137,10 @@
 
     <!-- Lines Administration Page -->
     <string name="linesa_title">Página de administración de líneas</string>
+    <string name="linesa_btn_edit">Editar Línea</string>
+    <string name="linesa_btn_save">Guardar Línea</string>
+    <string name="linesa_text_cat">Selecciona la Categoría</string>
+    <string name="linesa_text_city">Selecciona la Ciudad</string>
+    <string name="linesa_switch_enable">Habilitar Línea</string>
 
 </resources>
