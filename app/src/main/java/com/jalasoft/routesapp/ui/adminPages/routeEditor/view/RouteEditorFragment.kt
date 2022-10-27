@@ -85,6 +85,29 @@ class RouteEditorFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerCl
         map.setOnMapClickListener(this)
         map.setOnCameraMoveListener(this)
 
+        binding.btnAddPoint.setOnClickListener {
+            val indexStr = (routePoints.size + 1).toString()
+            val location = map.cameraPosition.target
+            GoogleMapsHelper.getBitmapMarker(requireContext(), R.drawable.ic_point_circle, indexStr)?.let {
+                routePoints.add(addMarker(location, it))
+            }
+        }
+
+        binding.btnAddStop.setOnClickListener {
+            val indexStr = (routePoints.size + 1).toString()
+            val location = map.cameraPosition.target
+            GoogleMapsHelper.getBitmapMarker(requireContext(), R.drawable.ic_stop_circle, indexStr)?.let {
+                routeStops.add(addMarker(location, it))
+                routePoints.add(addMarker(location, it))
+            }
+        }
+
+        binding.btnDone.setOnClickListener {
+            println(routeStops.size)
+            println(routePoints.size)
+            println("Saving")
+        }
+
         if (route.stops.isEmpty()) {
             setMapOnCurrentCity()
         } else {
