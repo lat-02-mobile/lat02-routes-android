@@ -152,4 +152,7 @@
     <string name="sure_remove_line">Are you sure you want to remove the line %s?</string>
     <string name="remove_line">Remove Line</string>
 
+    <string name="sort_label">Sort</string>
+    <string name="add_remove_stops">Add or remove stops</string>
+    <string name="add_remove_points">Add or remove points</string>
 </resources>

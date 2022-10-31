@@ -151,4 +151,8 @@
     <string name="sure_remove_line">Estas seguro que deseas eliminar la línea %s?</string>
     <string name="remove_line">Eliminar Línea</string>
 
+    <string name="sort_label">Ordenar</string>
+    <string name="add_remove_stops">Añadir o eliminar stops</string>
+    <string name="add_remove_points">Añadir o eliminar puntos</string>
+
 </resources>

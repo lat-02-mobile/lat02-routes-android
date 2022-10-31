@@ -43,7 +43,14 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigation.setupWithNavController(navController)
 
         navController.addOnDestinationChangedListener { _, nd: NavDestination, _ ->
-            if (nd.id == R.id.cityPickerFragment || nd.id == R.id.splashScreenFragment || nd.id == R.id.routeSelected || nd.id == R.id.tourPointDetailFragment) {
+            val screensWithHiddenBottomNav = listOf(
+                R.id.cityPickerFragment,
+                R.id.splashScreenFragment,
+                R.id.routeSelected,
+                R.id.tourPointDetailFragment,
+                R.id.routeEditorFragment
+            )
+            if (screensWithHiddenBottomNav.contains(nd.id)) {
                 binding.bottomNavigation.visibility = View.GONE
             } else {
                 binding.bottomNavigation.visibility = View.VISIBLE

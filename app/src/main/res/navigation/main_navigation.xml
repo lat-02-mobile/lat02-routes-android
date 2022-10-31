@@ -129,5 +129,11 @@
         android:label="fragment_lines_admin_detail"
         tools:layout="@layout/fragment_lines_admin_detail" />
 
+    <fragment
+        android:id="@+id/routeEditorFragment"
+        android:name="com.jalasoft.routesapp.ui.adminPages.routeEditor.view.RouteEditorFragment"
+        android:label="fragment_route_editor"
+        tools:layout="@layout/fragment_route_editor" />
+
 
 </navigation>
