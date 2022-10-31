@@ -29,7 +29,6 @@
     <string name="tv_welcome">Welcome back!</string>
     <string name="btn_sign_outd">Sign Out</string>
 
-
     <!-- Home Fragment -->
     <string name="give_the_app_precise_location_permissions">To use this functionality, please give the app precise location permissions</string>
     <string name="access_location_permission">Access location permission</string>
@@ -136,7 +135,11 @@
     <string name="search_best_route">Search best route</string>
     <string name="preselected_destination">Pre-Selected Destination:</string>
 
+    <!-- Route Editor texts-->
     <string name="sort_label">Sort</string>
     <string name="add_remove_stops">Add or remove stops</string>
     <string name="add_remove_points">Add or remove points</string>
+    <string name="rearrange_points">Rearrange selected point</string>
+    <string name="points_updated">Route points have been updated</string>
+    <string name="empty_route_error">Route has to have at least two points</string>
 </resources>

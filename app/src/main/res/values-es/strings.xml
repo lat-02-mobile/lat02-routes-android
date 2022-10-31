@@ -134,8 +134,13 @@
     <string name="address">Direccion:&#160;</string>
     <string name="search_best_route">Buscar mejor ruta</string>
     <string name="preselected_destination">Destino Preseleccionado:</string>
+
+
+    <!-- Route Editor texts-->
     <string name="sort_label">Ordenar</string>
     <string name="add_remove_stops">Añadir o eliminar stops</string>
     <string name="add_remove_points">Añadir o eliminar puntos</string>
-
+    <string name="rearrange_points">Reordenar punto seleccionado</string>
+    <string name="points_updated">Puntos de ruta han sido actualizados</string>
+    <string name="empty_route_error">La ruta debe contener al menos dos puntos</string>
 </resources>

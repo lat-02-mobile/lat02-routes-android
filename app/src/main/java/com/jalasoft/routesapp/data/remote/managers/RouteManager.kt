@@ -2,13 +2,17 @@ package com.jalasoft.routesapp.data.remote.managers
 
 import android.content.Context
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.GeoPoint
 import com.jalasoft.routesapp.data.model.local.LineCategoriesEntity
 import com.jalasoft.routesapp.data.model.local.LineEntity
 import com.jalasoft.routesapp.data.model.remote.*
 import com.jalasoft.routesapp.data.remote.interfaces.RouteRepository
 import com.jalasoft.routesapp.util.PreferenceManager
+import com.jalasoft.routesapp.util.Response
 import com.jalasoft.routesapp.util.helpers.DateHelper
 import com.jalasoft.routesapp.util.helpers.FirebaseCollections
+import kotlinx.coroutines.tasks.await
 
 class RouteManager(private val firebaseManager: FirebaseManager) : RouteRepository {
 
@@ -81,5 +85,22 @@ class RouteManager(private val firebaseManager: FirebaseManager) : RouteReposito
             }
         }
         return listOf()
+    }
+
+    override suspend fun updateLineRoutes(routeId: String, routePoints: List<GeoPoint>, routeStops: List<GeoPoint>): Response<Unit> {
+        val ref = firebaseManager.db.collection(FirebaseCollections.LineRoute.toString()).document(routeId)
+        val updates = hashMapOf(
+            "end" to routeStops.last(),
+            "start" to routeStops.first(),
+            "routePoints" to routePoints,
+            "stops" to routeStops,
+            "updateAt" to FieldValue.serverTimestamp()
+        )
+        return try {
+            ref.update(updates).await()
+            Response.Success(Unit)
+        } catch (e: Exception) {
+            Response.Error(e.message.toString(), null)
+        }
     }
 }

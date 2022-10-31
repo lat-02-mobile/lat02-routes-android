@@ -1,10 +1,12 @@
 package com.jalasoft.routesapp.data.source
 
 import android.content.Context
+import com.google.firebase.firestore.GeoPoint
 import com.jalasoft.routesapp.data.model.local.LineCategoriesEntity
 import com.jalasoft.routesapp.data.model.local.LineEntity
 import com.jalasoft.routesapp.data.model.remote.LineRouteInfo
 import com.jalasoft.routesapp.data.remote.interfaces.RouteRepository
+import com.jalasoft.routesapp.util.Response
 
 class FakeRoutesManager : RouteRepository {
     override suspend fun getAllLinesToSaveLocally(context: Context): List<LineEntity> {
@@ -29,5 +31,9 @@ class FakeRoutesManager : RouteRepository {
 
     override suspend fun searchForUpdatedLineRoutes(idLine: String, lineRoutesLastUpdated: Long): List<LineRouteInfo> {
         return FakeRoutesData.lineRouteInfo
+    }
+
+    override suspend fun updateLineRoutes(routeId: String, routePoints: List<GeoPoint>, routeStops: List<GeoPoint>): Response<Unit> {
+        return Response.Success(Unit)
     }
 }

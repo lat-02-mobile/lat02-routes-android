@@ -43,6 +43,7 @@
 
     <style name="CustomAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:windowBackground">@drawable/bg_dialog</item>
+        <item name="colorControlNormal">@color/color_primary</item>
     </style>
 
     <style name="CustomSwitch" parent="Theme.AppCompat.Light">
