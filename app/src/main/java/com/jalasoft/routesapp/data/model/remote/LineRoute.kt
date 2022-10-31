@@ -1,6 +1,8 @@
 package com.jalasoft.routesapp.data.model.remote
 
 import android.location.Location
+import android.os.Parcel
+import android.os.Parcelable
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.GeoPoint
@@ -44,4 +46,46 @@ data class LineRouteInfo(
     val averageVelocity: Double = 0.0,
     val createAt: Long = 0,
     val updateAt: Long = 0
-) : Serializable
+) : Serializable, Parcelable {
+    constructor(parcel: Parcel) : this(
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+        parcel.createTypedArrayList(Location.CREATOR) ?: listOf(),
+        parcel.readParcelable(Location::class.java.classLoader),
+        parcel.readParcelable(Location::class.java.classLoader),
+        parcel.createTypedArrayList(Location.CREATOR) ?: listOf(),
+        parcel.readString() ?: "",
+        parcel.readDouble(),
+        parcel.readLong(),
+        parcel.readLong()
+    )
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(id)
+        parcel.writeString(name)
+        parcel.writeString(idLine)
+        parcel.writeTypedList(routePoints)
+        parcel.writeParcelable(start, flags)
+        parcel.writeParcelable(end, flags)
+        parcel.writeTypedList(stops)
+        parcel.writeString(color)
+        parcel.writeDouble(averageVelocity)
+        parcel.writeLong(createAt)
+        parcel.writeLong(updateAt)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<LineRouteInfo> {
+        override fun createFromParcel(parcel: Parcel): LineRouteInfo {
+            return LineRouteInfo(parcel)
+        }
+
+        override fun newArray(size: Int): Array<LineRouteInfo?> {
+            return arrayOfNulls(size)
+        }
+    }
+}
