@@ -4,6 +4,7 @@ import android.content.Context
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.ktx.toObject
 import com.jalasoft.routesapp.data.model.local.LineCategoriesEntity
 import com.jalasoft.routesapp.data.model.local.LineEntity
 import com.jalasoft.routesapp.data.model.remote.*
@@ -60,19 +61,23 @@ class RouteManager(private val firebaseManager: FirebaseManager) : RouteReposito
                 if (resultCity != null) {
                     val city = resultCity.first()
                     var cate = ""
+                    var idCat = ""
                     var category: DocumentSnapshot?
                     var categoryName = ""
+                    var catId = ""
                     it.categoryRef?.let { docRef ->
                         category = docRef.get().await()
                         category?.let { ref ->
+                            catId = ref.toObject(LineCategories::class.java)?.id ?: ""
                             val currLang = Locale.getDefault().isO3Language
                             categoryName =
                                 if (currLang == Constants.CURRENT_SPANISH_LANGUAGE) ref.toObject(LineCategories::class.java)?.nameEsp ?: ""
                                 else ref.toObject(LineCategories::class.java)?.nameEng ?: ""
                         }
+                        idCat = catId
                         cate = categoryName
                     }
-                    val line = LineAux(it.id, it.name, it.enable, cate, it.idCity, city.name)
+                    val line = LineAux(it.id, it.name, it.enable, idCat, cate, it.idCity, city.name)
                     list.add(line)
                 }
             }
@@ -133,5 +138,16 @@ class RouteManager(private val firebaseManager: FirebaseManager) : RouteReposito
         val ref: DocumentReference = firebaseManager.db.document(FirebaseCollections.LineCategories.toString() + "/" + idCategory)
         val line = Line(docId, ref, idCategory, idCity, enable, name, Timestamp(date), Timestamp(date))
         return firebaseManager.addDocument(docId, line, FirebaseCollections.Lines)
+    }
+
+    override suspend fun updateLine(idLine: String, name: String, idCategory: String, idCity: String, enable: Boolean): Response<String> {
+        val date = Date()
+        val ref: DocumentReference = firebaseManager.db.document(FirebaseCollections.LineCategories.toString() + "/" + idCategory)
+        val line = Line(idLine, ref, idCategory, idCity, enable, name, Timestamp(date), Timestamp(date))
+        return firebaseManager.addDocument(idLine, line, FirebaseCollections.Lines)
+    }
+
+    override suspend fun deleteLine(idLine: String): Response<String> {
+        return firebaseManager.deleteDocument(idLine, FirebaseCollections.Lines)
     }
 }

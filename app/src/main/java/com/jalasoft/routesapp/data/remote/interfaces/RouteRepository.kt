@@ -18,4 +18,6 @@ interface RouteRepository {
     suspend fun searchForUpdatedLines(cityId: String, linesLastUpdated: Long): List<LineEntity>
     suspend fun searchForUpdatedLineRoutes(idLine: String, lineRoutesLastUpdated: Long): List<LineRouteInfo>
     suspend fun addNewLine(name: String, idCategory: String, idCity: String, enable: Boolean): Response<String>
+    suspend fun updateLine(idLine: String, name: String, idCategory: String, idCity: String, enable: Boolean): Response<String>
+    suspend fun deleteLine(idLine: String): Response<String>
 }

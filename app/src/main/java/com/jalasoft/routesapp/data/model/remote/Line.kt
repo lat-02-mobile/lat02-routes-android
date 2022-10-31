@@ -68,6 +68,7 @@ data class LineAux(
     val id: String = "",
     val name: String = "",
     val enable: Boolean? = null,
+    val idCategory: String = "",
     val category: String = "",
     val idCity: String = "",
     val cityName: String = ""

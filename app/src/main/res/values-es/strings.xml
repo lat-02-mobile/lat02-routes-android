@@ -2,6 +2,10 @@
     <string name="app_name">RoutesApp</string>
     <string name="new_language_text">Nuevo texto de idioma</string>
     <string name="loading_data">Cargando Datos</string>
+    <string name="register_success">Registrado Exitosamente</string>
+    <string name="edited_success">Editado Exitosamente</string>
+    <string name="field_empty">Campo Vacio</string>
+
     <!-- Register user -->
     <string name="reg_hint_name">Nombre</string>
     <string name="reg_hint_email">Email</string>
@@ -115,6 +119,7 @@
     <string name="cancel">Cancelar</string>
     <string name="yes">Si</string>
     <string name="save">Guardar</string>
+    <string name="ok">OK</string>
     <string name="sure_remove_fav_dest">¿Esta seguro/a que desea eliminar este destino favorito?</string>
     <string name="remove_fav_dest">Eliminar Destino Favorito</string>
     <string name="save_dest">Guardar Destino</string>
@@ -142,5 +147,7 @@
     <string name="linesa_text_cat">Selecciona la Categoría</string>
     <string name="linesa_text_city">Selecciona la Ciudad</string>
     <string name="linesa_switch_enable">Habilitar Línea</string>
+    <string name="sure_remove_line">Estas seguro que deseas eliminar la línea %s?</string>
+    <string name="remove_line">Eliminar Línea</string>
 
 </resources>

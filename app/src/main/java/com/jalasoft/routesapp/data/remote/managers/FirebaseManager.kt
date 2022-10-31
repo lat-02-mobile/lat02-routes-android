@@ -24,6 +24,15 @@ class FirebaseManager(val db: FirebaseFirestore) : FirebaseDataSource {
         }
     }
 
+    override suspend fun deleteDocument(documentId: String, collection: FirebaseCollections): Response<String> {
+        return try {
+            db.collection(collection.toString()).document(documentId).delete().await()
+            return Response.Success(documentId)
+        } catch (e: Exception) {
+            Response.Error(e.message.toString(), null)
+        }
+    }
+
     override suspend fun getUsersByParameter(collection: FirebaseCollections, field: String, parameter: String): Response<MutableList<User>> {
         return try {
             val list = db.collection(collection.toString()).whereEqualTo(field, parameter).get().await()

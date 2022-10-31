@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jalasoft.routesapp.R
+import com.jalasoft.routesapp.RoutesAppApplication
 import com.jalasoft.routesapp.data.model.remote.City
 import com.jalasoft.routesapp.data.model.remote.LineAux
 import com.jalasoft.routesapp.data.model.remote.LineCategories
@@ -34,7 +36,7 @@ constructor(private val lineRepository: RouteRepository, private val cityReposit
     val errorMessage: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
-    val registerLine: MutableLiveData<Boolean> by lazy {
+    val successResult: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
     }
 
@@ -66,10 +68,51 @@ constructor(private val lineRepository: RouteRepository, private val cityReposit
         _cities.value = cityRepository.getAllCities()
     }
 
+    fun validateFields(name: String): String {
+        var isValid = ""
+        if (name.isEmpty()) {
+            isValid = RoutesAppApplication.resource?.getString(R.string.reg_val_name).toString()
+            return isValid
+        }
+        return isValid
+    }
+
     fun saveNewLine(name: String) = viewModelScope.launch {
-        when (val result = lineRepository.addNewLine(name, categorySelected, citySelected, enable)) {
+        val valid = validateFields(name)
+        if (valid.isEmpty()) {
+            when (val result = lineRepository.addNewLine(name, categorySelected, citySelected, enable)) {
+                is Response.Success -> {
+                    result.data?.let { successResult.value = true }
+                }
+                is Response.Error -> {
+                    errorMessage.value = result.message
+                }
+            }
+        } else {
+            errorMessage.value = valid
+        }
+    }
+
+    fun updateLine(idLine: String, name: String) = viewModelScope.launch {
+        val valid = validateFields(name)
+        if (valid.isEmpty()) {
+            when (val result = lineRepository.updateLine(idLine, name, categorySelected, citySelected, enable)) {
+                is Response.Success -> {
+                    result.data?.let { successResult.value = true }
+                }
+                is Response.Error -> {
+                    errorMessage.value = result.message
+                }
+            }
+        } else {
+            errorMessage.value = valid
+        }
+    }
+
+    fun deleteLine(idLine: String) = viewModelScope.launch {
+        when (val result = lineRepository.deleteLine(idLine)) {
             is Response.Success -> {
-                result.data?.let { registerLine.value = true }
+                result.data?.let { successResult.value = true }
             }
             is Response.Error -> {
                 errorMessage.value = result.message
