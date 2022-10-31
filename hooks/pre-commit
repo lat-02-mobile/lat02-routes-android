@@ -2,6 +2,7 @@
 echo "*****Running unit tests & lint******"
 ./gradlew lintKotlin
 status=$?
+[ $status -ne 0 ] && exit 1
 CMD="./gradlew clean test"
 # Check if we actually have commits to push
 commits=`git log @{u}..`

@@ -32,4 +32,8 @@ class FakeRoutesManager : RouteRepository {
     override suspend fun searchForUpdatedLineRoutes(idLine: String, lineRoutesLastUpdated: Long): List<LineRouteInfo> {
         return FakeRoutesData.lineRouteInfo
     }
+
+    override suspend fun updateLineRoutes(routeId: String, routePoints: List<GeoPoint>, routeStops: List<GeoPoint>): Response<Unit> {
+        return Response.Success(Unit)
+    }
 }
