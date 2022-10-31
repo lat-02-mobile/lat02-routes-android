@@ -5,6 +5,7 @@
     <string name="register_success">Registrado Exitosamente</string>
     <string name="edited_success">Editado Exitosamente</string>
     <string name="field_empty">Campo Vacio</string>
+    <string name="unknown_Error">Ha ocurrido un error desconocido</string>
 
     <!-- Register user -->
     <string name="reg_hint_name">Nombre</string>

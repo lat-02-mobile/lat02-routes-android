@@ -20,7 +20,7 @@ import javax.inject.Inject
 class LinesAdminViewModel
 @Inject
 constructor(private val lineRepository: RouteRepository, private val cityRepository: CityRepository) : ViewModel() {
-    private var _lineList: MutableLiveData<List<LineAux>> = MutableLiveData()
+    var _lineList: MutableLiveData<List<LineAux>> = MutableLiveData()
     val lineList: LiveData<List<LineAux>> = _lineList
     var originalList: List<LineAux> = listOf()
     var searchQuery = ""
@@ -110,13 +110,17 @@ constructor(private val lineRepository: RouteRepository, private val cityReposit
     }
 
     fun deleteLine(idLine: String) = viewModelScope.launch {
-        when (val result = lineRepository.deleteLine(idLine)) {
-            is Response.Success -> {
-                result.data?.let { successResult.value = true }
+        if (idLine.isNotEmpty()) {
+            when (val result = lineRepository.deleteLine(idLine)) {
+                is Response.Success -> {
+                    result.data?.let { successResult.value = true }
+                }
+                is Response.Error -> {
+                    errorMessage.value = result.message
+                }
             }
-            is Response.Error -> {
-                errorMessage.value = result.message
-            }
+        } else {
+            errorMessage.value = RoutesAppApplication.resource?.getString(R.string.unknown_Error).toString()
         }
     }
 }
