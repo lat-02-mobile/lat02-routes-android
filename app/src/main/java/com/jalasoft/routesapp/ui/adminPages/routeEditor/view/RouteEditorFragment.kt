@@ -237,12 +237,12 @@ class RouteEditorFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerCl
         return mark
     }
 
-    override fun onMarkerClick(p0: Marker): Boolean {
+    override fun onMarkerClick(clickedMarker: Marker): Boolean {
         if (selectedMarker != null) {
             setDefaultSelectedMarker()
         }
-        selectedMarker = p0
-        map.moveCamera(CameraUpdateFactory.newLatLng(p0.position))
+        selectedMarker = clickedMarker
+        map.moveCamera(CameraUpdateFactory.newLatLng(clickedMarker.position))
         val selectedMarkerIndex = routePoints.indexOf(selectedMarker)
         val indexStr = (selectedMarkerIndex + 1).toString()
         val isStop = selectedMarker?.tag as? Boolean
@@ -257,7 +257,7 @@ class RouteEditorFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerCl
         return true
     }
 
-    override fun onMapClick(p0: LatLng) {
+    override fun onMapClick(clickedPoint: LatLng) {
         binding.btnSort.isEnabled = false
         if (selectedMarker != null) {
             setDefaultSelectedMarker()
