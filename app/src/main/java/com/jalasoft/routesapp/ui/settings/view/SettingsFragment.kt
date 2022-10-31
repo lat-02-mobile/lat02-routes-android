@@ -66,6 +66,9 @@ class SettingsFragment : Fragment() {
         binding.btnRouteEditor.setOnClickListener {
             viewModel.callRouteDetails()
         }
+        binding.btnUserPromote.setOnClickListener {
+            findNavController().navigate(R.id.promoteUsersFragment)
+        }
     }
 
     private fun observers() {

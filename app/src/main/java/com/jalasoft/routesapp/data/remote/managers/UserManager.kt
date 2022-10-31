@@ -45,4 +45,12 @@ class UserManager(private val authManager: AuthFirebaseManager, private val fire
     override fun signOut() {
         authManager.singOut()
     }
+
+    override suspend fun getAllUsers(): List<User> {
+        val result = firebaseManager.getAllDocuments<User>(FirebaseCollections.Users).data
+        if (result != null) {
+            return result
+        }
+        return listOf()
+    }
 }

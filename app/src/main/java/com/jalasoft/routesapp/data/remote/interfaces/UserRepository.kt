@@ -17,4 +17,5 @@ interface UserRepository {
     suspend fun verifyPhoneCode(credential: PhoneAuthCredential, activity: Activity): Response<String>
     suspend fun signInWithEmailAndPassword(email: String, password: String): Response<String>
     fun signOut()
+    suspend fun getAllUsers(): List<User>
 }

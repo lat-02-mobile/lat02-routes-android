@@ -143,4 +143,10 @@
     <string name="rearrange_points">Reordenar punto seleccionado</string>
     <string name="points_updated">Puntos de ruta han sido actualizados</string>
     <string name="empty_route_error">La ruta debe contener al menos dos puntos</string>
+    <string name="button_route_editor">Ir al editor de rutas</string>
+
+    <!-- Users Promotion -->
+    <string name="user_promotion_title">Página de promoción de usuarios</string>
+    <string name="button_user_promote">Ir a los permisos del usuario</string>
+
 </resources>

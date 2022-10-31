@@ -142,4 +142,10 @@
     <string name="rearrange_points">Rearrange selected point</string>
     <string name="points_updated">Route points have been updated</string>
     <string name="empty_route_error">Route has to have at least two points</string>
+    <string name="button_route_editor">Go to route editor</string>
+
+    <!-- Users Promotion -->
+    <string name="user_promotion_title">Users Promotion page</string>
+    <string name="button_user_promote">Go to User\'s permission</string>
+
 </resources>
