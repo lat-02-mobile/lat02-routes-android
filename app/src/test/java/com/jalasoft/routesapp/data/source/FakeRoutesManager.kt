@@ -1,6 +1,7 @@
 package com.jalasoft.routesapp.data.source
 
 import android.content.Context
+import com.google.firebase.firestore.GeoPoint
 import com.jalasoft.routesapp.data.model.local.LineCategoriesEntity
 import com.jalasoft.routesapp.data.model.local.LineEntity
 import com.jalasoft.routesapp.data.model.remote.LineAux
@@ -52,5 +53,9 @@ class FakeRoutesManager : RouteRepository {
 
     override suspend fun deleteLine(idLine: String): Response<String> {
         return Response.Success(idLine)
+    }
+
+    override suspend fun updateLineRoutes(routeId: String, routePoints: List<GeoPoint>, routeStops: List<GeoPoint>): Response<Unit> {
+        return Response.Success(Unit)
     }
 }

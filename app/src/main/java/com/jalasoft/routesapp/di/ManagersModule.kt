@@ -3,13 +3,13 @@ package com.jalasoft.routesapp.di
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.jalasoft.routesapp.RoutesAppApplication
+import com.jalasoft.routesapp.data.api.retrofit.IGmapsDirections
 import com.jalasoft.routesapp.data.api.retrofit.IGmapsService
 import com.jalasoft.routesapp.data.local.room.db.RoutesDB
 import com.jalasoft.routesapp.data.local.room.interfaces.LocalDataBaseRepository
-import com.jalasoft.routesapp.data.local.room.managers.LocalDataBaseManager
-import com.jalasoft.routesapp.data.api.retrofit.IGmapsDirections
 import com.jalasoft.routesapp.data.local.room.interfaces.RouteLocalRepository
 import com.jalasoft.routesapp.data.local.room.interfaces.TourPointLocalRepository
+import com.jalasoft.routesapp.data.local.room.managers.LocalDataBaseManager
 import com.jalasoft.routesapp.data.local.room.managers.RouteLocalManager
 import com.jalasoft.routesapp.data.local.room.managers.TourPointLocalManager
 import com.jalasoft.routesapp.data.remote.interfaces.*

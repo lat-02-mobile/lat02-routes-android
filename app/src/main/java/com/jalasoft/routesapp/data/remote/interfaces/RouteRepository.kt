@@ -1,6 +1,7 @@
 package com.jalasoft.routesapp.data.remote.interfaces
 
 import android.content.Context
+import com.google.firebase.firestore.GeoPoint
 import com.jalasoft.routesapp.data.model.local.LineCategoriesEntity
 import com.jalasoft.routesapp.data.model.local.LineEntity
 import com.jalasoft.routesapp.data.model.remote.LineAux
@@ -20,4 +21,5 @@ interface RouteRepository {
     suspend fun addNewLine(name: String, idCategory: String, idCity: String, enable: Boolean): Response<String>
     suspend fun updateLine(idLine: String, name: String, idCategory: String, idCity: String, enable: Boolean): Response<String>
     suspend fun deleteLine(idLine: String): Response<String>
+    suspend fun updateLineRoutes(routeId: String, routePoints: List<GeoPoint>, routeStops: List<GeoPoint>): Response<Unit>
 }

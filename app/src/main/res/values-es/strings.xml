@@ -151,8 +151,11 @@
     <string name="sure_remove_line">Estas seguro que deseas eliminar la línea %s?</string>
     <string name="remove_line">Eliminar Línea</string>
 
+    <!-- Route Editor texts-->
     <string name="sort_label">Ordenar</string>
     <string name="add_remove_stops">Añadir o eliminar stops</string>
     <string name="add_remove_points">Añadir o eliminar puntos</string>
-
+    <string name="rearrange_points">Reordenar punto seleccionado</string>
+    <string name="points_updated">Puntos de ruta han sido actualizados</string>
+    <string name="empty_route_error">La ruta debe contener al menos dos puntos</string>
 </resources>

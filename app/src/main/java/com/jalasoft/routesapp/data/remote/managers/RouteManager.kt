@@ -4,7 +4,8 @@ import android.content.Context
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.GeoPoint
 import com.jalasoft.routesapp.data.model.local.LineCategoriesEntity
 import com.jalasoft.routesapp.data.model.local.LineEntity
 import com.jalasoft.routesapp.data.model.remote.*
@@ -149,5 +150,22 @@ class RouteManager(private val firebaseManager: FirebaseManager) : RouteReposito
 
     override suspend fun deleteLine(idLine: String): Response<String> {
         return firebaseManager.deleteDocument(idLine, FirebaseCollections.Lines)
+    }
+
+    override suspend fun updateLineRoutes(routeId: String, routePoints: List<GeoPoint>, routeStops: List<GeoPoint>): Response<Unit> {
+        val ref = firebaseManager.db.collection(FirebaseCollections.LineRoute.toString()).document(routeId)
+        val updates = hashMapOf(
+            "end" to routeStops.last(),
+            "start" to routeStops.first(),
+            "routePoints" to routePoints,
+            "stops" to routeStops,
+            "updateAt" to FieldValue.serverTimestamp()
+        )
+        return try {
+            ref.update(updates).await()
+            Response.Success(Unit)
+        } catch (e: Exception) {
+            Response.Error(e.message.toString(), null)
+        }
     }
 }
