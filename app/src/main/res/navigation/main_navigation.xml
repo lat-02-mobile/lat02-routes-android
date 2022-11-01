@@ -122,6 +122,9 @@
         <action
             android:id="@+id/action_linesAdminFragment_to_linesAdminDetailFragment"
             app:destination="@id/linesAdminDetailFragment" />
+        <action
+            android:id="@+id/action_linesAdminFragment_to_routesAdminFragment"
+            app:destination="@id/routesAdminFragment" />
     </fragment>
     <fragment
         android:id="@+id/linesAdminDetailFragment"
@@ -134,6 +137,11 @@
         android:name="com.jalasoft.routesapp.ui.adminPages.routeEditor.view.RouteEditorFragment"
         android:label="fragment_route_editor"
         tools:layout="@layout/fragment_route_editor" />
+    <fragment
+        android:id="@+id/routesAdminFragment"
+        android:name="com.jalasoft.routesapp.ui.adminPages.routes.view.RoutesAdminFragment"
+        android:label="fragment_routes_admin"
+        tools:layout="@layout/fragment_routes_admin" />
 
 
 </navigation>
