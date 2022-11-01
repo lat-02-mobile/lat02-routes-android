@@ -167,7 +167,6 @@
     <string name="sure_promote_user">Are you sure you want to promote the user "%s"</string>
     <string name="revoke_user">Revoke permission for Administrator</string>
     <string name="sure_revoke_user">Are you sure you want to revoke the permissions for "%s"</string>
-    <string name="user_promoted">User promoted successfully</string>
-    <string name="user_permission_revoked">User permission revoked Successfully</string>
+    <string name="succes_result_user">Permissions updated successfully</string>
 
 </resources>

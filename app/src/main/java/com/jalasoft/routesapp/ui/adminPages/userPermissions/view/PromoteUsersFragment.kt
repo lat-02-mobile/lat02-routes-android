@@ -105,7 +105,9 @@ class PromoteUsersFragment : Fragment(), UserAdapter.IUserListener {
         val successResult = Observer<Boolean> { successResult ->
             if (successResult) {
                 showProgress(false)
-                Toast.makeText(context, "Edited Successfully", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, requireContext().getString(R.string.succes_result_user), Toast.LENGTH_SHORT).show()
+                binding.fadUserPermissions.visibility = View.GONE
+                viewModel.fetchUsers()
             } else {
                 showProgress(false)
             }
