@@ -158,4 +158,15 @@
     <string name="rearrange_points">Rearrange selected point</string>
     <string name="points_updated">Route points have been updated</string>
     <string name="empty_route_error">Route has to have at least two points</string>
+    <string name="button_route_editor">Go to route editor</string>
+
+    <!-- Users Promotion -->
+    <string name="user_promotion_title">Users Promotion page</string>
+    <string name="button_user_promote">Go to User\'s permission</string>
+    <string name="promote_user">Promote User to Administrator</string>
+    <string name="sure_promote_user">Are you sure you want to promote the user "%s"</string>
+    <string name="revoke_user">Revoke permission for Administrator</string>
+    <string name="sure_revoke_user">Are you sure you want to revoke the permissions for "%s"</string>
+    <string name="succes_result_user">Permissions updated successfully</string>
+
 </resources>

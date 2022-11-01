@@ -134,6 +134,11 @@
         android:name="com.jalasoft.routesapp.ui.adminPages.routeEditor.view.RouteEditorFragment"
         android:label="fragment_route_editor"
         tools:layout="@layout/fragment_route_editor" />
+    <fragment
+        android:id="@+id/promoteUsersFragment"
+        android:name="com.jalasoft.routesapp.ui.adminPages.userPermissions.view.PromoteUsersFragment"
+        android:label="fragment_promote_users"
+        tools:layout="@layout/fragment_promote_users" />
 
 
 </navigation>

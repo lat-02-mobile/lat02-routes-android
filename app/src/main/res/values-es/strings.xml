@@ -158,4 +158,15 @@
     <string name="rearrange_points">Reordenar punto seleccionado</string>
     <string name="points_updated">Puntos de ruta han sido actualizados</string>
     <string name="empty_route_error">La ruta debe contener al menos dos puntos</string>
+    <string name="button_route_editor">Ir al editor de rutas</string>
+
+    <!-- Users Promotion -->
+    <string name="user_promotion_title">Página de promoción de usuarios</string>
+    <string name="button_user_promote">Ir a los permisos del usuario</string>
+    <string name="promote_user">Promover a un usuario a administrador</string>
+    <string name="sure_promote_user">Está seguro de que quiere promover al usuario "%s"</string>
+    <string name="revoke_user">Revocar permiso de administrador</string>
+    <string name="sure_revoke_user">Está seguro de que quiere revocar los permisos de "%s"</string>
+    <string name="succes_result_user">Permisos actualizados con éxito</string>
+
 </resources>
