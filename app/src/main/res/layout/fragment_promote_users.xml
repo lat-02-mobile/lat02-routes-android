@@ -8,7 +8,7 @@
     tools:context=".ui.adminPages.userPermissions.view.PromoteUsersFragment">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/lap_coordinator"
+        android:id="@+id/uap_coordinator"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,16 +27,17 @@
                 app:elevation="0dp">
 
                 <com.google.android.material.appbar.MaterialToolbar
-                    android:id="@+id/lap_topAppBar"
+                    android:id="@+id/uap_topAppBar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
+                    app:navigationIcon="?attr/homeAsUpIndicator"
                     app:title="@string/user_promotion_title"
                     style="@style/Widget.MaterialComponents.Toolbar.Primary" />
 
             </com.google.android.material.appbar.AppBarLayout>
 
             <androidx.appcompat.widget.SearchView
-                android:id="@+id/upp_search_view"
+                android:id="@+id/uap_search_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_search_view"
@@ -57,7 +58,7 @@
         android:clipToPadding="false"
         android:layout_margin="10dp"
         android:padding="10dp"
-        app:layout_constraintTop_toBottomOf="@id/lap_coordinator"
+        app:layout_constraintTop_toBottomOf="@id/uap_coordinator"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:listitem="@layout/user_admin_item" />
 

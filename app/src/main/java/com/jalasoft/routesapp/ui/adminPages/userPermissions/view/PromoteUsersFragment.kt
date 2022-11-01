@@ -12,6 +12,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.data.model.remote.User
@@ -47,6 +48,10 @@ class PromoteUsersFragment : Fragment(), UserAdapter.IUserListener {
 
         setRecycler()
 
+        binding.uapTopAppBar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
+
         binding.progressBar.visibility = View.VISIBLE
         viewModel.users.observe(viewLifecycleOwner) {
             binding.progressBar.visibility = View.GONE
@@ -54,7 +59,7 @@ class PromoteUsersFragment : Fragment(), UserAdapter.IUserListener {
         }
         viewModel.fetchUsers()
 
-        binding.uppSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        binding.uapSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 viewModel.searchQuery = query.toString()
                 viewModel.applyFilter()
