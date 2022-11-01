@@ -4,6 +4,8 @@ import android.content.Context
 import com.google.firebase.firestore.GeoPoint
 import com.jalasoft.routesapp.data.model.local.LineCategoriesEntity
 import com.jalasoft.routesapp.data.model.local.LineEntity
+import com.jalasoft.routesapp.data.model.remote.LineAux
+import com.jalasoft.routesapp.data.model.remote.LineCategories
 import com.jalasoft.routesapp.data.model.remote.LineRouteInfo
 import com.jalasoft.routesapp.data.remote.interfaces.RouteRepository
 import com.jalasoft.routesapp.util.Response
@@ -21,6 +23,14 @@ class FakeRoutesManager : RouteRepository {
         return FakeRoutesData.lineRouteInfo
     }
 
+    override suspend fun getAllLines(): List<LineAux> {
+        return FakeRoutesData.lineAuxList
+    }
+
+    override suspend fun getAllLineCategories(): List<LineCategories> {
+        return FakeRoutesData.lineCategoriesList
+    }
+
     override suspend fun searchForUpdatedLineCategory(lineCategoryLastUpdated: Long): List<LineCategoriesEntity> {
         return FakeRoutesData.lineCategoriesEntity
     }
@@ -31,6 +41,18 @@ class FakeRoutesManager : RouteRepository {
 
     override suspend fun searchForUpdatedLineRoutes(idLine: String, lineRoutesLastUpdated: Long): List<LineRouteInfo> {
         return FakeRoutesData.lineRouteInfo
+    }
+
+    override suspend fun addNewLine(name: String, idCategory: String, idCity: String, enable: Boolean): Response<String> {
+        return Response.Success(name)
+    }
+
+    override suspend fun updateLine(idLine: String, name: String, idCategory: String, idCity: String, enable: Boolean): Response<String> {
+        return Response.Success(idLine)
+    }
+
+    override suspend fun deleteLine(idLine: String): Response<String> {
+        return Response.Success(idLine)
     }
 
     override suspend fun updateLineRoutes(routeId: String, routePoints: List<GeoPoint>, routeStops: List<GeoPoint>): Response<Unit> {

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="lineItem"
+            type="com.jalasoft.routesapp.data.model.remote.LineAux" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/lineAdminContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/line_name"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="@{lineItem.name}"
+                tools:text="Colon Station" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/line_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:textColor="@color/color_primary"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:text="@{lineItem.category}"
+                tools:text="Museum" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/line_city"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{lineItem.cityName}"
+                tools:text="Street A, Lon - Lat" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal"
+            android:background="@color/gray_color">
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</layout>

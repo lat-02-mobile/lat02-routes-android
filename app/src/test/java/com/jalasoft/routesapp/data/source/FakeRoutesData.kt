@@ -5,6 +5,9 @@ import com.jalasoft.routesapp.data.model.local.LineCategoriesEntity
 import com.jalasoft.routesapp.data.model.local.LineEntity
 import android.location.LocationManager
 import com.google.android.gms.maps.model.LatLng
+import com.google.firebase.Timestamp
+import com.jalasoft.routesapp.data.model.remote.LineAux
+import com.jalasoft.routesapp.data.model.remote.LineCategories
 import com.jalasoft.routesapp.data.model.remote.LineInfo
 import com.jalasoft.routesapp.data.model.remote.LineRouteInfo
 
@@ -109,11 +112,15 @@ object FakeRoutesData {
 
     private val lineEntity = LineEntity("1", "line test", "scz", "bus", true, 1666618377352, 1666618377352)
     private val lineCategory = LineCategoriesEntity("123", "bus", "bus", "", "", 1666618377352, 1666618377352)
+    private val lineAux = LineAux("1", "line test", false, "1", "bus", "1", "Santa Cruz")
+    private val lineCategories = LineCategories("1", "Bus", "Bus", "", "", Timestamp.now(), Timestamp.now())
 
     val lineInfo = listOf(line1Info, line2Info, line3Info)
     val lineRouteInfo = listOf(line1RouteInfo, line2RouteInfo, line3RouteInfo)
     val linesEntity = listOf(lineEntity)
     val lineCategoriesEntity = listOf(lineCategory)
+    val lineAuxList = listOf(lineAux)
+    val lineCategoriesList = listOf(lineCategories)
 
     val directionsPointLst = listOf(
         LatLng(-16.52469, -68.12539000000001),

@@ -2,6 +2,11 @@
     <string name="app_name">RoutesApp</string>
     <string name="new_language_text">New language text</string>
     <string name="loading_data">Loading Data</string>
+    <string name="register_success">Register Successfully</string>
+    <string name="edited_success">Edited Successfully</string>
+    <string name="field_empty">Field Empty</string>
+    <string name="unknown_Error">An Error unknown error occurred</string>
+
     <!-- Register user -->
     <string name="reg_hint_name">Name</string>
     <string name="reg_hint_email">Email</string>
@@ -115,6 +120,7 @@
     <string name="cancel">Cancel</string>
     <string name="yes">Yes</string>
     <string name="save">Save</string>
+    <string name="ok">OK</string>
     <string name="sure_remove_fav_dest">Are you sure you want to remove the favorite destination</string>
     <string name="remove_fav_dest">Remove Favorite destination</string>
     <string name="save_dest">Save Destination</string>
@@ -134,6 +140,16 @@
     <string name="address">Address:&#160;</string>
     <string name="search_best_route">Search best route</string>
     <string name="preselected_destination">Pre-Selected Destination:</string>
+
+    <!-- Lines Administration Page -->
+    <string name="linesa_title">Lines Administration Page</string>
+    <string name="linesa_btn_edit">Edit Line</string>
+    <string name="linesa_btn_save">Save Line</string>
+    <string name="linesa_text_cat">Select Category</string>
+    <string name="linesa_text_city">Select City</string>
+    <string name="linesa_switch_enable">Enable Line</string>
+    <string name="sure_remove_line">Are you sure you want to remove the line %s?</string>
+    <string name="remove_line">Remove Line</string>
 
     <!-- Route Editor texts-->
     <string name="sort_label">Sort</string>

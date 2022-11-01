@@ -15,4 +15,6 @@ object Constants {
     const val MINIMUM_DISTANCE_ORIGIN_DESTINATION = 500
     const val MINIMUM_DISTANCE_TO_STILL_FAVORITE = 8
     const val DEFAULT_POLYLINE_COLOR = "#004696"
+    const val BUNDLE_KEY_LINE_ADMIN_SELECTED_DATA = "lineAdminSelected"
+    const val BUNDLE_KEY_LINE_ADMIN_IS_NEW = "lineAdminIsNew"
 }

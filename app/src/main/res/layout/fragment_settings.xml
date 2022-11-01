@@ -30,6 +30,12 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/btn_lines_admin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Lines Admin" />
+
+    <Button
         android:id="@+id/btn_route_editor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

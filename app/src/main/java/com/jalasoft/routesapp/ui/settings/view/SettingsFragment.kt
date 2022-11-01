@@ -55,6 +55,10 @@ class SettingsFragment : Fragment() {
             findNavController().navigate(R.id.action_settingsFragment_to_cityPickerFragment)
         }
 
+        binding.btnLinesAdmin.setOnClickListener {
+            findNavController().navigate(R.id.linesAdminFragment)
+        }
+
         binding.btnLogout.setOnClickListener {
             AuthFirebaseManager.signOutUser()
             PreferenceManager.deleteAllData(requireContext())
@@ -63,6 +67,7 @@ class SettingsFragment : Fragment() {
             activity?.startActivity(intent)
             activity?.finish()
         }
+
         binding.btnRouteEditor.setOnClickListener {
             viewModel.callRouteDetails()
         }
