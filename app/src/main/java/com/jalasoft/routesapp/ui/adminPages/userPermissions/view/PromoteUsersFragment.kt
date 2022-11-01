@@ -128,16 +128,14 @@ class PromoteUsersFragment : Fragment(), UserAdapter.IUserListener {
 
     override fun addRevokeUserPermission(user: User) {
         if (user.type == 0) {
-            binding.fadUserPermissions.visibility = View.VISIBLE
             binding.fadUserPermissions.backgroundTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.color_primary, null))
             binding.fadUserPermissions.setImageResource(R.drawable.ic_user_settings_line)
-            userSelected = user
         } else {
-            binding.fadUserPermissions.visibility = View.VISIBLE
             binding.fadUserPermissions.backgroundTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.delete_color, null))
             binding.fadUserPermissions.setImageResource(R.drawable.ic_settings_alert_outline)
-            userSelected = user
         }
+        binding.fadUserPermissions.visibility = View.VISIBLE
+        userSelected = user
     }
 
     private fun showProgress(show: Boolean) {
