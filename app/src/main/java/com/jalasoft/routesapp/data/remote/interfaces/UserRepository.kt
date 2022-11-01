@@ -18,4 +18,5 @@ interface UserRepository {
     suspend fun signInWithEmailAndPassword(email: String, password: String): Response<String>
     fun signOut()
     suspend fun getAllUsers(): List<User>
+    suspend fun promoteRevokeUserPermission(user: User, isPromote: Boolean): Response<String>
 }

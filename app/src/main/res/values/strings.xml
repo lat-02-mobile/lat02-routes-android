@@ -147,5 +147,11 @@
     <!-- Users Promotion -->
     <string name="user_promotion_title">Users Promotion page</string>
     <string name="button_user_promote">Go to User\'s permission</string>
+    <string name="promote_user">Promote User to Administrator</string>
+    <string name="sure_promote_user">Are you sure you want to promote the user "%s"</string>
+    <string name="revoke_user">Revoke permission for Administrator</string>
+    <string name="sure_revoke_user">Are you sure you want to revoke the permissions for "%s"</string>
+    <string name="user_promoted">User promoted successfully</string>
+    <string name="user_permission_revoked">User permission revoked Successfully</string>
 
 </resources>

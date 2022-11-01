@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jalasoft.routesapp.data.model.remote.User
 import com.jalasoft.routesapp.data.remote.interfaces.UserRepository
+import com.jalasoft.routesapp.util.Response
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -43,6 +44,28 @@ constructor(private val repository: UserRepository) : ViewModel() {
         return usersList.filter { user ->
             val name = user.name ?: return@filter false
             name.lowercase().contains(query.lowercase())
+        }
+    }
+
+    fun promoteUser(user: User) = viewModelScope.launch {
+        when (val result = repository.promoteRevokeUserPermission(user, true)) {
+            is Response.Success -> {
+                result.data?.let { successResult.value = true }
+            }
+            is Response.Error -> {
+                errorMessage.value = result.message
+            }
+        }
+    }
+
+    fun revokeUserPermission(user: User) = viewModelScope.launch {
+        when (val result = repository.promoteRevokeUserPermission(user, false)) {
+            is Response.Success -> {
+                result.data?.let { successResult.value = true }
+            }
+            is Response.Error -> {
+                errorMessage.value = result.message
+            }
         }
     }
 }

@@ -53,4 +53,16 @@ class UserManager(private val authManager: AuthFirebaseManager, private val fire
         }
         return listOf()
     }
+
+    override suspend fun promoteRevokeUserPermission(user: User, isPromote: Boolean): Response<String> {
+        val dateStr = DateHelper.getCurrentDate()
+        val date = DateHelper.convertDateToDouble(dateStr)
+        val docId = user.id ?: ""
+        val userEd = if (isPromote) {
+            User(user.id, user.name, user.email, user.phoneNumber, UserType.ADMIN.int, user.typeLogin, user.createdAt, date)
+        } else {
+            User(user.id, user.name, user.email, user.phoneNumber, UserType.NORMAL.int, user.typeLogin, user.createdAt, date)
+        }
+        return firebaseManager.addDocument(docId, userEd, FirebaseCollections.Users)
+    }
 }

@@ -75,9 +75,10 @@
         android:layout_height="100dp"
         android:layout_gravity="end|bottom"
         android:layout_margin="20dp"
-        android:backgroundTint="@color/color_primary"
+        app:backgroundTint="@color/color_primary"
         android:src="@drawable/ic_user_settings_line"
         android:tintMode="@color/white"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         tools:ignore="MissingConstraints" />
