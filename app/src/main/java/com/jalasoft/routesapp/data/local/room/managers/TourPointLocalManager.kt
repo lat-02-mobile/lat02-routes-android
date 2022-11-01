@@ -21,6 +21,20 @@ class TourPointLocalManager(private val localRoutesDB: RoutesDB) : TourPointLoca
         return tourPointPaths
     }
 
+    override fun getAllLocalTourPointsByCityId(cityId: String): List<TourPointPath> {
+        val tourPointCategories = localRoutesDB.tourPointCategoryDao().getAllTourPointsCategory()
+        var tourPointPaths = mutableListOf<TourPointPath>()
+        for (categories in tourPointCategories) {
+            val category = categories.toTourPointCategory()
+            val tourPoints = localRoutesDB.tourPointDao().getAllTourPointsByCityAndCategory(cityId, categories.id)
+            tourPoints.forEach { tourPoint ->
+                val tourPointPath = TourPointPath(tourPoint.id, tourPoint.idCity, tourPoint.name, tourPoint.address, tourPoint.destination.toAndroidLocation(), tourPoint.urlImage, categories.icon, category, tourPoint.categoryName)
+                tourPointPaths.add(tourPointPath)
+            }
+        }
+        return tourPointPaths
+    }
+
     override fun addLocalTourPoint(tourPoint: TourPointEntity) {
         localRoutesDB.tourPointDao().addTourPoint(tourPoint)
     }
