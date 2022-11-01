@@ -142,14 +142,19 @@
     <string name="preselected_destination">Destino Preseleccionado:</string>
 
     <!-- Lines Administration Page -->
-    <string name="linesa_title">Página de administración de líneas</string>
+    <string name="linesa_title">Administración de líneas</string>
     <string name="linesa_btn_edit">Editar Línea</string>
+    <string name="linesa_btn_edit_routes">Editar rutas de línea</string>
     <string name="linesa_btn_save">Guardar Línea</string>
     <string name="linesa_text_cat">Selecciona la Categoría</string>
     <string name="linesa_text_city">Selecciona la Ciudad</string>
     <string name="linesa_switch_enable">Habilitar Línea</string>
     <string name="sure_remove_line">Estas seguro que deseas eliminar la línea %s?</string>
     <string name="remove_line">Eliminar Línea</string>
+    <string name="select_option">Selecione una opción</string>
+
+    <!-- Routes Administration Page-->
+    <string name="routes_admin_title">Administración de rutas</string>
 
     <!-- Route Editor texts-->
     <string name="sort_label">Ordenar</string>
