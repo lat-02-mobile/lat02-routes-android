@@ -2,6 +2,7 @@ package com.jalasoft.routesapp.util
 
 import android.location.Location
 import android.location.LocationManager
+import android.text.Editable
 import com.google.android.gms.maps.model.LatLng
 
 object Extensions {
@@ -15,4 +16,6 @@ object Extensions {
         newLocation.longitude = longitude
         return newLocation
     }
+
+    fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
 }
