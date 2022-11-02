@@ -163,4 +163,5 @@
     <string name="rearrange_points">Reordenar punto seleccionado</string>
     <string name="points_updated">Puntos de ruta han sido actualizados</string>
     <string name="empty_route_error">La ruta debe contener al menos dos puntos</string>
+    <string name="route_points">Puntos de ruta: %d</string>
 </resources>

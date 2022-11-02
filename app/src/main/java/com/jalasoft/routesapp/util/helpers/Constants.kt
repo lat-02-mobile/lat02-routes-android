@@ -17,4 +17,5 @@ object Constants {
     const val DEFAULT_POLYLINE_COLOR = "#004696"
     const val BUNDLE_KEY_LINE_ADMIN_SELECTED_DATA = "lineAdminSelected"
     const val BUNDLE_KEY_LINE_ADMIN_IS_NEW = "lineAdminIsNew"
+    const val BUNDLE_KEY_LINE_ID = "lineId"
 }

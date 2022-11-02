@@ -155,6 +155,7 @@
 
     <!-- Routes Administration Page-->
     <string name="routes_admin_title">Routes Administration</string>
+    <string name="route_points">Route points: %d</string>
 
     <!-- Route Editor texts-->
     <string name="sort_label">Sort</string>

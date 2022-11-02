@@ -153,7 +153,6 @@ class RouteManager(private val firebaseManager: FirebaseManager) : RouteReposito
     }
 
     override suspend fun updateLineRoutes(routeId: String, routePoints: List<GeoPoint>, routeStops: List<GeoPoint>): Response<Unit> {
-        val ref = firebaseManager.db.collection(FirebaseCollections.LineRoute.toString()).document(routeId)
         val updates = hashMapOf(
             "end" to routeStops.last(),
             "start" to routeStops.first(),
@@ -161,11 +160,40 @@ class RouteManager(private val firebaseManager: FirebaseManager) : RouteReposito
             "stops" to routeStops,
             "updateAt" to FieldValue.serverTimestamp()
         )
-        return try {
-            ref.update(updates).await()
-            Response.Success(Unit)
-        } catch (e: Exception) {
-            Response.Error(e.message.toString(), null)
+        return firebaseManager.updateDocument(routeId, FirebaseCollections.LineRoute, updates)
+    }
+
+    override fun getAllRoutesForLine(idLine: String, completion: (Response<List<LineRouteInfo>>) -> Unit) {
+        firebaseManager.listenDocumentsWithQuery<LineRoute>(FirebaseCollections.LineRoute, "idLine", idLine) { result ->
+            when (result) {
+                is Response.Success -> {
+                    val data = result.data
+                    if (data != null) {
+                        val lineRoutes = data.map {
+                            it.lineRouteToLineRouteInfo()
+                        }
+                        completion(Response.Success(lineRoutes))
+                        return@listenDocumentsWithQuery
+                    }
+                    completion(Response.Success(listOf()))
+                }
+                is Response.Error -> {
+                    completion(Response.Error(result.message.toString()))
+                }
+            }
         }
+    }
+
+    override suspend fun updateRouteInfo(routeId: String): Response<Unit> {
+        return Response.Success(Unit)
+    }
+
+    override suspend fun createRouteForLine(idLine: String): Response<Unit> {
+        val lineReference = firebaseManager.db.collection(FirebaseCollections.LineRoute.toString()).document()
+        return Response.Success(Unit)
+    }
+
+    override suspend fun deleteRouteInLine(routeId: String): Response<Unit> {
+        return Response.Success(Unit)
     }
 }

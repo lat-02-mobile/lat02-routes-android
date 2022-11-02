@@ -22,4 +22,8 @@ interface RouteRepository {
     suspend fun updateLine(idLine: String, name: String, idCategory: String, idCity: String, enable: Boolean): Response<String>
     suspend fun deleteLine(idLine: String): Response<String>
     suspend fun updateLineRoutes(routeId: String, routePoints: List<GeoPoint>, routeStops: List<GeoPoint>): Response<Unit>
+    fun getAllRoutesForLine(idLine: String, completion: (Response<List<LineRouteInfo>>) -> Unit)
+    suspend fun updateRouteInfo(routeId: String): Response<Unit>
+    suspend fun deleteRouteInLine(routeId: String): Response<Unit>
+    suspend fun createRouteForLine(idLine: String): Response<Unit>
 }

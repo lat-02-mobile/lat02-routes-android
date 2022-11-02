@@ -36,12 +36,6 @@
         android:text="Lines Admin" />
 
     <Button
-        android:id="@+id/btn_route_editor"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Go to route editor" />
-
-    <Button
         android:id="@+id/btn_logout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

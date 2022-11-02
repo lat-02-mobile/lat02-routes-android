@@ -14,7 +14,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -24,7 +23,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:elevation="0dp">
-
                 <com.google.android.material.appbar.MaterialToolbar
                     android:id="@+id/topAppBar"
                     android:layout_width="match_parent"
@@ -32,23 +30,8 @@
                     app:navigationIcon="?attr/homeAsUpIndicator"
                     app:title="@string/routes_admin_title"
                     style="@style/Widget.MaterialComponents.Toolbar.Primary" />
-
             </com.google.android.material.appbar.AppBarLayout>
-            <androidx.appcompat.widget.SearchView
-                android:id="@+id/search_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_search_view"
-                android:layout_margin="10dp"
-                app:queryHint="@string/search_route_hint"
-                app:queryBackground="@null"
-                app:iconifiedByDefault="false"
-                app:layout_constraintTop_toBottomOf="@id/coordinator"
-                />
-
         </LinearLayout>
-
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -61,6 +44,18 @@
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="0dp"
         tools:listitem="@layout/route_admin_item" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_new_route"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="20dp"
+        android:src="@drawable/ic_baseline_add_24"
+        android:tintMode="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@string/linesa_btn_save" />
 
     <ProgressBar
         android:id="@+id/progress_bar"

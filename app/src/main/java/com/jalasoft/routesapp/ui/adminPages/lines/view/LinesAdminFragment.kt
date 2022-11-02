@@ -115,7 +115,9 @@ class LinesAdminFragment : Fragment(), LinesAdminAdapter.ILinesAdminListener {
                 bundle.putBoolean(Constants.BUNDLE_KEY_LINE_ADMIN_IS_NEW, false)
                 findNavController().navigate(R.id.linesAdminDetailFragment, bundle)
             } else {
-                findNavController().navigate(R.id.action_linesAdminFragment_to_routesAdminFragment)
+                val bundle = Bundle()
+                bundle.putString(Constants.BUNDLE_KEY_LINE_ID, lineAux.id)
+                findNavController().navigate(R.id.action_linesAdminFragment_to_routesAdminFragment, bundle)
             }
             dialog.dismiss()
         }

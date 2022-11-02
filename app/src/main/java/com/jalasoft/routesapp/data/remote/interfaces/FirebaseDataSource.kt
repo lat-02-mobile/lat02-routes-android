@@ -8,4 +8,6 @@ interface FirebaseDataSource {
     suspend fun getUsersByParameter(collection: FirebaseCollections, field: String, parameter: String): Response<MutableList<User>>
     suspend fun <T : Any> addDocument(documentId: String, document: T, collection: FirebaseCollections): Response<String>
     suspend fun deleteDocument(documentId: String, collection: FirebaseCollections): Response<String>
+    suspend fun addDocument(documentId: String, data: HashMap<String, Any>, collection: FirebaseCollections): Response<Unit>
+    suspend fun updateDocument(documentId: String, collection: FirebaseCollections, data: HashMap<String, Any>): Response<Unit>
 }
