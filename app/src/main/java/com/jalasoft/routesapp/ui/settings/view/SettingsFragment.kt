@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -14,11 +15,13 @@ import com.amplitude.android.Amplitude
 import com.jalasoft.routesapp.AuthActivity
 import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.data.model.remote.LineRoute
+import com.jalasoft.routesapp.data.model.remote.User
 import com.jalasoft.routesapp.data.remote.managers.AuthFirebaseManager
 import com.jalasoft.routesapp.databinding.FragmentSettingsBinding
 import com.jalasoft.routesapp.ui.settings.viewModel.SettingsViewModel
 import com.jalasoft.routesapp.util.PreferenceManager
 import com.jalasoft.routesapp.util.helpers.Constants
+import com.jalasoft.routesapp.util.helpers.UserType
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -55,10 +58,6 @@ class SettingsFragment : Fragment() {
             findNavController().navigate(R.id.action_settingsFragment_to_cityPickerFragment)
         }
 
-        binding.btnLinesAdmin.setOnClickListener {
-            findNavController().navigate(R.id.linesAdminFragment)
-        }
-
         binding.btnLogout.setOnClickListener {
             AuthFirebaseManager.signOutUser()
             PreferenceManager.deleteAllData(requireContext())
@@ -68,12 +67,12 @@ class SettingsFragment : Fragment() {
             activity?.finish()
         }
 
-        binding.btnRouteEditor.setOnClickListener {
-            viewModel.callRouteDetails()
+        binding.btnAdmin.setOnClickListener {
+            findNavController().navigate(R.id.action_settingsFragment_to_adminFragment)
         }
-        binding.btnUserPromote.setOnClickListener {
-            findNavController().navigate(R.id.promoteUsersFragment)
-        }
+
+        binding.btnAdmin.isVisible = false
+        viewModel.fetchUserDetails()
     }
 
     private fun observers() {
@@ -85,7 +84,32 @@ class SettingsFragment : Fragment() {
             bundle.putSerializable(Constants.BUNDLE_KEY_ROUTE_SELECTED_DATA, lineRoute.lineRouteToLineRouteInfo())
             findNavController().navigate(R.id.routeEditorFragment, bundle)
         }
+
+        val userObserver = Observer<User> {
+            it?.let { user ->
+                user.type?.let { type ->
+                    if (type == 0) {
+                        adminMode(UserType.NORMAL)
+                    } else {
+                        adminMode(UserType.ADMIN)
+                    }
+                }
+            }
+        }
+
         viewModel.errorMessage.observe(this, errorObserver)
         viewModel.lineRoute.observe(this, routeObserver)
+        viewModel.user.observe(this, userObserver)
+    }
+
+    private fun adminMode(userType: UserType) {
+        when (userType) {
+            UserType.NORMAL -> {
+                binding.btnAdmin.isVisible = false
+            }
+            UserType.ADMIN -> {
+                binding.btnAdmin.isVisible = true
+            }
+        }
     }
 }
