@@ -169,4 +169,9 @@
     <string name="sure_revoke_user">Está seguro de que quiere revocar los permisos de "%s"</string>
     <string name="succes_result_user">Permisos actualizados con éxito</string>
 
+    <!--  Admin Module  -->
+    <string name="admin_module">Módulo de Administrador</string>
+    <string name="cities_admin">Administración de ciudades</string>
+    <string name="lines_admin">Administración de líneas</string>
+    <string name="go_to_route_editor">Ir a editor de rutas</string>
 </resources>

@@ -169,4 +169,9 @@
     <string name="sure_revoke_user">Are you sure you want to revoke the permissions for "%s"</string>
     <string name="succes_result_user">Permissions updated successfully</string>
 
+    <!--  Admin Module  -->
+    <string name="admin_module">Admin module</string>
+    <string name="cities_admin">cities admin</string>
+    <string name="lines_admin">Lines Admin</string>
+    <string name="go_to_route_editor">Go to route editor</string>
 </resources>
