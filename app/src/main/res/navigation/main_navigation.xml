@@ -166,16 +166,24 @@
         android:label="fragment_admin"
         tools:layout="@layout/fragment_admin" >
         <action
-            android:id="@+id/action_adminFragment_to_citiesFragment"
-            app:destination="@id/citiesFragment" />
-        <action
             android:id="@+id/action_adminFragment_to_routeEditorFragment"
             app:destination="@id/routeEditorFragment" />
+        <action
+            android:id="@+id/action_adminFragment_to_cityAdminFragment"
+            app:destination="@id/cityAdminFragment" />
     </fragment>
     <fragment
-        android:id="@+id/citiesFragment"
-        android:name="com.jalasoft.routesapp.ui.adminPages.cities.CitiesFragment"
-        android:label="fragment_cities"
-        tools:layout="@layout/fragment_cities" />
+        android:id="@+id/cityAdminFragment"
+        android:name="com.jalasoft.routesapp.ui.adminPages.cities.view.CityAdminFragment"
+        android:label="CityAdminFragment" >
+        <action
+            android:id="@+id/action_cityAdminFragment_to_cityAdminDetailFragment"
+            app:destination="@id/cityAdminDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cityAdminDetailFragment"
+        android:name="com.jalasoft.routesapp.ui.adminPages.cities.view.CityAdminDetailFragment"
+        android:label="fragment_cities_admin_detail"
+        tools:layout="@layout/fragment_cities_admin_detail" />
 
 </navigation>

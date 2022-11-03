@@ -55,6 +55,10 @@ class LinesAdminFragment : Fragment(), LinesAdminAdapter.ILinesAdminListener {
         }
         viewModel.fetchLines()
 
+        binding.lapTopAppBar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
+
         binding.lapSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 viewModel.searchQuery = query.toString()
