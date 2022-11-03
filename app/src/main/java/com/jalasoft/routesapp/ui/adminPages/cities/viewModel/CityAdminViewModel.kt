@@ -62,7 +62,7 @@ constructor(private val cityRepository: CityRepository) : ViewModel() {
         _cityCountry.value = cityRepository.getAllCountries()
     }
 
-    private fun validateFields(name: String): String {
+    fun validateFields(name: String): String {
         var isValid = ""
         if (name.isEmpty()) {
             isValid = RoutesAppApplication.resource?.getString(R.string.reg_val_name).toString()

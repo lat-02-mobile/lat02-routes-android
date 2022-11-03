@@ -81,8 +81,8 @@ class CityAdminFragment : Fragment(), CityAdminAdapter.ICityAdminListener {
         val swipeGesture = object : SwipeGesture(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 binding.recyclerCitiesAdministrator.adapter?.notifyItemChanged(viewHolder.absoluteAdapterPosition)
-                val setCity = (binding.recyclerCitiesAdministrator.adapter as LinesAdminAdapter).linesList[viewHolder.absoluteAdapterPosition]
-                val position = (binding.recyclerCitiesAdministrator.adapter as LinesAdminAdapter).linesList.indexOf(setCity)
+                val setCity = (binding.recyclerCitiesAdministrator.adapter as CityAdminAdapter).citiesList[viewHolder.absoluteAdapterPosition]
+                val position = (binding.recyclerCitiesAdministrator.adapter as CityAdminAdapter).citiesList.indexOf(setCity)
                 when (direction) {
                     ItemTouchHelper.LEFT -> {
                         val builder = AlertDialog.Builder(binding.root.context)
