@@ -11,6 +11,10 @@ class FakeTourPointsLocalManager : TourPointLocalRepository {
         return FakeTourPointData.tourPoints
     }
 
+    override fun getAllLocalTourPointsByCityId(cityId: String): List<TourPointPath> {
+        return FakeTourPointData.tourPoints
+    }
+
     override fun addLocalTourPoint(tourPoint: TourPointEntity) {
     }
 

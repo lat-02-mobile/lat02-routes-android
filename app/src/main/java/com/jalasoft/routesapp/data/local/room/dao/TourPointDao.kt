@@ -17,6 +17,13 @@ interface TourPointDao {
     )
     fun getAllTourPointsByCityId(cityId: String): List<TourPointEntity>
 
+    @Query(
+        "SELECT * FROM tourpointentity " +
+            "WHERE idCity = :cityId " +
+            "AND categoryId = :categoryId"
+    )
+    fun getAllTourPointsByCityAndCategory(cityId: String, categoryId: String): List<TourPointEntity>
+
     @Update(entity = TourPointEntity::class)
     fun updateTourPoint(tourPointsEntity: TourPointEntity)
 }
