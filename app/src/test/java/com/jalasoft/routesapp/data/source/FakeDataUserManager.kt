@@ -42,4 +42,12 @@ class FakeDataUserManager(var users: MutableList<User> = mutableListOf()) : User
     override fun signOut() {
         users.removeAll(users)
     }
+
+    override suspend fun getAllUsers(): List<User> {
+        return FakeUserData.userList
+    }
+
+    override suspend fun promoteRevokeUserPermission(user: User, isPromote: Boolean): Response<String> {
+        return Response.Success("")
+    }
 }

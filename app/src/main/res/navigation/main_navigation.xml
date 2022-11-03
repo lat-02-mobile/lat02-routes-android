@@ -40,6 +40,9 @@
         <action
             android:id="@+id/action_settingsFragment_to_cityPickerFragment"
             app:destination="@id/cityPickerFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_adminFragment"
+            app:destination="@id/adminFragment" />
     </fragment>
     <fragment
         android:id="@+id/cityPickerFragment"
@@ -152,5 +155,27 @@
         android:label="fragment_route_admin_detail"
         tools:layout="@layout/fragment_route_admin_detail" />
 
+    <fragment
+        android:id="@+id/promoteUsersFragment"
+        android:name="com.jalasoft.routesapp.ui.adminPages.userPermissions.view.PromoteUsersFragment"
+        android:label="fragment_promote_users"
+        tools:layout="@layout/fragment_promote_users" />
+    <fragment
+        android:id="@+id/adminFragment"
+        android:name="com.jalasoft.routesapp.ui.adminPages.AdminFragment"
+        android:label="fragment_admin"
+        tools:layout="@layout/fragment_admin" >
+        <action
+            android:id="@+id/action_adminFragment_to_citiesFragment"
+            app:destination="@id/citiesFragment" />
+        <action
+            android:id="@+id/action_adminFragment_to_routeEditorFragment"
+            app:destination="@id/routeEditorFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/citiesFragment"
+        android:name="com.jalasoft.routesapp.ui.adminPages.cities.CitiesFragment"
+        android:label="fragment_cities"
+        tools:layout="@layout/fragment_cities" />
 
 </navigation>

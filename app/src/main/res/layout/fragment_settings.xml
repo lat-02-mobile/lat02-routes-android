@@ -30,10 +30,10 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/btn_lines_admin"
+        android:id="@+id/btn_admin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Lines Admin" />
+        android:text="@string/admin_module"/>
 
     <Button
         android:id="@+id/btn_logout"
