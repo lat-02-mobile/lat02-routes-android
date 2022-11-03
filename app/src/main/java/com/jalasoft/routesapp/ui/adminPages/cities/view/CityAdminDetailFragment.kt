@@ -106,7 +106,7 @@ class CityAdminDetailFragment : Fragment() {
                 } else {
                     val item = editCityList[position]
                     viewModel.countrySelected = item.name
-                    viewModel.countryID = item?.id ?: ""
+                    viewModel.countryID = item.id
                 }
             }
 
@@ -126,7 +126,7 @@ class CityAdminDetailFragment : Fragment() {
                 val lat = binding.etLat.text.toString()
                 val lng = binding.etLng.text.toString()
                 val selectedCountry = (binding.spCategory.selectedItem as Country).name
-                val countyId = viewModel.cityCountry?.value?.get(binding.spCategory.selectedItemPosition)?.id
+                val countyId = viewModel.cityCountry.value?.get(binding.spCategory.selectedItemPosition)?.id
                 viewModel.saveNewCity(name, lat, lng, selectedCountry, countyId ?: "0")
             } else {
                 showProgress(true)
@@ -134,8 +134,10 @@ class CityAdminDetailFragment : Fragment() {
                 val lat = binding.etLat.text.toString()
                 val lng = binding.etLng.text.toString()
                 val selectedCountry = (binding.spCategory.selectedItem as Country).name
-                val countyId = viewModel.cityCountry?.value?.get(binding.spCategory.selectedItemPosition)?.id
-                viewModel.updateCity(name, lat, lng, selectedCountry, countyId ?: "0", city!!)
+                val countyId = viewModel.cityCountry.value?.get(binding.spCategory.selectedItemPosition)?.id
+                city?.let { it1 ->
+                    viewModel.updateCity(name, lat, lng, selectedCountry, countyId ?: "0", it1)
+                }
             }
         }
 

@@ -180,4 +180,5 @@
     <string name="sure_remove_city">Are you sure you want to remove the city?</string>
     <string name="hint_lat">Latitude</string>
     <string name="hintlng">Longitude</string>
+    <string name="missing">Missing parameter</string>
 </resources>

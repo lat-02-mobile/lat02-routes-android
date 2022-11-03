@@ -24,7 +24,7 @@ constructor(private val cityRepository: CityRepository) : ViewModel() {
     var searchQuery = ""
 
     private var _cityCountry: MutableLiveData<List<Country>> = MutableLiveData()
-    val cityCountry: LiveData<List<Country>> = _cityCountry // val lineCategories: LiveData<List<LineCategories>> = _lineCategories
+    val cityCountry: LiveData<List<Country>> = _cityCountry
     var countrySelected = ""
     var countryID = ""
     var country = ""
@@ -62,9 +62,9 @@ constructor(private val cityRepository: CityRepository) : ViewModel() {
         _cityCountry.value = cityRepository.getAllCountries()
     }
 
-    fun validateFields(name: String): String {
+    fun validateFields(name: String, latitude: String, longitude: String, countryId: String): String {
         var isValid = ""
-        if (name.isEmpty()) {
+        if (name.isEmpty() || latitude.isEmpty() || longitude.isEmpty() || countryId.isEmpty()) {
             isValid = RoutesAppApplication.resource?.getString(R.string.reg_val_name).toString()
             return isValid
         }
@@ -72,7 +72,7 @@ constructor(private val cityRepository: CityRepository) : ViewModel() {
     }
 
     fun saveNewCity(name: String, latitude: String, longitude: String, countrySelected: String, countryId: String) = viewModelScope.launch {
-        val valid = validateFields(name)
+        val valid = validateFields(name, latitude, longitude, countryId)
         if (valid.isEmpty()) {
             when (val result = cityRepository.addNewCity(countrySelected, countryId, latitude, longitude, name)) {
                 is Response.Success -> {
@@ -88,7 +88,7 @@ constructor(private val cityRepository: CityRepository) : ViewModel() {
     }
 
     fun updateCity(name: String, latitude: String, longitude: String, countrySelected: String, countryId: String, city: City) = viewModelScope.launch {
-        val valid = validateFields(name)
+        val valid = validateFields(name, latitude, longitude, countryId)
         if (valid.isEmpty()) {
             when (val result = cityRepository.updateCity(countrySelected, city.id, countryId, latitude, longitude, name)) {
                 is Response.Success -> {

@@ -52,7 +52,7 @@ class CitiesAdminViewModelTest : TestCase() {
 
     @Test
     fun `Given valid and not empty field name it returns an empty String`() {
-        val result = viewModel.validateFields("name")
+        val result = viewModel.validateFields("name", "lat", "lng", "id")
         assertEquals("", result)
     }
 
