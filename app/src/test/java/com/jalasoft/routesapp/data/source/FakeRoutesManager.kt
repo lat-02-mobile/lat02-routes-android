@@ -4,6 +4,7 @@ import android.content.Context
 import com.google.firebase.firestore.GeoPoint
 import com.jalasoft.routesapp.data.model.local.LineCategoriesEntity
 import com.jalasoft.routesapp.data.model.local.LineEntity
+import com.jalasoft.routesapp.data.model.local.LineRouteAux
 import com.jalasoft.routesapp.data.model.remote.LineAux
 import com.jalasoft.routesapp.data.model.remote.LineCategories
 import com.jalasoft.routesapp.data.model.remote.LineRouteInfo
@@ -57,5 +58,21 @@ class FakeRoutesManager : RouteRepository {
 
     override suspend fun updateLineRoutes(routeId: String, routePoints: List<GeoPoint>, routeStops: List<GeoPoint>): Response<Unit> {
         return Response.Success(Unit)
+    }
+
+    override fun getAllRoutesForLine(idLine: String, completion: (Response<List<LineRouteInfo>>) -> Unit) {
+        completion(Response.Success(FakeRoutesData.lineRouteInfo))
+    }
+
+    override suspend fun createRouteForLine(lineRouteInfo: LineRouteAux): Response<Unit> {
+        return Response.Success(Unit)
+    }
+
+    override suspend fun updateRouteInfo(lineRouteInfo: LineRouteAux): Response<Unit> {
+        return Response.Success(Unit)
+    }
+
+    override suspend fun deleteRouteInLine(routeId: String): Response<String> {
+        return Response.Success(routeId)
     }
 }
