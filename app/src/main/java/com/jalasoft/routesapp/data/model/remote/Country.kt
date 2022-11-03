@@ -4,6 +4,7 @@ import com.google.firebase.firestore.DocumentReference
 import java.io.Serializable
 
 data class Country(
+    var id: String = "",
     var code: String = "",
     var name: String = "",
     var phone: String = "",

@@ -53,7 +53,7 @@ class AdminFragment : Fragment() {
         }
 
         binding.btnCities.setOnClickListener {
-            findNavController().navigate(R.id.action_adminFragment_to_citiesFragment)
+            findNavController().navigate(R.id.action_adminFragment_to_cityAdminFragment)
         }
     }
 
