@@ -166,6 +166,8 @@
     <string name="route_name_error">Name has to be at least 5 characters</string>
     <string name="velocity_greater_than_zero">Velocity must be greater than zero</string>
     <string name="velocity_format_error">Must be a number</string>
+    <string name="remove_route">Remove route</string>
+    <string name="sure_remove_route">Are you sure you want to remove the route %s?</string>
 
     <!-- Route Editor texts-->
     <string name="sort_label">Sort</string>

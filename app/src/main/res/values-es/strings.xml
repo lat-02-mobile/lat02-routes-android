@@ -149,7 +149,7 @@
     <string name="linesa_text_cat">Selecciona la Categoría</string>
     <string name="linesa_text_city">Selecciona la Ciudad</string>
     <string name="linesa_switch_enable">Habilitar Línea</string>
-    <string name="sure_remove_line">Estas seguro que deseas eliminar la línea %s?</string>
+    <string name="sure_remove_line">¿Estas seguro que deseas eliminar la línea %s?</string>
     <string name="remove_line">Eliminar Línea</string>
     <string name="select_option">Selecione una opción</string>
 
@@ -166,6 +166,8 @@
     <string name="route_name_error">Nombre tiene que tener al menos 5 caracteres</string>
     <string name="velocity_greater_than_zero">Velocidad debe ser mayor a cero</string>
     <string name="velocity_format_error">Debe ser un número</string>
+    <string name="remove_route">Eliminar ruta</string>
+    <string name="sure_remove_route">¿Estas seguro que deseas eliminar la ruta %s?</string>
 
     <!-- Route Editor texts-->
     <string name="sort_label">Ordenar</string>

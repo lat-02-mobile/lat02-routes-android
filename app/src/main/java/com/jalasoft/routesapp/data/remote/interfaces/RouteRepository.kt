@@ -26,5 +26,5 @@ interface RouteRepository {
     fun getAllRoutesForLine(idLine: String, completion: (Response<List<LineRouteInfo>>) -> Unit)
     suspend fun createRouteForLine(lineRouteInfo: LineRouteAux): Response<Unit>
     suspend fun updateRouteInfo(lineRouteInfo: LineRouteAux): Response<Unit>
-    suspend fun deleteRouteInLine(routeId: String): Response<Unit>
+    suspend fun deleteRouteInLine(routeId: String): Response<String>
 }

@@ -50,4 +50,14 @@ constructor(private val routeRepository: RouteRepository) : ViewModel() {
             }
         }
     }
+    fun deleteRoute(routeId: String) = viewModelScope.launch {
+        when (val response = routeRepository.deleteRouteInLine(routeId)) {
+            is Response.Success -> {
+                successSave.value = Unit
+            }
+            is Response.Error -> {
+                errorMessage.value = response.message
+            }
+        }
+    }
 }

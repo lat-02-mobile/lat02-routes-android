@@ -215,7 +215,7 @@ class RouteManager(private val firebaseManager: FirebaseManager) : RouteReposito
         return firebaseManager.addDocument(idRoute, createRoute, FirebaseCollections.LineRoute)
     }
 
-    override suspend fun deleteRouteInLine(routeId: String): Response<Unit> {
-        return Response.Success(Unit)
+    override suspend fun deleteRouteInLine(routeId: String): Response<String> {
+        return firebaseManager.deleteDocument(routeId, FirebaseCollections.LineRoute)
     }
 }

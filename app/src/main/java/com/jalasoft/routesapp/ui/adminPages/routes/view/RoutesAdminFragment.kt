@@ -10,13 +10,16 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.data.model.local.LineRouteAux
 import com.jalasoft.routesapp.data.model.remote.LineRouteInfo
 import com.jalasoft.routesapp.databinding.FragmentRoutesAdminBinding
 import com.jalasoft.routesapp.ui.adminPages.routes.adapters.RoutesAdminAdapter
 import com.jalasoft.routesapp.ui.adminPages.routes.viewModel.RoutesAdminViewModel
+import com.jalasoft.routesapp.util.SwipeGesture
 import com.jalasoft.routesapp.util.helpers.Constants
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -57,6 +60,29 @@ class RoutesAdminFragment : Fragment(), RoutesAdminAdapter.IRoutesAdminListener 
             bundle.putSerializable(Constants.BUNDLE_KEY_ROUTE_SELECTED_DATA, LineRouteAux(lineId))
             findNavController().navigate(R.id.action_routesAdminFragment_to_routeAdminDetailFragment, bundle)
         }
+
+        val swipeGesture = object : SwipeGesture(requireContext(), ItemTouchHelper.LEFT) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                binding.recyclerRoutes.adapter?.notifyItemChanged(viewHolder.absoluteAdapterPosition)
+                val selRoute = (binding.recyclerRoutes.adapter as RoutesAdminAdapter).routeList[viewHolder.absoluteAdapterPosition]
+                when (direction) {
+                    ItemTouchHelper.LEFT -> {
+                        val builder = AlertDialog.Builder(binding.root.context)
+                        builder.setTitle(R.string.remove_route)
+                        builder.setMessage(requireContext().getString(R.string.sure_remove_route, selRoute.name))
+                        builder.setPositiveButton(R.string.yes) { _, _ ->
+                            viewModel.deleteRoute(selRoute.id)
+                        }
+                        builder.setNegativeButton(R.string.cancel) { _, _ ->
+                        }
+                        builder.show()
+                    }
+                }
+            }
+        }
+
+        val touchHelper = ItemTouchHelper(swipeGesture)
+        touchHelper.attachToRecyclerView(binding.recyclerRoutes)
         binding.progressBar.visibility = View.VISIBLE
         viewModel.getAllRoutesForLine(lineId)
     }
