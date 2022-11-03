@@ -14,8 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jalasoft.routesapp.R
 import com.jalasoft.routesapp.data.model.remote.City
-import com.jalasoft.routesapp.data.model.remote.LineAux
-import com.jalasoft.routesapp.data.model.remote.User
 import com.jalasoft.routesapp.databinding.FragmentCitiesAdminBinding
 import com.jalasoft.routesapp.ui.adminPages.cities.adapter.CityAdminAdapter
 import com.jalasoft.routesapp.ui.adminPages.cities.viewModel.CityAdminViewModel
@@ -69,6 +67,10 @@ class CityAdminFragment : Fragment(), CityAdminAdapter.ICityAdminListener {
                 return true
             }
         })
+
+        binding.lapTopAppBar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
 
         binding.btnAddNewCity.setOnClickListener {
             val bundle = Bundle()

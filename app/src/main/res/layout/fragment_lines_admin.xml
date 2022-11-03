@@ -29,7 +29,8 @@
                 <com.google.android.material.appbar.MaterialToolbar
                     android:id="@+id/lap_topAppBar"
                     android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
+                    android:layout_height="match_parent"
+                    app:navigationIcon="?attr/homeAsUpIndicator"
                     app:title="@string/linesa_title"
                     style="@style/Widget.MaterialComponents.Toolbar.Primary" />
 
