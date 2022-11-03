@@ -174,4 +174,10 @@
     <string name="cities_admin">cities admin</string>
     <string name="lines_admin">Lines Admin</string>
     <string name="go_to_route_editor">Go to route editor</string>
+    <string name="btn_edit_city">Edit City</string>
+    <string name="city_btn_save">Save City</string>
+    <string name="remove_city">Remove City</string>
+    <string name="sure_remove_city">Are you sure you want to remove the city?</string>
+    <string name="hint_lat">Latitude</string>
+    <string name="hintlng">Longitude</string>
 </resources>

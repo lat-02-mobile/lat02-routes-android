@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:paddingHorizontal="18dp"
+    android:paddingVertical="16dp"
+    tools:context=".ui.adminPages.cities.view.CityAdminDetailFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:drawablePadding="12dp"
+            android:ems="10"
+            android:hint="@string/reg_hint_name"
+            android:padding="8dp"
+            app:hintTextColor="@color/black">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:drawablePadding="12dp"
+            android:ems="10"
+            android:hint="@string/hint_lat"
+            android:padding="8dp"
+            app:hintTextColor="@color/black">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etLat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:drawablePadding="12dp"
+            android:ems="10"
+            android:hint="Longitud"
+            android:padding="8dp"
+            app:hintTextColor="@color/black">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etLng"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:padding="8dp"
+            android:text="Select country"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <Spinner
+            android:id="@+id/sp_category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:background="@drawable/spinner_background"
+            android:spinnerMode="dialog" />
+
+        <ProgressBar
+            android:id="@+id/pb_reg_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            android:minWidth="200dp"
+            android:minHeight="50dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/txt_error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:padding="8dp"
+            android:textColor="@color/red_color"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            android:visibility="gone"
+            tools:ignore="RtlHardcoded" />
+
+            <Button
+                android:id="@+id/btn_edit_save"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:padding="10dp"
+                android:text="@string/btn_edit_city"
+                android:textAllCaps="false"
+                android:textStyle="normal"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                style="@style/btnPrimaryRounded"
+                android:backgroundTint="@color/color_primary" />
+
+            <Button
+                android:id="@+id/btn_cancel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="@string/cancel"
+                android:textAllCaps="false"
+                android:textStyle="normal"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                style="@style/btnPrimaryRounded"
+                android:backgroundTint="@color/color_primary" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

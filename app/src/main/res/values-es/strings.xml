@@ -174,4 +174,10 @@
     <string name="cities_admin">Administración de ciudades</string>
     <string name="lines_admin">Administración de líneas</string>
     <string name="go_to_route_editor">Ir a editor de rutas</string>
+    <string name="btn_edit_city">Editar ciudad</string>
+    <string name="city_btn_save">Guardar ciudad</string>
+    <string name="remove_city">Eliminar ciudad</string>
+    <string name="sure_remove_city">Estas seguro que deseas eliminar la ciudad?</string>
+    <string name="hint_lat">Latitud</string>
+    <string name="hintlng">Longitud</string>
 </resources>

@@ -1,32 +1,35 @@
-package com.jalasoft.routesapp.ui.adminPages.lines.view
+package com.jalasoft.routesapp.ui.adminPages.cities.view
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jalasoft.routesapp.R
+import com.jalasoft.routesapp.data.model.remote.City
 import com.jalasoft.routesapp.data.model.remote.LineAux
-import com.jalasoft.routesapp.databinding.FragmentLinesAdminBinding
+import com.jalasoft.routesapp.data.model.remote.User
+import com.jalasoft.routesapp.databinding.FragmentCitiesAdminBinding
+import com.jalasoft.routesapp.ui.adminPages.cities.adapter.CityAdminAdapter
+import com.jalasoft.routesapp.ui.adminPages.cities.viewModel.CityAdminViewModel
 import com.jalasoft.routesapp.ui.adminPages.lines.adapter.LinesAdminAdapter
-import com.jalasoft.routesapp.ui.adminPages.lines.viewModel.LinesAdminViewModel
 import com.jalasoft.routesapp.util.SwipeGesture
 import com.jalasoft.routesapp.util.helpers.Constants
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class LinesAdminFragment : Fragment(), LinesAdminAdapter.ILinesAdminListener {
+class CityAdminFragment : Fragment(), CityAdminAdapter.ICityAdminListener {
 
-    private var _binding: FragmentLinesAdminBinding? = null
+    private var _binding: FragmentCitiesAdminBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: LinesAdminViewModel by viewModels()
+    private val viewModel: CityAdminViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +40,7 @@ class LinesAdminFragment : Fragment(), LinesAdminAdapter.ILinesAdminListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentLinesAdminBinding.inflate(inflater, container, false)
+        _binding = FragmentCitiesAdminBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -46,11 +49,12 @@ class LinesAdminFragment : Fragment(), LinesAdminAdapter.ILinesAdminListener {
         setRecycler()
 
         binding.progressBar.visibility = View.VISIBLE
-        viewModel.lineList.observe(viewLifecycleOwner) {
+        viewModel.cityList.observe(viewLifecycleOwner) {
             binding.progressBar.visibility = View.GONE
-            (binding.recyclerLinesAdministrator.adapter as LinesAdminAdapter).updateList(it.toMutableList())
+            (binding.recyclerCitiesAdministrator.adapter as CityAdminAdapter).updateList(it.toMutableList())
         }
-        viewModel.fetchLines()
+
+        viewModel.fetchCities()
 
         binding.lapSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -66,25 +70,25 @@ class LinesAdminFragment : Fragment(), LinesAdminAdapter.ILinesAdminListener {
             }
         })
 
-        binding.fabAddNewLine.setOnClickListener {
+        binding.btnAddNewCity.setOnClickListener {
             val bundle = Bundle()
-            bundle.putBoolean(Constants.BUNDLE_KEY_LINE_ADMIN_IS_NEW, true)
-            findNavController().navigate(R.id.linesAdminDetailFragment, bundle)
+            bundle.putBoolean(Constants.BUNDLE_KEY_CITY_ADMIN_IS_NEW, true)
+            findNavController().navigate(R.id.cityAdminDetailFragment, bundle)
         }
 
         val swipeGesture = object : SwipeGesture(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                binding.recyclerLinesAdministrator.adapter?.notifyItemChanged(viewHolder.absoluteAdapterPosition)
-                val selLine = (binding.recyclerLinesAdministrator.adapter as LinesAdminAdapter).linesList[viewHolder.absoluteAdapterPosition]
-                val position = (binding.recyclerLinesAdministrator.adapter as LinesAdminAdapter).linesList.indexOf(selLine)
+                binding.recyclerCitiesAdministrator.adapter?.notifyItemChanged(viewHolder.absoluteAdapterPosition)
+                val setCity = (binding.recyclerCitiesAdministrator.adapter as LinesAdminAdapter).linesList[viewHolder.absoluteAdapterPosition]
+                val position = (binding.recyclerCitiesAdministrator.adapter as LinesAdminAdapter).linesList.indexOf(setCity)
                 when (direction) {
                     ItemTouchHelper.LEFT -> {
                         val builder = AlertDialog.Builder(binding.root.context)
-                        builder.setTitle(R.string.remove_line)
-                        builder.setMessage(requireContext().getString(R.string.sure_remove_line, selLine.name))
+                        builder.setTitle(R.string.remove_city)
+                        builder.setMessage(requireContext().getString(R.string.sure_remove_line, setCity.name))
                         builder.setPositiveButton(R.string.yes) { _, _ ->
-                            viewModel.deleteLine(selLine.id)
-                            binding.recyclerLinesAdministrator.adapter?.notifyItemRemoved(position)
+                            viewModel.deleteCity(setCity.id)
+                            binding.recyclerCitiesAdministrator.adapter?.notifyItemRemoved(position)
                         }
                         builder.setNegativeButton(R.string.cancel) { _, _ ->
                         }
@@ -95,18 +99,18 @@ class LinesAdminFragment : Fragment(), LinesAdminAdapter.ILinesAdminListener {
         }
 
         val touchHelper = ItemTouchHelper(swipeGesture)
-        touchHelper.attachToRecyclerView(binding.recyclerLinesAdministrator)
+        touchHelper.attachToRecyclerView(binding.recyclerCitiesAdministrator)
     }
 
     private fun setRecycler() {
-        binding.recyclerLinesAdministrator.layoutManager = LinearLayoutManager(requireContext())
-        binding.recyclerLinesAdministrator.adapter = LinesAdminAdapter(mutableListOf(), this)
+        binding.recyclerCitiesAdministrator.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerCitiesAdministrator.adapter = CityAdminAdapter(mutableListOf(), this)
     }
 
-    override fun gotoEditLine(lineAux: LineAux) {
+    override fun gotoEditCity(city: City) {
         val bundle = Bundle()
-        bundle.putSerializable(Constants.BUNDLE_KEY_LINE_ADMIN_SELECTED_DATA, lineAux)
-        bundle.putBoolean(Constants.BUNDLE_KEY_LINE_ADMIN_IS_NEW, false)
-        findNavController().navigate(R.id.linesAdminDetailFragment, bundle)
+        bundle.putSerializable(Constants.BUNDLE_KEY_CITY_ADMIN_SELECTED_DATA, city)
+        bundle.putBoolean(Constants.BUNDLE_KEY_CITY_ADMIN_IS_NEW, false)
+        findNavController().navigate(R.id.cityAdminDetailFragment, bundle)
     }
 }
