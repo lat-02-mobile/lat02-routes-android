@@ -17,7 +17,6 @@ import com.jalasoft.routesapp.data.model.remote.City
 import com.jalasoft.routesapp.databinding.FragmentCitiesAdminBinding
 import com.jalasoft.routesapp.ui.adminPages.cities.adapter.CityAdminAdapter
 import com.jalasoft.routesapp.ui.adminPages.cities.viewModel.CityAdminViewModel
-import com.jalasoft.routesapp.ui.adminPages.lines.adapter.LinesAdminAdapter
 import com.jalasoft.routesapp.util.SwipeGesture
 import com.jalasoft.routesapp.util.helpers.Constants
 import dagger.hilt.android.AndroidEntryPoint

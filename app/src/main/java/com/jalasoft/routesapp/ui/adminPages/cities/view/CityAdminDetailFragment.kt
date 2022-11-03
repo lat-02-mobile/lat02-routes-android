@@ -28,10 +28,9 @@ class CityAdminDetailFragment : Fragment() {
     private var _binding: FragmentCitiesAdminDetailBinding? = null
     private val binding get() = _binding!!
     private val viewModel: CityAdminViewModel by viewModels()
-    private var city: City? = null  // line: LineAux
+    private var city: City? = null
     private var isNew: Boolean = true
-    private var editCityList: List<Country> = listOf()  // private var editCategoryList: List<City> = listOf()
-    // private var editCityList: List<City> = listOf()
+    private var editCityList: List<Country> = listOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +41,7 @@ class CityAdminDetailFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentCitiesAdminDetailBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -93,8 +92,8 @@ class CityAdminDetailFragment : Fragment() {
     private fun loadData(city: City?) {
         val name = city?.name ?: ""
         binding.etName.text = name.toEditable()
-        binding.etLat.text=city?.lat?.toEditable()
-        binding.etLng.text=city?.lat?.toEditable()
+        binding.etLat.text = city?.lat?.toEditable()
+        binding.etLng.text = city?.lat?.toEditable()
     }
 
     private fun buttonActions() {
@@ -103,11 +102,11 @@ class CityAdminDetailFragment : Fragment() {
                 if (isNew) {
                     val item = viewModel.cityCountry.value?.get(position)
                     viewModel.countrySelected = item?.name ?: ""
-                    viewModel.countryID = item?.id?:""
+                    viewModel.countryID = item?.id ?: ""
                 } else {
                     val item = editCityList[position]
                     viewModel.countrySelected = item.name
-                    viewModel.countryID = item?.id?:""
+                    viewModel.countryID = item?.id ?: ""
                 }
             }
 
@@ -127,16 +126,16 @@ class CityAdminDetailFragment : Fragment() {
                 val lat = binding.etLat.text.toString()
                 val lng = binding.etLng.text.toString()
                 val selectedCountry = (binding.spCategory.selectedItem as Country).name
-                val countyId =viewModel.cityCountry?.value?.get(binding.spCategory.selectedItemPosition)?.id
-                viewModel.saveNewCity(name,lat,lng,selectedCountry,countyId?:"0")
+                val countyId = viewModel.cityCountry?.value?.get(binding.spCategory.selectedItemPosition)?.id
+                viewModel.saveNewCity(name, lat, lng, selectedCountry, countyId ?: "0")
             } else {
                 showProgress(true)
                 val name = binding.etName.text.toString()
                 val lat = binding.etLat.text.toString()
                 val lng = binding.etLng.text.toString()
                 val selectedCountry = (binding.spCategory.selectedItem as Country).name
-                val countyId =viewModel.cityCountry?.value?.get(binding.spCategory.selectedItemPosition)?.id
-                viewModel.updateCity(name,lat,lng,selectedCountry,countyId?:"0",city!!)
+                val countyId = viewModel.cityCountry?.value?.get(binding.spCategory.selectedItemPosition)?.id
+                viewModel.updateCity(name, lat, lng, selectedCountry, countyId ?: "0", city!!)
             }
         }
 

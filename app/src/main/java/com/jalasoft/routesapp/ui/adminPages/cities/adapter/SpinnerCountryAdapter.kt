@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.jalasoft.routesapp.R
-import com.jalasoft.routesapp.data.model.remote.City
 import com.jalasoft.routesapp.data.model.remote.Country
 
 class SpinnerCountryAdapter(context: Context, countryList: List<Country>) : ArrayAdapter<Country>(context, 0, countryList) {

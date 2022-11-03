@@ -71,9 +71,9 @@ constructor(private val cityRepository: CityRepository) : ViewModel() {
         return isValid
     }
 
-    fun saveNewCity(name: String,latitude: String, longitude: String, countrySelected: String,countryId:String) = viewModelScope.launch {
+    fun saveNewCity(name: String, latitude: String, longitude: String, countrySelected: String, countryId: String) = viewModelScope.launch {
         val valid = validateFields(name)
-       if (valid.isEmpty()) {
+        if (valid.isEmpty()) {
             when (val result = cityRepository.addNewCity(countrySelected, countryId, latitude, longitude, name)) {
                 is Response.Success -> {
                     result.data?.let { successResult.value = true }
@@ -87,10 +87,10 @@ constructor(private val cityRepository: CityRepository) : ViewModel() {
         }
     }
 
-    fun updateCity(name: String,latitude: String, longitude: String, countrySelected: String,countryId:String,city: City) = viewModelScope.launch {
+    fun updateCity(name: String, latitude: String, longitude: String, countrySelected: String, countryId: String, city: City) = viewModelScope.launch {
         val valid = validateFields(name)
         if (valid.isEmpty()) {
-            when (val result = cityRepository.updateCity(countrySelected, city.id,countryId, latitude, longitude, name)) {
+            when (val result = cityRepository.updateCity(countrySelected, city.id, countryId, latitude, longitude, name)) {
                 is Response.Success -> {
                     result.data?.let { successResult.value = true }
                 }
