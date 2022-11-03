@@ -141,7 +141,16 @@
         android:id="@+id/routesAdminFragment"
         android:name="com.jalasoft.routesapp.ui.adminPages.routes.view.RoutesAdminFragment"
         android:label="fragment_routes_admin"
-        tools:layout="@layout/fragment_routes_admin" />
+        tools:layout="@layout/fragment_routes_admin" >
+        <action
+            android:id="@+id/action_routesAdminFragment_to_routeAdminDetailFragment"
+            app:destination="@id/routeAdminDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/routeAdminDetailFragment"
+        android:name="com.jalasoft.routesapp.ui.adminPages.routes.view.RouteAdminDetailFragment"
+        android:label="fragment_route_admin_detail"
+        tools:layout="@layout/fragment_route_admin_detail" />
 
 
 </navigation>

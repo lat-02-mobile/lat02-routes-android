@@ -156,6 +156,16 @@
     <!-- Routes Administration Page-->
     <string name="routes_admin_title">Routes Administration</string>
     <string name="route_points">Route points: %d</string>
+    <string name="route_details">Route details</string>
+    <string name="route_name_hint">Route name</string>
+    <string name="route_velocity_hint">Average velocity (meters per sec)</string>
+    <string name="go_to_map_editor">Go to map editor</string>
+    <string name="see_route_details">See route details</string>
+    <string name="choose_color">Choose color</string>
+    <string name="route_info_updated">Route information has been updated</string>
+    <string name="route_name_error">Name has to be at least 5 characters</string>
+    <string name="velocity_greater_than_zero">Velocity must be greater than zero</string>
+    <string name="velocity_format_error">Must be a number</string>
 
     <!-- Route Editor texts-->
     <string name="sort_label">Sort</string>

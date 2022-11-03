@@ -8,6 +8,7 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.GeoPoint
 import com.jalasoft.routesapp.data.model.local.LineCategoriesEntity
 import com.jalasoft.routesapp.data.model.local.LineEntity
+import com.jalasoft.routesapp.data.model.local.LineRouteAux
 import com.jalasoft.routesapp.data.model.remote.*
 import com.jalasoft.routesapp.data.remote.interfaces.RouteRepository
 import com.jalasoft.routesapp.util.PreferenceManager
@@ -184,13 +185,34 @@ class RouteManager(private val firebaseManager: FirebaseManager) : RouteReposito
         }
     }
 
-    override suspend fun updateRouteInfo(routeId: String): Response<Unit> {
-        return Response.Success(Unit)
+    override suspend fun updateRouteInfo(lineRouteInfo: LineRouteAux): Response<Unit> {
+        val updates = hashMapOf(
+            "averageVelocity" to lineRouteInfo.velocity.toString(),
+            "color" to lineRouteInfo.color,
+            "name" to lineRouteInfo.name,
+            "updateAt" to FieldValue.serverTimestamp()
+        )
+        return firebaseManager.updateDocument(lineRouteInfo.routeId, FirebaseCollections.LineRoute, updates)
     }
 
-    override suspend fun createRouteForLine(idLine: String): Response<Unit> {
-        val lineReference = firebaseManager.db.collection(FirebaseCollections.LineRoute.toString()).document()
-        return Response.Success(Unit)
+    override suspend fun createRouteForLine(lineRouteInfo: LineRouteAux): Response<Unit> {
+        val idRoute = firebaseManager.getDocId(FirebaseCollections.LineRoute)
+        val lineRef = firebaseManager.db.collection(FirebaseCollections.LineRoute.toString()).document(lineRouteInfo.lineId)
+        val createRoute = hashMapOf(
+            "averageVelocity" to lineRouteInfo.velocity.toString(),
+            "color" to lineRouteInfo.color,
+            "createAt" to FieldValue.serverTimestamp(),
+            "end" to GeoPoint(0.0, 0.0),
+            "id" to idRoute,
+            "idLine" to lineRouteInfo.lineId,
+            "line" to lineRef,
+            "name" to lineRouteInfo.name,
+            "routePoints" to listOf<GeoPoint>(),
+            "start" to GeoPoint(0.0, 0.0),
+            "stops" to listOf<GeoPoint>(),
+            "updateAt" to FieldValue.serverTimestamp()
+        )
+        return firebaseManager.addDocument(idRoute, createRoute, FirebaseCollections.LineRoute)
     }
 
     override suspend fun deleteRouteInLine(routeId: String): Response<Unit> {
