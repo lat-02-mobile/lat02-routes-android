@@ -1,7 +1,6 @@
-package com.jalasoft.routesapp.ui.adminPages.routeEditor
+package com.jalasoft.routesapp.ui.adminPages.routeEditor.viewModel
 
 import com.jalasoft.routesapp.data.source.FakeRoutesManager
-import com.jalasoft.routesapp.ui.adminPages.routeEditor.viewModel.RouteEditorViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication

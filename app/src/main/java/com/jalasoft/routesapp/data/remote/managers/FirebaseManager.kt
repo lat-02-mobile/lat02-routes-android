@@ -33,6 +33,42 @@ class FirebaseManager(val db: FirebaseFirestore) : FirebaseDataSource {
         }
     }
 
+    override suspend fun addDocument(documentId: String, data: HashMap<String, Any>, collection: FirebaseCollections): Response<Unit> {
+        return try {
+            db.collection(collection.toString()).document(documentId).set(data).await()
+            return Response.Success(Unit)
+        } catch (e: Exception) {
+            Response.Error(e.message.toString())
+        }
+    }
+
+    override suspend fun updateDocument(documentId: String, collection: FirebaseCollections, data: HashMap<String, Any>): Response<Unit> {
+        return try {
+            db.collection(collection.toString()).document(documentId).update(data).await()
+            return Response.Success(Unit)
+        } catch (e: Exception) {
+            Response.Error(e.message.toString())
+        }
+    }
+
+    inline fun <reified T : Any> listenDocumentsWithQuery(collection: FirebaseCollections, field: String, parameter: String, crossinline completion: (Response<List<T>>) -> Unit) {
+        try {
+            db.collection(collection.toString()).whereEqualTo(field, parameter).addSnapshotListener { snapshot, e ->
+                if (e != null) {
+                    completion(Response.Error(e.message.toString()))
+                }
+                if (snapshot != null && !snapshot.isEmpty) {
+                    val snap = snapshot.toObjects(T::class.java)
+                    completion(Response.Success(snap))
+                } else {
+                    completion(Response.Success(mutableListOf()))
+                }
+            }
+        } catch (e: Exception) {
+            completion(Response.Error(e.message.toString()))
+        }
+    }
+
     override suspend fun getUsersByParameter(collection: FirebaseCollections, field: String, parameter: String): Response<MutableList<User>> {
         return try {
             val list = db.collection(collection.toString()).whereEqualTo(field, parameter).get().await()

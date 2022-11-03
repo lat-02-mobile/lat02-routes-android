@@ -28,15 +28,13 @@ class LinesAdminFragment : Fragment(), LinesAdminAdapter.ILinesAdminListener {
     private val binding get() = _binding!!
     private val viewModel: LinesAdminViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    private lateinit var alertDialog: AlertDialog.Builder
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentLinesAdminBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -44,6 +42,11 @@ class LinesAdminFragment : Fragment(), LinesAdminAdapter.ILinesAdminListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setRecycler()
+        binding.lapTopAppBar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
+        alertDialog = AlertDialog.Builder(requireContext())
+        alertDialog.setTitle(getString(R.string.select_option))
 
         binding.progressBar.visibility = View.VISIBLE
         viewModel.lineList.observe(viewLifecycleOwner) {
@@ -76,7 +79,7 @@ class LinesAdminFragment : Fragment(), LinesAdminAdapter.ILinesAdminListener {
             findNavController().navigate(R.id.linesAdminDetailFragment, bundle)
         }
 
-        val swipeGesture = object : SwipeGesture(requireContext()) {
+        val swipeGesture = object : SwipeGesture(requireContext(), ItemTouchHelper.LEFT) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 binding.recyclerLinesAdministrator.adapter?.notifyItemChanged(viewHolder.absoluteAdapterPosition)
                 val selLine = (binding.recyclerLinesAdministrator.adapter as LinesAdminAdapter).linesList[viewHolder.absoluteAdapterPosition]
@@ -107,10 +110,22 @@ class LinesAdminFragment : Fragment(), LinesAdminAdapter.ILinesAdminListener {
         binding.recyclerLinesAdministrator.adapter = LinesAdminAdapter(mutableListOf(), this)
     }
 
-    override fun gotoEditLine(lineAux: LineAux) {
-        val bundle = Bundle()
-        bundle.putSerializable(Constants.BUNDLE_KEY_LINE_ADMIN_SELECTED_DATA, lineAux)
-        bundle.putBoolean(Constants.BUNDLE_KEY_LINE_ADMIN_IS_NEW, false)
-        findNavController().navigate(R.id.linesAdminDetailFragment, bundle)
+    override fun onLineTap(lineAux: LineAux) {
+        val options = listOf(getString(R.string.linesa_btn_edit), getString(R.string.linesa_btn_edit_routes))
+        alertDialog.setItems(options.toTypedArray()) { dialog, position ->
+            if (position == 0) {
+                val bundle = Bundle()
+                bundle.putSerializable(Constants.BUNDLE_KEY_LINE_ADMIN_SELECTED_DATA, lineAux)
+                bundle.putBoolean(Constants.BUNDLE_KEY_LINE_ADMIN_IS_NEW, false)
+                findNavController().navigate(R.id.linesAdminDetailFragment, bundle)
+            } else {
+                val bundle = Bundle()
+                bundle.putString(Constants.BUNDLE_KEY_LINE_ID, lineAux.id)
+                findNavController().navigate(R.id.action_linesAdminFragment_to_routesAdminFragment, bundle)
+            }
+            dialog.dismiss()
+        }
+        val dialog = alertDialog.create()
+        dialog.show()
     }
 }

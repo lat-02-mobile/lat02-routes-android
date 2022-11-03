@@ -142,14 +142,32 @@
     <string name="preselected_destination">Pre-Selected Destination:</string>
 
     <!-- Lines Administration Page -->
-    <string name="linesa_title">Lines Administration Page</string>
+    <string name="linesa_title">Lines Administration</string>
     <string name="linesa_btn_edit">Edit Line</string>
+    <string name="linesa_btn_edit_routes">Edit line routes</string>
     <string name="linesa_btn_save">Save Line</string>
     <string name="linesa_text_cat">Select Category</string>
     <string name="linesa_text_city">Select City</string>
     <string name="linesa_switch_enable">Enable Line</string>
     <string name="sure_remove_line">Are you sure you want to remove the line %s?</string>
     <string name="remove_line">Remove Line</string>
+    <string name="select_option">Select an option</string>
+
+    <!-- Routes Administration Page-->
+    <string name="routes_admin_title">Routes Administration</string>
+    <string name="route_points">Route points: %d</string>
+    <string name="route_details">Route details</string>
+    <string name="route_name_hint">Route name</string>
+    <string name="route_velocity_hint">Average velocity (meters per sec)</string>
+    <string name="go_to_map_editor">Go to map editor</string>
+    <string name="see_route_details">See route details</string>
+    <string name="choose_color">Choose color</string>
+    <string name="route_info_updated">Route information has been updated</string>
+    <string name="route_name_error">Name has to be at least 5 characters</string>
+    <string name="velocity_greater_than_zero">Velocity must be greater than zero</string>
+    <string name="velocity_format_error">Must be a number</string>
+    <string name="remove_route">Remove route</string>
+    <string name="sure_remove_route">Are you sure you want to remove the route %s?</string>
 
     <!-- Route Editor texts-->
     <string name="sort_label">Sort</string>

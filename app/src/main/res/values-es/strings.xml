@@ -142,14 +142,32 @@
     <string name="preselected_destination">Destino Preseleccionado:</string>
 
     <!-- Lines Administration Page -->
-    <string name="linesa_title">Página de administración de líneas</string>
+    <string name="linesa_title">Administración de líneas</string>
     <string name="linesa_btn_edit">Editar Línea</string>
+    <string name="linesa_btn_edit_routes">Editar rutas de línea</string>
     <string name="linesa_btn_save">Guardar Línea</string>
     <string name="linesa_text_cat">Selecciona la Categoría</string>
     <string name="linesa_text_city">Selecciona la Ciudad</string>
     <string name="linesa_switch_enable">Habilitar Línea</string>
-    <string name="sure_remove_line">Estas seguro que deseas eliminar la línea %s?</string>
+    <string name="sure_remove_line">¿Estas seguro que deseas eliminar la línea %s?</string>
     <string name="remove_line">Eliminar Línea</string>
+    <string name="select_option">Selecione una opción</string>
+
+    <!-- Routes Administration Page-->
+    <string name="routes_admin_title">Administración de rutas</string>
+    <string name="route_points">Puntos de ruta: %d</string>
+    <string name="route_name_hint">Nombre de ruta</string>
+    <string name="route_velocity_hint">Velocidad promedio (metros por seg)</string>
+    <string name="go_to_map_editor">Ir al editor de mapa</string>
+    <string name="see_route_details">Ver detalles de ruta</string>
+    <string name="route_details">Detalles de ruta</string>
+    <string name="choose_color">Seleccione color</string>
+    <string name="route_info_updated">Información de ruta ha sido actualizada</string>
+    <string name="route_name_error">Nombre tiene que tener al menos 5 caracteres</string>
+    <string name="velocity_greater_than_zero">Velocidad debe ser mayor a cero</string>
+    <string name="velocity_format_error">Debe ser un número</string>
+    <string name="remove_route">Eliminar ruta</string>
+    <string name="sure_remove_route">¿Estas seguro que deseas eliminar la ruta %s?</string>
 
     <!-- Route Editor texts-->
     <string name="sort_label">Ordenar</string>
@@ -158,6 +176,7 @@
     <string name="rearrange_points">Reordenar punto seleccionado</string>
     <string name="points_updated">Puntos de ruta han sido actualizados</string>
     <string name="empty_route_error">La ruta debe contener al menos dos puntos</string>
+
     <string name="button_route_editor">Ir al editor de rutas</string>
 
     <!-- Users Promotion -->

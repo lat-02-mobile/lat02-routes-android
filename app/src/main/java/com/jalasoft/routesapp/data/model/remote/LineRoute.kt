@@ -3,12 +3,13 @@ package com.jalasoft.routesapp.data.model.remote
 import android.location.Location
 import android.os.Parcel
 import android.os.Parcelable
-import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.GeoPoint
+import com.google.firebase.firestore.ServerTimestamp
 import com.jalasoft.routesapp.util.helpers.LocationHelper.geoPointListToLocationList
 import com.jalasoft.routesapp.util.helpers.LocationHelper.geoPointToLocation
 import java.io.Serializable
+import java.util.*
 
 data class LineRoute(
     val id: String = "",
@@ -21,8 +22,10 @@ data class LineRoute(
     val stops: List<GeoPoint> = listOf(),
     val color: String = "",
     val averageVelocity: String = "0.0",
-    val createAt: Timestamp = Timestamp.now(),
-    val updateAt: Timestamp = Timestamp.now()
+    @ServerTimestamp
+    val createAt: Date? = Date(),
+    @ServerTimestamp
+    val updateAt: Date? = Date()
 ) : Serializable {
     fun lineRouteToLineRouteInfo(): LineRouteInfo {
         val routePoints = geoPointListToLocationList(routePoints)
@@ -30,7 +33,7 @@ data class LineRoute(
         val end = end?.let { geoPointToLocation(it) }
         val stops = geoPointListToLocationList(stops)
 
-        return LineRouteInfo(id, name, idLine, routePoints, start, end, stops, color, averageVelocity.toDouble(), createAt.toDate().time, updateAt.toDate().time)
+        return LineRouteInfo(id, name, idLine, routePoints, start, end, stops, color, averageVelocity.toDouble(), createAt?.time ?: 0, updateAt?.time ?: 0)
     }
 }
 

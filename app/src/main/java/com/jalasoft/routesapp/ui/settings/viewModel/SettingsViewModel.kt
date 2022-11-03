@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
-import com.jalasoft.routesapp.data.model.remote.LineRoute
 import com.jalasoft.routesapp.data.model.remote.User
 import com.jalasoft.routesapp.data.remote.managers.FirebaseManager
 import com.jalasoft.routesapp.util.Response
@@ -20,22 +19,6 @@ constructor(private val firebaseManager: FirebaseManager, private val auth: Fire
 
     val errorMessage: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
-    }
-
-    val lineRoute: MutableLiveData<LineRoute> by lazy {
-        MutableLiveData<LineRoute>()
-    }
-
-    fun callRouteDetails() = viewModelScope.launch {
-        // TODO: change the route id after getting the list of routes to show the details for the corresponding route details
-        when (val result = firebaseManager.getDocumentsWithCondition<LineRoute>(FirebaseCollections.LineRoute, "id", "fPzkYkakqvqDsmTNXFqq")) {
-            is Response.Success -> {
-                lineRoute.value = result.data?.firstOrNull()
-            }
-            is Response.Error -> {
-                errorMessage.value = result.message
-            }
-        }
     }
 
     val user: MutableLiveData<User> by lazy {

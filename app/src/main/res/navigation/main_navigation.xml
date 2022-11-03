@@ -125,6 +125,9 @@
         <action
             android:id="@+id/action_linesAdminFragment_to_linesAdminDetailFragment"
             app:destination="@id/linesAdminDetailFragment" />
+        <action
+            android:id="@+id/action_linesAdminFragment_to_routesAdminFragment"
+            app:destination="@id/routesAdminFragment" />
     </fragment>
     <fragment
         android:id="@+id/linesAdminDetailFragment"
@@ -138,6 +141,24 @@
         android:label="fragment_route_editor"
         tools:layout="@layout/fragment_route_editor" />
     <fragment
+        android:id="@+id/routesAdminFragment"
+        android:name="com.jalasoft.routesapp.ui.adminPages.routes.view.RoutesAdminFragment"
+        android:label="fragment_routes_admin"
+        tools:layout="@layout/fragment_routes_admin" >
+        <action
+            android:id="@+id/action_routesAdminFragment_to_routeAdminDetailFragment"
+            app:destination="@id/routeAdminDetailFragment" />
+        <action
+            android:id="@+id/action_routesAdminFragment_to_routeEditorFragment"
+            app:destination="@id/routeEditorFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/routeAdminDetailFragment"
+        android:name="com.jalasoft.routesapp.ui.adminPages.routes.view.RouteAdminDetailFragment"
+        android:label="fragment_route_admin_detail"
+        tools:layout="@layout/fragment_route_admin_detail" />
+
+    <fragment
         android:id="@+id/promoteUsersFragment"
         android:name="com.jalasoft.routesapp.ui.adminPages.userPermissions.view.PromoteUsersFragment"
         android:label="fragment_promote_users"
@@ -148,25 +169,22 @@
         android:label="fragment_admin"
         tools:layout="@layout/fragment_admin" >
         <action
-            android:id="@+id/action_adminFragment_to_routeEditorFragment"
-            app:destination="@id/routeEditorFragment" />
-        <action
             android:id="@+id/action_adminFragment_to_cityAdminFragment"
             app:destination="@id/cityAdminFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/cityAdminFragment"
-        android:name="com.jalasoft.routesapp.ui.adminPages.cities.view.CityAdminFragment"
-        android:label="CityAdminFragment" >
-        <action
-            android:id="@+id/action_cityAdminFragment_to_cityAdminDetailFragment"
-            app:destination="@id/cityAdminDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/cityAdminDetailFragment"
         android:name="com.jalasoft.routesapp.ui.adminPages.cities.view.CityAdminDetailFragment"
         android:label="fragment_cities_admin_detail"
         tools:layout="@layout/fragment_cities_admin_detail" />
-
+    <fragment
+        android:id="@+id/cityAdminFragment"
+        android:name="com.jalasoft.routesapp.ui.adminPages.cities.view.CityAdminFragment"
+        android:label="fragment_cities_admin"
+        tools:layout="@layout/fragment_cities_admin" >
+        <action
+            android:id="@+id/action_cityAdminFragment_to_cityAdminDetailFragment"
+            app:destination="@id/cityAdminDetailFragment" />
+    </fragment>
 
 </navigation>

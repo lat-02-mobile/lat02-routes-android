@@ -14,13 +14,11 @@ import androidx.navigation.fragment.findNavController
 import com.amplitude.android.Amplitude
 import com.jalasoft.routesapp.AuthActivity
 import com.jalasoft.routesapp.R
-import com.jalasoft.routesapp.data.model.remote.LineRoute
 import com.jalasoft.routesapp.data.model.remote.User
 import com.jalasoft.routesapp.data.remote.managers.AuthFirebaseManager
 import com.jalasoft.routesapp.databinding.FragmentSettingsBinding
 import com.jalasoft.routesapp.ui.settings.viewModel.SettingsViewModel
 import com.jalasoft.routesapp.util.PreferenceManager
-import com.jalasoft.routesapp.util.helpers.Constants
 import com.jalasoft.routesapp.util.helpers.UserType
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -79,11 +77,6 @@ class SettingsFragment : Fragment() {
         val errorObserver = Observer<String> { errorMessage ->
             Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
         }
-        val routeObserver = Observer<LineRoute> { lineRoute ->
-            val bundle = Bundle()
-            bundle.putSerializable(Constants.BUNDLE_KEY_ROUTE_SELECTED_DATA, lineRoute.lineRouteToLineRouteInfo())
-            findNavController().navigate(R.id.routeEditorFragment, bundle)
-        }
 
         val userObserver = Observer<User> {
             it?.let { user ->
@@ -98,7 +91,6 @@ class SettingsFragment : Fragment() {
         }
 
         viewModel.errorMessage.observe(this, errorObserver)
-        viewModel.lineRoute.observe(this, routeObserver)
         viewModel.user.observe(this, userObserver)
     }
 

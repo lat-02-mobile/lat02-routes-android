@@ -49,7 +49,15 @@ class MainActivity : AppCompatActivity() {
                 R.id.routeSelected,
                 R.id.tourPointDetailFragment,
                 R.id.routeEditorFragment,
-                R.id.promoteUsersFragment
+                R.id.linesAdminFragment,
+                R.id.linesAdminDetailFragment,
+                R.id.routesAdminFragment,
+                R.id.routeAdminDetailFragment,
+                R.id.routeEditorFragment,
+                R.id.promoteUsersFragment,
+                R.id.adminFragment,
+                R.id.cityAdminFragment,
+                R.id.cityAdminDetailFragment
             )
             if (screensWithHiddenBottomNav.contains(nd.id)) {
                 binding.bottomNavigation.visibility = View.GONE

@@ -8,6 +8,7 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.GeoPoint
 import com.jalasoft.routesapp.data.model.local.LineCategoriesEntity
 import com.jalasoft.routesapp.data.model.local.LineEntity
+import com.jalasoft.routesapp.data.model.local.LineRouteAux
 import com.jalasoft.routesapp.data.model.remote.*
 import com.jalasoft.routesapp.data.remote.interfaces.RouteRepository
 import com.jalasoft.routesapp.util.PreferenceManager
@@ -153,7 +154,6 @@ class RouteManager(private val firebaseManager: FirebaseManager) : RouteReposito
     }
 
     override suspend fun updateLineRoutes(routeId: String, routePoints: List<GeoPoint>, routeStops: List<GeoPoint>): Response<Unit> {
-        val ref = firebaseManager.db.collection(FirebaseCollections.LineRoute.toString()).document(routeId)
         val updates = hashMapOf(
             "end" to routeStops.last(),
             "start" to routeStops.first(),
@@ -161,11 +161,61 @@ class RouteManager(private val firebaseManager: FirebaseManager) : RouteReposito
             "stops" to routeStops,
             "updateAt" to FieldValue.serverTimestamp()
         )
-        return try {
-            ref.update(updates).await()
-            Response.Success(Unit)
-        } catch (e: Exception) {
-            Response.Error(e.message.toString(), null)
+        return firebaseManager.updateDocument(routeId, FirebaseCollections.LineRoute, updates)
+    }
+
+    override fun getAllRoutesForLine(idLine: String, completion: (Response<List<LineRouteInfo>>) -> Unit) {
+        firebaseManager.listenDocumentsWithQuery<LineRoute>(FirebaseCollections.LineRoute, "idLine", idLine) { result ->
+            when (result) {
+                is Response.Success -> {
+                    val data = result.data
+                    if (data != null) {
+                        val lineRoutes = data.map {
+                            it.lineRouteToLineRouteInfo()
+                        }
+                        completion(Response.Success(lineRoutes))
+                        return@listenDocumentsWithQuery
+                    }
+                    completion(Response.Success(listOf()))
+                }
+                is Response.Error -> {
+                    completion(Response.Error(result.message.toString()))
+                }
+            }
         }
+    }
+
+    override suspend fun updateRouteInfo(lineRouteInfo: LineRouteAux): Response<Unit> {
+        val updates = hashMapOf(
+            "averageVelocity" to lineRouteInfo.velocity.toString(),
+            "color" to lineRouteInfo.color,
+            "name" to lineRouteInfo.name,
+            "updateAt" to FieldValue.serverTimestamp()
+        )
+        return firebaseManager.updateDocument(lineRouteInfo.routeId, FirebaseCollections.LineRoute, updates)
+    }
+
+    override suspend fun createRouteForLine(lineRouteInfo: LineRouteAux): Response<Unit> {
+        val idRoute = firebaseManager.getDocId(FirebaseCollections.LineRoute)
+        val lineRef = firebaseManager.db.collection(FirebaseCollections.LineRoute.toString()).document(lineRouteInfo.lineId)
+        val createRoute = hashMapOf(
+            "averageVelocity" to lineRouteInfo.velocity.toString(),
+            "color" to lineRouteInfo.color,
+            "createAt" to FieldValue.serverTimestamp(),
+            "end" to GeoPoint(0.0, 0.0),
+            "id" to idRoute,
+            "idLine" to lineRouteInfo.lineId,
+            "line" to lineRef,
+            "name" to lineRouteInfo.name,
+            "routePoints" to listOf<GeoPoint>(),
+            "start" to GeoPoint(0.0, 0.0),
+            "stops" to listOf<GeoPoint>(),
+            "updateAt" to FieldValue.serverTimestamp()
+        )
+        return firebaseManager.addDocument(idRoute, createRoute, FirebaseCollections.LineRoute)
+    }
+
+    override suspend fun deleteRouteInLine(routeId: String): Response<String> {
+        return firebaseManager.deleteDocument(routeId, FirebaseCollections.LineRoute)
     }
 }

@@ -8,12 +8,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jalasoft.routesapp.R
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 
-abstract class SwipeGesture(context: Context) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+abstract class SwipeGesture(context: Context, swipeDirs: Int = (ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT)) : ItemTouchHelper.SimpleCallback(0, swipeDirs) {
 
-    val deleteColor = ContextCompat.getColor(context, R.color.red_color)
-    val editColor = ContextCompat.getColor(context, R.color.teal_700)
-    val deleteIcon = R.drawable.ic_baseline_delete_24
-    val editIcon = R.drawable.ic_baseline_edit_24
+    private val deleteColor = ContextCompat.getColor(context, R.color.delete_color)
+    private val editColor = ContextCompat.getColor(context, R.color.selected_point_color)
+    private val deleteIcon = R.drawable.ic_baseline_delete_24
+    private val editIcon = R.drawable.ic_baseline_edit_24
 
     override fun onMove(
         recyclerView: RecyclerView,

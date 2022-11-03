@@ -53,18 +53,14 @@ class RouteSelectedFragment : Fragment(), OnMapReadyCallback {
             checkPermissions(isGranted)
         }
     private val tourPointsViewModel: TourPointsViewModel by viewModels()
-    var tourPointsMarkers: MutableList<Marker> = mutableListOf()
-    var isTourPointsEnabled = false
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    private var tourPointsMarkers: MutableList<Marker> = mutableListOf()
+    private var isTourPointsEnabled = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentRouteSelectedBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -133,7 +129,7 @@ class RouteSelectedFragment : Fragment(), OnMapReadyCallback {
         mMap?.addMarker(MarkerOptions().position(start).title(R.string.start_of_route.toString()).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.ic_start_route)).anchor(0.5F, 0.5F))
         mMap?.addMarker(MarkerOptions().position(end).title(R.string.end_of_route.toString()).icon(GoogleMapsHelper.bitmapFromVector(requireContext(), R.drawable.ic_end_route)).anchor(0.5F, 0.5F))
 
-        moveToLocation(start, 15F)
+        moveToLocation(start)
         addStopMarkers(nRoute.stops)
         drawPolyline(nRoute.routePoints)
         loadTourPoints()
@@ -156,26 +152,7 @@ class RouteSelectedFragment : Fragment(), OnMapReadyCallback {
 
     private fun drawPolyline(list: List<Location>) {
         val map = mMap ?: return
-        for (i in list.indices) {
-            val item = list[i]
-            if (item == list.last()) {
-                map.addPolyline(
-                    PolylineOptions()
-                        .add(GoogleMapsHelper.locationToLatLng(list[i - 1]), GoogleMapsHelper.locationToLatLng(item))
-                        .width(10f)
-                        .color(resources.getColor(R.color.color_primary, null))
-                        .geodesic(true)
-                )
-            } else {
-                map.addPolyline(
-                    PolylineOptions()
-                        .add(GoogleMapsHelper.locationToLatLng(item), GoogleMapsHelper.locationToLatLng(list[i + 1]))
-                        .width(10f)
-                        .color(resources.getColor(R.color.color_primary, null))
-                        .geodesic(true)
-                )
-            }
-        }
+        GoogleMapsHelper.drawPolyline(map, list.map { point -> point.toLatLong() }, route?.color ?: "")
     }
 
     @SuppressLint("MissingPermission")
@@ -227,7 +204,7 @@ class RouteSelectedFragment : Fragment(), OnMapReadyCallback {
     @SuppressLint("MissingPermission")
     private fun getLocation() {
         if (isLocationEnabled()) {
-            mFusedLocationClient.lastLocation.addOnCompleteListener() { task ->
+            mFusedLocationClient.lastLocation.addOnCompleteListener { task ->
                 val location: Location? = task.result
                 if (location != null) {
                     mMap?.isMyLocationEnabled = true
@@ -247,8 +224,8 @@ class RouteSelectedFragment : Fragment(), OnMapReadyCallback {
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
     }
 
-    private fun moveToLocation(location: LatLng, zoom: Float) {
-        val cameraTargetLocation = CameraUpdateFactory.newLatLngZoom(location, zoom)
+    private fun moveToLocation(location: LatLng) {
+        val cameraTargetLocation = CameraUpdateFactory.newLatLngZoom(location, 15.0f)
         mMap?.animateCamera(cameraTargetLocation)
     }
 

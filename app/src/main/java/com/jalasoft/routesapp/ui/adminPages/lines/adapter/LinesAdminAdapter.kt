@@ -8,7 +8,7 @@ import com.jalasoft.routesapp.databinding.LineAdminItemBinding
 
 class LinesAdminAdapter(var linesList: MutableList<LineAux>, val listener: ILinesAdminListener) : RecyclerView.Adapter<LinesAdminAdapter.LinesAdminViewHolder> () {
     interface ILinesAdminListener {
-        fun gotoEditLine(lineAux: LineAux)
+        fun onLineTap(lineAux: LineAux)
     }
 
     class LinesAdminViewHolder(val binding: LineAdminItemBinding) : RecyclerView.ViewHolder(binding.root)
@@ -22,7 +22,7 @@ class LinesAdminAdapter(var linesList: MutableList<LineAux>, val listener: ILine
     override fun onBindViewHolder(holder: LinesAdminViewHolder, position: Int) {
         holder.binding.lineItem = linesList[position]
         holder.binding.lineAdminContainer.setOnClickListener {
-            listener.gotoEditLine(linesList[position])
+            listener.onLineTap(linesList[position])
         }
     }
 
