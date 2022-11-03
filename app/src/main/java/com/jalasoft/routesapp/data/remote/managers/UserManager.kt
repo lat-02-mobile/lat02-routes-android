@@ -7,10 +7,10 @@ import com.google.firebase.auth.PhoneAuthProvider
 import com.jalasoft.routesapp.data.model.remote.User
 import com.jalasoft.routesapp.data.remote.interfaces.UserRepository
 import com.jalasoft.routesapp.util.Response
-import com.jalasoft.routesapp.util.helpers.DateHelper
 import com.jalasoft.routesapp.util.helpers.FirebaseCollections
 import com.jalasoft.routesapp.util.helpers.UserType
 import com.jalasoft.routesapp.util.helpers.UserTypeLogin
+import java.util.*
 
 class UserManager(private val authManager: AuthFirebaseManager, private val firebaseManager: FirebaseManager) : UserRepository {
     override suspend fun validateEmailUser(email: String): Response<MutableList<User>> {
@@ -18,9 +18,7 @@ class UserManager(private val authManager: AuthFirebaseManager, private val fire
     }
 
     override suspend fun createUser(uid: String, name: String, email: String, typeLogin: UserTypeLogin): Response<String> {
-        val dateStr = DateHelper.getCurrentDate()
-        val date = DateHelper.convertDateToDouble(dateStr)
-        val user = User(uid, name, email, "", UserType.NORMAL.int, typeLogin.int, date, date)
+        val user = User(uid, name, email, "", UserType.NORMAL.int, typeLogin.int, Date(), Date())
         return firebaseManager.addDocument(uid, user, FirebaseCollections.Users)
     }
 
@@ -55,13 +53,11 @@ class UserManager(private val authManager: AuthFirebaseManager, private val fire
     }
 
     override suspend fun promoteRevokeUserPermission(user: User, isPromote: Boolean): Response<String> {
-        val dateStr = DateHelper.getCurrentDate()
-        val date = DateHelper.convertDateToDouble(dateStr)
         val docId = user.id ?: ""
         val userEd = if (isPromote) {
-            User(user.id, user.name, user.email, user.phoneNumber, UserType.ADMIN.int, user.typeLogin, user.createdAt, date)
+            User(user.id, user.name, user.email, user.phoneNumber, UserType.ADMIN.int, user.typeLogin, user.createAt, Date())
         } else {
-            User(user.id, user.name, user.email, user.phoneNumber, UserType.NORMAL.int, user.typeLogin, user.createdAt, date)
+            User(user.id, user.name, user.email, user.phoneNumber, UserType.NORMAL.int, user.typeLogin, user.createAt, Date())
         }
         return firebaseManager.addDocument(docId, userEd, FirebaseCollections.Users)
     }
