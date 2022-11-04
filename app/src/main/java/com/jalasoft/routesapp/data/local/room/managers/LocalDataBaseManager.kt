@@ -1,13 +1,13 @@
 package com.jalasoft.routesapp.data.local.room.managers
 
 import android.content.Context
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.jalasoft.routesapp.data.local.room.db.RoutesDB
 import com.jalasoft.routesapp.data.local.room.interfaces.LocalDataBaseRepository
 import com.jalasoft.routesapp.data.model.local.*
 import com.jalasoft.routesapp.util.PreferenceManager
 import com.jalasoft.routesapp.util.helpers.DateHelper
-import java.util.*
 
 class LocalDataBaseManager(private val localRoutesDB: RoutesDB) : LocalDataBaseRepository {
     override fun addLocalFavoriteDestination(lat: Double, lng: Double, name: String, context: Context) {
@@ -38,8 +38,7 @@ class LocalDataBaseManager(private val localRoutesDB: RoutesDB) : LocalDataBaseR
 
     override fun addSyncHistory(context: Context) {
         val currentCityId = PreferenceManager.getCurrentCityID(context)
-        val currentDate = Date()
-        val history = SyncHistoryEntity(currentCityId, currentDate.time, currentDate.time, currentDate.time, currentDate.time, currentDate.time)
+        val history = SyncHistoryEntity(currentCityId, Timestamp.now().toDate().time, Timestamp.now().toDate().time, Timestamp.now().toDate().time, Timestamp.now().toDate().time, Timestamp.now().toDate().time)
         localRoutesDB.syncHistoryDao().addSyncHistoryDao(history)
     }
 

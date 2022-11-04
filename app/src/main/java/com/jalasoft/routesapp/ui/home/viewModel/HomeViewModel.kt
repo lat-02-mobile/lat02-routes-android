@@ -21,6 +21,7 @@ import com.jalasoft.routesapp.util.PreferenceManager
 import com.jalasoft.routesapp.util.algorithm.RouteCalculator
 import com.jalasoft.routesapp.util.helpers.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
@@ -90,7 +91,7 @@ constructor(private val placeManager: PlaceRepository, private val gDirectionsRe
         localDB.deleteFavoriteDestination(favoriteDestinationEntity)
     }
 
-    fun checkForUpdatedData(context: Context) = viewModelScope.launch {
+    fun checkForUpdatedData(context: Context) = viewModelScope.launch(Dispatchers.IO) {
         val currentCityId = PreferenceManager.getCurrentCityID(context)
         val result = localDB.getSyncHistory(context)
         syncDataRepository.updateLocalLineCategory(currentCityId, result)
