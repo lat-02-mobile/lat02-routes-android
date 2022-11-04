@@ -19,6 +19,7 @@ import org.junit.Before
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.junit.Test
+import java.util.*
 
 @ExperimentalCoroutinesApi
 @RunWith(RobolectricTestRunner::class)
@@ -41,7 +42,7 @@ class RegisterUserViewModelTest : TestCase() {
     private var typeLogin: UserTypeLogin = UserTypeLogin.GOOGLE
     private var confirmPassword: String = "123456"
     private var users: MutableList<User> = mutableListOf(User())
-    private var user = User("asd", names, email, "0", 0, typeLogin.int, 1.0, 1.0)
+    private var user = User("asd", names, email, "0", 0, typeLogin.int, Date(), Date())
 
     @Before
     public override fun setUp() {
