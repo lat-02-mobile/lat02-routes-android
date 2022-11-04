@@ -24,18 +24,10 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        amplitude = PreferenceManager.getAmplitude(binding.root.context.applicationContext)
         val currentUser = FirebaseAuth.getInstance().currentUser
-        if (currentUser == null) {
-            goToAuthActivity()
-        } else {
-            amplitude.setUserId(currentUser.uid)
-            com.amplitude.api.Amplitude.getInstance().trackSessionEvents(true)
-            val phoneNumber = currentUser.phoneNumber
-            if (phoneNumber == null || phoneNumber.isEmpty()) {
-                goToAuthActivity()
-            }
-        }
+        amplitude = PreferenceManager.getAmplitude(binding.root.context.applicationContext)
+        amplitude.setUserId(currentUser?.uid)
+        com.amplitude.api.Amplitude.getInstance().trackSessionEvents(true)
 
         supportActionBar?.hide()
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment

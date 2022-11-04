@@ -106,11 +106,11 @@ class RouteLocalManager(private val localRoutesDB: RoutesDB) : RouteLocalReposit
     }
 
     override fun updateLocalLineCategory(lineCategory: LineCategoriesEntity) {
-        localRoutesDB.lineCategoryDao().updateLinesCategory(lineCategory)
+        localRoutesDB.lineCategoryDao().addLineCategory(lineCategory)
     }
 
     override fun updateLocalLines(line: LineEntity) {
-        localRoutesDB.lineDao().updateLines(line)
+        localRoutesDB.lineDao().addLine(line)
     }
 
     override fun updateLocalLineRoutes(lineRouteInfo: List<LineRouteInfo>) {
@@ -118,7 +118,7 @@ class RouteLocalManager(private val localRoutesDB: RoutesDB) : RouteLocalReposit
             val start = Location(item.start?.latitude ?: 0.0, item.start?.longitude ?: 0.0)
             val end = Location(item.end?.latitude ?: 0.0, item.end?.longitude ?: 0.0)
             val lineLocal = LineRouteEntity(item.id, item.idLine, item.name, item.averageVelocity, item.color, start, end, item.createAt, item.updateAt)
-            localRoutesDB.lineRouteDao().updateLineRoutes(lineLocal)
+            localRoutesDB.lineRouteDao().addLineRoute(lineLocal)
             updateLocalRoutePoints(item.id, item.routePoints)
             updateLocalStops(item.id, item.stops)
         }
@@ -128,7 +128,7 @@ class RouteLocalManager(private val localRoutesDB: RoutesDB) : RouteLocalReposit
         for ((position, item) in routePoints.withIndex()) {
             val location = Location(item.latitude, item.longitude)
             val routePointsLocal = RoutePointsHolder(position, idLineRoute, location)
-            localRoutesDB.lineRouteDao().updateRoutePoints(routePointsLocal)
+            localRoutesDB.lineRouteDao().addRoutePoints(routePointsLocal)
         }
     }
 
@@ -136,7 +136,7 @@ class RouteLocalManager(private val localRoutesDB: RoutesDB) : RouteLocalReposit
         for ((position, item) in stops.withIndex()) {
             val location = Location(item.latitude, item.longitude)
             val stopsPoints = StopsHolder(position, idLineRoute, location)
-            localRoutesDB.lineRouteDao().updateStops(stopsPoints)
+            localRoutesDB.lineRouteDao().addStops(stopsPoints)
         }
     }
 }

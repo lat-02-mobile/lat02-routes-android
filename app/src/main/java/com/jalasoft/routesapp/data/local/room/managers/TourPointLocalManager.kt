@@ -44,10 +44,10 @@ class TourPointLocalManager(private val localRoutesDB: RoutesDB) : TourPointLoca
     }
 
     override fun updateLocalTourPoint(tourPoint: TourPointEntity) {
-        localRoutesDB.tourPointDao().updateTourPoint(tourPoint)
+        localRoutesDB.tourPointDao().addTourPoint(tourPoint)
     }
 
     override fun updateLocalTourPointCategory(tourPointCategory: TourPointsCategoryEntity) {
-        localRoutesDB.tourPointCategoryDao().updateTourPointCategory(tourPointCategory)
+        localRoutesDB.tourPointCategoryDao().addTourPointCategory(tourPointCategory)
     }
 }
