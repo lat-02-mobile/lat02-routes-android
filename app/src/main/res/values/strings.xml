@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RoutesApp</string>
+    <string name="app_name">Move On</string>
     <string name="new_language_text">New language text</string>
     <string name="loading_data">Loading Data</string>
     <string name="register_success">Register Successfully</string>
@@ -30,7 +30,7 @@
     <string name="login">Login</string>
     <string name="register">Register</string>
     <string name="log_txt_others">Or login using</string>
-    <string name="name_app">RoutesApp</string>
+    <string name="name_app">Move On</string>
     <string name="tv_welcome">Welcome back!</string>
     <string name="btn_sign_outd">Sign Out</string>
 

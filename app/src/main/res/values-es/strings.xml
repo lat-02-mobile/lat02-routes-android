@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RoutesApp</string>
+    <string name="app_name">Move On</string>
     <string name="new_language_text">Nuevo texto de idioma</string>
     <string name="loading_data">Cargando Datos</string>
     <string name="register_success">Registrado Exitosamente</string>
@@ -30,7 +30,7 @@
     <string name="login">Iniciar Sesion</string>
     <string name="register">Registrate</string>
     <string name="log_txt_others">O inicia sesion usando</string>
-    <string name="name_app">RoutesApp</string>
+    <string name="name_app">Move On</string>
     <string name="tv_welcome">¡Bienvenido de vuelta!</string>
     <string name="btn_sign_outd">Cerrar Sesion</string>
 
