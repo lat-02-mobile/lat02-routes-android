@@ -28,7 +28,6 @@ class RouteAdminDetailFragment : Fragment() {
     private val viewModel: RoutesAdminViewModel by viewModels()
 
     private lateinit var lineRouteInfo: LineRouteAux
-    private lateinit var pickerDialog: ColorPickerDialog.Builder
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +45,6 @@ class RouteAdminDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        pickerDialog = ColorPickerDialog.Builder(requireContext())
         val isNew = arguments?.getBoolean(Constants.BUNDLE_KEY_NEW_ROUTE) ?: true
         lineRouteInfo = arguments?.getSerializable(Constants.BUNDLE_KEY_ROUTE_SELECTED_DATA) as LineRouteAux
         if (!isNew) {
@@ -59,7 +57,7 @@ class RouteAdminDetailFragment : Fragment() {
         }
         binding.colorPreview.setBackgroundColor(Color.parseColor(defaultHexColor))
         binding.btnColorPicker.setOnClickListener {
-            pickerDialog.setTitle(getString(R.string.choose_color))
+            ColorPickerDialog.Builder(requireContext()).setTitle(getString(R.string.choose_color))
                 .setPositiveButton(
                     getString(R.string.ok),
                     ColorEnvelopeListener { envelope, _ ->
@@ -68,8 +66,6 @@ class RouteAdminDetailFragment : Fragment() {
                     }
                 )
                 .setNegativeButton(getString(R.string.cancel)) { dialogInterface, _ -> dialogInterface.dismiss() }
-                .attachAlphaSlideBar(false)
-                .attachBrightnessSlideBar(false)
                 .show()
         }
         binding.btnSave.setOnClickListener {
